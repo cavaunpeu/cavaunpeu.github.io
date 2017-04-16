@@ -11,19 +11,19 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
 
 	<!-- CSS -->
-	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -35,19 +35,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a href="http://cavaunpeu.github.io/es/">will wolf</a></h1>
+        <h1><a href="https://cavaunpeu.github.io/es/">will wolf</a></h1>
           <h4>cosas de data science y pensamientos sobre el mundo</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="http://cavaunpeu.github.io/es/about/" title="Acerca de"><span class="glyphicon glyphicon-user"></span> Acerca de</a></li>
-              <li><a href="http://cavaunpeu.github.io/es/archive/" title="Archivo"><span class="glyphicon glyphicon-th-list"></span> Archivo</a></li>
+              <li><a href="https://cavaunpeu.github.io/es/about/" title="Acerca de"><span class="glyphicon glyphicon-user"></span> Acerca de</a></li>
+              <li><a href="https://cavaunpeu.github.io/es/archive/" title="Archivo"><span class="glyphicon glyphicon-th-list"></span> Archivo</a></li>
               <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/" title=English>EN</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/" title=English>EN</a>
                 </li>
             </ul>
           </li>
@@ -109,7 +109,7 @@ feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span c
 </pre></div>
 
 
-<p><img alt="explicit feedback scores" src="http://cavaunpeu.github.io/es/../figures/empirical_distribution_explicit_feedback_scores.png"></p>
+<p><img alt="explicit feedback scores" src="https://cavaunpeu.github.io/es/../figures/empirical_distribution_explicit_feedback_scores.png"></p>
 <p>Next, let's fit an ordered categorical GLM in the Stan modeling language. Note that we don't have any predictor variables <span class="math">\(x_i\)</span>; therefore, the only variables we will be estimating are our intercepts <span class="math">\(\alpha_k\)</span>.</p>
 <div class="highlight"><pre><span></span><span class="kn">data</span><span class="p">{</span>
     <span class="kt">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">N</span><span class="p">;</span>
@@ -142,7 +142,7 @@ feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span c
 
 <p>Our model estimates four values: <span class="math">\(\alpha_1, \alpha_2, \alpha_3\)</span> and <span class="math">\(\alpha_4\)</span>. Why four and not five? The cumulative probability of the final outcome, <span class="math">\(\text{Pr}(y_i \leq 5)\)</span> is always 1.</p>
 <p>The posterior samples from our model will be vectors of cumulative probabilities, i.e. cumulative distribution functions. Let's examine the variation in these estimates, and plot them against the proportion of each class observed in our original data to see how well our model did. The following plot is constructed with 2,000 samples from our posterior distribution, where each sample is given as <span class="math">\(\{\alpha_1, \alpha_2, \alpha_3, \alpha_4\}\)</span>. The dotted red line gives the column-wise mean, and the error band gives the column-wise 92% interval.</p>
-<p><img alt="posterior cumulative distribution" src="http://cavaunpeu.github.io/es/../figures/mean_posterior_cumulative_distribution.png"></p>
+<p><img alt="posterior cumulative distribution" src="https://cavaunpeu.github.io/es/../figures/mean_posterior_cumulative_distribution.png"></p>
 <p>Key points are as follows:</p>
 <h3>The scale of our estimates</h3>
 <p>The marginal distributions of each estimated parameter are on the <em>log-cumulative-odds</em> scale. This is because <span class="math">\(\alpha_k\)</span> - the only set of parameters we are estimating - is set equal to <span class="math">\(\log{\bigg(\frac{\text{Pr}(y_i \leq k)}{1 - \text{Pr}(y_i \leq k)}\bigg)}\)</span> in our model above. So, what does a value of, say, <span class="math">\(\alpha_3 = -1.5\)</span> say about the probability of receiving a feedback score of 3 from a given user? I have no idea. As such, we necessarily convert these estimates from the <em>log-cumulative-odds</em> scale to the <em>cumulative probability</em> scale to make interpretation easier. The sigmoid function gives this conversion.</p>
@@ -156,9 +156,9 @@ feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span c
 
 <p>Next, we can use each sample from <code>simulated_probabilities</code> to roll a multinomial die. Here, I'll adopt the strategy Erik uses in the original post: with each sample, we'll simulate a large number - I've chosen 500 - of multinomial throws. This will give a histogram of empirical counts - similar to the first plot shown at the top of this post. With this distribution, we'll compute a weighted average. After repeating this for a large number of samples from our posterior, we'll have a distribution of weighted averages. (Incidentally, as Erik highlights in his post, the shape of this distribution can be assumed Normal as given by the <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Central Limit Theorem</a>.)</p>
 <p>The following plot compares the results for both the ordered categorical and multinomial models. Remember, we obtain the posterior of the latter through the Dirichlet-Multinomial conjugacy described above. Sampling from this posterior follows trivially. While vanilla histograms should do the trick, let's plot the inferred densities just to be safe.</p>
-<p><img alt="comparative posterior density plots" src="http://cavaunpeu.github.io/es/../figures/comparative_posterior_predictive_density_plots.png"></p>
+<p><img alt="comparative posterior density plots" src="https://cavaunpeu.github.io/es/../figures/comparative_posterior_predictive_density_plots.png"></p>
 <p>To be frank, this has me a little disappointed! According to the posterior predictive densities of the weighted-average throws, there is no discernible difference between the multinomial and ordered categorical models. To be thorough, let's plot 100 draws from the <em>raw</em>, respective posteriors: a distribution over cumulative distribution functions for each model.</p>
-<p><img alt="comparative posterior cumulative distributions" src="http://cavaunpeu.github.io/es/../figures/comparative_posterior_cumulative_distributions.png"></p>
+<p><img alt="comparative posterior cumulative distributions" src="https://cavaunpeu.github.io/es/../figures/comparative_posterior_cumulative_distributions.png"></p>
 <p>Yep, no difference. So, why do we think this is? What are our takeaways?</p>
 <h3>We didn't use any predictor variables</h3>
 <p>In the ordered categorical case, we estimate <span class="math">\(k - 1\)</span> values of <span class="math">\(\alpha_k\)</span> and a <em>single set</em> of predictor coefficients. In the multinomial case, we estimate <span class="math">\(k - 1\)</span> sets of <span class="math">\(\{\alpha_k, \beta_{X, k}\}\)</span> values (for example, should we have <span class="math">\(k = 3\)</span> classes and two predictor variables <span class="math">\(a\)</span> and <span class="math">\(b\)</span>, we'd estimate parameters <span class="math">\(\alpha_1, \beta_{a, 1}, \beta_{b, 1}, \alpha_{2}, \beta_{a, 2}, \beta_{b, 2}\)</span> in the simplest case). Given that we didn't use any predictor variables, we're simply estimating a set of intercepts <span class="math">\(\alpha_k\)</span> in each case. In the former, these values give the log-cumulative-odds of each outcome, while in the latter they give the log-odds outright. Given that the transformation between the two is deterministic, the ordered categorical and multinomial models should be functionally identical.</p>
@@ -171,7 +171,7 @@ feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span c
 </blockquote>
 <p>In this quote, he's describing the ordered categorical GLM (in addition to "zero-inflated" models - models that "mix a binary event with an ordinary GLM likelihood like a Poisson or binomial" - hence the plurality). And therein lies the rub: a model is but an approximation of the world, and if one needs to bend to accommodate the other, the former should be preferred.</p>
 <p>To conclude, I built a <a href="https://willwolf.shinyapps.io/ordered-categorical-a-b-test/">Shiny app</a> to be used as an A/B test calculator for ordered categorical data using the methodologies detailed above. Example output looks as follows:</p>
-<p><img alt="a/b comparison plot" src="http://cavaunpeu.github.io/es/../figures/a_b_comparison_plot.png"></p>
+<p><img alt="a/b comparison plot" src="https://cavaunpeu.github.io/es/../figures/a_b_comparison_plot.png"></p>
 <p>Code for this work can be found <a href="https://github.com/cavaunpeu/ordered-categorical-glm">here</a>. Thanks for reading.</p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",

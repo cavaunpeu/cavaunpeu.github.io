@@ -11,19 +11,19 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
 
 	<!-- CSS -->
-	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -35,19 +35,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a href="http://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a href="https://cavaunpeu.github.io/">will wolf</a></h1>
           <h4>data science things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="http://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="http://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
               <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -68,7 +68,7 @@
 	<div itemprop="articleBody" class="article-body"><p>In my experience, the gap between a conceptual understanding of how a machine learning model "learns" and a concrete, "I can do this with a pencil and paper" understanding is large. This gap is further exacerbated by the nature of popular machine learning libraries which allow you to use powerful models without knowing how they really work. This isn't such a bad thing. But knowledge is power. In this post, I aim to close the gap above for a vanilla neural network that learns by gradient descent: we will use gradient descent to learn a weight and a bias for a single neuron. From there, when learning an entire network of millions of neurons, we just do the same thing a bunch more times. The rest is details. The following assumes a cursory knowledge of <a href="https://en.wikipedia.org/wiki/Linear_combination">linear combinations</a>, <a href="https://en.wikipedia.org/wiki/Activation_function">activation functions</a>, <a href="https://class.coursera.org/ml-005/lecture/6">cost functions</a>, and how they all fit together in <a href="https://www.youtube.com/watch?v=UJwK6jAStmg">forward propagation</a>. It is math-heavy with some Python interspersed.</p>
 <h2>Problem setup</h2>
 <p>Our neuron looks like this:</p>
-<p><img alt="single_neuron_gradient_descent" src="http://cavaunpeu.github.io/images/single_neuron_gradient_descent.png"></p>
+<p><img alt="single_neuron_gradient_descent" src="https://cavaunpeu.github.io/images/single_neuron_gradient_descent.png"></p>
 <p>Our parameters look like this:</p>
 <div class="highlight"><pre><span></span><span class="n">ACTIVATION</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">INITIAL_WEIGHT</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
