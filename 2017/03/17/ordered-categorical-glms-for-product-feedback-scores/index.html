@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="http://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4>data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="http://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Ordered Categorical GLMs for Product Feedback Scores</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2017-03-17T16:55:00-04:00" itemprop="datePublished">March 17, 2017</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>TL;DR: there's a <a href="https://willwolf.shinyapps.io/ordered-categorical-a-b-test/">Shiny app</a> too.</p>
+<p>I write this post as a follow-up to Erik Bernhardsson's post <a href="https://erikbern.com/2015/12/05/more-mcmc-analyzing-a-small-dataset-with-1-5-ratings/">"More MCMC – Analyzing a small dataset with 1-5 ratings."</a> Therein, Erik builds a simple multinomial regression to model explicit, 1-5 feedback scores for different variants of Better's <a href="https://better.com/">website</a>. I like his approach for the rigor and mathematical fidelity it brings to what is a straightforward, ubiquitous use case for any product team.</p>
+<p>I recently learned about ordered categorical generalized linear models (GLMs) and thought back to the post above. Of course, while feedback scores do fall into discrete categories, there is an implicit ordinality therein: choosing integers in <span class="math">\([1, 5]\)</span> is different from choosing colors in <span class="math">\(\{\text{red}, \text{green}, \text{blue}\}\)</span>. This is because 5 is greater than 4, while green is not "greater" than "blue." (For a royalistic debate on the supremacy of the color green, please make use of the comments section below.)</p>
+<p>In a multinomial regression, we can formulate our problem thus:</p>
+<div class="math">$$
+\begin{align*} y &amp;\sim \text{Multinomial}(1, p)\\
+p_j &amp;= \frac{e^{\phi_j}}{\sum\limits_{k = 1}^{K} e^{\phi_k}}\\
+\phi_j &amp;= \alpha_j + \beta_j X_i\\
+\alpha_j &amp;\sim \text{Normal}(0, 10)\\
+\beta_j &amp;\sim \text{Normal}(0, 10)\\
+\end{align*}
+$$</div>
+<p>In a model with <span class="math">\(k\)</span> categorical outcomes, we typically have <span class="math">\(k-1\)</span> linear equations for <span class="math">\(\phi_j\)</span>. The link function - which you'll recognize as the <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax</a> - "squashes" these values such that they sum to 1 (with one of the values of <span class="math">\(\phi_k\)</span> fixed at an arbitrary constant). The Normal priors placed on <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> were chosen arbitrarily: we can use any continuous-valued distribution we like.</p>
+<p>In situations where we don't have predictor variables, we can alternatively draw the entire vector <span class="math">\(p\)</span> from a <a href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet</a> distribution outright. As it happens, this offers us a trivially simple analytical solution to the posterior. This fact owes itself to <a href="http://stats.stackexchange.com/questions/44494/why-is-the-dirichlet-distribution-the-prior-for-the-multinomial-distribution">Dirichlet-Multinomial conjugacy</a>: given total observed counts <span class="math">\(x_k\)</span> of each category <span class="math">\(k\)</span> and respective parameters <span class="math">\(\alpha_k\)</span> on our prior, our posterior distribution for our belief in <span class="math">\(p\)</span> is given as:</p>
+<div class="math">$$p \sim \text{Dirichlet}(\alpha_1 + x_1, ..., \alpha_k + x_k)$$</div>
+<p>This makes both inference and posterior predictive sampling trivial: a few lines of code for each. Unfortunately, while delightfully simple, the multinomial regression makes a strong concession with respect to the data at hand: the ordinality of our feedback scores is not explicitly preserved. To this effect, let us explore the ordered categorical GLM.</p>
+<p>The ordered categorical GLM can be specified thus:</p>
+<div class="math">$$
+\begin{align*}
+&amp;y \sim \text{Ordered}(p)\\
+&amp;\log{\bigg(\frac{p_k}{1 - p_k}\bigg)} = \alpha_k - \phi_i\\
+&amp;\phi_i = \beta X_i\\
+&amp;\alpha_k \sim \text{Normal}(0, 10)\\
+&amp;\beta \sim \text{Normal}(0, 10)
+\end{align*}
+$$</div>
+<p>There's a few components to clarify:</p>
+<h3>Ordered distribution</h3>
+<p>An Ordered distribution is a vanilla categorical distribution that accepts a vector of <em>cumulative probabilities</em> <span class="math">\(p_k = \text{Pr}(y_i \leq k)\)</span>, as opposed to traditional probabilities <span class="math">\(p_k = \text{Pr}(y_i = k)\)</span>. This preserves the ordering among variables.</p>
+<h3>Link function</h3>
+<p>In a typical logistic regression, we model the log-odds of observing a positive outcome as a linear function of the intercept plus weighted input variables. (The inverse of this function which we thereafter employ to obtain the raw probability <span class="math">\(p\)</span> is the <em>logistic</em> function, or <em><a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid</a></em> function.) In the ordered categorical GLM, we instead model the <em>log-cumulative-odds</em> of observing a position outcome as a linear function of the intercept <em>minus</em> weighted input variables. We'll dive into the "minus" momentarily.</p>
+<h3>Cumulative probability</h3>
+<p><span class="math">\(p_k\)</span> in the above equation is defined as <span class="math">\(p_k = \text{Pr}(y_i \leq k)\)</span>. For this reason, the left-hand-side of the second line of our model gives the log-cumulative-odds, not the log-odds.</p>
+<h3>Priors</h3>
+<p>Placing Normal priors on <span class="math">\(\alpha_k\)</span> and <span class="math">\(\beta\)</span> was an arbitrary choice. In fact, any prior that produces a continuous value should suffice: the constraint that <span class="math">\(p_k\)</span> must be a valid (cumulative) probability, i.e. <span class="math">\(p_k\)</span> must lie on the interval <span class="math">\([0, 1]\)</span>, is enforced by the inverse link function.</p>
+<h3>Subtracting <span class="math">\(\phi_i\)</span></h3>
+<p>Ultimately, <span class="math">\(\phi_i\)</span> is the linear model. Should we want to add additional predictors, we would append them here. So, why do we subtract <span class="math">\(\phi_i\)</span> from <span class="math">\(\alpha_k\)</span> instead of add? Intuitively, it would make sense for an increase in the value of a predictor variable, given a positive coefficient, to shift probability mass towards <em>larger</em> ordinal values. This makes for more fluid interpretation of our model parameters. Subtracting <span class="math">\(\phi_i\)</span> does just this: <em>increasing</em> the value of a given predictor <em>decreases</em> the log-cumulative-odds of every outcome value <span class="math">\(k\)</span> below the maximum (<em>every</em> outcome value below the maximum, because we have one linear model <span class="math">\(\phi_i\)</span> which we must subtract, separately, from each intercept <span class="math">\(\alpha_k\)</span> in order to compute <span class="math">\(\log{\big(\frac{p_k}{1 - p_k}\big)}\)</span>) which shifts probability mass upwards. This way, the desired dynamic - "a bigger predictor should lead to a bigger outcome given a positive coefficient" - holds.</p>
+<p>Let's move to R to fit and compare these models. I'm enjoying R more and more for the ease of plotting with <a href="http://docs.ggplot2.org/current/">ggplot2</a>, as well as the functional "chains" offered by <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> ("to be pronounced with a sophisticated french accent," apparently) and Hadley Wickham's <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">dplyr</a>.</p>
+<p>First, let's simulate some scores then plot the results.</p>
+<div class="highlight"><pre><span></span>N <span class="o">&lt;-</span> <span class="m">50</span> probabilities <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="m">.1</span><span class="p">,</span> <span class="m">.2</span><span class="p">,</span> <span class="m">.3</span><span class="p">,</span> <span class="m">.3</span><span class="p">,</span> <span class="m">.1</span><span class="p">)</span>
+feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span class="o">=</span> N<span class="p">,</span> size <span class="o">=</span> <span class="m">1</span><span class="p">,</span> prob <span class="o">=</span> probabilities<span class="p">)</span> <span class="o">%&gt;%</span> t <span class="o">%&gt;%</span> <span class="kp">max.col</span>
+</pre></div>
+
+
+<p><img alt="explicit feedback scores" src="http://cavaunpeu.github.io/figures/empirical_distribution_explicit_feedback_scores.png"></p>
+<p>Next, let's fit an ordered categorical GLM in the Stan modeling language. Note that we don't have any predictor variables <span class="math">\(x_i\)</span>; therefore, the only variables we will be estimating are our intercepts <span class="math">\(\alpha_k\)</span>.</p>
+<div class="highlight"><pre><span></span><span class="kn">data</span><span class="p">{</span>
+    <span class="kt">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">N</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">obs</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="kn">parameters</span><span class="p">{</span>
+    <span class="kt">ordered</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="n">cutpoints</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kn">model</span><span class="p">{</span>
+    <span class="kt">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">phi</span><span class="p">;</span>
+    <span class="n">cutpoints</span> <span class="o">~</span> <span class="nb">normal</span><span class="p">(</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span>
+    <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">~</span> <span class="nb">ordered_logistic</span><span class="p">(</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">cutpoints</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="kn">generated quantities</span><span class="p">{</span>
+    <span class="kt">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">phi</span><span class="p">;</span>
+    <span class="kt">real</span> <span class="n">dev</span><span class="p">;</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="n">dev</span> <span class="o">+</span> <span class="p">(</span><span class="mi">-2</span><span class="p">)</span><span class="o">*</span><span class="n">ordered_logistic_lpmf</span><span class="p">(</span> <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="err">|</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">cutpoints</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Our model estimates four values: <span class="math">\(\alpha_1, \alpha_2, \alpha_3\)</span> and <span class="math">\(\alpha_4\)</span>. Why four and not five? The cumulative probability of the final outcome, <span class="math">\(\text{Pr}(y_i \leq 5)\)</span> is always 1.</p>
+<p>The posterior samples from our model will be vectors of cumulative probabilities, i.e. cumulative distribution functions. Let's examine the variation in these estimates, and plot them against the proportion of each class observed in our original data to see how well our model did. The following plot is constructed with 2,000 samples from our posterior distribution, where each sample is given as <span class="math">\(\{\alpha_1, \alpha_2, \alpha_3, \alpha_4\}\)</span>. The dotted red line gives the column-wise mean, and the error band gives the column-wise 92% interval.</p>
+<p><img alt="posterior cumulative distribution" src="http://cavaunpeu.github.io/figures/mean_posterior_cumulative_distribution.png"></p>
+<p>Key points are as follows:</p>
+<h3>The scale of our estimates</h3>
+<p>The marginal distributions of each estimated parameter are on the <em>log-cumulative-odds</em> scale. This is because <span class="math">\(\alpha_k\)</span> - the only set of parameters we are estimating - is set equal to <span class="math">\(\log{\bigg(\frac{\text{Pr}(y_i \leq k)}{1 - \text{Pr}(y_i \leq k)}\bigg)}\)</span> in our model above. So, what does a value of, say, <span class="math">\(\alpha_3 = -1.5\)</span> say about the probability of receiving a feedback score of 3 from a given user? I have no idea. As such, we necessarily convert these estimates from the <em>log-cumulative-odds</em> scale to the <em>cumulative probability</em> scale to make interpretation easier. The sigmoid function gives this conversion.</p>
+<h3>The width of the band</h3>
+<p>The width of the band quantifies the uncertainty in our estimate of the true cumulative distribution function. We used 50 samples: it should be reasonably wide. With 500,000 samples, the red band would be indistinguishable from the dotted line.</p>
+<p>Finally, let's simulate new observations from each model. Our posterior contains a distribution of <em>cumulative distribution functions</em>: how do we translate this into multinomial samples?</p>
+<p>First, samples from this distribution can be transformed into probability mass functions with the follow code:</p>
+<div class="highlight"><pre><span></span>simulated_probabilities <span class="o">&lt;-</span> <span class="kp">cbind</span><span class="p">(</span>cutpoint_samples<span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="o">-</span> <span class="kp">cbind</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> cutpoint_samples<span class="p">)</span>
+</pre></div>
+
+
+<p>Next, we can use each sample from <code>simulated_probabilities</code> to roll a multinomial die. Here, I'll adopt the strategy Erik uses in the original post: with each sample, we'll simulate a large number - I've chosen 500 - of multinomial throws. This will give a histogram of empirical counts - similar to the first plot shown at the top of this post. With this distribution, we'll compute a weighted average. After repeating this for a large number of samples from our posterior, we'll have a distribution of weighted averages. (Incidentally, as Erik highlights in his post, the shape of this distribution can be assumed Normal as given by the <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Central Limit Theorem</a>.)</p>
+<p>The following plot compares the results for both the ordered categorical and multinomial models. Remember, we obtain the posterior of the latter through the Dirichlet-Multinomial conjugacy described above. Sampling from this posterior follows trivially. While vanilla histograms should do the trick, let's plot the inferred densities just to be safe.</p>
+<p><img alt="comparative posterior density plots" src="http://cavaunpeu.github.io/figures/comparative_posterior_predictive_density_plots.png"></p>
+<p>To be frank, this has me a little disappointed! According to the posterior predictive densities of the weighted-average throws, there is no discernible difference between the multinomial and ordered categorical models. To be thorough, let's plot 100 draws from the <em>raw</em>, respective posteriors: a distribution over cumulative distribution functions for each model.</p>
+<p><img alt="comparative posterior cumulative distributions" src="http://cavaunpeu.github.io/figures/comparative_posterior_cumulative_distributions.png"></p>
+<p>Yep, no difference. So, why do we think this is? What are our takeaways?</p>
+<h3>We didn't use any predictor variables</h3>
+<p>In the ordered categorical case, we estimate <span class="math">\(k - 1\)</span> values of <span class="math">\(\alpha_k\)</span> and a <em>single set</em> of predictor coefficients. In the multinomial case, we estimate <span class="math">\(k - 1\)</span> sets of <span class="math">\(\{\alpha_k, \beta_{X, k}\}\)</span> values (for example, should we have <span class="math">\(k = 3\)</span> classes and two predictor variables <span class="math">\(a\)</span> and <span class="math">\(b\)</span>, we'd estimate parameters <span class="math">\(\alpha_1, \beta_{a, 1}, \beta_{b, 1}, \alpha_{2}, \beta_{a, 2}, \beta_{b, 2}\)</span> in the simplest case). Given that we didn't use any predictor variables, we're simply estimating a set of intercepts <span class="math">\(\alpha_k\)</span> in each case. In the former, these values give the log-cumulative-odds of each outcome, while in the latter they give the log-odds outright. Given that the transformation between the two is deterministic, the ordered categorical and multinomial models should be functionally identical.</p>
+<h3>We might want predictor variables</h3>
+<p>It is easy to conceive of a situation in which we'd want predictor variables. In this case, the ordered categorical model becomes a clear choice for ordered categorical data. Revisiting its formulation above, we see that predictors are trivial to add to the model: we just tack them onto the equation for <span class="math">\(\phi_i\)</span>.</p>
+<h3>The inconvenient realities of measurement</h3>
+<p>There's a quote I like from Richard McElreath (I just finished his textbook, <a href="http://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking</a>, which I couldn't recommend much more highly):</p>
+<blockquote>
+<p>Both types of models help us transform our modeling to cope with the inconvenient realities of measurement, rather than transforming measurements to cope with the constraints of our models.</p>
+</blockquote>
+<p>In this quote, he's describing the ordered categorical GLM (in addition to "zero-inflated" models - models that "mix a binary event with an ordinary GLM likelihood like a Poisson or binomial" - hence the plurality). And therein lies the rub: a model is but an approximation of the world, and if one needs to bend to accommodate the other, the former should be preferred.</p>
+<p>To conclude, I built a <a href="https://willwolf.shinyapps.io/ordered-categorical-a-b-test/">Shiny app</a> to be used as an A/B test calculator for ordered categorical data using the methodologies detailed above. Example output looks as follows:</p>
+<p><img alt="a/b comparison plot" src="http://cavaunpeu.github.io/figures/a_b_comparison_plot.png"></p>
+<p>Code for this work can be found <a href="https://github.com/cavaunpeu/ordered-categorical-glm">here</a>. Thanks for reading.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'Ordered Categorical GLMs for Product Feedback Scores';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

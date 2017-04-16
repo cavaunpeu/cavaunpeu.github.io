@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="http://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4>data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="http://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Single Neuron Gradient Descent</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2016-05-06T00:42:00-04:00" itemprop="datePublished">May 6, 2016</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>In my experience, the gap between a conceptual understanding of how a machine learning model "learns" and a concrete, "I can do this with a pencil and paper" understanding is large. This gap is further exacerbated by the nature of popular machine learning libraries which allow you to use powerful models without knowing how they really work. This isn't such a bad thing. But knowledge is power. In this post, I aim to close the gap above for a vanilla neural network that learns by gradient descent: we will use gradient descent to learn a weight and a bias for a single neuron. From there, when learning an entire network of millions of neurons, we just do the same thing a bunch more times. The rest is details. The following assumes a cursory knowledge of <a href="https://en.wikipedia.org/wiki/Linear_combination">linear combinations</a>, <a href="https://en.wikipedia.org/wiki/Activation_function">activation functions</a>, <a href="https://class.coursera.org/ml-005/lecture/6">cost functions</a>, and how they all fit together in <a href="https://www.youtube.com/watch?v=UJwK6jAStmg">forward propagation</a>. It is math-heavy with some Python interspersed.</p>
+<h2>Problem setup</h2>
+<p>Our neuron looks like this:</p>
+<p><img alt="single_neuron_gradient_descent" src="http://cavaunpeu.github.io/images/single_neuron_gradient_descent.png"></p>
+<p>Our parameters look like this:</p>
+<div class="highlight"><pre><span></span><span class="n">ACTIVATION</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">INITIAL_WEIGHT</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
+<span class="n">INITIAL_BIAS</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">ACTUAL_OUTPUT_NEURON_ACTIVATION</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">N_EPOCHS</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="o">.</span><span class="mo">05</span>
+</pre></div>
+
+
+<h2>Let's work backwards</h2>
+<p>We have an initial weight and bias of:</p>
+<div class="highlight"><pre><span></span><span class="n">weight</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">bias</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+
+
+<p>After each iteration of gradient descent, we update these parameters via:</p>
+<div class="highlight"><pre><span></span><span class="n">weight</span> <span class="o">+=</span> <span class="o">-</span><span class="n">LEARNING_RATE</span> <span class="o">*</span> <span class="n">weight_gradient</span>
+<span class="n">bias</span> <span class="o">+=</span> <span class="o">-</span><span class="n">LEARNING_RATE</span> <span class="o">*</span> <span class="n">bias_gradient</span>
+</pre></div>
+
+
+<p>This is where the "learning" is concretized: changing a weight and a bias to a different weight and bias that makes our network better at prediction. So: how do we obtain the <code>weight_gradient</code> and <code>bias_gradient</code>? More importantly, <em>why do we want these things in the first place?</em></p>
+<h2>Why we want the gradient</h2>
+<p>I'll be keeping this simple because it is simple. Our initial weight (<span class="math">\(w_0 = 3\)</span>) and bias (<span class="math">\(b_0 = 2\)</span>) were chosen randomly. As such, our network will likely make terrible predictions. By definition, our cost will be high. We want to make our cost low. Let's pick a new weight and bias that change this cost by <span class="math">\(\Delta C\)</span>, where <span class="math">\(\Delta C\)</span> is some strictly negative number. For our weight: Define <span class="math">\(\Delta C\)</span> as "how much our cost changes with respect to a 1 unit change in our weight" times "how much we changed our weight". In math, that looks like:</p>
+<div class="math">$$
+\begin{align*} \Delta C &amp;=\frac{\partial C}{\partial w} (w_{i+1} - w_i)\\
+&amp;=\nabla C \cdot \Delta w\\
+\end{align*}
+$$</div>
+<p>Our goal is to make <span class="math">\(\Delta C\)</span> strictly negative, such that every time we update our weight, we do so in a way that lowers our cost. Duh. Let's choose <span class="math">\(\Delta w = -\eta\ \nabla C\)</span>. Our previous expression becomes:</p>
+<div class="math">$$
+\begin{align*} \Delta C &amp;=\nabla C \cdot \Delta w\\
+&amp;=\nabla C \cdot (-\eta\ \nabla C)\\
+&amp;=-\eta\|\nabla C\|\\
+\end{align*}
+$$</div>
+<p><span class="math">\(\|\nabla C\|\)</span> is strictly positive, and a positive number multiplied by a negative number (<span class="math">\(-\eta\)</span>) is strictly negative. So, by choosing <span class="math">\(\Delta w = -\eta\ \nabla C\)</span>, our <span class="math">\(\Delta C\)</span> is always negative; in other words, at each iteration of gradient descent - in which we perform <code>weight += delta_weight</code>, a.k.a. <code>weight += -LEARNING_RATE * weight_gradient</code> - our cost always goes down. Nice.</p>
+<p>For our bias, it's the very same thing.</p>
+<h2>Deriving <span class="math">\(\frac{\partial C}{\partial w}\)</span> and <span class="math">\(\frac{\partial C}{\partial b}\)</span></h2>
+<p>Deriving both <span class="math">\(\frac{\partial C}{\partial w}\)</span> and <span class="math">\(\frac{\partial C}{\partial b}\)</span> is pure 12th grade calculus. Plain and simple. If you forget your 12th grade calculus, spend ~2 minutes refreshing your memory with an article online. It's not difficult. Before we begin, we must first define a cost function and an activation function. Let's choose <a href="https://en.wikipedia.org/wiki/Loss_function#Quadratic_loss_function">quadratic loss</a> and a <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid</a> respectively.</p>
+<div class="math">$$
+C(\hat{y}) = \frac{1}{2}(y - \hat{y})^2
+$$</div>
+<div class="math">$$
+\sigma(z) = \frac{1}{1 + e^{-z}}
+$$</div>
+<p>where <span class="math">\(\hat{y}\)</span> is the neuron's final output, <span class="math">\(z\)</span> is the linear combination (<span class="math">\(wx+b\)</span>) input, and <span class="math">\(\hat{y} = \sigma(z)\)</span>.</p>
+<p>Using the chain rule, our desired expression <span class="math">\(\frac{\partial C}{\partial w}\)</span> becomes:</p>
+<div class="math">$$
+\begin{align*}
+\frac{\partial C}{\partial w} &amp;=
+C'(\hat{y})\frac{d}{dw}\sigma(z)\\
+&amp;= C'(\hat{y})\sigma'(z)\frac{d}{dw}z\\
+&amp;= C'(\hat{y})\sigma'(z)\frac{d}{dw}(wx + b)\\
+&amp;= C'(\hat{y})\sigma'(z)x\\
+\end{align*}
+$$</div>
+<p>For our bias, the expression <span class="math">\(\frac{\partial C}{\partial b}\)</span> is almost identical:</p>
+<div class="math">$$
+\begin{align*}
+\frac{\partial C}{\partial b} &amp;=
+C'(\hat{y})\frac{d}{db}\sigma(z)\\
+&amp;= C'(\hat{y})\sigma'(z)\frac{d}{db}z\\
+&amp;= C'(\hat{y})\sigma'(z)\frac{d}{db}(wx + b)\\
+&amp;= C'(\hat{y})\sigma'(z)\\
+\end{align*}
+$$</div>
+<p>Now we need expressions for <span class="math">\(C'\)</span> and <span class="math">\(\sigma'\)</span>. Let's derive them.</p>
+<div class="math">$$
+\begin{align*}
+C'(\hat{y}) &amp;= 2 \cdot \frac{1}{2}(y - \hat{y})\\
+&amp;= y - \hat{y}\\
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*} \sigma'(z) &amp;= -1(1+e^{-z})^{-2}(e^{-z})(-1)\\
+&amp;=\frac{e^{-z}}{1+e^{-z}}\\
+&amp;=\frac{1}{1+e^{-z}}\frac{e^{-z}}{1+e^{-z}}\\
+&amp;=\frac{1}{1+e^{-z}}\frac{(1 + e^{-z}) - 1}{1+e^{-z}}\\
+&amp;=\frac{1}{1+e^{-z}}\bigg(1 - \frac{1}{1+e^{-z}}\bigg)\\
+&amp;=\sigma(z)(1-\sigma(z))
+\end{align*}
+$$</div>
+<p>As such, our final expressions for <span class="math">\(\frac{\partial C}{\partial w}\)</span> and <span class="math">\(\frac{\partial C}{\partial b}\)</span> are:</p>
+<div class="math">$$
+\frac{\partial C}{\partial w} = (y - \hat{y})(\sigma(wx + b)(1-\sigma(wx + b)))x
+$$</div>
+<div class="math">$$
+\frac{\partial C}{\partial b} = (y - \hat{y})(\sigma(wx + b)(1-\sigma(wx + b)))
+$$</div>
+<p>From there, we just plug in our values from the start (<span class="math">\(x\)</span> is our <code>ACTIVATION</code>) to solve for <code>weight_gradient</code> and <code>bias gradient</code>. The result of each is a <em>real-valued number</em>. It is no longer a function, nor expression, nor nebulous mathematical concept.</p>
+<p>Finally, as initially prescribed, we update our weight and bias via:</p>
+<div class="highlight"><pre><span></span><span class="n">weight</span> <span class="o">+=</span> <span class="o">-</span><span class="n">LEARNING_RATE</span> <span class="o">*</span> <span class="n">weight_gradient</span>
+<span class="n">bias</span> <span class="o">+=</span> <span class="o">-</span><span class="n">LEARNING_RATE</span> <span class="o">*</span> <span class="n">bias_gradient</span>
+</pre></div>
+
+
+<p>Because <span class="math">\(\Delta C = -\eta\|\nabla C\|\)</span>, the resulting weight and bias will give a lower cost than before. Nice!</p>
+<hr>
+<p>Code:</p>
+<p>Here's a <a href="http://nbviewer.jupyter.org/github/cavaunpeu/single-neuron-gradient-descent/blob/master/single-neuron-gradient-descent.ipynb">notebook</a> showing this process in action. Happy gradient descent.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'Single Neuron Gradient Descent';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

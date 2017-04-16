@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="http://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4>data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="http://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Recurrent Neural Network Gradients, and Lessons Learned Therein</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2016-10-18T14:00:00-04:00" itemprop="datePublished">October 18, 2016</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>I've spent the last week hand-rolling recurrent neural networks. I'm currently taking Udacity's Deep Learning <a href="https://www.udacity.com/course/deep-learning--ud730">course</a>, and arriving at the section on RNN's and LSTM's, I decided to build a few for myself.</p>
+<h3>What are RNN's?</h3>
+<p>On the outside, recurrent neural networks differ from typical, feedforward neural networks in that they take a <em>sequence</em> of input instead of an input of fixed length. Concretely, imagine we are training a sentiment classifier on a bunch of tweets. To embed these tweets in vector space, we create a bag-of-words model with vocabulary size 3. In a typical neural network, this implies an input layer of size 3; an input could be <span class="math">\([4, 9, 3]\)</span>, or <span class="math">\([1, 0, 5]\)</span>, or <span class="math">\([0, 0, 6]\)</span>, for example. In a recurrent neural network, our input layer has the same size 3, but instead of just a single size-3 input, we can feed it a sequence of size-3 inputs of any length. For example, an input could be <span class="math">\([[1, 8, 5], [2, 2, 4]]\)</span>, or <span class="math">\([[6, 7, 3], [6, 2, 4], [9, 17, 5]]\)</span>, or <span class="math">\([[2, 3, 0], [1, 1, 7], [5, 5, 3], [8, 18, 4]]\)</span>.</p>
+<p>On the inside, recurrent neural networks have a different feedforward mechanism than typical neural networks. In addition, each input in our sequence of inputs is processed individually and chronologically: the first input is fed forward, then the second, and so on. Finally, after all inputs have been fed forward, we compute some gradients and update our weights. Like in feedforward networks, we also use backpropagation. However, we must now backpropagate errors to our parameters at every step in time. In other words, we must compute gradients with respect to: the state of the world when we fed our first input forward, the state of the world when we fed our second input forward, and up until the state of the world when we fed our last input forward. This algorithm is called <a href="https://en.wikipedia.org/wiki/Backpropagation_through_time">Backpropagation Through Time</a>.</p>
+<h3>Other Resources, My Frustrations</h3>
+<p>There are many resources for understanding how to compute gradients using Backpropagation Through Time. In my view, <a href="https://www.existor.com/en/ml-rnn.html">Recurrent Neural Networks Maths</a> is the most mathematically comprehensive, while <a href="http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/">Recurrent Neural Networks Tutorial Part 3</a> is more concise yet equally clear. Finally, there exists Andrej Karpathy's <a href="https://gist.github.com/karpathy/d4dee566867f8291f086">Minimal character-level language model</a>, accompanying his excellent <a href="https://karpathy.github.io/2015/05/21/rnn-effectiveness/">blog post</a> on the general theory and use of RNN's, which I initially found convoluted and hard to understand.</p>
+<p>In all posts, I think the authors unfortunately blur the line between the derivation of the gradients and their (efficient) implementation in code, or at the very least jump too quickly from one to another. They define variables like <code>dbnext</code>,  <code>delta_t</code>, and <span class="math">\(e_{hi}^{2f3}\)</span> without thoroughly explaining their place in the analytical gradients themselves. As one example, the first post includes the snippet:</p>
+<blockquote>
+<p>
+<div class="math">$$
+\frac{\partial J^{t=2}}{\partial w^{xh}_{mi}} =
+e^{t=2f2}_{hi} \frac{\partial h^{t=2}_i}{\partial z^{t=2}_{hi}} \frac{\partial z^{t=2}_{hi}}{\partial w^{xh}_{mi}} +
+e^{t=1f2}_{hi} \frac{\partial h^{t=1}_i} {\partial z^{t=1}_{hi}} \frac{\partial z^{t=1}_{hi}}{\partial w^{xh}_{mi}}
+$$</div>
+</p>
+</blockquote>
+<p>So far, he's just talking about analytical gradients. Next, he gives hint to the implementation-in-code that follows.</p>
+<blockquote>
+<p>So the thing to note is that we can delay adding in the backward propagated errors until we get further into the loop. In other words, we can initially compute the derivatives of <em>J</em> with respect to the third unrolled network with only the first term:</p>
+<p>
+<div class="math">$$
+\frac{\partial J^{t=3}}{\partial w^{xh}_{mi}} =
+e^{t=3f3}_{hi} \frac{\partial h^{t=3}_i}{\partial z^{t=3}_{hi}} \frac{\partial z^{t=3}_{hi}}{\partial w^{xh}_{mi}}
+$$</div>
+</p>
+<p>And then add in the other term only when we get to the second unrolled
+network:</p>
+<p>
+<div class="math">$$
+\frac{\partial J^{t=2}}{\partial w^{xh}_{mi}} =
+(e^{t=2f3}_{hi} + e^{t=2f2}_{hi}) \frac{\partial h^{t=2}_i}{\partial z^{t=2}_{hi}}
+\frac{\partial z^{t=2}_{hi}}
+{\partial w^{xh}_{mi}}
+$$</div>
+</p>
+</blockquote>
+<p>Note the opposing definitions of the variable <span class="math">\(\frac{\partial J^{t=2}}{\partial w^{xh}_{mi}}\)</span>. As far as I know, the latter is, in a vacuum, categorically false. This said, I believe the author is simply providing an alternative definition of this quantity in line with a computational shortcut he later takes.</p>
+<p>Of course, these ambiguities become very emotional, very quickly. I myself was confused for two days. As such, the aim of this post is to derive recurrent neural network gradients from scratch, and emphatically clarify that all implementation "shortcuts" thereafter are nothing more than just that, with no real bearing on the analytical gradients themselves. In other words, if you can derive the gradients, you win. Write a unit test, code these gradients in the crudest way you can, watch your test pass, and then immediately realize that your code can be made more efficient. At this point, all "shortcuts" that the above authors (and myself, now, as well) take in their code will make perfect sense.</p>
+<h3>Backpropagation Through Time</h3>
+<p>In the simplest case, let's assume our network has 3 layers, and just 3 parameters to optimize: <span class="math">\(\mathbf{W^{xh}}\)</span>, <span class="math">\(\mathbf{W^{hh}}\)</span> and <span class="math">\(\mathbf{W^{hy}}\)</span>. The foundational equations of this network are as follows:</p>
+<ul>
+<li><span class="math">\(\mathbf{z_t} = \mathbf{W^{xh}}\mathbf{x} + \mathbf{W^{hh}}\mathbf{h_{t-1}}\)</span></li>
+<li><span class="math">\(\mathbf{h_t} = \tanh(\mathbf{z_t})\)</span></li>
+<li><span class="math">\(\mathbf{y_t} = \mathbf{W^{hy}}\mathbf{h_t}\)</span></li>
+<li><span class="math">\(\mathbf{p_t} = \text{softmax}(\mathbf{y_t})\)</span></li>
+<li><span class="math">\(\mathbf{J_t} = \text{crossentropy}(\mathbf{p_t},
+    \mathbf{\text{labels}_t})\)</span></li>
+</ul>
+<p>I've written "softmax" and "cross-entropy" for clarity: before tackling the math below, it is important to understand what they do, and how to derive their gradients by hand.</p>
+<p>Before moving forward, let's restate the definition of a partial derivative itself.</p>
+<blockquote>
+<p>A partial derivative, for example <span class="math">\(\frac{\partial y}{\partial x}\)</span>, measures how much <span class="math">\(y\)</span> increases with every 1-unit increase in <span class="math">\(x\)</span>.</p>
+</blockquote>
+<p>Our cost <span class="math">\(\mathbf{J_t}\)</span> is the <em>total</em> <em>cost</em> (i.e., not the average cost) of a given sequence of inputs. As such, a 1-unit increase in <span class="math">\(\mathbf{W^{hy}}\)</span> will impact each of <span class="math">\(\mathbf{J_1}\)</span>, <span class="math">\(\mathbf{J_2}\)</span> and <span class="math">\(\mathbf{J_3}\)</span> individually. Therefore, our gradient is equal to the sum of the respective gradients at each time step <span class="math">\(t\)</span>:</p>
+<div class="math">$$
+\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hy}}} =
+\sum\limits_t \frac{\partial \mathbf{J_t}}{\partial
+\mathbf{W^{hy}}} = \frac{\partial \mathbf{J_3}}{\partial
+\mathbf{W^{hy}}} + \frac{\partial \mathbf{J_2}}{\partial
+\mathbf{W^{hy}}} + \frac{\partial \mathbf{J_1}}{\partial
+\mathbf{W^{hy}}}\\
+\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}} =
+\sum\limits_t \frac{\partial \mathbf{J_t}}{\partial
+\mathbf{W^{hh}}} = \frac{\partial \mathbf{J_3}}{\partial
+\mathbf{W^{hh}}} + \frac{\partial \mathbf{J_2}}{\partial
+\mathbf{W^{hh}}} + \frac{\partial \mathbf{J_1}}{\partial
+\mathbf{W^{hh}}}\\
+\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{xh}}} =
+\sum\limits_t \frac{\partial \mathbf{J_t}}{\partial
+\mathbf{W^{xh}}} = \frac{\partial \mathbf{J_3}}{\partial
+\mathbf{W^{xh}}} + \frac{\partial \mathbf{J_2}}{\partial
+\mathbf{W^{xh}}} + \frac{\partial \mathbf{J_1}}{\partial
+\mathbf{W^{xh}}}
+$$</div>
+<p>Let's take this piece by piece.</p>
+<h3>Algebraic Derivatives</h3>
+<p><br></p>
+<h4><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}}\)</span>:</h4>
+<p>Starting with <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}}\)</span>, we note that a change in <span class="math">\(\mathbf{W^{hy}}\)</span> will only impact <span class="math">\(\mathbf{J_3}\)</span> at time <span class="math">\(t=3\)</span>: <span class="math">\(\mathbf{W^{hy}}\)</span> plays no role in computing the value of anything other than <span class="math">\(\mathbf{y_3}\)</span>. Therefore:</p>
+<div class="math">$$
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}} =
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{W^{hy}}}\\
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{W^{hy}}} =
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{p_2}}
+\frac{\partial \mathbf{p_2}}{\partial \mathbf{y_2}}
+\frac{\partial \mathbf{y_2}}{\partial \mathbf{W^{hy}}}\\
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}} =
+\frac{\partial \mathbf{J_1}}{\partial \mathbf{p_1}}
+\frac{\partial \mathbf{p_1}}{\partial \mathbf{y_1}}
+\frac{\partial \mathbf{y_1}}{\partial \mathbf{W^{hy}}}\\
+$$</div>
+<h4><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}}\)</span>:</h4>
+<p>Starting with <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hh}}}\)</span>, a change in <span class="math">\(\mathbf{W^{hh}}\)</span> will impact our cost <span class="math">\(\mathbf{J_3}\)</span> in <em>3 separate ways: </em>once, when computing the value of <span class="math">\(\mathbf{h_1}\)</span>; once, when computing the value of <span class="math">\(\mathbf{h_2}\)</span>, which depends on <span class="math">\(\mathbf{h_1}\)</span>; once, when computing the value of <span class="math">\(\mathbf{h_3}\)</span>, which depends on <span class="math">\(\mathbf{h_2}\)</span>, which depends on <span class="math">\(\mathbf{h_1}\)</span>.</p>
+<p>More generally, a change in <span class="math">\(\mathbf{W^{hh}}\)</span> will impact our cost <span class="math">\(\mathbf{J_t}\)</span> on <span class="math">\(t\)</span> separate occasions. Therefore:</p>
+<div class="math">$$
+\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}} =
+\sum\limits_{k=0}^{t} \frac{\partial \mathbf{J_t}}{\partial
+\mathbf{h_t}} \frac{\partial \mathbf{h_t}}{\partial
+\mathbf{h_k}} \frac{\partial \mathbf{h_k}}{\partial
+\mathbf{z_k}} \frac{\partial \mathbf{z_k}}{\partial
+\mathbf{W^{hh}}}
+$$</div>
+<p>Then, with this definition, we compute our individual gradients as:</p>
+<div class="math">$$
+\begin{align*}
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hh}}} &amp;=
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{h_3}}
+\frac{\partial \mathbf{h_3}}{\partial \mathbf{z_3}}
+\frac{\partial \mathbf{z_3}}{\partial \mathbf{W^{hh}}}\\ &amp;+
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{h_3}}
+\frac{\partial \mathbf{h_3}}{\partial \mathbf{z_3}}
+\frac{\partial \mathbf{z_3}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{W^{hh}}}\\ &amp;+
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{h_3}}
+\frac{\partial \mathbf{h_3}}{\partial \mathbf{z_3}}
+\frac{\partial \mathbf{z_3}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{h_1}}
+\frac{\partial \mathbf{h_1}}{\partial \mathbf{z_1}}
+\frac{\partial \mathbf{z_1}}{\partial \mathbf{W^{hh}}}\\
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{W^{hh}}} &amp;=
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{p_2}}
+\frac{\partial \mathbf{p_2}}{\partial \mathbf{y_2}}
+\frac{\partial \mathbf{y_2}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{W^{hh}}}\\ &amp;+
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{p_2}}
+\frac{\partial \mathbf{p_2}}{\partial \mathbf{y_2}}
+\frac{\partial \mathbf{y_2}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{h_1}}
+\frac{\partial \mathbf{h_1}}{\partial \mathbf{z_1}}
+\frac{\partial \mathbf{z_1}}{\partial \mathbf{W^{hh}}}
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\frac{\partial \mathbf{J_1}}{\partial \mathbf{W^{hh}}} &amp;=
+\frac{\partial \mathbf{J_1}}{\partial \mathbf{p_1}}
+\frac{\partial \mathbf{p_1}}{\partial \mathbf{y_1}}
+\frac{\partial \mathbf{y_1}}{\partial \mathbf{h_1}}
+\frac{\partial \mathbf{h_1}}{\partial \mathbf{z_1}}
+\frac{\partial \mathbf{z_1}}{\partial \mathbf{W^{hh}}}
+\end{align*}
+$$</div>
+<h4><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{xh}}}\)</span>:</h4>
+<p>Similarly:</p>
+<div class="math">$$
+\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{xh}}} =
+\sum\limits_{k=0}^{t} \frac{\partial \mathbf{J_t}}{\partial
+\mathbf{h_t}} \frac{\partial \mathbf{h_t}}{\partial
+\mathbf{h_k}} \frac{\partial \mathbf{h_k}}{\partial
+\mathbf{z_k}} \frac{\partial \mathbf{z_k}}{\partial
+\mathbf{W^{xh}}}
+$$</div>
+<p>Therefore:</p>
+<div class="math">$$
+\begin{align*}
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{xh}}} &amp;=
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{h_3}}
+\frac{\partial \mathbf{h_3}}{\partial \mathbf{z_3}}
+\frac{\partial \mathbf{z_3}}{\partial \mathbf{W^{xh}}}\\ &amp;+
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{h_3}}
+\frac{\partial \mathbf{h_3}}{\partial \mathbf{z_3}}
+\frac{\partial \mathbf{z_3}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{W^{xh}}}\\ &amp;+
+\frac{\partial \mathbf{J_3}}{\partial \mathbf{p_3}}
+\frac{\partial \mathbf{p_3}}{\partial \mathbf{y_3}}
+\frac{\partial \mathbf{y_3}}{\partial \mathbf{h_3}}
+\frac{\partial \mathbf{h_3}}{\partial \mathbf{z_3}}
+\frac{\partial \mathbf{z_3}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{h_1}}
+\frac{\partial \mathbf{h_1}}{\partial \mathbf{z_1}}
+\frac{\partial \mathbf{z_1}}{\partial \mathbf{W^{xh}}}
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{W^{xh}}} &amp;=
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{p_2}}
+\frac{\partial \mathbf{p_2}}{\partial \mathbf{y_2}}
+\frac{\partial \mathbf{y_2}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{W^{xh}}}\\ &amp;+
+\frac{\partial \mathbf{J_2}}{\partial \mathbf{p_2}}
+\frac{\partial \mathbf{p_2}}{\partial \mathbf{y_2}}
+\frac{\partial \mathbf{y_2}}{\partial \mathbf{h_2}}
+\frac{\partial \mathbf{h_2}}{\partial \mathbf{z_2}}
+\frac{\partial \mathbf{z_2}}{\partial \mathbf{h_1}}
+\frac{\partial \mathbf{h_1}}{\partial \mathbf{z_1}}
+\frac{\partial \mathbf{z_1}}{\partial \mathbf{W^{xh}}}
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\frac{\partial \mathbf{J_1}}{\partial \mathbf{W^{xh}}} &amp;=
+\frac{\partial \mathbf{J_1}}{\partial \mathbf{p_1}}
+\frac{\partial \mathbf{p_1}}{\partial \mathbf{y_1}}
+\frac{\partial \mathbf{y_1}}{\partial \mathbf{h_1}}
+\frac{\partial \mathbf{h_1}}{\partial \mathbf{z_1}}
+\frac{\partial \mathbf{z_1}}{\partial \mathbf{W^{xh}}}
+\end{align*}
+$$</div>
+<h3>Analytical Derivatives</h3>
+<p>Finally, we plug in the individual partial derivates to compute our final gradients, where:</p>
+<ul>
+<li><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{y_t}} = \mathbf{p_t} - \mathbf{\text{labels}_t}\)</span>, where <span class="math">\(\mathbf{\text{labels}_t}\)</span> is a one-hot vector of the correct answer at a given time-step <span class="math">\(t\)</span></li>
+<li><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hy}}} = (\mathbf{p_t} - \mathbf{\text{labels}_t})\mathbf{h_t}\)</span></li>
+<li><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{h_t}} = (\mathbf{p_t} - \mathbf{\text{labels}_t})\mathbf{W^{hy}}\)</span></li>
+<li><span class="math">\(\frac{\partial \mathbf{h_t}}{\partial \mathbf{z_t}} = 1 - \tanh^2(\mathbf{z_t}) = 1 - \mathbf{h_t}^2\)</span>, as <span class="math">\(\mathbf{h_t} = \tanh(\mathbf{z_t})\)</span></li>
+<li><span class="math">\(\frac{\partial \mathbf{z_t}}{\mathbf{h_{t-1}}} = \mathbf{W^{hh}}\)</span></li>
+<li><span class="math">\(\frac{\partial \mathbf{z_t}}{\partial \mathbf{W^{xh}}} = \mathbf{x_t}\)</span></li>
+<li><span class="math">\(\frac{z_t}{\partial \mathbf{W^{hh}}} = \mathbf{h_{t-1}}\)</span></li>
+</ul>
+<p>At this point, you're done: you've computed your gradients, and you understand Backpropagation Through Time. From this point forward, all that's left is writing some for-loops.</p>
+<h3>Implementation Shortcuts</h3>
+<p>As you'll readily note, when computing the gradient for, for example, <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{xh}}}\)</span>, we'll need access to our labels at time-steps <span class="math">\(t=3\)</span>, <span class="math">\(t=2\)</span> and <span class="math">\(t=1\)</span>. For <span class="math">\(\frac{\partial \mathbf{J_2}}{\partial \mathbf{W^{xh}}}\)</span>, we'll need our labels at time-steps <span class="math">\(t=2\)</span> and <span class="math">\(t=1\)</span>. Finally, for <span class="math">\(\frac{\partial \mathbf{J_1}}{\partial \mathbf{W^{xh}}}\)</span>, we'll need our labels at just <span class="math">\(t=1\)</span>. Naturally, we look to make this efficient: for, for example, <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{xh}}}\)</span>, how about just compute the <span class="math">\(t=3\)</span> parts at <span class="math">\(t=3\)</span>, and add in the rest at <span class="math">\(t=2\)</span>? Instead of explaining further, I leave this step to you: it is ultimately trivial, a good exercise, and when you're finished, you'll find that your code readily resembles much of that written in the above resources.</p>
+<h3>Lessons Learned</h3>
+<p>Throughout this process, I learned a few lessons.</p>
+<ol>
+<li>When implementing neural networks from scratch, derive gradients by hand at the outset. <em>This makes thing so much easier.</em></li>
+<li>Turn more readily to your pencil and paper before writing a single line of code. They are not scary and they absolutely have their place.</li>
+<li>The chain rule remains simple and clear. If a derivative seems to "supercede" the general difficulty of the chain rule, there's probably something else you're missing.</li>
+</ol>
+<p>Happy RNN's.</p>
+<hr>
+<p>Key references for this article include:</p>
+<ul>
+<li><a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-2-implementing-a-language-model-rnn-with-python-numpy-and-theano/">Recurrent Neural Networks Tutorial Part 2 Implementing A Rnn With Python Numpy And Theano</a></li>
+<li><a href="http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/">Recurrent Neural Networks Tutorial Part 3 Backpropagation Through Time And Vanishing Gradients</a></li>
+<li><a href="https://karpathy.github.io/2015/05/21/rnn-effectiveness/">The Unreasonable Effectiveness of Recurrent Neural Networks</a></li>
+<li><a href="https://gist.github.com/karpathy/d4dee566867f8291f086">Minimal character-level language model with a Vanilla Recurrent Neural Network, in Python/numpy</a></li>
+<li><a href="https://www.existor.com/en/ml-rnn.html">Machine Learning - Recurrent Neural Networks Maths</a></li>
+</ul>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'Recurrent Neural Network Gradients, and Lessons Learned Therein';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

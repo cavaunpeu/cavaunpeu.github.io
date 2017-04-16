@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="http://cavaunpeu.github.io/es/">will wolf</a></h1>
+          <h4>cosas de data science y pensamientos sobre el mundo</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://cavaunpeu.github.io/es/about/" title="Acerca de"><span class="glyphicon glyphicon-user"></span> Acerca de</a></li>
+              <li><a href="http://cavaunpeu.github.io/es/archive/" title="Archivo"><span class="glyphicon glyphicon-th-list"></span> Archivo</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/" title=English>EN</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Markovian Muse: Conjuring the Backpacker Within</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2015-06-29T00:17:00-04:00" itemprop="datePublished">June 29, 2015</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>I haven't travel-blogged in a while - mainly because I haven't been traveling. When I was, the writing flowed easily: I'd wander, hike, try and fail, and humbling lessons about the world and its creatures seemed around every corner. There was plenty about which to write. Now, living here in New York City, and spending much of my time zealously science-ing data, I haven't found the same inspiration.</p>
+<p>Piqued by Andrej Karpathy's <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">post</a> on auto-generating text with recurrent neural networks, and indeed wanting to write some more travel posts, I've decided to conjure the backpacker within. My tool of choice is a Markov chain - simple, and less black-box-y than an <a href="https://en.wikipedia.org/wiki/Recurrent_neural_network">RNN</a> - which will do the writing for us.</p>
+<p>First thing's first: what is a Markov chain, and how does it work?</p>
+<p>Markov chains are stochastic processes with many "states," or "nodes." At discrete time steps, the system may jump from one node to another with fixed probability. For example, assume our system is at State A at time <span class="math">\(t = 0\)</span>. At <span class="math">\(t = 1\)</span>, we jump to State B with probability <span class="math">\(p = 0.4\)</span>, State C with probability <span class="math">\(p = 0.3\)</span>, and remain at State A with probability <span class="math">\(p = 0.3\)</span>. In addition, the system is "memoryless": the probability distribution (<span class="math">\(A=0.3, B=.4, C=.3\)</span> in the previous case) governing our move to the next state depends <em>only</em> on the current state, and none previous. </p>
+<p>I first learned about Markov chain's in undergrad as a way to model industrial processes. To auto-generate text with a Markov chain, the process is as follows:</p>
+<ol>
+<li>Initialize an empty string, <code>s</code>.</li>
+<li>Choose a word at random from a given body of text, and call it <code>word_1</code>. Call the subsequent word <code>word_2</code>.</li>
+<li>Add <code>word_1</code> plus a whitespace to our string, such that <code>s += word_1 + ' '</code>.</li>
+<li>Find all occurrences of <code>word_1 word_2</code> in the text. Then, create an array of each word that follows. For example, if <code>word_1 = "Will"</code> and <code>word_2 = "went"</code>, and our text contains the snippets <code>"Will went to"</code>, <code>"Will went further"</code>, and <code>"Will went north"</code>, then this array would be defined as <code>["to", "further", "north"]</code>. Duplicate elements should remain in the array.</li>
+<li>Select a word at random from the array we just created and call it <code>word_3</code>. Then, set <code>word_1 = word_2</code> and <code>word_2 = word_3</code>.</li>
+<li>Repeat steps 3-5 until the length of our string exceeds a user-defined string length.</li>
+</ol>
+<p>The dataset I'm using is a full corpus of my <a href="http://willtravellife.com">travel blog</a>. Each post has its respective published-date attached, such that I can generate posts in the spirit of a certain timeframe. Let's give it a whirl!</p>
+<p>Between January 1st, 2012 (the ~start of my journey), and March 1st, 2012, I was in Kenya, Tanzania, Uganda, Rwanda, United Arab Emirates, and Brazil. With these dates specified as start and end points respectively, and a maximum post length of 250 words, here's what we get:</p>
+<blockquote>
+<p>So--Ill Just Tell You What Ive Been Trying To Stitch</p>
+<p>Paths, and a chicken pie and a terribly anti-climactic pile of roughly 11 baked beans. Shortly after, I parted with the group for the kid who cant ride a manual motor scooter company arrived, yelled at a small valley, and see what was up around there. I really dont understand how 20 people could have stayed a day longer, but alas, the upcoming safari beckoned. This in the ocean at sunset, and meeting a Latvian Emirates stewardess whos going to talk about Africa. Africa is rather different from anywhere Ive ever eaten, and we arrive at Uhuru Peak just as the sun rise. 7:30AM: Eggs, toast, bananas, mangoes on the east coast. The touristy ones are Nungwe and Kendwa, each up north, and this beach resort. I get on the sill of the bags for a good Italian meal and a tuk-tuk with my camera. Light painting and zooming in and out during 10+ second exposures: Boom--artsy. The pinnacle of the sea, each poked with a Rwandese girl who is currently living in a beautiful city to boot. I arrive at Uhuru before sunrise, while it normally commands a fee of $49 stayed the next post. Kilimanjaro. Mount Kilimanjaro. F*cking beauty. We only stayed at the summit for about 15 minutes, and my world hasnt shattered nor universe exploded just yet. So--Ill just tell you what Ive been moving just a van, packed with roughly 20 seat-belt-less travelers, often outfitted with a toothpick, dipped in chili, and wrapped in newspaper.</p>
+</blockquote>
+<p>Fast-forward a year. Between January 1st, 2013, and March 1st, 2013, I was in Senegal and Guinea. Using these dates and the same post length, we get:</p>
+<blockquote>
+<p>Stockpiled With Noodles, Cookies, And Overused Kitchenware-Wandered By 4 Or</p>
+<p>Wait a bit. You said this would work at noon. OK. Im going to inadvertently insult someone sooner or later. Its just going to be back in an hour. Maybe tomorrow. Im now hungry, so I know you arent fresh out; Im standing here with money-why dont you just pedal once, and then the owner grabbed both bottles from me and put them behind the bar-plastic tables and plastic chairs-and just no discernible superfluity, personal assumption, nor granular trace of coziness. Most are powered by generators, and once in a minute. 11:15am rolls around. Sir, whats the deal. It will be looked at, pointed at, and called names. I was 15 years old. I deposited $50 onto Full Tilt Poker, and I slept in (she was off work), went hiking, took some pictures, got a bit closer, to what this world is still alive and so very well, and a passing trucks. To be clear, its not exactly a boulder field that youre driving through, but after a cold, headlamp-lit bucket shower, I went through it all. Every country, every person, that time I stood looking up at the game they so love-the kids from the mothers and sisters finally, for the rest just looking to yell about something-formed in the air, at a fish market in Mauritania. 1592 National Pride in the car-only 3 seats still to fill. I read the first passing truck. The passengers were left to negociate a red-dirt road, with plenty of potholes, dodging cows!</p>
+</blockquote>
+<p>So eloquent! Finally, let's stipulate the real start and end dates of my journey around the world: January 3rd, 2012 to March 12th, 2014. In all its glory:</p>
+<blockquote>
+<p>To Be A Travel Day Without Knowing Where Ill Ride</p>
+<p>Just wait a bit. Ill be in a wood-hut cafe, and am instantly hooked; Carey was a very natural combination of words like open, forward, transparent, and organic. Individual, on the front. I cant wait. Kitchen takeover is an equally innocent Palestinian local being mocked, harassed, and possibly the most serious lecture of all that stuff happened on this road, piste-section included, serves as a symbol of his back, uses the same people every day, challenge yourself, and from this guy boarded with a German guy who told me about another hour passing customs once in four months, when hiking in the above - all ruinous yet enchanting in their midst (this white guy (theres really not Superman. There is a language spoken by both the older and younger generations. If you dont, youre doing it yourself. The thing about traveling is an area of the house, through his carefully manicured fields, and into a friendship, a contact, and a dire lack of plumbing, food, running water, electricity, and general motley than the floor of the season. The weather in Patagonia is capricious at best, and terroristic at worst. Days like this place was an absolute nightmare of sog and wet. Follow the trail begins at the rink. Furthermore, the NHL guys were the only word I understood. As I said, its probably much more real. Emotionally, and certainly in big cities. 4. Study Blogs if Traversing Kazakhstan, Uzbekistan, and Tajikistan. My tips are based on my laptop at the.</p>
+</blockquote>
+<p>Thanks for reading.</p>
+<hr>
+<p>Code:</p>
+<p>Code for this project can be found on my <a href="https://github.com/cavaunpeu/markovian-muse">GitHub</a>. It takes heavy inspiration from Greg Reda's <a href="http://www.gregreda.com/2015/03/30/beer-review-markov-chains/">Nonsensical beer reviews via Markov chains</a>, who does a terrific job with a similar topic.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'Markovian Muse: Conjuring the Backpacker Within';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

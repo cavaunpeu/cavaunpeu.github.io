@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="http://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="http://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="http://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4>data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="http://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="http://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="http://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Clustering Continued: A Gaucho on Vacation</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2014-05-02T19:11:00-04:00" itemprop="datePublished">May 2, 2014</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>In our <a href="clustering-the-airports.md">previous post</a> we chose to cluster South American airports into <span class="math">\(k = 3\)</span> distinct groups. Moving forward, we'll take a closer look into what this really means.</p>
+<p>As mentioned previously, the k-means algorithm incorporates some element of mathematical randomness. On one k-means trial, the algorithm may assign 30% of our airports to Cluster 1, 65% to Cluster 2, and 5% to Cluster 3. Other times, this distribution could look more like 35%, 55%, and 10% respectively. The more clusters we input, or the larger we make k, the less the distributions vary by trial.</p>
+<p>Irrespective, we previously deemed <span class="math">\(k = 3\)</span> to be the way to go, informed by statistical methods and not by counting the number of McDonald's each airport houses, so with <span class="math">\(k = 3\)</span> we will proceed. Qualitatively, these clusters can be said to define airports as "major" airports, "semi-major" airports, and "non-major" airports.</p>
+<p>In addition to cluster sizes varying by trial, the actual number assigned to each cluster - 1, 2, or 3 - will vary by trial as well. For example, in Argentina, Buenos Aires' international airport is assumed to be consistently placed in the cluster pertaining to "major" airports; however, the cluster number assigned to this group on a given trial could be 1, 2, or 3. Below is a histogram of cluster sizes across 100 k-means trials for the 293 South American airports being examined.</p>
+<p><img alt="Cluster Assignment Frequency Histogram" src="http://cavaunpeu.github.io/figures/airport_cluster_frequency_histograms.png"></p>
+<p>Since numbers assigned to each cluster (1, 2, or 3) change by trial, this graph isn't particularly useful. However, it does given significant evidence that cluster sizes will indeed vary by trial, which we'll use later on. As such, it follows that clusters should not be judged by their respective cluster numbers, but rather, by the mean "centers" values associated with the airports grouped within. This is what really defines the clusters themselves, or in other words, what makes each cluster pertain to "major," "semi-major," and "non-major" air hubs (I'll continue to keep these words in quotations, since k-means clustering is ultimately an attempt to give a quantitative definition to an ultimately qualitative distinction, which is always, at best, an approximation).</p>
+<p>Upon first examining which airports were actually clustered together - and again, we're using <span class="math">\(k = 3\)</span>, and considering all routes between all airports in South America - it is immediately clear that airports from the same country are consistently put into the same cluster groups. Even though Buenos Aires' airport, with 50 distinct routes continent-wide, and Santa Rosa, Argentina's airport, with only 1 distinct route continent-wide (that being to Buenos Aires), are clearly categorically different in "major-ness," they are consistently put into the same cluster. This is probably for one or both of the following reasons: "non-major" airports are "piggy-backing" onto the more "major" domestic airports in their respective countries (as they are generally just 1 flight away, as is the case with Santa Rosa); or, the extensiveness of the domestic air network itself outweighs the international, continent-wide connectivity that a single airport can offer, therefore grouping "major" and "non-major" airports from the same country together more frequently than "major" and "semi-major" airports from different countries. Clearly, our goal is to consistently have, at a minimum, the continent's most "major" airports grouped together - those of Buenos Aires, São Paulo, Bogotá, Lima, and Santiago, for example - but unfortunately this is not the case. Back to the drawing board.</p>
+<p>Instead, what I choose to do in this post is compare and contrast the clusterings of individual domestic networks. For this, I choose only the countries with at least 3 airports running domestic routes (as we of course need as many airports as we do clusters), being Argentina, Bolivia, Brazil, Chile, Colombia, Ecuador, Peru, and Venezuela. Our aim here to figure out the proportion of "major" airports, "semi-major" airports, and "non-major" airports in each country.</p>
+<p>To do this, we first cluster and then examine the means of each cluster's centers. From there, we simply take the means - average shortest path lengths for airports in each cluster - and order from smallest to biggest. This will ensure that the smallest means correspond to our "major" airports, second-smallest means correspond to "semi-major" airports, and largest correspond to "non-major" airports. One problem still remains: cluster sizes will still vary by trial, as shown clearly in the graph above. Therefore, I run 100 k-means trials for each country, compute population proportions across these trials, and compare with a stacked-bar ggplot. The red bars are for "major" airports, green for "semi-major," and blue for "non-major."</p>
+<div class="highlight"><pre><span></span><span class="c1"># create stacked bar chart in ggplot</span>
+ggplot<span class="p">(</span>km_by_country<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span>Country<span class="p">,</span> y<span class="o">=</span>FractOfWhole<span class="p">,</span> fill<span class="o">=</span>Cluster<span class="p">))</span>
+        <span class="o">+</span> geom_bar<span class="p">(</span>position<span class="o">=</span><span class="s">&quot;stack&quot;</span><span class="p">,</span> stat<span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">,</span> width<span class="o">=</span><span class="m">0.75</span><span class="p">)</span>
+        <span class="o">+</span> labs<span class="p">(</span>
+            y<span class="o">=</span><span class="s">&quot;Percentage of Total Domestic Airports&quot;</span><span class="p">,</span>
+            title<span class="o">=</span><span class="s">&quot;Cluster Proportionality of Domestic Airports&quot;</span>
+        <span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="Stack Bar Cluster Props" src="http://cavaunpeu.github.io/figures/cluster_proportions_stacked_barchart.png"></p>
+<p>Now for the fun part.</p>
+<p>First, we see that Argentina, Colombia, and Peru have comparatively few "major" airports; most routes in these countries will be sourced by a select few hubs. In Argentina, this is primarily Buenos Aires; in Colombia, primarily Bogotá and Cali (and to a surprising extent Rio Negro and San Andrés Island); and in Peru, primarily Lima. At the opposite end of the spectrum, Brazil and Bolivia house a relatively even distribution of airport types. In Brazil, this is likely due to the sheer volume and variety of domestic routes (~120 working airports), meaning that no matter where you are, you're never that far from anywhere else. In Bolivia, with only ~15 working airports, it seems that the load is simply shared rather evenly across the board, with no one airport as the single, outright major hub, and smaller airports servicing a nice handful of routes themselves.</p>
+<p>So - what does this all mean? Countries with more evenly distributed "major," "semi-major," and "non-major" airports make travel much easier. If you're in Central Argentina and want to go somewhere by air, you're rather likely to require a layover in the nation's capital (which is not near the center of the country either) before moving to your destination. In Colombia, while there are many active airports, if you want to travel somewhere a bit "off-path" you're likely to require just a few more layovers than you had hoped. Lastly, if you're in Brazil, unless you're stuck on a canoe in the Amazon Rainforest, you're never really in the middle of logistical nowhere.</p>
+<p>In a future post, it will be interesting to look more closely at the economic causes and effects for these air distributions. For now, let's just be thankful we're not gauchos in <a href="http://willtravellife.com/blog/2013/04/22/photo-essay-the-conical-cathedral-of-patagonias-fitzroy/">Patagonia</a> planning a vacation.</p>
+<p><img alt="Gaucho Photo" src="http://cavaunpeu.github.io/images/guachos_on_vacation.jpg"></p>
+<p>Photo Credit: <a href="http://www.beforethey.com/tribe/gauchos">Jimmy Nelson</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'Clustering Continued: A Gaucho on Vacation';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
