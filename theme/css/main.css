@@ -144,3 +144,8 @@ body div > blockquote > p {
     font-size: 77%;
     margin: 1.65em 0;
 }
+
+img {
+  display: block;
+  margin: auto;
+}
