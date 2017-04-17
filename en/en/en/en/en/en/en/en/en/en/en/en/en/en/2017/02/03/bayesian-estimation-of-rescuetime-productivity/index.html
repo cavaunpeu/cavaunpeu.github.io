@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="https://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4>data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">RescueTime Inference via the "Poor Man's Dirichlet"</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2017-02-03T18:42:00-05:00" itemprop="datePublished">February 3, 2017</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p><a href="http://www.rescuetime.com">RescueTime</a> is "a personal analytics service that shows you how you spend your time [on the computer], and provides tools to help you be more productive." Personally, I've been a RescueTime user since late-January 2016, and while it does ping me guilty for harking back to a dangling Facebook tab in Chrome, I haven't yet dug much into the data it's thus-far stored.</p>
+<p>In short, I built a <a href="https://willwolf.shinyapps.io/rescue-time-estimation/">Shiny app</a> that estimates my/your typical week with RescueTime. In long, the analysis is as follows.</p>
+<p>The basic model of RescueTime is thus: track all activity, then categorize this activity by both "category" - "Software Development," "Reference and Learning," "Social Learning," etc. - and "productivity level" - "Very Productive Time," "Productive Time," "Neutral Time," "Distracting Time" and "Very Distracting Time." For example, 10 minutes spent on Twitter would be logged as (600 seconds, "Social Networking", "Very Distracting Time"), while 20 minutes on an <a href="https://arxiv.org/">arxiv</a> paper logged as (1200 seconds, "Reference &amp; Learning," "Very Productive Time"). Finally, RescueTime maintains (among other minutia) an aggregate "productivity score" by day, week and year.</p>
+<p>The purpose of this post is to take my weekly summary for 2016 and examine how I'm doing thus far. More specifically, with a dataset containing the total seconds-per-week spent [viewing resources categorized] at each of the 5 distinct productivity levels, I'd like to infer the productivity breakdown of a typical week. Rows of this dataset - after dividing all values in each by its sum - will contain 5 numbers, with each expressing the percentage of that week spent at the respective productivity level. Examples might include: <span class="math">\((.2, .3, .1, .2, .2)\)</span>, <span class="math">\((.1, .3, .2, .15, .25)\)</span> or <span class="math">\((.05, .25, .3, .25, .15)\)</span>. Of course, the values in each row must sum to 1.</p>
+<p>In effect, we can view each row as an empirical probability distribution over the 5 levels at hand. As such, our goal is to infer the process that generated these samples in the first place. In the canonical case, this generative process would be a <a href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet distribution</a> - a thing that takes a vector <span class="math">\(\alpha\)</span> and returns vectors of the length of <span class="math">\(\alpha\)</span> containing values that sum to 1. With a Dirichlet model conditional on the RescueTime data observed, the world becomes ours: we can generate new samples (a "week" of RescueTime log!) ad infinitum, ask questions of these samples (e.g. "what percentage of the time can we expect to log more 'Very Productive Time' than 'Productive Time?'"), and get some proxy lens into the brain cells and body fibers that spend our typical week in front of the computer in the manner that they do.</p>
+<p>To begin this analysis, I first download the data at the following <a href="https://www.rescuetime.com/browse/productivity/by/week/for/the/year/of/2016-01-01">link</a>. If you're not logged in, you'll be first prompted to do so. To do the same, you must be a paying RescueTime user. If you're not, you're welcome to use <a href="https://github.com/cavaunpeu/rescue-time-estimation/blob/publish/data/rescue_time_report.csv">my personal data</a> in order to follow along.</p>
+<p>The data at hand have 48 rows. First, let's see what they look like.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="kp">head</span><span class="p">(</span>report<span class="p">)</span>
+ week very_distracting distracting neutral productive very_productive
+<span class="m">1</span> <span class="m">2016-01-31</span>T00<span class="o">:</span><span class="m">00</span><span class="o">:</span><span class="m">00</span> <span class="m">0.05802495</span> <span class="m">0.15878213</span> <span class="m">0.1179268</span> <span class="m">0.05471899</span> <span class="m">0.6105471</span>
+<span class="m">2</span> <span class="m">2016-02-07</span>T00<span class="o">:</span><span class="m">00</span><span class="o">:</span><span class="m">00</span> <span class="m">0.16082036</span> <span class="m">0.11625240</span> <span class="m">0.1251466</span> <span class="m">0.06762928</span> <span class="m">0.5301514</span>
+<span class="m">3</span> <span class="m">2016-02-14</span>T00<span class="o">:</span><span class="m">00</span><span class="o">:</span><span class="m">00</span> <span class="m">0.07335485</span> <span class="m">0.18299335</span> <span class="m">0.1269896</span> <span class="m">0.08361825</span> <span class="m">0.5330439</span>
+<span class="m">4</span> <span class="m">2016-02-21</span>T00<span class="o">:</span><span class="m">00</span><span class="o">:</span><span class="m">00</span> <span class="m">0.07911463</span> <span class="m">0.04051227</span> <span class="m">0.1445033</span> <span class="m">0.05395296</span> <span class="m">0.6819169</span>
+<span class="m">5</span> <span class="m">2016-02-28</span>T00<span class="o">:</span><span class="m">00</span><span class="o">:</span><span class="m">00</span> <span class="m">0.07513117</span> <span class="m">0.12542957</span> <span class="m">0.1560940</span> <span class="m">0.04884047</span> <span class="m">0.5945047</span>
+<span class="m">6</span> <span class="m">2016-03-06</span>T00<span class="o">:</span><span class="m">00</span><span class="o">:</span><span class="m">00</span> <span class="m">0.04554125</span> <span class="m">0.12288119</span> <span class="m">0.1410541</span> <span class="m">0.08958757</span> <span class="m">0.6009359</span>
+</pre></div>
+
+
+<p>Next, let's see how each level is distributed:</p>
+<p><img alt="empirical boxplot" src="https://cavaunpeu.github.io/figures/observed_productivity_levels_empirical_boxplot.png"></p>
+<p>Finally, let's choose a modeling approach. Once more, I venture that each week should be viewed as a draw from a Dirichlet distribution; at the very least, no matter how modeled, each week (draw) is inarguably a vector of values that sum to 1. To this effect, I see a few possible approaches.</p>
+<h3>Dirichlet Process</h3>
+<p>A <a href="https://en.wikipedia.org/wiki/Dirichlet_process">Dirichlet Process</a> (DP) is a model of <em>a distribution over distributions</em>. In our example, this would imply that each week's vector is drawn from one of several possible Dirichlet distributions, each one governing a fundamentally different type of week altogether. For example, let's posit that we have several different kinds of work weeks: a "lazy" week, a "fire-power-super-charged week," a "start-slow-finish-strong week," a "cram-all-the-things-on Friday week." Each week, we arrive to work on Monday morning and our aforementioned brain cells and body fibers "decide" what type of week we're going to have. Finally, we play out the week and observe the resulting vector. Of course, while two weeks might have the same type, the resulting vectors will likely be (at least) slightly different.</p>
+<p>In this instance, given a Dirichlet Process <span class="math">\(DP(G_0, \alpha)\)</span> - where <span class="math">\(G_0\)</span> is the base distribution (from which the cells and fibers decide what type of week we'll have) and <span class="math">\(\alpha\)</span> is some prior - we first draw a week-type distribution from the base, then draw our week-level probability vector from the result. As a bonus, a DP is able to infer an <em>infinite</em> number of week-type distributions from our data (as compared to K-Means, for example, in which we would have to specify this value <em>a priori</em>) which fits nicely with the problem at hand: <em>à la base</em>, how many distinct week-types do we truly have? How would we ever know?</p>
+<p>Dirichlet Processes are best understood through one of several simple generative statistical processes, namely the Chinese Restaurant Process, Polya Urn Model or Stick-Breaking Process. Edwin Chen has an <em>excellent</em> <a href="http://blog.echen.me/2012/03/20/infinite-mixture-models-with-nonparametric-bayes-and-the-dirichlet-process/">post</a> dissecting each and its relation to the DP itself.</p>
+<h3>Dirichlet Inference via Conjugacy</h3>
+<p>Given that a Dirichlet distribution is an exponential model, "all members of the exponential family have conjugate priors"<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> and our data can be intuitively viewed as Dirichlet draws, it would be fortuitous if there existed some nice algebraic conjugacy to make inference a breeze. We know how to use <em>Beta-Binomial</em> and <em>Dirichlet-Multinomial</em>, but unfortunately there doesn't seem to be much in the way of <em>X-Dirichlet</em><sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup>. As such, this approach unfortunately dead-ends here.</p>
+<h3>The "Poor-Man's Dirichlet" via Linear Models</h3>
+<p>A final approach has us modeling the mean of each productivity-level proportion <span class="math">\(\mu_i\)</span> as:</p>
+<div class="math">$$
+\mu_i = \frac{exp(\phi_j)}{\sum\limits_{j = 0}^{4}
+exp(\phi_j)}, \text{for i} \in \{0, 1, 2, 3, 4\}
+$$</div>
+<p>For each <span class="math">\(\phi_j\)</span>, we place a normal prior <span class="math">\(\phi_j \sim \text{Normal}(\mu_j, \sigma_j)\)</span>, and finally give the likelihood of each productivity-level proportion <span class="math">\(p_i\)</span> as <span class="math">\(p_i \sim \text{Normal}(\mu_i, \sigma)\)</span> as in the canonical Bayesian linear regression. There's two key points to make on this approach.</p>
+<ol>
+<li>
+<p>As each <span class="math">\(\mu_i\)</span> is given by the softmax function the values <span class="math">\(\phi_j\)</span> are not uniquely identifiable, i.e. <code>softmax(vector) = softmax(100 + vector)</code>. In other words, because the magnitude of the values <span class="math">\(\phi_j\)</span> (how big they are) is unimportant, we cannot (nor do we need to) solve for these values exactly. I like to think of this as inference on two multi-collinear variables in a linear regression: with <span class="math">\(corr(x_1, x_2) \approx 1\)</span>, we can re-express our regression <span class="math">\(\mu = \alpha + \beta_1 x_1 + \beta_2 x_2\)</span> as <span class="math">\(\mu = \alpha + (\beta_1 + \beta_2)x_1\)</span>; in effect, we now have only 1 coefficient to solve for, and while the sum <span class="math">\(\beta_1 + \beta_2\)</span> is what we're trying to infer, the individual values <span class="math">\(\beta_1\)</span> and <span class="math">\(\beta_2\)</span> are of no importance. (For example, if <span class="math">\(\beta_1 + \beta_2 = 10\)</span>, we could choose <span class="math">\(\beta_1 = 3\)</span> and <span class="math">\(\beta_2 = 7\)</span>, or <span class="math">\(\beta_1 = 9\)</span> and <span class="math">\(\beta_2 = 1\)</span>, or <span class="math">\(\beta_1 = .01\)</span> and <span class="math">\(\beta_2 = 9.99\)</span> to no material difference.) In this case, while interpretation of the individual coefficients <span class="math">\(\beta_1\)</span> and <span class="math">\(\beta_2\)</span> would be erroneous, we can still make perfectly sound predictions on <span class="math">\(\mu\)</span> with the posterior for <span class="math">\(\beta_1 + \beta_2\)</span>. To close, this is but a tangential way of saying that while the posteriors of each individual <span class="math">\(\phi_j\)</span> will be of little informative value, the softmax itself will still work out just fine.</p>
+</li>
+<li>
+<p>I've chosen the likelihood as the normal distribution with respective means <span class="math">\(\mu_i\)</span> and a <em>shared</em> standard deviation <span class="math">\(\sigma\)</span>. First, I note that I hope this is the correct approach, i.e. "do it like you would with a typical linear model." Second, I chose a shared standard deviation (and, frankly, prayed it would be small) as my aim way to omit it from analysis/posterior prediction entirely: while simulating <span class="math">\(\mu_i\)</span> seems perfectly sound, making a draw from the likelihood function, i.e. the normal distribution with mean <span class="math">\(\mu_i\)</span> and standard deviation <span class="math">\(\sigma\)</span>, would cause our simulated productivity-level proportions to no longer add up to 1! This seems like the worst of all evils. While the spread of the respective distributions <em>does</em> seem to vary - thus suggesting we would be wise to infer a separate <span class="math">\(\sigma_i\)</span> for each - I chose to brush this fact aside because: one, the <span class="math">\(p_i\)</span>'s are not independent, i.e. as one goes up another must necessarily go down, which I hoped might be in some way "captured" by the single parameter, and two, I didn't intend to use the <span class="math">\(\sigma\)</span> posterior in the analysis for the reason mentioned above, checking only to see that it converged.</p>
+</li>
+</ol>
+<p>In the end, I chose Option 3 for a few simple reasons. First, I have no reason to believe that the data were generated by a variety of distinct "week-type" distributions; a week is a rather large unit of time. In addition, the spread of the empirical distributions don't appear, by no particularly rigorous measure, that erratic. Conversely, if this were instead day-level data, this argument would be much more plausible and the data would likely corroborate this point. Second, Gelman suggests this approach in response to a similar question, adding "I’ve personally never had much success with Dirichlets.^"3^</p>
+<p>To build this model, I elect to use Stan in R, defining it as follows:</p>
+<div class="highlight"><pre><span></span>data <span class="p">{</span>
+ int<span class="o">&lt;</span>lower<span class="o">=</span><span class="m">1</span><span class="o">&gt;</span> N<span class="p">;</span>
+ real very_distracting<span class="p">[</span>N<span class="p">];</span>
+ real distracting<span class="p">[</span>N<span class="p">];</span>
+ real neutral<span class="p">[</span>N<span class="p">];</span>
+ real productive<span class="p">[</span>N<span class="p">];</span>
+<span class="p">}</span>
+
+parameters <span class="p">{</span>
+ real phi_a<span class="p">;</span>
+ real phi_b<span class="p">;</span>
+ real phi_c<span class="p">;</span>
+ real phi_d<span class="p">;</span>
+ real phi_e<span class="p">;</span>
+ real<span class="o">&lt;</span>lower<span class="o">=</span><span class="m">0</span><span class="p">,</span> upper<span class="o">=</span><span class="m">1</span><span class="o">&gt;</span> sigma<span class="p">;</span>
+<span class="p">}</span>
+
+transformed parameters <span class="p">{</span>
+ real mu_a<span class="p">;</span>
+ real mu_b<span class="p">;</span>
+ real mu_c<span class="p">;</span>
+ real mu_d<span class="p">;</span>
+ mu_a <span class="o">=</span> <span class="kp">exp</span><span class="p">(</span>phi_a<span class="p">)</span> <span class="o">/</span> <span class="p">(</span> <span class="kp">exp</span><span class="p">(</span>phi_a<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_b<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_c<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_d<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_e<span class="p">)</span> <span class="p">);</span>
+ mu_b <span class="o">=</span> <span class="kp">exp</span><span class="p">(</span>phi_b<span class="p">)</span> <span class="o">/</span> <span class="p">(</span> <span class="kp">exp</span><span class="p">(</span>phi_a<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_b<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_c<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_d<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_e<span class="p">)</span> <span class="p">);</span>
+ mu_c <span class="o">=</span> <span class="kp">exp</span><span class="p">(</span>phi_c<span class="p">)</span> <span class="o">/</span> <span class="p">(</span> <span class="kp">exp</span><span class="p">(</span>phi_a<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_b<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_c<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_d<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_e<span class="p">)</span> <span class="p">);</span>
+ mu_d <span class="o">=</span> <span class="kp">exp</span><span class="p">(</span>phi_d<span class="p">)</span> <span class="o">/</span> <span class="p">(</span> <span class="kp">exp</span><span class="p">(</span>phi_a<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_b<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_c<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_d<span class="p">)</span> <span class="o">+</span> <span class="kp">exp</span><span class="p">(</span>phi_e<span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+
+model <span class="p">{</span>
+ sigma <span class="o">~</span> uniform<span class="p">(</span> <span class="m">0</span> <span class="p">,</span> <span class="m">1</span> <span class="p">);</span>
+ phi_a <span class="o">~</span> normal<span class="p">(</span> <span class="m">0</span> <span class="p">,</span> <span class="m">1</span> <span class="p">);</span>
+ phi_e <span class="o">~</span> normal<span class="p">(</span> <span class="m">0</span> <span class="p">,</span> <span class="m">1</span> <span class="p">);</span>
+ phi_d <span class="o">~</span> normal<span class="p">(</span> <span class="m">0</span> <span class="p">,</span> <span class="m">1</span> <span class="p">);</span>
+ phi_c <span class="o">~</span> normal<span class="p">(</span> <span class="m">0</span> <span class="p">,</span> <span class="m">1</span> <span class="p">);</span>
+ phi_b <span class="o">~</span> normal<span class="p">(</span> <span class="m">0</span> <span class="p">,</span> <span class="m">1</span> <span class="p">);</span>
+ very_distracting <span class="o">~</span> normal<span class="p">(</span>mu_a<span class="p">,</span> sigma<span class="p">);</span>
+ distracting <span class="o">~</span> normal<span class="p">(</span>mu_b<span class="p">,</span> sigma<span class="p">);</span>
+ neutral <span class="o">~</span> normal<span class="p">(</span>mu_c<span class="p">,</span> sigma<span class="p">);</span>
+ productive <span class="o">~</span> normal<span class="p">(</span>mu_d<span class="p">,</span> sigma<span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Here (with <em>a, b, c, d, e</em> corresponding respectively to "Very Distracting Time," "Distracting Time," "Neutral," "Productive Time," "Very Productive Time") I model the likelihoods of all but <em>e</em>, as this can be computed deterministically from the posterior samples of <em>a, b, c</em> and <em>d</em> as <span class="math">\(e = 1 - a - b - c - d\)</span>. For priors, I place <span class="math">\(\text{Normal}(0, 1)\)</span> priors on <span class="math">\(\phi_j\)</span>, the magnitude of which should be practically irrelevant as stated previously. Finally, I give <span class="math">\(\sigma\)</span> a <span class="math">\(\text{Uniform}(0, 1)\)</span> prior, which seemed like a logical magnitude for mapping a vector of values that sum to 1 to another vector of values that sum (to something close to) to 1.</p>
+<p>Instinctually, this modeling framework seems like it might have a few leaks in the theoretical ceiling - especially with respect to my choices surrounding the shared <span class="math">\(\sigma\)</span> parameter. Should you have some feedback on this approach, please do drop a line in the comments below.</p>
+<p>To fit the model, I use the standard Stan NUTS engine to build 4 MCMC chains, following Richard McElreath's "four short chains to check, one long chain for inference!"<sup id="fnref-3"><a class="footnote-ref" href="#fn-3">3</a></sup>. The results - fortunately, quite smooth - are as follows:</p>
+<p><img alt="traceplot" src="https://cavaunpeu.github.io/figures/poor_mans_dirichlet_traceplot.png"></p>
+<p>The gray area of the plot pertains to the warmup period, while the white gives the valid samples. All four chains appear highly-stationary, well-mixing and roughly identical. Finally, let's examine the convergence diagnostics themselves:</p>
+<div class="highlight"><pre><span></span>Inference <span class="kr">for</span> Stan model<span class="o">:</span> model.
+<span class="m">4</span> chains<span class="p">,</span> each with iter<span class="o">=</span><span class="m">2000</span><span class="p">;</span> warmup<span class="o">=</span><span class="m">1000</span><span class="p">;</span> thin<span class="o">=</span><span class="m">1</span><span class="p">;</span>
+post<span class="o">-</span>warmup draws per chain<span class="o">=</span><span class="m">1000</span><span class="p">,</span> total post<span class="o">-</span>warmup draws<span class="o">=</span><span class="m">4000.</span>
+
+      mean se_mean   sd <span class="m">1.5</span><span class="o">% 98.5%</span> n_eff Rhat
+mu_a  <span class="m">0.07</span>       <span class="m">0</span> <span class="m">0.01</span> <span class="m">0.05</span>  <span class="m">0.09</span>  <span class="m">4000</span>    <span class="m">1</span>
+mu_b  <span class="m">0.07</span>       <span class="m">0</span> <span class="m">0.01</span> <span class="m">0.05</span>  <span class="m">0.09</span>  <span class="m">4000</span>    <span class="m">1</span>
+mu_c  <span class="m">0.20</span>       <span class="m">0</span> <span class="m">0.01</span> <span class="m">0.18</span>  <span class="m">0.22</span>  <span class="m">4000</span>    <span class="m">1</span>
+mu_d  <span class="m">0.12</span>       <span class="m">0</span> <span class="m">0.01</span> <span class="m">0.10</span>  <span class="m">0.14</span>  <span class="m">4000</span>    <span class="m">1</span>
+sigma <span class="m">0.07</span>       <span class="m">0</span> <span class="m">0.00</span> <span class="m">0.06</span>  <span class="m">0.07</span>  <span class="m">1792</span>    <span class="m">1</span>
+</pre></div>
+
+
+<p>Both <code>Rhat</code> - a value which we hope to equal 1, would be "suspicious at 1.01 and catastrophic at 1.10"<sup id="fnref2-3"><a class="footnote-ref" href="#fn-3">3</a></sup> - and <code>n_eff</code> - which expresses the "effective" number of samples, i.e. the samples not discarded due to high autocorrelation in the NUTS process - are right where we want them to be. Furthermore, <span class="math">\(\sigma\)</span> ends up being rather small, and with a rather-tight 97% prediction interval to boot.</p>
+<p>Next, let's draw 2000 samples from the joint posterior and plot the respective distributions of <span class="math">\(\mu_i\)</span> against one another:</p>
+<p><img alt="posterior plot" src="https://cavaunpeu.github.io/figures/poor_mans_dirichlet_posteriors.png"></p>
+<p>Remember, the above posterior distributions are for the <em>expected values</em> (mean) of each productivity-level proportion. In our model, we then insert this mean into a normal distribution (the likelihood function) with standard deviation <span class="math">\(\sigma\)</span> and draw our final value.</p>
+<p>Finally, let's compute the mean of each posterior for a final result:</p>
+<p><img alt="donut plot" src="https://cavaunpeu.github.io/figures/poor_mans_dirichlet_donut_plot.png"></p>
+<p>In summary, I've got work to do. Time to cast off those "Neutral" clothes and toss it to the purple.</p>
+<hr>
+<p>Additional Resources:</p>
+<ol>
+<li><a href="https://erikbern.com/2015/12/05/more-mcmc-analyzing-a-small-dataset-with-1-5-ratings/">More MCMC – Analyzing a small dataset with 1-5
+    ratings</a></li>
+</ol>
+<hr>
+<p>Code:</p>
+<p>The code for this project can be found
+<a href="https://github.com/cavaunpeu/rescue-time-estimation">here</a>.</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn-1">
+<p><a href="https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-gelman_et_al-3">Conjugate Prior - Wikipedia</a>&#160;<a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn-2">
+<p><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">Conjugate prior to
+Dirichlets?</a>&#160;<a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn-3">
+<p>McElreath, Richard. Statistical Rethinking. Chapman and
+Hall/CRC, 20151222. VitalBook file.&#160;<a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2-3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'RescueTime Inference via the "Poor Man's Dirichlet"';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

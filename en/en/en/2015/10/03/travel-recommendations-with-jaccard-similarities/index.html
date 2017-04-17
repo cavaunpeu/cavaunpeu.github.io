@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- CSS -->
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a href="https://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4>data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Travel Recommendations with Jaccard Similarities</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2015-10-03T02:40:00-04:00" itemprop="datePublished">October 3, 2015</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>I recently finished building a <a href="http://countryrecommender.herokuapp.com/">web app</a> that recommends travel destinations. You input a country, and it provides you with 5 other countries which you might also enjoy. The recommendations are generated via a basic application of <a href="https://en.wikipedia.org/wiki/Collaborative_filtering">collaborative filtering</a>. In effect, you query for a country, and the engine suggests additional countries enjoyed by other users of similar taste. The methodology is pretty simple:</p>
+<ol>
+<li>Capture travel-related tweets from the <a href="http://twitter4j.org/en/">Twitter API</a>, defined as any containing the strings "#ttot", "#travel", "#lp", "vacation", "holiday", "wanderlust", "viajar", "voyager", "destination", "tbex", or "tourism."</li>
+<li>If a tweet contains the name of one of 248 countries or territories, or their respective capitals, label this tweet with this country. For example, the tweet "backpacking Iran is awesome! #travel" would be labled with "Iran."</li>
+<li>Represent each country as a set of the user_id's who have tweeted about it.</li>
+<li>Compute a <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard similarity</a> - defined as the size of the intersection of 2 sets divided by the size of their union - between all combinations of countries.</li>
+<li>When a country is queried, return the 5 countries Jaccard-most similar. The length of the bars on the plot are the respective similarity scores. So - let's try a few out!</li>
+</ol>
+<p><img alt="colombia recommendations" src="https://cavaunpeu.github.io/figures/colombia_recommendations.png"></p>
+<p>Not bad. Venezuela - neighbor to the East - is recommended most highly. Again, this implies that those tweeting about Colombia were also tweeting about Venezuela.</p>
+<p><img alt="malaysia recommendations" src="https://cavaunpeu.github.io/figures/malaysia_recommendations.png"></p>
+<p>Seems logical.</p>
+<p><img alt="india recommendations" src="https://cavaunpeu.github.io/figures/india_recommendations.png"></p>
+<p>Strange one, maybe? Then again, all countries - especially Greece, Italy, and France - are universally popular travel destinations, just like our query country India. As such, it's certainly conceivable that they were being promoted by similar users. We'd want to read the tweets to be sure.</p>
+<p>Moving forward, I plan to implement a more robust similarity metric/methodology. While a Jaccard similarity is effective, it's a little bit "bulky": most notably, being a <em>set</em> similarity metric, it doesn't consider repeat tweets about a given country. For example, if User A tweeted 12 times about Hungary and 1 time about Turkey, a Jaccard similarity would consider these behaviors equal (by simply including User A in each country's respective set). As such, a cosine-based metric might be more appropriate. See <a href="http://www.benfrederickson.com/distance-metrics/">here</a> for an excellent overview of possible approaches to a "people who like this also like" analysis.</p>
+<p>Once more, the app is linked <a href="http://countryrecommender.herokuapp.com/">here</a>. In addition, the code powering the app can be found on my <a href="https://github.com/cavaunpeu/countryrecommender">GitHub</a>. Backend in Scala, and front-end in HTML, CSS, and native JavaScript. Do take it for a spin, and <a href="https://twitter.com/WillTravelLife">let me know</a> what you think!</p></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf'; 
+    var disqus_title = 'Travel Recommendations with Jaccard Similarities';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-send" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
