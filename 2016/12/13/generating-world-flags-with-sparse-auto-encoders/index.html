@@ -11,26 +11,27 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="https://willwolf.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
 
 	<!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary">
+        <meta name="twitter:card" content="summary">
         <meta name="twitter:site" content="@willwolf_">
         <meta name="twitter:creator" content="@willwolf_">
-    <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+        <meta name="twitter:domain" content="https://willwolf.io">
+        <meta property="twitter:title" content="Generating World Flags with Sparse Auto-Encoders"/>
         <meta property="twitter:description" content="Hand-rolled sparse autoencoders to generate novel world flags."/>
 
 	<!-- CSS -->
-	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -42,19 +43,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a href="https://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a href="https://willwolf.io/">will wolf</a></h1>
           <h4>data science things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://willwolf.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://willwolf.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
               <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://willwolf.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://willwolf.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -104,75 +105,75 @@
 <p>First, let's see how well our network does. Again, its goal was to learn how to compress an image into a reduced representation containing enough information to recreate the original thereafter.</p>
 <p>Here's an image of the downsized flag of Afghanistan as passed into our network:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/afghanistan_reduced_bitmap.png'>
+  <img src='https://willwolf.io/images/afghanistan_reduced_bitmap.png'>
 </p>
 
 <p>So, this is as good as we're ever going to do. When we pass this into our network, here's what it predicts:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/reconstructed_afghanistan_reduced_bitmap.png'>
+  <img src='https://willwolf.io/images/reconstructed_afghanistan_reduced_bitmap.png'>
 </p>
 
 <p>Not terrible. Of course, this could be improved with, squarely, more training data.</p>
 <p>After training our auto-encoder, we solve for the 64 individual images that "maximally activate" each of the 64 "feature detectors," i.e. each of our hidden-layer nodes.</p>
-<p><img alt="embedded features" src="https://cavaunpeu.github.io/figures/flag_embedding_features.png"></p>
+<p><img alt="embedded features" src="https://willwolf.io/figures/flag_embedding_features.png"></p>
 <p>As anticipated, there does in fact appear to be some higher-level "structure" in our flags. In other words, we can now empirically see: a flag is a thing made up of some combination of horizontal stripes, vertical stripes, diagonal crosses, central emblems, the British crest, etc.</p>
 <p>Next, let's pass all images back through our network, obtain the 64-dimensional encoding for each, reduce these encodings into 2-dimensional space via the <a href="http://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html">TSNE</a> algorithm, and plot.</p>
-<p><img alt="tsne plot" src="https://cavaunpeu.github.io/figures/country_embeddings_tsne_plot.png"></p>
+<p><img alt="tsne plot" src="https://willwolf.io/figures/country_embeddings_tsne_plot.png"></p>
 <p>Points that are close together indicate flags that are visually similar. So, what have we learned (or rather, what human intuition have we corroborated with empirical, numerical evidence)? Notable similarities include:</p>
 <p>Belgium, Chad and Mali:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/belgium_flag.jpg'>
+  <img src='https://willwolf.io/images/belgium_flag.jpg'>
 </p>
 
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/chad_flag.jpg'>
+  <img src='https://willwolf.io/images/chad_flag.jpg'>
 </p>
 
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/mali_flag.jpg'>
+  <img src='https://willwolf.io/images/mali_flag.jpg'>
 </p>
 
 <p>Malaysia, Liberia and Puerto Rico:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/malaysia_flag.jpg'>
+  <img src='https://willwolf.io/images/malaysia_flag.jpg'>
 </p>
 
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/liberia_flag.jpg'>
+  <img src='https://willwolf.io/images/liberia_flag.jpg'>
 </p>
 
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/puerto_rico_flag.jpg'>
+  <img src='https://willwolf.io/images/puerto_rico_flag.jpg'>
 </p>
 
 <p>Canada, Denmark and Peru:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/canada_flag.jpg'>
+  <img src='https://willwolf.io/images/canada_flag.jpg'>
 </p>
 
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/denmark_flag.jpg'>
+  <img src='https://willwolf.io/images/denmark_flag.jpg'>
 </p>
 
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/peru_flag.jpg'>
+  <img src='https://willwolf.io/images/peru_flag.jpg'>
 </p>
 
 <p>Here, we see that similarity is defined not just across one type of feature, but necessarily, across all. Respectively, the above 3 groups seem heavy in: the "3 vertical bars" feature(s), the "stripes" and "thing in the top-left corner" feature(s), and the "cherry red" feature(s). (I include the optional "s" because the features are not particularly easy to identify nor apparently mutually exclusive in the feature map above.)</p>
 <p>Finally, let's generate some new flags. The following images are what happens when we pass the respective composite encodings into the hidden-layer of our auto-encoder, and feed-forward (i.e. pass it through the decoder). The result is then resized back to the original (where more resolution is inherently lost).</p>
 <p>Morocco:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/morocco_generated_flag.png'>
+  <img src='https://willwolf.io/images/morocco_generated_flag.png'>
 </p>
 
 <p>Morocco + Colombia:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/morocco_colombia_generated_flag.png'>
+  <img src='https://willwolf.io/images/morocco_colombia_generated_flag.png'>
 </p>
 
 <p>Morocco + Colombia + Malaysia:</p>
 <p align="center">
-  <img src='https://cavaunpeu.github.io/images/morocco_colombia_malaysia_generated_flag.png'>
+  <img src='https://willwolf.io/images/morocco_colombia_malaysia_generated_flag.png'>
 </p>
 
 <p>If only there were more countries in the world such that I could get more data. But hey, we need fewer borders, not more.</p>
