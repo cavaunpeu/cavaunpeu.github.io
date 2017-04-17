@@ -149,3 +149,11 @@ img {
   display: block;
   margin: auto;
 }
+
+.output_area {
+  justify-content: center;
+}
+
+.output_area .output_text.output_stream.output_stdout {
+  margin-right: auto;
+}
