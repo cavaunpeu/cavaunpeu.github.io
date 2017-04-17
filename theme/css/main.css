@@ -1,0 +1,146 @@
+body {
+  font-size: 19px;
+  background-color: white;
+}
+
+h1 {
+  font-size: 48px !important;
+}
+
+h2 {
+  font-size: 40px !important;
+}
+
+h3 {
+  font-size: 32px !important;
+}
+
+h4 {
+  font-size: 24px !important;
+}
+
+h5 {
+  font-size: 18px !important;
+}
+
+/*Navbar*/
+.navbar {
+  border: None;
+  margin-bottom: 0px;
+}
+
+.navbar-nav > li > a {
+  line-height: 90px;
+  font-size: 22px;
+}
+
+#myNavbar > ul > li > #activeLanguage.dropdown-toggle {
+  padding-bottom: 2px;
+  height: 75px;
+}
+
+#myNavbar > ul > li.dropdown.open > .dropdown-toggle {
+  background-color: transparent;
+}
+
+#myNavbar .dropdown-menu::before, #myNavbar .dropdown-menu::after {
+    border: none;
+    content: none;
+}
+
+#myNavbar .dropdown-menu {
+ background-color: transparent;
+ border: none;
+ box-shadow: none;
+ left: 17px;
+}
+
+#myNavbar #inactiveLanguage {
+ float: left;
+ font-size: 22px;
+ color: inherit;
+}
+
+#myNavbar #inactiveLanguage {
+ background-color: transparent;
+ background-image: none;
+ color: #555555;
+}
+
+/*Footer*/
+#footer-wrapper > #social-links a > i {
+  padding: 3px;
+}
+
+/*Articles*/
+.article-body > p {
+  line-height: 1.6;
+}
+
+.article-body > p, .article-body > ol, .article-body > ul {
+  margin-bottom: 24px;
+  color: black;
+}
+
+.article-body > ol > li, .article-body > ul > li {
+  line-height: 1.6;
+}
+
+.article-body > h2, .article-body > h3, .article-body > h4, .article-body > h5 {
+  margin-bottom: 16px;
+}
+
+.article-body .highlight > pre {
+  margin-bottom: 24px;
+  margin-top: 24px;
+}
+
+/*Pages*/
+#content.body > p, #content.body > ol, #content.body > ul {
+  margin-bottom: 24px;
+  line-height: 1.6;
+  color: black;
+}
+
+#content.body > h2, #content.body > h3, #content.body > h4, #content.body > h5 {
+  margin-bottom: 16px;
+}
+
+/*Jupyter notebooks*/
+
+/*There was a change made on line 3346 of ipython.css; this change should be made
+here, but I had trouble overriding it in a reasonable way*/
+
+body div > ol > li, body div > ul > li {
+  line-height: 1.6;
+}
+
+body div > blockquote > p {
+  line-height: 1.6;
+}
+
+.rendered_html h1 {
+    margin: .5em 0;
+    font-weight: bold;
+}
+
+.rendered_html h2 {
+    margin: .65em 0;
+}
+
+.rendered_html h3 {
+    margin: .75em 0;
+}
+
+.rendered_html h4 {
+    margin: 0.85em 0;
+}
+
+.rendered_html h5 {
+    margin: 1.25em 0;
+}
+
+.rendered_html h6 {
+    font-size: 77%;
+    margin: 1.65em 0;
+}
