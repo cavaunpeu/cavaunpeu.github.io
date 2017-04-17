@@ -15067,25 +15067,27 @@ $$&lt;p&gt;Starting from the beginning, our goal is to reduce each question down
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h1 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$"&gt;$P(\text{Accident = 1}\ |\ \text{Traffic = 1})$&lt;a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$"&gt;¶&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;$\begin{align*}
+&lt;h2 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$"&gt;$P(\text{Accident = 1}\ |\ \text{Traffic = 1})$&lt;a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;$\begin{align*}
 P(A = 1|T = 1)
   &amp;= \frac{P(T = 1 | A = 1)P(A = 1)}{P(T = 1)}\\
   &amp;= \frac{P(T = 1, A = 1)P(A = 1)}{P(A = 1)P(T = 1)}\\
   &amp;= \frac{P(T = 1, A = 1)}{P(T = 1)}\\
 \end{align*}$
+&lt;br&gt;
 $\begin{align*}
 P(T = 1, A = 1)
   &amp;= \sum_{P}P(P, A = 1, T = 1))\\
   &amp;= P(P = 0, A = 1, T = 1) + P(P = 1, A = 1, T = 1)\\
   &amp;= P(P = 0)P(A = 1)P(T = 1 \ |\  P = 0, A = 1) + P(P = 1)P(A = 1)P(T = 1 \ |\  P = 1, A = 1)
 \end{align*}$
+&lt;br&gt;
 $\begin{align*}
 P(T = 1)
   &amp;= \sum_{A, P}P(A, P, T = 1))\\
   &amp;= \sum_{A, P}P(A)P(P)P(T = 1\ |\ A, P))\\
   &amp;=
     P(A = 0)P(P = 0)P(T = 1\ |\ A = 0, P = 0) + P(A = 0)P(P = 1)P(T = 1\ |\ A = 0, P = 1) + P(A = 1)P(P = 0)P(T = 1\ |\ A = 1, P = 0) + P(A = 1)P(P = 1)P(T = 1\ |\ A = 1, P = 1)
-\end{align*}$&lt;/p&gt;
+\end{align*}$&lt;/br&gt;&lt;/br&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -15470,20 +15472,22 @@ TkSuQmCC
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h1 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$"&gt;$P(\text{Accident = 1}\ |\ \text{Traffic = 1}, \text{President = 1})$&lt;a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$"&gt;¶&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;$\begin{align*}
+&lt;h2 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$"&gt;$P(\text{Accident = 1}\ |\ \text{Traffic = 1}, \text{President = 1})$&lt;a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;$\begin{align*}
 P(A = 1\ |\ T = 1, P = 1)
   &amp;= \frac{P(A = 1, T = 1, P = 1)}{P(T = 1, P = 1)}
 \end{align*}$
+&lt;br&gt;
 $\begin{align*}
 P(A = 1, T = 1, P = 1)
   &amp;= P(T = 1\ |\ A = 1, P = 1)P(A = 1)P(P = 1)
 \end{align*}$
+&lt;br&gt;
 $\begin{align*}
 P(T = 1, P = 1)
   &amp;= \sum_{A}P(A, P = 1, T = 1)\\
   &amp;= P(A = 0, P = 1, T = 1) + P(A = 1, P = 1, T = 1)\\
   &amp;= P(T = 1\ |\ A = 0, P = 1)P(P = 1)P(A = 0) + P(T = 1\ |\ A = 1, P = 1)P(P = 1)P(A = 1)
-\end{align*}$&lt;/p&gt;
+\end{align*}$&lt;/br&gt;&lt;/br&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
