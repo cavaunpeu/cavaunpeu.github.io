@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://willwolf.io/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,18 +20,18 @@
         <meta name="twitter:card" content="summary">
         <meta name="twitter:site" content="@willwolf_">
         <meta name="twitter:creator" content="@willwolf_">
-        <meta name="twitter:domain" content="https://willwolf.io/es">
+        <meta name="twitter:domain" content="https://cavaunpeu.github.io/es">
         <meta property="twitter:title" content="Simulación Estadística del Plebiscito Colombiano: ¿Realmente Ganaron Los del &#34;No?&#34;"/>
         <meta property="twitter:description" content="Una simulación estadística del plebiscito colombiano de 2016."/>
 
 	<!-- CSS -->
-	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -43,19 +43,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a href="https://willwolf.io/es/">will wolf</a></h1>
+        <h1><a href="https://cavaunpeu.github.io/es/">will wolf</a></h1>
           <h4>cosas de data science y pensamientos sobre el mundo</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://willwolf.io/es/about/" title="Acerca de"><span class="glyphicon glyphicon-user"></span> Acerca de</a></li>
-              <li><a href="https://willwolf.io/es/archive/" title="Archivo"><span class="glyphicon glyphicon-th-list"></span> Archivo</a></li>
+              <li><a href="https://cavaunpeu.github.io/es/about/" title="Acerca de"><span class="glyphicon glyphicon-user"></span> Acerca de</a></li>
+              <li><a href="https://cavaunpeu.github.io/es/archive/" title="Archivo"><span class="glyphicon glyphicon-th-list"></span> Archivo</a></li>
               <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://willwolf.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://willwolf.io/" title=English>EN</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/" title=English>EN</a>
                 </li>
             </ul>
           </li>
@@ -82,7 +82,7 @@
 <p>The technology of tired humans sorting pieces of paper into four stacks is, at best, crude. As a large research literature has made clear, we can reasonably assume that even well-rested people would have made mistakes with between 0.5% and 1% of the ballots. On this estimate, about 65,000-130,000 votes would have been unintentionally misclassified. It means the number of innocent counting errors could easily be substantially larger than the 53,894 yes-no difference.</p>
 </blockquote>
 <p>¿Sería posible que la mayoría quería el "Sí" y sin embargo perdió igual?</p>
-<p><img alt="plebiscite vote" src="https://willwolf.io/es/../images/colombian_plebiscite_vote.jpg"></p>
+<p><img alt="plebiscite vote" src="https://cavaunpeu.github.io/es/../images/colombian_plebiscite_vote.jpg"></p>
 <p>Para investigarlo, podemos formular el proceso del voto como un sencillo proceso estadístico y preguntarse: "Si repitiéramos el plebiscito muchas más veces, ¿con qué frecuencia ganaría el 'Sí' de verdad?"</p>
 <p>Si queremos, podemos analizar el problema desde un lado analítico, que es decir resolverlo a mano con un lápiz y papel. Esto se pone complicado rápido. Más bien, nos negamos de hacerle tanto caso a la teoría y corremos una simulación básica en su lugar; <a href="https://speakerdeck.com/jakevdp/statistics-for-hackers">"si sabes escribir un for-loop, puedes tú hacer los estadísticos."</a></p>
 <p>Formulemos el problem así:</p>

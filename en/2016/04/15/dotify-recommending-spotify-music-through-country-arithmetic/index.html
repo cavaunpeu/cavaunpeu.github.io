@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://willwolf.io/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,18 +20,18 @@
         <meta name="twitter:card" content="summary">
         <meta name="twitter:site" content="@willwolf_">
         <meta name="twitter:creator" content="@willwolf_">
-        <meta name="twitter:domain" content="https://willwolf.io">
+        <meta name="twitter:domain" content="https://cavaunpeu.github.io">
         <meta property="twitter:title" content="dotify: Recommending Spotify Music Through Country Arithmetic"/>
         <meta property="twitter:description" content="A web app for Spotify music recommendation using Implicit Matrix Factorization and &#34;country arithmetic.&#34;"/>
 
 	<!-- CSS -->
-	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -43,19 +43,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a href="https://willwolf.io/">will wolf</a></h1>
+        <h1><a href="https://cavaunpeu.github.io/">will wolf</a></h1>
           <h4>data science things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://willwolf.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://willwolf.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
               <li><a href="feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://willwolf.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://willwolf.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -76,9 +76,9 @@
 	<div itemprop="articleBody" class="article-body"><p>Ever since the release of <a href="https://en.wikipedia.org/wiki/Word2vec">word2vec</a> I've been fascinated with embedding things - words, places, people - into vector space. Though not a mathematical historian, I don't believe this concept is at all new: matrix factorization methods like <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> have given us this ability for years. This said, one of the most exciting revelations of word2vec is the remarkably intuitive results of taking arithmetic combinations of these vectors - adding, subtracting, multiplying, etc. - with</p>
 <div class="math">$$vector_{king} - vector_{man} + vector_{girl} \approx vector_{queen}$$</div>
 <p>being the classic party trick. With <a href="http://dotify.herokuapp.com/">dotify</a>, I set out to embed countries into vector space myself, and use these embeddings to recommend music. What are some songs like "Colombia" .. times "Turkey" .. minus "Germany," you ask?</p>
-<p><img alt="dotify Background" src="https://willwolf.io/images/spotify_not_available.png"></p>
+<p><img alt="dotify Background" src="https://cavaunpeu.github.io/images/spotify_not_available.png"></p>
 <p>To embed, I employ the timeless Implicit Matrix Factorization of <a href="http://yifanhu.net/PUB/cf.pdf">Hu, Koren, and Volinsky</a> on daily Spotify Charts data. For a given song in a given country, implicit feedback is counted as the total number of times this song has been streamed throughout history. While the confidence matrix <span class="math">\(C_{ui}\)</span> is typically defined as <span class="math">\(1 + \alpha(1 + R_{ui})\)</span>, I tweaked it to be <span class="math">\(1 + \alpha\log{(1 + R_{ui})}\)</span>; this performed better empirically - likely due to the fact that many songs have stream counts orders of magnitude higher than others. I've been trying to implement more algorithms by hand as of late, which you'll find in the code. To use dotify: begin typing the name of a country, or simply press the down arrow, in order to select a country with your mouse or the enter key. Next, a dropdown of arithmetic operators will appear; select one in identical fashion. Feel free to keep entering countries and operators: your expression can be as long as you like. Finally, when you're ready to terminate your expression and receive song recommendations, simply enter the equals sign ("=") in the operator dropdown. For example:</p>
-<p><img alt="dotify Screenshot" src="https://willwolf.io/images/dotify_screenshot.png"></p>
+<p><img alt="dotify Screenshot" src="https://cavaunpeu.github.io/images/dotify_screenshot.png"></p>
 <p>The app is built with the following core technologies: Flask as both API endpoints and a web server; React and LESS on the front-end; Webpack for asset compilaton; Postgres database; Heroku for deployment.</p>
 <p>Feedback is appreciated as always. Thanks for reading.</p>
 <hr>
