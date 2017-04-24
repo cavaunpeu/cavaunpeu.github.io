@@ -486,7 +486,7 @@ $$</div>
 <li>Our factors take any arbitrary form, and we "anticipate" that this form will be exponentiated within the softmax function.</li>
 </ol>
 <p>Remember, the point of this exponentiation was to put our weighted input elements "on the arithmetic path to becoming valid probabilities," i.e. to make them strictly positive. This said, there is nothing (to my knowledge) that mandates that a factor produce a strictly positive number. So which came first — the chicken or the egg (the exponent or the softmax)?</p>
-<p>In truth, I'm not actually sure, but I do believe we can safely treat the softmax numerator and an unnormalized Gibb's distribution as equivalent, and simply settle on: <em>call it what you will, we need an exponent in there somewhere to put this thing in $[0, 1].</em></p>
+<p>In truth, I'm not actually sure, but I do believe we can safely treat the softmax numerator and an unnormalized Gibb's distribution as equivalent and simply settle on: <em>call it what you will, we need an exponent in there somewhere to put this thing in <span class="math">\([0, 1]\)</span>.</em></p>
 <h2>Summary</h2>
 <p>This exercise has made the relationships between canonical machine learning models, activation functions and the basic axiom of conditional probability a whole lot clearer. For more information, to reference the resources below, especially Daphne Koller's material on <a href="https://www.coursera.org/learn/probabilistic-graphical-models">probabilistic graphical models</a>. Thanks a lot for reading this far.</p>
 <hr>
