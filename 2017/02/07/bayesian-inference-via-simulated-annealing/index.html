@@ -76,7 +76,7 @@
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>I recently finished a <a href="https://www.coursera.org/learn/discrete-optimization">course</a> on discrete optimization and am currently working through Richard McElreath's <em>excellent</em> <a href="http://xcelab.net/rm/statistical-rethinking/">textbook</a> Statistical Rethinking. Combining the two, and duly jazzed by this <a href="https://www.youtube.com/watch?v=SC5CX8drAtU">video</a> on the Traveling Salesman Problem, I'd thought I'd build a toy Bayesian model and try to optimize it via simulated annealing.</p>
 <p>This work was brief, amusing and experimental. The result is a simple <a href="https://willwolf.shinyapps.io/bayesian-inference-simulated-annealing/">Shiny app</a> that contrasts MCMC search via simulated annealing versus the (more standard) Metropolis algorithm. While far from groundbreaking, I did pick up the following few bits of intuition along the way.</p>
-<p><img alt="traceplot" src="https://cavaunpeu.github.io/figures/bayesian_inference_simulated_annealing_traceplot.png"></p>
+<p><img alt="traceplot" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_inference_simulated_annealing_traceplot.png"/></p>
 <h3>A new favorite analogy for Bayesian inference</h3>
 <p>I like teaching things to anyone who will listen. Fancy models are useless if your boss doesn't understand. Simple analogies are immensely effective for communicating almost anything at all.</p>
 <p>The goal of Bayesian inference is, given some data, to figure out which parameters were employed in generating that data. The data itself come from generative processes - a Binomial process, a Poisson process, a Normal process (as is used in this post), for example - which each require parameters to get off the ground (in the same way that an oven needs a temperature and a time limit before it can start making bread) - <span class="math">\(n\)</span> and <span class="math">\(p\)</span>; <span class="math">\(\lambda\)</span>; <span class="math">\(\mu\)</span> and <span class="math">\(\sigma\)</span>, respectively. In statistical inference, we work backwards: we're given the data, we hypothesize from which type of process(es) it was generated, and we then do our best to guess what these initial parameters were. Of course, we'll never actually know: if we did, we wouldn't need to do any modeling at all.</p>
@@ -164,7 +164,7 @@
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script></div>
+</script></hr></div>
 	<hr>
 	<h2>Comments</h2>
 <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>

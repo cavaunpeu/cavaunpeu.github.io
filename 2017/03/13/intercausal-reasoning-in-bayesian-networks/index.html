@@ -1052,7 +1052,7 @@ h6:hover .anchor-link {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The goal of this work is to perform simple intercausal reasoning on a 3-node Bayesian network.
-<img alt="simple bayesian network" src="https://cavaunpeu.github.io/figures/simple_bayesian_network.png"/></p>
+<img alt="simple bayesian network" class="img-responsive" src="https://cavaunpeu.github.io/figures/simple_bayesian_network.png"/></p>
 <p>In this network, both the "president being in town" and a "car accident on the highway" exert influence over whether a traffic jam occurs. With this relationship in mind, we will try to answer two simple questions:</p>
 <ul>
 <li>"What is the probability of an accident having occurred given that a traffic jam occurred?"</li>
@@ -1334,7 +1334,7 @@ Estimated accident coefficient: 1.0845
 <div class="output">
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 2000/2000 [00:15<00:00, 127.65it/s]
+<pre>100%|██████████| 2000/2000 [00:15&lt;00:00, 127.65it/s]
 </pre>
 </div>
 </div>
@@ -1358,7 +1358,7 @@ Estimated accident coefficient: 1.0845
 <div class="output">
 <div class="output_area"><div class="prompt"></div>
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA1gAAAGoCAYAAABbkkSYAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+<img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA1gAAAGoCAYAAABbkkSYAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzsvXmYXVWZ6P3b+8ynplRVKnMCBBICYZ4CotA4NEijOOCs
 tHbjdFuv3dr9cdv7NF8PYl8/+z52N/dqiwMO4AAqgi2tgogoQ4BACEkqc1VqrjrzsOe91/r+2KdO
 nZOqykAqqQTX71Hq5Ozp3evs4X3XO2lSSolCoVAoFAqFQqFQKI4afb4FUCgUCoVCoVAoFIpXCsrA
@@ -3864,7 +3864,7 @@ $$</p>
 <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">input_combinations</span><span class="p">:</span>
     <span class="n">counterfactual_predictions</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">)]</span> <span class="o">=</span> <span class="n">compute_counterfactual_predictions</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="n">observed_proportions</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">)]</span> <span class="o">=</span> \
-        <span class="n">observed_data</span><span class="p">[(</span><span class="n">observed_data</span><span class="p">[</span><span class="s1">'president'</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span> <span class="o">&</span> <span class="p">(</span><span class="n">observed_data</span><span class="p">[</span><span class="s1">'accident'</span><span class="p">]</span> <span class="o">==</span> <span class="n">a</span><span class="p">)][</span><span class="s1">'traffic'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">observed_data</span><span class="p">[(</span><span class="n">observed_data</span><span class="p">[</span><span class="s1">'president'</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">observed_data</span><span class="p">[</span><span class="s1">'accident'</span><span class="p">]</span> <span class="o">==</span> <span class="n">a</span><span class="p">)][</span><span class="s1">'traffic'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -3912,7 +3912,7 @@ $$</p>
 <div class="output">
 <div class="output_area"><div class="prompt"></div>
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA/oAAALECAYAAAC44UvIAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+<img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA/oAAALECAYAAAC44UvIAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xl8U1X+//H3bdIWO9SK0CqiFkRwAaUIyCi4gRsCg/hD
 wUFcUHDQCjojO1RQFFRcwOLCV8fxy/hFEStoccFBHQeUzbKJo5QqIPsilEJLl+T+/uiQaehCEnKb
 3NvX8/HgwaPJPeeek6TN55Nzcz6GaZqmAAAAAACAI8REegAAAAAAACB8SPQBAAAAAHAQEn0AAAAA
@@ -4652,12 +4652,12 @@ gg==
 <div class="output">
 <div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.legend.Legend at 0x1192d19e8></pre>
+<pre><matplotlib.legend.legend 0x1192d19e8="" at=""></matplotlib.legend.legend></pre>
 </div>
 </div>
 <div class="output_area"><div class="prompt"></div>
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAsEAAAHfCAYAAACxhQUCAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+<img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAsEAAAHfCAYAAACxhQUCAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xl8VOWh//HPOZNACIEsEJQ17IggArIvKiCCgoJWK5ZL
 tdq6t1WvS62K4FartrVotfqqV/3Z1qvWq6itiIKKoAioyCIoSwJhJ9skmfXMOc/vjyEjyBIQwmT5
 vv8ymZlznpk4yYczz3mOZYwxiIiIiIg0IHayByAiIiIicrwpgkVERESkwVEEi4iIiEiDowgWERER
@@ -5235,23 +5235,23 @@ $$<p>Starting from the beginning, our goal is to reduce each question down to an
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$">$P(\text{Accident = 1}\ |\ \text{Traffic = 1})$<a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$">¶</a></h2><p>$\begin{align*}
 P(A = 1|T = 1)
-  &= \frac{P(T = 1 | A = 1)P(A = 1)}{P(T = 1)}\\
-  &= \frac{P(T = 1, A = 1)P(A = 1)}{P(A = 1)P(T = 1)}\\
-  &= \frac{P(T = 1, A = 1)}{P(T = 1)}\\
+  &amp;= \frac{P(T = 1 | A = 1)P(A = 1)}{P(T = 1)}\\
+  &amp;= \frac{P(T = 1, A = 1)P(A = 1)}{P(A = 1)P(T = 1)}\\
+  &amp;= \frac{P(T = 1, A = 1)}{P(T = 1)}\\
 \end{align*}$
 <br>
 $\begin{align*}
 P(T = 1, A = 1)
-  &= \sum_{P}P(P, A = 1, T = 1))\\
-  &= P(P = 0, A = 1, T = 1) + P(P = 1, A = 1, T = 1)\\
-  &= P(P = 0)P(A = 1)P(T = 1 \ |\  P = 0, A = 1) + P(P = 1)P(A = 1)P(T = 1 \ |\  P = 1, A = 1)
+  &amp;= \sum_{P}P(P, A = 1, T = 1))\\
+  &amp;= P(P = 0, A = 1, T = 1) + P(P = 1, A = 1, T = 1)\\
+  &amp;= P(P = 0)P(A = 1)P(T = 1 \ |\  P = 0, A = 1) + P(P = 1)P(A = 1)P(T = 1 \ |\  P = 1, A = 1)
 \end{align*}$
 <br>
 $\begin{align*}
 P(T = 1)
-  &= \sum_{A, P}P(A, P, T = 1))\\
-  &= \sum_{A, P}P(A)P(P)P(T = 1\ |\ A, P))\\
-  &=
+  &amp;= \sum_{A, P}P(A, P, T = 1))\\
+  &amp;= \sum_{A, P}P(A)P(P)P(T = 1\ |\ A, P))\\
+  &amp;=
     P(A = 0)P(P = 0)P(T = 1\ |\ A = 0, P = 0) + P(A = 0)P(P = 1)P(T = 1\ |\ A = 0, P = 1) + P(A = 1)P(P = 0)P(T = 1\ |\ A = 1, P = 0) + P(A = 1)P(P = 1)P(T = 1\ |\ A = 1, P = 1)
 \end{align*}$</br></br></p>
 </div>
@@ -5318,12 +5318,12 @@ P(T = 1)
 <div class="output">
 <div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.legend.Legend at 0x1194a6a20></pre>
+<pre><matplotlib.legend.legend 0x1194a6a20="" at=""></matplotlib.legend.legend></pre>
 </div>
 </div>
 <div class="output_area"><div class="prompt"></div>
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtoAAAH0CAYAAAADoIroAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+<img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtoAAAH0CAYAAAADoIroAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XtY1GX+//HXMIgi4Kno8LW0DMEjHlPLU+oqZWbqGpoK
 blububYlmadM89SqadZmmVmuplZmWm2ttvXTUsvM1hOZhwzKA26mKSYgcRju3x8usyIIqNwzjPN8
 XBdX+ZmZ+/OeuQd4zc0973EYY4wAAAAAlKkAbxcAAAAAXI4I2gAAAIAFBG0AAADAAoI2AAAAYAFB
@@ -5640,19 +5640,19 @@ TkSuQmCC
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$">$P(\text{Accident = 1}\ |\ \text{Traffic = 1}, \text{President = 1})$<a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$">¶</a></h2><p>$\begin{align*}
 P(A = 1\ |\ T = 1, P = 1)
-  &= \frac{P(A = 1, T = 1, P = 1)}{P(T = 1, P = 1)}
+  &amp;= \frac{P(A = 1, T = 1, P = 1)}{P(T = 1, P = 1)}
 \end{align*}$
 <br>
 $\begin{align*}
 P(A = 1, T = 1, P = 1)
-  &= P(T = 1\ |\ A = 1, P = 1)P(A = 1)P(P = 1)
+  &amp;= P(T = 1\ |\ A = 1, P = 1)P(A = 1)P(P = 1)
 \end{align*}$
 <br>
 $\begin{align*}
 P(T = 1, P = 1)
-  &= \sum_{A}P(A, P = 1, T = 1)\\
-  &= P(A = 0, P = 1, T = 1) + P(A = 1, P = 1, T = 1)\\
-  &= P(T = 1\ |\ A = 0, P = 1)P(P = 1)P(A = 0) + P(T = 1\ |\ A = 1, P = 1)P(P = 1)P(A = 1)
+  &amp;= \sum_{A}P(A, P = 1, T = 1)\\
+  &amp;= P(A = 0, P = 1, T = 1) + P(A = 1, P = 1, T = 1)\\
+  &amp;= P(T = 1\ |\ A = 0, P = 1)P(P = 1)P(A = 0) + P(T = 1\ |\ A = 1, P = 1)P(P = 1)P(A = 1)
 \end{align*}$</br></br></p>
 </div>
 </div>
@@ -5714,12 +5714,12 @@ P(T = 1, P = 1)
 <div class="output">
 <div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.legend.Legend at 0x119715f60></pre>
+<pre><matplotlib.legend.legend 0x119715f60="" at=""></matplotlib.legend.legend></pre>
 </div>
 </div>
 <div class="output_area"><div class="prompt"></div>
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtsAAAH0CAYAAADsYuHWAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+<img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtsAAAH0CAYAAADsYuHWAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XtY1GX+//HXMIAi4CkpN1ssQzzjMdE0Da3QNDMzUwyt
 zTLXDlp5KsXjrtnB2iwyD2t5KGM12/ppW5vlITXKs6lkYB6wLFJMQOQw3r8//DIrchT4OMP4fFyX
 126fmbnve2ZuZl5zz/15j80YYwQAAACgwnm5egAAAACApyJsAwAAABYhbAMAAAAWIWwDAAAAFiFs
@@ -6113,12 +6113,12 @@ D2skSxiUJ7AvAAAAAElFTkSuQmCC
 <div class="output">
 <div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.text.Text at 0x1197e7ef0></pre>
+<pre><matplotlib.text.text 0x1197e7ef0="" at=""></matplotlib.text.text></pre>
 </div>
 </div>
 <div class="output_area"><div class="prompt"></div>
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAuIAAAH0CAYAAAB4hEgkAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+<img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAuIAAAH0CAYAAAB4hEgkAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XlYVPX+B/D3sDkI6CiMEK6kgZkgetWuhZp7mpmZ5oql
 adl6s0xzLbVEy7IbrZpZmeVWqTeXyuWilFlqLoWAuaGRrI4O4Mj6+4Pfd+7MMMs5MwcYhvfreXie
 hDlnzhzQ3vPh8/18VRUVFRUgIiIiIqIa5VXbF0BEREREVB8xiBMRERER1QIGcSIiIiKiWsAgTkRE

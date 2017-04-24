@@ -150,7 +150,7 @@ $$</div>
 $$</div>
 <p>Let's take this piece by piece.</p>
 <h3>Algebraic Derivatives</h3>
-<p><br></p>
+<p><br/></p>
 <h4><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}}\)</span>:</h4>
 <p>Starting with <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}}\)</span>, we note that a change in <span class="math">\(\mathbf{W^{hy}}\)</span> will only impact <span class="math">\(\mathbf{J_3}\)</span> at time <span class="math">\(t=3\)</span>: <span class="math">\(\mathbf{W^{hy}}\)</span> plays no role in computing the value of anything other than <span class="math">\(\mathbf{y_3}\)</span>. Therefore:</p>
 <div class="math">$$
@@ -168,7 +168,7 @@ $$</div>
 \frac{\partial \mathbf{y_1}}{\partial \mathbf{W^{hy}}}\\
 $$</div>
 <h4><span class="math">\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}}\)</span>:</h4>
-<p>Starting with <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hh}}}\)</span>, a change in <span class="math">\(\mathbf{W^{hh}}\)</span> will impact our cost <span class="math">\(\mathbf{J_3}\)</span> in <em>3 separate ways: </em>once, when computing the value of <span class="math">\(\mathbf{h_1}\)</span>; once, when computing the value of <span class="math">\(\mathbf{h_2}\)</span>, which depends on <span class="math">\(\mathbf{h_1}\)</span>; once, when computing the value of <span class="math">\(\mathbf{h_3}\)</span>, which depends on <span class="math">\(\mathbf{h_2}\)</span>, which depends on <span class="math">\(\mathbf{h_1}\)</span>.</p>
+<p>Starting with <span class="math">\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hh}}}\)</span>, a change in <span class="math">\(\mathbf{W^{hh}}\)</span> will impact our cost <span class="math">\(\mathbf{J_3}\)</span> in <em>3 separate ways:</em> once, when computing the value of <span class="math">\(\mathbf{h_1}\)</span>; once, when computing the value of <span class="math">\(\mathbf{h_2}\)</span>, which depends on <span class="math">\(\mathbf{h_1}\)</span>; once, when computing the value of <span class="math">\(\mathbf{h_3}\)</span>, which depends on <span class="math">\(\mathbf{h_2}\)</span>, which depends on <span class="math">\(\mathbf{h_1}\)</span>.</p>
 <p>More generally, a change in <span class="math">\(\mathbf{W^{hh}}\)</span> will impact our cost <span class="math">\(\mathbf{J_t}\)</span> on <span class="math">\(t\)</span> separate occasions. Therefore:</p>
 <div class="math">$$
 \frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}} =
@@ -383,7 +383,7 @@ $$</div>
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script></div>
+</script></hr></div>
 	<hr>
 	<h2>Comments</h2>
 <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
