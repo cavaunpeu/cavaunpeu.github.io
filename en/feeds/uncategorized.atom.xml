@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf - Uncategorized</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/uncategorized.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-04-19T17:26:00-04:00</updated><entry><title>Deriving the Softmax from First Principles</title><link href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/" rel="alternate"></link><published>2017-04-19T17:26:00-04:00</published><updated>2017-04-19T17:26:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-04-19:/2017/04/19/deriving-the-softmax-from-first-principles/</id><summary type="html">&lt;p&gt;Deriving the softmax from first conditional probabilistic principles, and how this framework extends naturally to define the softmax regression, conditional random fields, naive Bayes and hidden Markov models.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The original goal of this post was to explore the relationship between the softmax and sigmoid functions. In truth, this relationship had always seemed just out of reach: "One has an exponent in the numerator! One has a summation! One has a 1 in the denominator!" And of course, the two have different names.&lt;/p&gt;
-&lt;p&gt;Once derived, I quickly realized how this relationship backed out into a more general modeling framework motivated by the conditional probability axiom itself. As such, this post first explores how the sigmoid is but a special case of the softmax, and the underpinnings of each in Gibb's distributions, factor products and probabilistic graphical models. Next, we go on to show how this framework extends naturally to define canonical model classes such as the softmax regression, conditional random fields, naive Bayes and hidden Markov models.&lt;/p&gt;
+&lt;p&gt;Once derived, I quickly realized how this relationship backed out into a more general modeling framework motivated by the conditional probability axiom itself. As such, this post first explores how the sigmoid is but a special case of the softmax, and the underpinnings of each in Gibbs distributions, factor products and probabilistic graphical models. Next, we go on to show how this framework extends naturally to define canonical model classes such as the softmax regression, conditional random fields, naive Bayes and hidden Markov models.&lt;/p&gt;
 &lt;h2&gt;Our goal&lt;/h2&gt;
 &lt;p&gt;This is a predictive model. It is a diamond that receives an input and produces an output.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="simple input/output model" class="img-responsive" src="https://cavaunpeu.github.io/images/simple_input_output_model.png"/&gt;&lt;/p&gt;
@@ -188,9 +188,9 @@ $$&lt;/div&gt;
 &lt;li&gt;One of &lt;span class="math"&gt;\(\tilde{a}, \tilde{b}, \tilde{c}\)&lt;/span&gt;.&lt;/li&gt;
 &lt;li&gt;Model input elements are &lt;span class="math"&gt;\([x_0, x_1, x_2, x_3]\)&lt;/span&gt;. Weighted model input elements are &lt;span class="math"&gt;\(w_0x_0, w_1x_1, w_2x_2, w_3x_3\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Unfortunately, this only holds if we buy the fact that &lt;span class="math"&gt;\(\tilde{P}(a, \mathbf{x}) = \prod\limits_i e^{(w_ix_i)}\)&lt;/span&gt; in the first place. Introducing the &lt;a href="https://www.youtube.com/watch?v=kFcjl3A9QuA&amp;amp;t=314s"&gt;Gibb's distribution&lt;/a&gt;.&lt;/p&gt;
-&lt;h2&gt;Gibb's distribution&lt;/h2&gt;
-&lt;p&gt;A Gibb's distribution gives the unnormalized joint probability distribution over a set of outcomes, analogous to the &lt;span class="math"&gt;\(e^{\tilde{a}}, e^{\tilde{b}}, e^{\tilde{c}}\)&lt;/span&gt; computed above, as:&lt;/p&gt;
+&lt;p&gt;Unfortunately, this only holds if we buy the fact that &lt;span class="math"&gt;\(\tilde{P}(a, \mathbf{x}) = \prod\limits_i e^{(w_ix_i)}\)&lt;/span&gt; in the first place. Introducing the &lt;a href="https://www.youtube.com/watch?v=kFcjl3A9QuA&amp;amp;t=314s"&gt;Gibbs distribution&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Gibbs distribution&lt;/h2&gt;
+&lt;p&gt;A Gibbs distribution gives the unnormalized joint probability distribution over a set of outcomes, analogous to the &lt;span class="math"&gt;\(e^{\tilde{a}}, e^{\tilde{b}}, e^{\tilde{c}}\)&lt;/span&gt; computed above, as:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})
 = \prod\limits_{i=1}^{k}\phi_i(\mathbf{D}_i)\\
@@ -253,7 +253,7 @@ $$&lt;/div&gt;
 $$&lt;/div&gt;
 where &lt;span class="math"&gt;\(\Phi = \{\phi_1(\mathbf{D_1}), ..., \phi_k(\mathbf{D_k})\}\)&lt;/span&gt; and &lt;span class="math"&gt;\(G\)&lt;/span&gt; is the &lt;em&gt;induced graph&lt;/em&gt; for &lt;span class="math"&gt;\(\Phi\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;The first half of this lemma does nothing more than restate the definition of an unnormalized Gibb's distribution. Expanding on the second half, we note:&lt;/p&gt;
+&lt;p&gt;The first half of this lemma does nothing more than restate the definition of an unnormalized Gibbs distribution. Expanding on the second half, we note:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;The graph induced by a set of factors is a pretty picture in which we draw a circle around each variable in the factor domain superset and draw lines between those that appear concurrently in a given factor domain.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -266,7 +266,7 @@ where &lt;span class="math"&gt;\(\Phi = \{\phi_1(\mathbf{D_1}), ..., \phi_k(\mat
 &lt;/ol&gt;
 &lt;p&gt;Unfortunately, the resulting factor product &lt;span class="math"&gt;\(\tilde{P}_{\Phi}\)&lt;/span&gt; is still unnormalized just like &lt;span class="math"&gt;\(e^{\tilde{a}}, e^{\tilde{b}}, e^{\tilde{c}}\)&lt;/span&gt; in our original model.&lt;/p&gt;
 &lt;h2&gt;Partition function&lt;/h2&gt;
-&lt;p&gt;The partition function was the denominator, i.e. "normalizer", in our softmax function. It is used to turn an unnormalized probability distribution into a normalized (i.e. valid) probability distribution. A true Gibb's distribution is given as follows:&lt;/p&gt;
+&lt;p&gt;The partition function was the denominator, i.e. "normalizer", in our softmax function. It is used to turn an unnormalized probability distribution into a normalized (i.e. valid) probability distribution. A true Gibbs distribution is given as follows:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})
 = \prod\limits_{i=1}^{k}\phi_i(\mathbf{D}_i)\\
@@ -389,7 +389,7 @@ $$&lt;/div&gt;
 &lt;div class="math"&gt;$$
 P(y, \mathbf{x}) = P(y)\prod\limits_{i=1}^{K}P(x_i\vert y)
 $$&lt;/div&gt;
-&lt;p&gt;In effect, this model gives a (normalized) Gibb's distribution outright where the factors are &lt;em&gt;already valid probabilities&lt;/em&gt; expressing the relationship between each input element and the output.&lt;/p&gt;
+&lt;p&gt;In effect, this model gives a (normalized) Gibbs distribution outright where the factors are &lt;em&gt;already valid probabilities&lt;/em&gt; expressing the relationship between each input element and the output.&lt;/p&gt;
 &lt;h3&gt;The distribution of our data&lt;/h3&gt;
 &lt;p&gt;Crucially, neither Naive Bayes nor softmax regression make any assumptions about the distribution of the data, &lt;span class="math"&gt;\(P(\mathbf{x})\)&lt;/span&gt;. (Were this not the case, we'd have to state information like "I think the probability of observing the &lt;em&gt;input&lt;/em&gt; &lt;span class="math"&gt;\(x = [x_0 = .12, x_1 = .34, x_2 = .56, x_3 = .78]\)&lt;/span&gt; is &lt;span class="math"&gt;\(.00047\)&lt;/span&gt;," which would imply in the most trivial sense of the word that we are making &lt;em&gt;assumptions&lt;/em&gt; about the distribution of our data.)&lt;/p&gt;
 &lt;p&gt;In softmax regression, our model looks as follows:&lt;/p&gt;
@@ -404,14 +404,14 @@ $$&lt;/div&gt;
 &lt;p&gt;Finally, hidden Markov models are to naive Bayes what conditional random fields are to softmax regression: the former in each pair builds upon the latter by modeling a &lt;em&gt;sequence&lt;/em&gt; of labels. This graphic&lt;sup id="fnref-1"&gt;&lt;a class="footnote-ref" href="#fn-1"&gt;1&lt;/a&gt;&lt;/sup&gt; gives a bit more insight into these relationships:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="generative vs. discriminative models" class="img-responsive" src="https://cavaunpeu.github.io/images/generative_discriminative_models_flowchart.png"/&gt;&lt;/p&gt;
 &lt;h2&gt;Where does &lt;span class="math"&gt;\(e\)&lt;/span&gt; come from?&lt;/h2&gt;
-&lt;p&gt;Equation (2) states that the numerator of the softmax, i.e. the exponentiated linear combination of input elements, is equivalent to the unnormalized joint probability of our inputs and outputs as given by the Gibb's distribution factor product.&lt;/p&gt;
+&lt;p&gt;Equation (2) states that the numerator of the softmax, i.e. the exponentiated linear combination of input elements, is equivalent to the unnormalized joint probability of our inputs and outputs as given by the Gibbs distribution factor product.&lt;/p&gt;
 &lt;p&gt;However, this only holds if one of the following two are true:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Our factors are of the form &lt;span class="math"&gt;\(e^{z}\)&lt;/span&gt;.&lt;/li&gt;
 &lt;li&gt;Our factors take any arbitrary form, and we "anticipate" that this form will be exponentiated within the softmax function.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Remember, the point of this exponentiation was to put our weighted input elements "on the arithmetic path to becoming valid probabilities," i.e. to make them strictly positive. This said, there is nothing (to my knowledge) that mandates that a factor produce a strictly positive number. So which came first — the chicken or the egg (the exponent or the softmax)?&lt;/p&gt;
-&lt;p&gt;In truth, I'm not actually sure, but I do believe we can safely treat the softmax numerator and an unnormalized Gibb's distribution as equivalent and simply settle on: &lt;em&gt;call it what you will, we need an exponent in there somewhere to put this thing in &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;In truth, I'm not actually sure, but I do believe we can safely treat the softmax numerator and an unnormalized Gibbs distribution as equivalent and simply settle on: &lt;em&gt;call it what you will, we need an exponent in there somewhere to put this thing in &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Summary&lt;/h2&gt;
 &lt;p&gt;This exercise has made the relationships between canonical machine learning models, activation functions and the basic axiom of conditional probability a whole lot clearer. For more information, to reference the resources below, especially Daphne Koller's material on &lt;a href="https://www.coursera.org/learn/probabilistic-graphical-models"&gt;probabilistic graphical models&lt;/a&gt;. Thanks a lot for reading this far.&lt;/p&gt;
 &lt;hr&gt;
@@ -1533,7 +1533,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -3073,7 +3073,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6438,7 +6438,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6541,7 +6541,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6644,7 +6644,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6747,7 +6747,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6850,7 +6850,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6958,7 +6958,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7051,7 +7051,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7143,7 +7143,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7237,7 +7237,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7354,7 +7354,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7829,7 +7829,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7897,7 +7897,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9667,7 +9667,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9787,7 +9787,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9907,7 +9907,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -10027,7 +10027,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped dataframe table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
