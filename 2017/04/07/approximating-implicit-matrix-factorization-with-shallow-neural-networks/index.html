@@ -1051,6 +1051,15 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Abstract">Abstract<a class="anchor-link" href="#Abstract">¶</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Implicit-Matrix-Factorization">Implicit Matrix Factorization<a class="anchor-link" href="#Implicit-Matrix-Factorization">¶</a></h2><p>The Implicit Matrix Factorization (IMF) algorithm as presented by <a href="http://yifanhu.net/PUB/cf.pdf">Hu, Koren and Volinksy</a> is a widely popular, effective method for recommending items to users. This approach was born from necessity: while explicit feedback as to our users' tastes - a questionnaire completed at user signup, for example - makes building a recommendation engine straightforward, we often have nothing more than <em>implicit feedback</em> data - view count, click count, time spent on page, for example - which serve instead as a proxy for these preferences. Crucially, the latter feedback is asymmetric: while a high view count might indicate positive preference for a given item, a low view count cannot be said to do the opposite. Perhaps, the user simply didn't know the item was there.</p>
 <p>IMF begins with a ratings matrix $R$, where $R_{u, i}$ gives the implicit feedback value observed for user $u$ and item $i$. Next, it constructs two other matrices defined as follows:</p>
 $$
@@ -1120,7 +1129,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="output_area"><div class="prompt output_prompt">Out[143]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th>song_id</th>
@@ -2660,7 +2669,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[165]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6025,7 +6034,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[211]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6128,7 +6137,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[212]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6231,7 +6240,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[213]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6334,7 +6343,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[214]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6437,7 +6446,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[215]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6545,7 +6554,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[216]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6638,7 +6647,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[217]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6730,7 +6739,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[218]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6824,7 +6833,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[219]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6941,7 +6950,7 @@ $$<p>Let's briefly see what this looks like.</p>
 <div class="output_area"><div class="prompt output_prompt">Out[220]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7416,7 +7425,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7484,7 +7493,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9254,7 +9263,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[443]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9374,7 +9383,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[444]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9494,7 +9503,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[445]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9614,7 +9623,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[446]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-striped dataframe table table-hover">
+<table border="1" class="table-hover dataframe table table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
