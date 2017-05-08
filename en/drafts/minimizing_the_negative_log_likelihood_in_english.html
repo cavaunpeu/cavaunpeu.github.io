@@ -21,9 +21,9 @@
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
   <meta name="twitter:domain" content="https://cavaunpeu.github.io">
-    <meta property="twitter:title" content="archives"/>
+    <meta property="twitter:title" content="Minimizing the Negative Log-Likelihood, in English"/>
     <meta property="twitter:description" content=""/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/imf_country_vectors_cosine_similarity_plot.png"/>
 
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
@@ -66,107 +66,36 @@
   </nav>
 </div>	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Minimizing the Negative Log-Likelihood, in English</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2017-04-07T10:07:00-04:00" itemprop="datePublished">April 7, 2017</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><h2>expectation maximization</h2>
+<h2>neural net outputs are likelihood function parameters</h2>
+<ul>
+<li>argmax over the posterior: pick the parameters that give me the row in the table with the highest probability</li>
+</ul>
+<h2>what is marginalization/integration</h2></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf';
+    var disqus_title = 'Minimizing the Negative Log-Likelihood, in English';
 
-<h1>Archives</h1>
-
-<table class="table">
-    <tbody>
-        <tr>
-        <td>08 May 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/'>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</a></td>
-        </tr>
-        <tr>
-        <td>19 Apr 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/'>Deriving the Softmax from First Principles</a></td>
-        </tr>
-        <tr>
-        <td>07 Apr 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/04/07/approximating-implicit-matrix-factorization-with-shallow-neural-networks/'>Approximating Implicit Matrix Factorization with Shallow Neural Networks</a></td>
-        </tr>
-        <tr>
-        <td>17 Mar 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/03/17/ordered-categorical-glms-for-product-feedback-scores/'>Ordered Categorical GLMs for Product Feedback Scores</a></td>
-        </tr>
-        <tr>
-        <td>13 Mar 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/03/13/intercausal-reasoning-in-bayesian-networks/'>Intercausal Reasoning in Bayesian Networks</a></td>
-        </tr>
-        <tr>
-        <td>07 Feb 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/02/07/bayesian-inference-via-simulated-annealing/'>Bayesian Inference via Simulated Annealing</a></td>
-        </tr>
-        <tr>
-        <td>03 Feb 2017</td>
-        <td><a href='https://cavaunpeu.github.io/2017/02/03/bayesian-estimation-of-rescuetime-productivity/'>RescueTime Inference via the "Poor Man's Dirichlet"</a></td>
-        </tr>
-        <tr>
-        <td>13 Dec 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/12/13/generating-world-flags-with-sparse-auto-encoders/'>Generating World Flags with Sparse Auto-Encoders</a></td>
-        </tr>
-        <tr>
-        <td>22 Nov 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/11/22/docker-and-kaggle-with-ernie-and-bert/'>Docker and Kaggle with Ernie and Bert</a></td>
-        </tr>
-        <tr>
-        <td>10 Nov 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/11/10/while-we-were-busy-with-prosperity/'>While We Were Busy with Prosperity</a></td>
-        </tr>
-        <tr>
-        <td>18 Oct 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/10/18/recurrent-neural-network-gradients-and-lessons-learned-therein/'>Recurrent Neural Network Gradients, and Lessons Learned Therein</a></td>
-        </tr>
-        <tr>
-        <td>12 Oct 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/10/12/simulating-the-colombian-peace-vote-did-the-no-really-win/'>Simulating the Colombian Peace Vote: Did the "No" Really Win?</a></td>
-        </tr>
-        <tr>
-        <td>29 Jul 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/07/29/my-open-source-machine-learning-masters-in-casablanca-morocco/'>My Open-Source Machine Learning Masters (in Casablanca, Morocco)</a></td>
-        </tr>
-        <tr>
-        <td>15 May 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/05/15/vanilla-neural-nets/'>Vanilla Neural Nets</a></td>
-        </tr>
-        <tr>
-        <td>06 May 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/05/06/single-neuron-gradient-descent/'>Single Neuron Gradient Descent</a></td>
-        </tr>
-        <tr>
-        <td>15 Apr 2016</td>
-        <td><a href='https://cavaunpeu.github.io/2016/04/15/dotify-recommending-spotify-music-through-country-arithmetic/'>dotify: Recommending Spotify Music Through Country Arithmetic</a></td>
-        </tr>
-        <tr>
-        <td>18 Nov 2015</td>
-        <td><a href='https://cavaunpeu.github.io/2015/11/18/so-you-want-to-implement-a-custom-loss-function/'>So You Want to Implement a Custom Loss Function?</a></td>
-        </tr>
-        <tr>
-        <td>03 Oct 2015</td>
-        <td><a href='https://cavaunpeu.github.io/2015/10/03/travel-recommendations-with-jaccard-similarities/'>Travel Recommendations with Jaccard Similarities</a></td>
-        </tr>
-        <tr>
-        <td>29 Jun 2015</td>
-        <td><a href='https://cavaunpeu.github.io/2015/06/29/markovian-muse-conjuring-the-backpacker-within/'>Markovian Muse: Conjuring the Backpacker Within</a></td>
-        </tr>
-        <tr>
-        <td>16 May 2014</td>
-        <td><a href='https://cavaunpeu.github.io/2014/05/16/statistically-cycling-southeast-asia/'>Statistically Cycling Southeast Asia</a></td>
-        </tr>
-        <tr>
-        <td>06 May 2014</td>
-        <td><a href='https://cavaunpeu.github.io/2014/05/06/text-mining-south-american-constitutions/'>Text-Mining South American Constitutions</a></td>
-        </tr>
-        <tr>
-        <td>02 May 2014</td>
-        <td><a href='https://cavaunpeu.github.io/2014/05/02/clustering-continued-a-gaucho-on-vacation/'>Clustering Continued: A Gaucho on Vacation</a></td>
-        </tr>
-        <tr>
-        <td>25 Apr 2014</td>
-        <td><a href='https://cavaunpeu.github.io/2014/04/25/clustering-the-airports/'>Clustering South American Airports</a></td>
-        </tr>
-    </tbody>
-</table>
-
-
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
 		</div>
 	</div> </div>
 <footer class="aw-footer bg-danger">

@@ -184,7 +184,7 @@ body div > blockquote > p {
   margin-top: .2em !important;
 }
 
-img {
+img, svg {
   display: block;
   margin: auto;
 }
@@ -206,6 +206,12 @@ img {
   margin-left: .2em;
   margin-right: .2em;
   margin-bottom: .5em;
+}
+
+.output_execute_result.output_html.output_subarea.rendered_html {
+    margin: .4em;
+    padding: 0;
+    max-width: inherit;
 }
 
 /* Code formatting */
