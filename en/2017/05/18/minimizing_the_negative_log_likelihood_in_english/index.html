@@ -112,10 +112,12 @@
 <p>Next, we'll select four components key to each: its response variable, functional form, loss function and loss function plus regularization term. For each model, we'll describe the statistical underpinnings of each component — the steps on the ladder towards the surface of the pool.</p>
 <p>Before diving in, we'll need to define a few important concepts.</p>
 <h2>Random variable</h2>
-<p>I define a random variable as "a thing that can take on a bunch of different values."
-- "The tenure of despotic rulers in Central Africa" is a random variable. It could take on values of 25.73 years, 14.12 years, 8.99 years, ad infinitum; it could not take on values of 1.12 million years, nor -5 years.
-- "The height of the next person to leave the supermarket" is a random variable.
-- "The color of shirt I wear on Mondays" is a random variable. (Incidentally, this one only has ~3 unique values.)</p>
+<p>I define a random variable as "a thing that can take on a bunch of different values."</p>
+<ul>
+<li>"The tenure of despotic rulers in Central Africa" is a random variable. It could take on values of 25.73 years, 14.12 years, 8.99 years, ad infinitum; it could not take on values of 1.12 million years, nor -5 years.</li>
+<li>"The height of the next person to leave the supermarket" is a random variable.</li>
+<li>"The color of shirt I wear on Mondays" is a random variable. (Incidentally, this one only has ~3 unique values.)</li>
+</ul>
 <h2>Probability distribution</h2>
 <p>A probability distribution is a lookup table for the likelihood of observing each unique value of a random variable. Assuming a given variable can take on values in <span class="math">\(\{\text{rain, snow, sleet, hail}\}\)</span>, the following is a valid probability distribution:</p>
 <div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>

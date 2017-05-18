@@ -37,10 +37,12 @@
 &lt;p&gt;Next, we'll select four components key to each: its response variable, functional form, loss function and loss function plus regularization term. For each model, we'll describe the statistical underpinnings of each component — the steps on the ladder towards the surface of the pool.&lt;/p&gt;
 &lt;p&gt;Before diving in, we'll need to define a few important concepts.&lt;/p&gt;
 &lt;h2&gt;Random variable&lt;/h2&gt;
-&lt;p&gt;I define a random variable as "a thing that can take on a bunch of different values."
-- "The tenure of despotic rulers in Central Africa" is a random variable. It could take on values of 25.73 years, 14.12 years, 8.99 years, ad infinitum; it could not take on values of 1.12 million years, nor -5 years.
-- "The height of the next person to leave the supermarket" is a random variable.
-- "The color of shirt I wear on Mondays" is a random variable. (Incidentally, this one only has ~3 unique values.)&lt;/p&gt;
+&lt;p&gt;I define a random variable as "a thing that can take on a bunch of different values."&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;"The tenure of despotic rulers in Central Africa" is a random variable. It could take on values of 25.73 years, 14.12 years, 8.99 years, ad infinitum; it could not take on values of 1.12 million years, nor -5 years.&lt;/li&gt;
+&lt;li&gt;"The height of the next person to leave the supermarket" is a random variable.&lt;/li&gt;
+&lt;li&gt;"The color of shirt I wear on Mondays" is a random variable. (Incidentally, this one only has ~3 unique values.)&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2&gt;Probability distribution&lt;/h2&gt;
 &lt;p&gt;A probability distribution is a lookup table for the likelihood of observing each unique value of a random variable. Assuming a given variable can take on values in &lt;span class="math"&gt;\(\{\text{rain, snow, sleet, hail}\}\)&lt;/span&gt;, the following is a valid probability distribution:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'rain'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'snow'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;37&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'sleet'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mo"&gt;03&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'hail'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
@@ -2858,7 +2860,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -4398,7 +4400,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7763,7 +7765,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7866,7 +7868,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7969,7 +7971,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8072,7 +8074,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8175,7 +8177,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8283,7 +8285,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8376,7 +8378,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8468,7 +8470,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8562,7 +8564,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8679,7 +8681,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9154,7 +9156,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9222,7 +9224,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -10992,7 +10994,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11112,7 +11114,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11232,7 +11234,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11352,7 +11354,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
