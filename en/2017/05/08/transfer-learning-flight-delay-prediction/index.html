@@ -75,7 +75,7 @@
 		<time datetime="2017-05-08T12:45:00-04:00" itemprop="datePublished">May 8, 2017</time>
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:</p>
-<table class="table table-hover table-striped">
+<table class="table-striped table-hover table">
 <thead>
 <tr>
 <th>user_id</th>
@@ -346,7 +346,7 @@ ELBO(\lambda)
 $$</div>
 <p>Our goal is to maximize this expression, or minimize the opposite:</p>
 <div class="math">$$-\log{P(x\vert z)} + KL(q_{\lambda}(z\vert x)\Vert P(z))$$</div>
-<p>In machine learning parlance: "minimize the negative log likelihood of our data (generated via <span class="math">\(z\)</span>) plus the divergence between the distribution (ceramic plate) of <span class="math">\(z\)</span> and our approximation thereof."</p>
+<p>In machine learning parlance: "minimize the negative log likelihood of our data (generated via <span class="math">\(z\)</span>) plus the divergence between the true distribution of <span class="math">\(z\)</span> (the ceramic plate) and our approximation thereof."</p>
 <p>See what we did?</p>
 <h3>Finally, back to neural nets</h3>
 <p>The variational autoencoder consists of an encoder network and a decoder network.</p>
