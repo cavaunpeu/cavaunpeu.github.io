@@ -75,7 +75,7 @@
 		<time datetime="2017-05-08T12:45:00-04:00" itemprop="datePublished">May 8, 2017</time>
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:</p>
-<table class="table table-striped table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th>user_id</th>
@@ -281,7 +281,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 <p>For a more complete yet equally approachable explanation, please see <a href="https://arxiv.org/pdf/1402.3722.pdf">Goldberg and Levy</a>. For an <em>extremely thorough</em> review of related methods, see Sebastian Ruder's <a href="http://sebastianruder.com/word-embeddings-softmax/">On word embeddings - Part 2: Approximating the Softmax</a>.</p>
 <h2>Variational autoencoder</h2>
 <h3>Discriminative models</h3>
-<p>The previous network is a <em>discriminative</em> model: given two inputs <code>origin</code> and <code>dest</code>, it outputs the conditional probability that <code>exists = 1</code>. While discriminative models are effective in distinguishing <em>between</em> output classes, they don't offer an idea of what data look like within each class itself. To see why, let's restate Bayes rule for a given input <span class="math">\(x\)</span>:</p>
+<p>The previous network is a <em>discriminative</em> model: given two inputs <code>origin</code> and <code>dest</code>, it outputs the conditional probability that <code>exists = 1</code>. While discriminative models are effective in distinguishing <em>between</em> output classes, they don't offer an idea of what data look like within each class itself. To see why, let's restate Bayes' rule for a given input <span class="math">\(x\)</span>:</p>
 <div class="math">$$P(Y\vert x) = \frac{P(x\vert Y)P(Y)}{P(x)} = \frac{P(x, Y)}{P(x)}$$</div>
 <p><em><strong>Discriminative classifiers jump directly to estimating <span class="math">\(P(Y\vert x)\)</span> without modeling its component parts <span class="math">\(P(x, Y)\)</span> and <span class="math">\(P(x)\)</span>.</strong></em></p>
 <p>Instead, as the intermediate step, they simply compute an <em>unnormalized</em> joint distribution <span class="math">\(\tilde{P}(x, Y)\)</span> and a normalizing "partition function." The following then gives the model's predictions for the same reason that <span class="math">\(\frac{.2}{1} = \frac{3}{15}\)</span>:</p>
@@ -290,7 +290,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 <h3>Generative models</h3>
 <p>Conversely, a variational autoencoder is a <em>generative</em> model: instead of jumping <em>directly</em> to the conditional probability of all possible outputs given a specific input, they first compute the true component parts: the joint probability distribution over data and inputs alike, <span class="math">\(P(X, Y)\)</span>, and the distribution over our data, <span class="math">\(P(X)\)</span>.</p>
 <p>The joint probability can be rewritten as <span class="math">\(P(X, Y) = P(Y)P(X\vert Y)\)</span>: as such, generative models tell us the distribution over classes in our dataset, as well as the distribution of inputs within each class. Suppose we are trying to predict t-shirt colors with a 3-feature input; generative models would tell us: "30% of your t-shirts are green - typically produced by inputs near <code>x = [1, 2, 3]</code>; 40% are red - typically produced by inputs near <code>x = [10, 20, 30]</code>; 30% are blue - typically produced by inputs near <code>x = [100, 200, 300]</code>. This is in contrast to a discriminative model which would simply compute: given an input <span class="math">\(x\)</span>, your output probabilities are: <span class="math">\(\{\text{red}: .2, \text{green}: .3, \text{blue}: .5\}\)</span>.</p>
-<p><em><strong>To generate new data with a generative model, we draw from <span class="math">\(P(Y)\)</span>, then <span class="math">\(P(X\vert Y)\)</span>. To make predictions, we solicit <span class="math">\(P(Y), P(x\vert Y)\)</span> and <span class="math">\(P(x)\)</span> and employ Bayes rule outright.</strong></em></p>
+<p><em><strong>To generate new data with a generative model, we draw from <span class="math">\(P(Y)\)</span>, then <span class="math">\(P(X\vert Y)\)</span>. To make predictions, we solicit <span class="math">\(P(Y), P(x\vert Y)\)</span> and <span class="math">\(P(x)\)</span> and employ Bayes' rule outright.</strong></em></p>
 <h3>Manifold assumption</h3>
 <p>The goal of both autoencoders is to discover underlying "structure" in our data: while each airport can be one-hot encoded into a 3186-dimensional vector, we wish to learn a, or even the, reduced space in which our data both live and vary. This concept is well understood through the "manifold assumption," explained succinctly in this <a href="https://stats.stackexchange.com/questions/66939/what-is-the-manifold-assumption-in-semi-supervised-learning">CrossValidated thread</a>:</p>
 <blockquote>
@@ -305,7 +305,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 <p><img alt="VAE pgm" class="img-responsive" src="https://cavaunpeu.github.io/images/vae_pgm.png"/></p>
 <p>Coordinates on the plate detail airport character; choosing coordinates - say, <code>[global_hub_ness = 500, is_in_asia = 500]</code> - allows us to <em>generate</em> an airport. In this case, it might be Seoul. In variational autoencoders, ceramic-plate coordinates are called the "latent vector," denoted <span class="math">\(z\)</span>. The joint probability of our graphical model is given as:</p>
 <div class="math">$$P(z)P(x\vert z) = P(z, x)$$</div>
-<p>Our goal is to infer the priors that likely generated these data via Bayes rule:</p>
+<p>Our goal is to infer the priors that likely generated these data via Bayes' rule:</p>
 <div class="math">$$P(z\vert x) = \frac{P(z)P(x\vert z)}{P(x)}$$</div>
 <p>The denominator is called the <strong>evidence</strong>; we obtain it by marginalizing the joint distribution over the latent variables:</p>
 <div class="math">$$P(x) = \int P(x\vert z)P(z)dz$$</div>

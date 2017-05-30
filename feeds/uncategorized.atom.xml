@@ -133,7 +133,7 @@ $$&lt;/div&gt;
 &lt;p&gt;For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." &lt;em&gt;Can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Maximum entropy distributions&lt;/h2&gt;
 &lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (-\infty, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;uber&lt;/th&gt;
@@ -678,7 +678,7 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content></entry><entry><title>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</title><link href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/" rel="alternate"></link><published>2017-05-08T12:45:00-04:00</published><updated>2017-05-08T12:45:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-08:/2017/05/08/transfer-learning-flight-delay-prediction/</id><summary type="html">&lt;p&gt;Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;user_id&lt;/th&gt;
@@ -884,7 +884,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 &lt;p&gt;For a more complete yet equally approachable explanation, please see &lt;a href="https://arxiv.org/pdf/1402.3722.pdf"&gt;Goldberg and Levy&lt;/a&gt;. For an &lt;em&gt;extremely thorough&lt;/em&gt; review of related methods, see Sebastian Ruder's &lt;a href="http://sebastianruder.com/word-embeddings-softmax/"&gt;On word embeddings - Part 2: Approximating the Softmax&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Variational autoencoder&lt;/h2&gt;
 &lt;h3&gt;Discriminative models&lt;/h3&gt;
-&lt;p&gt;The previous network is a &lt;em&gt;discriminative&lt;/em&gt; model: given two inputs &lt;code&gt;origin&lt;/code&gt; and &lt;code&gt;dest&lt;/code&gt;, it outputs the conditional probability that &lt;code&gt;exists = 1&lt;/code&gt;. While discriminative models are effective in distinguishing &lt;em&gt;between&lt;/em&gt; output classes, they don't offer an idea of what data look like within each class itself. To see why, let's restate Bayes rule for a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;The previous network is a &lt;em&gt;discriminative&lt;/em&gt; model: given two inputs &lt;code&gt;origin&lt;/code&gt; and &lt;code&gt;dest&lt;/code&gt;, it outputs the conditional probability that &lt;code&gt;exists = 1&lt;/code&gt;. While discriminative models are effective in distinguishing &lt;em&gt;between&lt;/em&gt; output classes, they don't offer an idea of what data look like within each class itself. To see why, let's restate Bayes' rule for a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;:&lt;/p&gt;
 &lt;div class="math"&gt;$$P(Y\vert x) = \frac{P(x\vert Y)P(Y)}{P(x)} = \frac{P(x, Y)}{P(x)}$$&lt;/div&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;Discriminative classifiers jump directly to estimating &lt;span class="math"&gt;\(P(Y\vert x)\)&lt;/span&gt; without modeling its component parts &lt;span class="math"&gt;\(P(x, Y)\)&lt;/span&gt; and &lt;span class="math"&gt;\(P(x)\)&lt;/span&gt;.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Instead, as the intermediate step, they simply compute an &lt;em&gt;unnormalized&lt;/em&gt; joint distribution &lt;span class="math"&gt;\(\tilde{P}(x, Y)\)&lt;/span&gt; and a normalizing "partition function." The following then gives the model's predictions for the same reason that &lt;span class="math"&gt;\(\frac{.2}{1} = \frac{3}{15}\)&lt;/span&gt;:&lt;/p&gt;
@@ -893,7 +893,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 &lt;h3&gt;Generative models&lt;/h3&gt;
 &lt;p&gt;Conversely, a variational autoencoder is a &lt;em&gt;generative&lt;/em&gt; model: instead of jumping &lt;em&gt;directly&lt;/em&gt; to the conditional probability of all possible outputs given a specific input, they first compute the true component parts: the joint probability distribution over data and inputs alike, &lt;span class="math"&gt;\(P(X, Y)\)&lt;/span&gt;, and the distribution over our data, &lt;span class="math"&gt;\(P(X)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;The joint probability can be rewritten as &lt;span class="math"&gt;\(P(X, Y) = P(Y)P(X\vert Y)\)&lt;/span&gt;: as such, generative models tell us the distribution over classes in our dataset, as well as the distribution of inputs within each class. Suppose we are trying to predict t-shirt colors with a 3-feature input; generative models would tell us: "30% of your t-shirts are green - typically produced by inputs near &lt;code&gt;x = [1, 2, 3]&lt;/code&gt;; 40% are red - typically produced by inputs near &lt;code&gt;x = [10, 20, 30]&lt;/code&gt;; 30% are blue - typically produced by inputs near &lt;code&gt;x = [100, 200, 300]&lt;/code&gt;. This is in contrast to a discriminative model which would simply compute: given an input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, your output probabilities are: &lt;span class="math"&gt;\(\{\text{red}: .2, \text{green}: .3, \text{blue}: .5\}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;To generate new data with a generative model, we draw from &lt;span class="math"&gt;\(P(Y)\)&lt;/span&gt;, then &lt;span class="math"&gt;\(P(X\vert Y)\)&lt;/span&gt;. To make predictions, we solicit &lt;span class="math"&gt;\(P(Y), P(x\vert Y)\)&lt;/span&gt; and &lt;span class="math"&gt;\(P(x)\)&lt;/span&gt; and employ Bayes rule outright.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;To generate new data with a generative model, we draw from &lt;span class="math"&gt;\(P(Y)\)&lt;/span&gt;, then &lt;span class="math"&gt;\(P(X\vert Y)\)&lt;/span&gt;. To make predictions, we solicit &lt;span class="math"&gt;\(P(Y), P(x\vert Y)\)&lt;/span&gt; and &lt;span class="math"&gt;\(P(x)\)&lt;/span&gt; and employ Bayes' rule outright.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;h3&gt;Manifold assumption&lt;/h3&gt;
 &lt;p&gt;The goal of both autoencoders is to discover underlying "structure" in our data: while each airport can be one-hot encoded into a 3186-dimensional vector, we wish to learn a, or even the, reduced space in which our data both live and vary. This concept is well understood through the "manifold assumption," explained succinctly in this &lt;a href="https://stats.stackexchange.com/questions/66939/what-is-the-manifold-assumption-in-semi-supervised-learning"&gt;CrossValidated thread&lt;/a&gt;:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -908,7 +908,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 &lt;p&gt;&lt;img alt="VAE pgm" class="img-responsive" src="https://cavaunpeu.github.io/images/vae_pgm.png"/&gt;&lt;/p&gt;
 &lt;p&gt;Coordinates on the plate detail airport character; choosing coordinates - say, &lt;code&gt;[global_hub_ness = 500, is_in_asia = 500]&lt;/code&gt; - allows us to &lt;em&gt;generate&lt;/em&gt; an airport. In this case, it might be Seoul. In variational autoencoders, ceramic-plate coordinates are called the "latent vector," denoted &lt;span class="math"&gt;\(z\)&lt;/span&gt;. The joint probability of our graphical model is given as:&lt;/p&gt;
 &lt;div class="math"&gt;$$P(z)P(x\vert z) = P(z, x)$$&lt;/div&gt;
-&lt;p&gt;Our goal is to infer the priors that likely generated these data via Bayes rule:&lt;/p&gt;
+&lt;p&gt;Our goal is to infer the priors that likely generated these data via Bayes' rule:&lt;/p&gt;
 &lt;div class="math"&gt;$$P(z\vert x) = \frac{P(z)P(x\vert z)}{P(x)}$$&lt;/div&gt;
 &lt;p&gt;The denominator is called the &lt;strong&gt;evidence&lt;/strong&gt;; we obtain it by marginalizing the joint distribution over the latent variables:&lt;/p&gt;
 &lt;div class="math"&gt;$$P(x) = \int P(x\vert z)P(z)dz$$&lt;/div&gt;
@@ -1327,7 +1327,7 @@ Mean squared error, deeper regression: 2.291221474968889
 &lt;p&gt;Of course, a probability is but a real number that lies on the closed interval &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;How does the input affect the output?&lt;/h2&gt;
 &lt;p&gt;Our input is a list of 4 numbers; each one affects &lt;em&gt;each possible output&lt;/em&gt; to a &lt;em&gt;different extent&lt;/em&gt;. We'll call this effect a "weight." 4 inputs times 3 outputs equals 12 distinct weights. They might look like this:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -1522,7 +1522,7 @@ $$&lt;/div&gt;
 &lt;li&gt;Returns a value for every unique combination of values that the random variables can take, i.e. for every entry in the cross-product space of its scope.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;For example, a factor with scope &lt;span class="math"&gt;\(\{\mathbf{A, B}\}\)&lt;/span&gt; might look like:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -1593,7 +1593,7 @@ P_{\Phi}(\mathbf{X_1, ..., X_n})
 $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(\mathbf{Z}_{\Phi}\)&lt;/span&gt; is the partition function.&lt;/p&gt;
 &lt;p&gt;To compute this function, we simply add up all the values in the unnormalized table. Given &lt;span class="math"&gt;\(\tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})\)&lt;/span&gt; as:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -1632,7 +1632,7 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;Our valid probability distribution then becomes:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -2860,7 +2860,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -4400,7 +4400,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7765,7 +7765,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7868,7 +7868,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7971,7 +7971,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8074,7 +8074,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8177,7 +8177,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8285,7 +8285,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8378,7 +8378,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8470,7 +8470,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8564,7 +8564,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8681,7 +8681,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9156,7 +9156,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9224,7 +9224,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -10994,7 +10994,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11114,7 +11114,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11234,7 +11234,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11354,7 +11354,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
+&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
