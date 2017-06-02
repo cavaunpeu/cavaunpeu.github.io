@@ -77,8 +77,7 @@
 	<div itemprop="articleBody" class="article-body"><p>Roughly speaking, my machine learning journey began on <a href="http://kaggle.com">Kaggle</a>. "There's data, a model (i.e. estimator) and a loss function to optimize," I learned. "Regression models predict continuous-valued real numbers; classification models predict 'red,' 'green,' 'blue.' Typically, the former employs the mean squared error or mean absolute error; the latter, the cross-entropy loss. Stochastic gradient descent updates the model's parameters to drive these losses down." Furthermore, to fit these models, just <code>import sklearn</code>.</p>
 <p>A dexterity with the above is often sufficient for — at least from a technical stance — both employment and impact as a data scientist. In industry, commonplace prediction and inference problems — binary churn, credit scoring, product recommendation and A/B testing, for example — are easily matched with an off-the-shelf algorithm plus proficient data scientist for a measurable boost to the company's bottom line. In a vacuum I think this is fine: the winning driver does not <em>need</em> to know how to build the car. Surely, I've been this person before.</p>
 <p>Once fluid with "scikit-learn fit and predict," I turned to statistics. I was always aware that the two were related, yet figured them ultimately parallel sub-fields of my job. With the former, I build classification models; with the latter, I infer signup counts with the Poisson distribution and MCMC — right?</p>
-<p>Before long, I dove deeper into machine learning — reading textbooks, papers and source code and writing this blog. Therein, I began to come across <em>terms I didn't understand used to describe the things that I did.</em> "I understand what the categorical cross-entropy loss is, what it does and how it's defined," for example.</p>
-<p><em><strong>"Why are you calling it the negative log-likelihood?"</strong></em></p>
+<p>Before long, I dove deeper into machine learning — reading textbooks, papers and source code and writing this blog. Therein, I began to come across <em>terms I didn't understand used to describe the things that I did.</em> "I understand what the categorical cross-entropy loss is, what it does and how it's defined," for example: <em><strong>"why are you calling it the negative log-likelihood?"</strong></em></p>
 <p>Marginally wiser, I now know two truths about the above:</p>
 <ol>
 <li>Techniques we anoint as "machine learning" - classification and regression models, notably - have their underpinnings almost entirely in statistics. For this reason, terminology often flows between the two.</li>
@@ -162,10 +161,10 @@ H(p) = -\sum\limits_{i=1}^{n} p_i \log{p_i}
 $$</div>
 <p>where:</p>
 <ul>
-<li>There are <span class="math">\(n\)</span> unique events.</li>
+<li>There are <span class="math">\(n\)</span> distinct events.</li>
 <li>Each event <span class="math">\(i\)</span> has probability <span class="math">\(p_i\)</span>.</li>
 </ul>
-<p>Entropy is the <em>weighted-average log probability</em> over possible events, which measures the <em>uncertainty inherent in their probability distribution.</em> The higher the entropy, the less certain we are about the value we're going to get.</p>
+<p>Entropy is the <em>weighted-average log probability</em> over possible events — this much reads directly from the equation — which measures the <em>uncertainty inherent in their probability distribution.</em> The higher the entropy, the less certain we are about the value we're going to get.</p>
 <p>Let's calculate the entropy of our distribution above.</p>
 <div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
 
@@ -198,12 +197,12 @@ $$</div>
 <li>Logistic regression predicts a binary label. Let's call it <code>cat or dog</code></li>
 <li>Softmax regression predicts a multi-class label. Let's call it <code>red or green or blue</code>.</li>
 </ul>
-<p>In each model, the response variable can take on a bunch of different values. In other words, they are <em>random variables.</em> Which probability distributions are associated with each?</p>
+<p>In each model, the response variable can take on a bunch of different values. In other words, they are <em>random variables.</em> What probability distribution is associated with each?</p>
 <p>Unfortunately, we don't know. All we do know, in fact, is the following:</p>
 <ul>
 <li><code>temperature</code> has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (-\infty, \infty)\)</span>.</li>
 <li><code>cat or dog</code> takes on the value <code>cat</code> or <code>dog</code>. The likelihood of observing each outcome does not change over time, in the same way that <span class="math">\(\Pr(\text{heads})\)</span> for a fair coin is always <span class="math">\(0.5\)</span>.</li>
-<li><code>red or green or blue</code> takes on the value <code>red</code> or <code>green</code> or <code>blue</code>. The likelihood of observing each outcome does not change over time, in the same way that the probability of rolling a given number on fair die is always <span class="math">\(\frac{1}{6}\)</span>.</li>
+<li><code>red or green or blue</code> takes on the value <code>red</code> or <code>green</code> or <code>blue</code>. The likelihood of observing each outcome does not change over time, in the same way that the probability of rolling a given number on a fair die is always <span class="math">\(\frac{1}{6}\)</span>.</li>
 </ul>
 <p>For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." <em>Can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
@@ -264,10 +263,10 @@ $$</div>
 <p>We are not given the true underlying probability distribution associated with each random variable — not its general "shape," nor the parameters that control this shape. We will <em>never</em> be given these things, in fact: the point of statistics is to infer what they are.</p>
 <p>To make an initial choice we keep two things in mind:</p>
 <ul>
-<li><em>We'd like to be conservative</em>. We've only seen 10 values of "Uber's yearly profit;" we don't want to discount the fact that the next 20 could fall into <span class="math">\([-60, -50]\)</span> just because they haven't yet been observed.</li>
+<li><em>We'd like to be conservative</em>. We've only seen ten values of "Uber's yearly profit;" we don't want to discount the fact that the next twenty could fall into <span class="math">\([-60, -50]\)</span> just because they haven't yet been observed.</li>
 <li><em>We need to choose the same probability distribution "shape" for both random variables, as we've made identical assumptions for each</em>.</li>
 </ul>
-<p>As such, we'd like the most conservative distribution that obeys its constraints. This is the <a href="https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution"><em>maximum entropy distribution</em></a>.</p>
+<p>As such, we'd like the most conservative distribution that obeys the "utterly banal" constraints stated above. This is the <a href="https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution"><em>maximum entropy distribution</em></a>.</p>
 <p>For <code>temperature</code>, the maximum entropy distribution is the <a href="https://en.wikipedia.org/wiki/Normal_distribution">Gaussian distribution</a>. Its probability density function is given as:</p>
 <div class="math">$$
 p(y\vert \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}
@@ -293,7 +292,7 @@ $$</div>
 <p>While it may seem like we've "waved our hands" over the connection between the stated equality constraints for the response variable of each model and the respective distributions we've selected, it is <a href="https://en.wikipedia.org/wiki/Lagrange_multiplier">Lagrange multipliers</a> that succinctly and algebraically bridge this gap. This <a href="https://www.dsprelated.com/freebooks/sasp/Maximum_Entropy_Property_Gaussian.html">post</a> gives a terrific example of this derivation. I've chosen to omit it as I did not feel it would contribute to the clarity nor direction of this post.</p>
 <p>Finally, while we do assume that a Gaussian dictates the true distribution of values of both "Uber's yearly profit" and <code>temperature</code>, it is, trivially, a different Gaussian for each. This is because each random variable has its own true underlying mean and variance. These values make the respective Gaussians taller or wider — shifted left or shifted right.</p>
 <h1>Functional form</h1>
-<p>Our three protagonists generate predictions via distinct functions: the <a href="https://en.wikipedia.org/wiki/Identity_function">identity function</a>, the <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> and the <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax function</a>, respectively. The respective Keras output layers make this clear:</p>
+<p>Our three protagonists generate predictions via distinct functions: the <a href="https://en.wikipedia.org/wiki/Identity_function">identity function</a> (i.e. a no-op), the <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> and the <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax function</a>, respectively. The Keras output layers make this clear:</p>
 <div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
@@ -301,7 +300,7 @@ $$</div>
 <p>In this section, I'd like to:</p>
 <ul>
 <li>Show how each of the Gaussian, binomial and multinomial distributions can be reduced to the same functional form.</li>
-<li>Show how this functional form allows us to naturally derive the output functions for our three protagonist models.</li>
+<li>Show how this common functional form allows us to naturally derive the output functions for our three protagonist models.</li>
 </ul>
 <p>Graphically, this looks as follows, with three distributions going in and three output functions coming out.</p>
 <p><img alt="bottleneck" class="img-responsive" src="https://electric-cloud.com/wp-content/uploads/use-case-graphic_bottleneck.png"/></p>
@@ -311,7 +310,7 @@ $$</div>
 <p>In probability and statistics, an exponential family is a set of probability distributions of a certain form, specified below. This special form is chosen for mathematical convenience, on account of some useful algebraic properties, as well as for generality, as exponential families are in a sense very natural sets of distributions to consider.</p>
 </blockquote>
 <p>— Wikipedia</p>
-<p>I don't relish quoting this paragraph — and especially one so deliriously general. This said, the reality is that exponential functions provide, at a minimum, a unifying framework for deriving the canonical activation and loss functions we've come to know and love. To move forward, we simply have to cede that the "mathematical conveniences, on account of some useful algebraic properties, etc." that motivate this "certain form" are not totally heinous nor misguided.</p>
+<p>I don't relish quoting this paragraph — and especially one so deliriously ambiguous. This said, the reality is that exponential functions provide, at a minimum, a unifying framework for deriving the canonical activation and loss functions we've come to know and love. To move forward, we simply have to cede that the "mathematical conveniences, on account of some useful algebraic properties, etc." that motivate this "certain form" are not totally heinous nor misguided.</p>
 <p>A distribution belongs to the exponential family if it can be written in the following form:</p>
 <div class="math">$$
 p(y; \eta) = b(y)\exp(\eta^T T(y) - a(\eta))
@@ -324,7 +323,7 @@ $$</div>
 </ul>
 <p>"A fixed choice of <span class="math">\(T\)</span>, <span class="math">\(a\)</span> and <span class="math">\(b\)</span> defines a family (or set) of distributions that is parameterized by <span class="math">\(\eta\)</span>; as we vary <span class="math">\(\eta\)</span>, we then get different distributions within this family."<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> This simply means that a coin with <span class="math">\(\Pr(\text{heads}) = .6\)</span> gives a different distribution over outcomes than one with <span class="math">\(\Pr(\text{heads}) = .7\)</span>. Easy.</p>
 <h3>Gaussian distribution</h3>
-<p>Since we're working with the single-parameter form, we'll assume that <span class="math">\(\sigma^2\)</span> is known and equals <span class="math">\(1\)</span>. Therefore, <span class="math">\(\eta\)</span> will equal <span class="math">\(\mu\)</span>, i.e. the thing we pass into the Gaussian (that moves it left or right).</p>
+<p>Since we're working with the single-parameter form, we'll assume that <span class="math">\(\sigma^2\)</span> is known and equals <span class="math">\(1\)</span>.</p>
 <div class="math">$$
 \begin{align*}
 p(y\vert \mu, \sigma^2)
@@ -380,9 +379,9 @@ a(\eta)
 &amp;= \log(1 + e^{\eta})\\
 \end{align*}
 $$</div>
-<p>You will recognize our expression for <span class="math">\(\phi\)</span> as the sigmoid function.</p>
+<p>You will recognize our expression for <span class="math">\(\phi\)</span> - the probability of observing the true class - as the sigmoid function.</p>
 <h3>Multinomial distribution</h3>
-<p>Like the binomial distribution, we'll first rewrite the multinomial (for single observation) in a more compact form. <span class="math">\(\pi\)</span> gives a vector of class probabilities for the <span class="math">\(K\)</span> classes; <span class="math">\(k\)</span> denotes one of these classes.</p>
+<p>Like the binomial distribution, we'll first rewrite the multinomial (for a single observation) in a more compact form. <span class="math">\(\pi\)</span> gives a vector of class probabilities for the <span class="math">\(K\)</span> classes; <span class="math">\(k\)</span> denotes one of these classes.</p>
 <div class="math">$$
 p(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
 $$</div>
@@ -480,12 +479,14 @@ p(\text{outcome}) =
 \end{cases}
 $$</div>
 <p>Trivially, the <span class="math">\(\phi\)</span> value must be different in each case. In the former, <span class="math">\(\phi\)</span> should be small, such that we output "cat" with probability <span class="math">\(1 - \phi \approx 1\)</span>. In the latter, <span class="math">\(\phi\)</span> should be large, such that we output "dog" with probability <span class="math">\(\phi \approx 1\)</span>.</p>
-<p>So, what dictates the following?
-- <span class="math">\(\mu_i\)</span> in the case of linear regression, in which <span class="math">\(y_i \sim \mathcal{N}(\mu_i, \sigma^2)\)</span>
-- <span class="math">\(\phi_i\)</span> in the case of logistic regression, in which <span class="math">\(y_i \sim \text{Binomial}(\phi_i, 1)\)</span>
-- <span class="math">\(\pi_i\)</span> in the case of softmax regression, in which <span class="math">\(y_i \sim \text{Multinomial}(\pi_i, 1)\)</span></p>
-<p>Here, I've introduced the subscript <span class="math">\(i\)</span>. This makes explicit the <code>cat or dog</code> dynamic from above: each input to a given model will result in its <em>own</em> canonical parameter being passed to the distribution on the response variable. That logistic regression better make <span class="math">\(\phi_i \approx 0\)</span> when looking at a picture of cat.</p>
-<p>How do we go from a 10-feature input <span class="math">\(x\)</span> to this canonical parameter? We take a linear combination:</p>
+<p>So, what dictates the following?</p>
+<ul>
+<li><span class="math">\(\mu_i\)</span> in the case of linear regression, in which <span class="math">\(y_i \sim \mathcal{N}(\mu_i, \sigma^2)\)</span></li>
+<li><span class="math">\(\phi_i\)</span> in the case of logistic regression, in which <span class="math">\(y_i \sim \text{Binomial}(\phi_i, 1)\)</span></li>
+<li><span class="math">\(\pi_i\)</span> in the case of softmax regression, in which <span class="math">\(y_i \sim \text{Multinomial}(\pi_i, 1)\)</span></li>
+</ul>
+<p>Here, I've introduced the subscript <span class="math">\(i\)</span>. This makes explicit the <code>cat or dog</code> dynamic from above: each input to a given model will result in its <em>own</em> canonical parameter being passed to the distribution on the response variable. That logistic regression better make <span class="math">\(\phi_i \approx 0\)</span> when looking at a picture of a cat.</p>
+<p>Finally, how do we go from a 10-feature input <span class="math">\(x\)</span> to this canonical parameter? We take a linear combination:</p>
 <div class="math">$$
 \eta = \theta^Tx
 $$</div>
@@ -503,9 +504,12 @@ $$</div>
 <p><span class="math">\(\eta = \theta^Tx = \log\bigg(\frac{\pi_k}{\pi_K}\bigg)\)</span>. To solve for <span class="math">\(\pi_i\)</span>, i.e. the full vector of probabilities for observation <span class="math">\(i\)</span>, we solve for each individual probability <span class="math">\(\pi_{k, i}\)</span> then put them in a list.</p>
 <p>We did this above as well: <span class="math">\(\pi_{k, i} = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)</span>. This is the softmax function.</p>
 <p><em><strong>&gt; The softmax function gives us the probability that the response variable takes on each of the possible classes. This probability mass function is required by the multinomial distribution, which dictates the outcomes of the multi-class target <span class="math">\(y\)</span>.</strong></em></p>
-<p>Finally, why a linear model, i.e. why <span class="math">\(\eta = \theta^Tx\)</span>? Andrew Ng calls it a "design choice."<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">softmax post</a>. mathematicalmonk<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:
-- A linear combination is perhaps the simplest way to consider the impact of each feature on the canonical parameter.
-- A linear combination commands that either <span class="math">\(x\)</span>, or a <em>function of <span class="math">\(x\)</span></em>, vary linearly with <span class="math">\(\eta\)</span>. As such, we could write our model as <span class="math">\(\eta = \theta^T\Phi(x)\)</span>, where <span class="math">\(\Phi\)</span> applies some complex transformation to our features. This makes the "simplicity" of the linear combination less simple.</p>
+<p>Finally, why a linear model, i.e. why <span class="math">\(\eta = \theta^Tx\)</span>?</p>
+<p>Andrew Ng calls it a "design choice."<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">softmax post</a>. mathematicalmonk<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
+<ul>
+<li>A linear combination is perhaps the simplest way to consider the impact of each feature on the canonical parameter.</li>
+<li>A linear combination commands that either <span class="math">\(x\)</span>, or a <em>function of <span class="math">\(x\)</span></em>, vary linearly with <span class="math">\(\eta\)</span>. As such, we could write our model as <span class="math">\(\eta = \theta^T\Phi(x)\)</span>, where <span class="math">\(\Phi\)</span> applies some complex transformation to our features. This makes the "simplicity" of the linear combination less simple.</li>
+</ul>
 <h1>Loss function</h1>
 <p>We've now discussed how each response variable is generated, and how we compute the parameters for those distributions on a per-observation basis. Now, how do we quantify how good these parameters are?</p>
 <p>To get us started, let's go back to predicting <code>cat or dog</code>. If we input a picture of a cat, we should compute <span class="math">\(\phi \approx 0\)</span> given our binomial distribution.</p>
@@ -519,14 +523,14 @@ $$</div>
 <p>A perfect computation gives <span class="math">\(\phi = 0\)</span>. The loss function quantifies how close we got.</p>
 <h2>Maximum likelihood estimation</h2>
 <p>Each of our three distributions receives a parameter — <span class="math">\(\mu, \phi\)</span> and <span class="math">\(\pi\)</span> respectively. We then pass in a <span class="math">\(y\)</span> and the distribution tells us the probability of observing that value. (In the case of continuous-valued random variables, i.e. our distribution is a probability density function, it tells us a value <em>proportional</em> to this probability.)</p>
-<p>If we instead <em>fix</em> <span class="math">\(y\)</span> and pass in varying <em>parameter values</em>, our function becomes a <em>likelihood function</em>. It will tell us the likelihood of a given parameter having produced the now-fixed <span class="math">\(y\)</span>.</p>
+<p>If we instead <em>fix</em> <span class="math">\(y\)</span> and pass in varying <em>parameter values</em>, this same function becomes a <em>likelihood function</em>. It will tell us the likelihood of a given parameter having produced the now-fixed <span class="math">\(y\)</span>.</p>
 <p>If this is not clear, consider the following example:</p>
 <blockquote>
 <p>A Moroccan walks into a bar. He's wearing a football jersey that's missing a sleeve. He has a black eye, and blood on his jeans. How did he most likely spend his day?</p>
 <ol>
 <li>At home, reading a book.</li>
 <li>Training for a bicycle race.</li>
-<li>At the soccer game drinking beers with his friends - all of whom are MMA fighters and despise the other team.</li>
+<li>At the soccer game drinking beers with his friends — all of whom are MMA fighters that despise the other team.</li>
 </ol>
 </blockquote>
 <p>We'd like to pick the parameter that most likely gave rise to our data. This is the <em>maximum likelihood estimate</em>. Mathematically, we define it as:</p>
@@ -542,7 +546,7 @@ $$</div>
 <div class="math">$$
 \underset{\theta}{\arg\max} \prod\limits_{i=1}^{m}p(y^{(i)}\vert x^{(i)}; \theta)
 $$</div>
-<p>The product of numbers in <span class="math">\([0, 1]\)</span> gets very small, very quickly. Let's maximize the log likelihood instead so we can work with sums.</p>
+<p>The product of numbers in <span class="math">\([0, 1]\)</span> gets very small, very quickly. Let's maximize the log-likelihood instead so we can work with sums.</p>
 <h3>Linear regression</h3>
 <p>Maximize the log-likelihood of the Gaussian distribution. Remember, <span class="math">\(x\)</span> and <span class="math">\(\theta\)</span> assemble to give <span class="math">\(\mu\)</span>, where <span class="math">\(\theta^Tx = \mu\)</span>.</p>
 <div class="math">$$
@@ -570,15 +574,19 @@ $$</div>
 &amp;= -\sum\limits_{i = 1}^my^{(i)}\log{(\phi^{(i)})} + (1 - y^{(i)})\log{(1 - \phi^{(i)})}\\
 \end{align*}
 $$</div>
-<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> is equivalent to minimizing the binary cross-entropy (i.e. log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability thereof.</strong></em></p>
+<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> is equivalent to minimizing the binary cross-entropy (i.e. binary log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability thereof.</strong></em></p>
 <h3>Multinomial distribution</h3>
 <p>Negative log-likelihood:</p>
 <div class="math">$$
--\log{P(y\vert x; \theta)} = -\prod\limits_{k=1}^{K}y_k\log\pi_k\\
+\begin{align*}
+-\log{P(y\vert x; \theta)}
+&amp;= -\log\prod\limits_{i=1}^{m}\prod\limits_{k=1}^{K}\pi_k^{y_k}\\
+&amp;= -\sum\limits_{i=1}^{m}\sum\limits_{k=1}^{K}y_k\log\pi_k\\
+\end{align*}
 $$</div>
 <p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> is equivalent to minimizing the categorical cross-entropy (i.e. multi-class log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability distribution thereof.</strong></em></p>
 <h4><a href="https://en.wikipedia.org/wiki/Cross_entropy">Cross entropy</a></h4>
-<p>We previously defined entropy as a way to quantify the uncertainty inherent in a probability distribution. Next, we'll use this same notion to quantify the uncertainty inherent in using the probabilities <em>in one distribution to predict events in another.</em></p>
+<p>We previously defined entropy as a way to quantify the uncertainty inherent in a probability distribution. Next, we'll use this same notion to quantify the uncertainty inherent in using the probabilities <em>in one distribution to predict the events of another.</em></p>
 <div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'red'</span><span class="p">:</span> <span class="o">.</span><span class="mi">25</span><span class="p">,</span> <span class="s1">'green'</span><span class="p">:</span> <span class="o">.</span><span class="mi">45</span><span class="p">,</span> <span class="s1">'blue'</span><span class="p">:,</span> <span class="o">.</span><span class="mi">3</span><span class="p">}</span>
 <span class="n">q</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'red'</span><span class="p">:</span> <span class="o">.</span><span class="mi">35</span><span class="p">,</span> <span class="s1">'green'</span><span class="p">:</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'blue'</span><span class="p">:,</span> <span class="o">.</span><span class="mi">25</span><span class="p">}</span>
 </pre></div>
@@ -587,11 +595,11 @@ H(p, q) = -\sum_i p_i\log(q_i)
 $$</div>
 <p>This is the definition of cross entropy.</p>
 <h4><a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">KL-Divergence</a></h4>
-<p>Similarly, the Kullback-Leibler divergence quantifies the <em>additional uncertainty in <span class="math">\(p\)</span></em> introduced by using <span class="math">\(q\)</span> to approximate <span class="math">\(p\)</span>. It is given, almost trivially, as:</p>
+<p>Similarly, the Kullback-Leibler Divergence quantifies the <em>additional uncertainty in <span class="math">\(p\)</span></em> introduced by using <span class="math">\(q\)</span> to approximate <span class="math">\(p\)</span>. It is given, almost trivially, as:</p>
 <div class="math">$$
 D_{KL}(p, q) = H(p, q) - H(p)
 $$</div>
-<p>Why don't we use this in machine learning models instead of the cross entropy? The KL-divergence between distributions requires us to know the true, underlying probabilities of both the actual distribution <span class="math">\(p\)</span> and our prediction thereof. Unfortunately, we never have the former: that's why we build the model.</p>
+<p>Why don't we use this in machine learning models instead of the cross entropy? The KL-Divergence between distributions requires us to know the true, underlying probabilities of both the actual distribution <span class="math">\(p\)</span> and our prediction thereof. Unfortunately, we never have the former: that's why we build the model.</p>
 <h1>Maximum a posteriori estimation</h1>
 <p>When estimating <span class="math">\(\theta\)</span> via the MLE, we put no constraints on the permissible values thereof. More explicitly, we allow <span class="math">\(\theta\)</span> to be <em>equally likely to assume any real number</em> — be it <span class="math">\(0\)</span>, or <span class="math">\(10\)</span>, or <span class="math">\(-20\)</span>, or <span class="math">\(2.37 \times 10^{36}\)</span>.</p>
 <p>In practice, this assumption is both unrealistic and superfluous: typically, we do wish to constrain <span class="math">\(\theta\)</span> (our weights) to a non-infinite range of values. We do this by putting a <em>prior</em> on <span class="math">\(\theta\)</span>. Whereas the MLE computes <span class="math">\(\underset{\theta}{\arg\max}\ p(y\vert x; \theta)\)</span>, the maximum a posteriori estimate, or MAP, computes <span class="math">\(\underset{\theta}{\arg\max}\ p(y\vert x; \theta)p(\theta)\)</span>.</p>
@@ -616,12 +624,12 @@ $$</div>
 &amp;= \log{C_1} - C_2\theta^2\\
 \end{align*}
 $$</div>
-<p>Our goal is to maximize this term plus the log likelihood — or equivalently, minimize their opposite — with respect to <span class="math">\(\theta\)</span>. For a final step, let's discard the parts that don't include <span class="math">\(\theta\)</span> itself.</p>
+<p>Our goal is to maximize this term plus the log-likelihood — or equivalently, minimize their opposite — with respect to <span class="math">\(\theta\)</span>. For a final step, let's discard the parts that don't include <span class="math">\(\theta\)</span> itself.</p>
 <div class="math">$$
 \begin{align*}
 \log{C_1} - C_2\theta^2
 &amp;\propto - C_2\theta^2\\
-&amp;\propto C_2\Vert \theta\Vert_{2}^{2}\\
+&amp;\propto C\Vert \theta\Vert_{2}^{2}\\
 \end{align*}
 $$</div>
 <p>This is L2 regularization. Furthermore, placing different prior distributions on <span class="math">\(\theta\)</span> yields different regularization terms; most notably, a <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace prior</a> gives the L1.</p>
@@ -629,18 +637,18 @@ $$</div>
 <div class="math">$$
 \underset{\theta}{\arg\min} \sum\limits_{i=1}^{m}(y^{(i)} - \theta^Tx^{(i)})^2 + C\Vert \theta\Vert_{2}^{2}
 $$</div>
-<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> given a Gaussian prior on <span class="math">\(\theta\)</span> is equivalent to minimizing the mean squared error between the observed <span class="math">\(y\)</span> and our prediction thereof, plus the squared sum of the (elements of) <span class="math">\(\theta\)</span> itself.</strong></em></p>
+<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> given a Gaussian prior on <span class="math">\(\theta\)</span> is equivalent to minimizing the mean squared error between the observed <span class="math">\(y\)</span> and our prediction thereof, plus the squared sum of (the elements of) <span class="math">\(\theta\)</span> itself.</strong></em></p>
 <h2>Logistic regression</h2>
 <div class="math">$$
 \underset{\theta}{\arg\min}
 -\sum\limits_{i = 1}^my^{(i)}\log{(\phi^{(i)})} + (1 - y^{(i)})\log{(1 - \phi^{(i)})} + C\Vert \theta\Vert_{2}^{2}
 $$</div>
-<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> given a Gaussian prior on <span class="math">\(\theta\)</span> is equivalent to minimizing the binary cross-entropy (i.e. log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability thereof, plus the squared sum of the (elements of) <span class="math">\(\theta\)</span> itself.</strong></em></p>
+<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> given a Gaussian prior on <span class="math">\(\theta\)</span> is equivalent to minimizing the binary cross-entropy (i.e. binary log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability thereof, plus the squared sum of (the elements of) <span class="math">\(\theta\)</span> itself.</strong></em></p>
 <h2>Softmax regression</h2>
 <div class="math">$$
--\log{P(y\vert x; \theta)} = -\prod\limits_{k=1}^{K}y_k\log\pi_k + C\Vert \theta\Vert_{2}^{2}
+-\sum\limits_{i=1}^{m}\sum\limits_{k=1}^{K}y_k\log\pi_k + C\Vert \theta\Vert_{2}^{2}
 $$</div>
-<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> given a Gaussian prior on <span class="math">\(\theta\)</span> is equivalent to minimizing the categorical cross-entropy (i.e. multi-class log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability distribution thereof, plus the squared sum of the (elements of) <span class="math">\(\theta\)</span> itself.</strong></em></p>
+<p><em><strong>&gt; Minimizing the negative log-likelihood of our data with respect to <span class="math">\(\theta\)</span> given a Gaussian prior on <span class="math">\(\theta\)</span> is equivalent to minimizing the categorical cross-entropy (i.e. multi-class log loss) between the observed <span class="math">\(y\)</span> and our prediction of the probability distribution thereof, plus the squared sum of (the elements of) <span class="math">\(\theta\)</span> itself.</strong></em></p>
 <p>Finally, in machine learning, we say that regularizing our weights ensures that "no weight becomes too large," i.e. too "influential" in predicting <span class="math">\(y\)</span>. In statistical terms, we can equivalently say that this term <em>restricts the permissible values of these weights to a given interval. Furthermore, this interval is dictated by the scaling constant <span class="math">\(C\)</span>, which intrinsically parameterizes the prior distribution itself.</em> In L2 regularization, this scaling constant gives the variance of the Gaussian.</p>
 <h1>Going fully Bayesian</h1>
 <p>The key goal of a predictive model is to compute the following distribution:</p>
