@@ -1,5 +1,490 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-05-18T12:24:00-04:00</updated><entry><title>Minimizing the Negative Log-Likelihood, in English</title><link href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/" rel="alternate"></link><published>2017-05-18T12:24:00-04:00</published><updated>2017-05-18T12:24:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-18:/2017/05/18/minimizing_the_negative_log_likelihood_in_english/</id><summary type="html">&lt;p&gt;Statistical underpinnings of the machine learning models we know and love. A walk through random variables, entropy, exponential family distributions, generalized linear models, maximum likelihood estimation, cross entropy, KL divergence, maximum a posteriori estimation and going "fully Bayesian."&lt;/p&gt;</summary><content type="html">&lt;p&gt;Roughly speaking, my machine learning journey began on &lt;a href="http://kaggle.com"&gt;Kaggle&lt;/a&gt;. "There's data, a model (i.e. estimator) and a loss function to optimize," I learned. "Regression models predict continuous-valued real numbers; classification models predict 'red,' 'green,' 'blue.' Typically, the former employs the mean squared error or mean absolute error; the latter, the cross-entropy loss. Stochastic gradient descent updates the model's parameters to drive these losses down." Furthermore, to fit these models, just &lt;code&gt;import sklearn&lt;/code&gt;.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-07-06T10:00:00-04:00</updated><entry><title>Further Exploring Common Probabilistic Models</title><link href="https://cavaunpeu.github.io/2017/07/06/further-exploring-common-probabilistic-models/" rel="alternate"></link><published>2017-07-06T10:00:00-04:00</published><updated>2017-07-06T10:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-07-06:/2017/07/06/further-exploring-common-probabilistic-models/</id><summary type="html">&lt;p&gt;Exploring generative vs. discriminative models, and sampling and variational methods for approximate inference through the lens of Bayes' theorem.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;previous post&lt;/a&gt; on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.&lt;/p&gt;
+&lt;p&gt;In this post, we're going to stay on the surface: instead of deconstructing common models, we're going to further explore the relationships between them — swimming to different corners of the pool itself. Keeping us afloat will be Bayes' theorem — a balanced, dependable yet at times fragile pool ring, so to speak — which we'll take with us wherever we go.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="pool ring" class="img-responsive" src="https://c1.staticflickr.com/7/6151/6137348439_199f5119be_b.jpg"/&gt;&lt;/p&gt;
+&lt;p&gt;While there are many potential themes of probabilistic models we might explore, we'll herein focus on two: &lt;strong&gt;generative vs. discriminative models&lt;/strong&gt;, and &lt;strong&gt;"fully Bayesian" vs. "lowly point estimate" learning&lt;/strong&gt;. We will stick to the supervised setting as well.&lt;/p&gt;
+&lt;p&gt;Finally, our pool ring is not a godhead — we are not nautical missionaries brandishing a divine statistical truth, demanding that each model we encounter interpret this truth in a rigid, bottom-up fashion. Instead, we'll explore the unique goals, formulations and shortcomings of each, and fall back on Bayes' theorem to bridge the gaps between. Without it, we'd quickly start sinking.&lt;/p&gt;
+&lt;h1&gt;Discriminative vs. generative models&lt;/h1&gt;
+&lt;p&gt;The goal of a supervised model is to compute the distribution over outcomes &lt;span class="math"&gt;\(y\)&lt;/span&gt; given an input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, written &lt;span class="math"&gt;\(P(y\vert x)\)&lt;/span&gt;. If &lt;span class="math"&gt;\(y\)&lt;/span&gt; is discrete, this distribution is a probability mass function, e.g. a multinomial or binomial distribution. If continuous, it is a probability density function, e.g. a Gaussian distribution.&lt;/p&gt;
+&lt;h2&gt;Discriminative models&lt;/h2&gt;
+&lt;p&gt;In discriminative models, we immediately direct our focus to this output distribution. Taking an example from the &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;previous post&lt;/a&gt;, let's assume a softmax regression which receives some data &lt;span class="math"&gt;\(x\)&lt;/span&gt; and predicts a multi-class label &lt;code&gt;red or green or blue&lt;/code&gt;. The model's output distribution is therefore multinomial; a multinomial distribution requires as a parameter a vector &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; of respective outcome probabilities, e.g. &lt;code&gt;{red: .27, green: .11, blue: .62}&lt;/code&gt;. We can compute these individual probabilities via the softmax function, where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(\pi_k = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(\eta_k = \theta_k^Tx\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is a matrix of weights which we must infer, and &lt;span class="math"&gt;\(x\)&lt;/span&gt; is our input.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Inference&lt;/h3&gt;
+&lt;p&gt;Typically, we perform inference by taking the &lt;em&gt;maximum likelihood estimate&lt;/em&gt;: "which parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; most likely gave rise to the observed data pairs &lt;span class="math"&gt;\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)&lt;/span&gt; via the relationships described above?" We compute this estimate by maximizing the log-likelihood function with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, or equivalently minimizing the negative log-likelihood in identical fashion — the latter better known as a "loss function" in machine learning parlance.&lt;/p&gt;
+&lt;p&gt;Unfortunately, the maximum likelihood estimate includes no information about the plausibility of the chosen parameter value itself. As such, we often place a &lt;em&gt;prior&lt;/em&gt; on our parameter and take the &lt;a href="https://en.wikipedia.org/wiki/Arg_max"&gt;"argmax"&lt;/a&gt; over their product. This gives the &lt;em&gt;maximum a posteriori&lt;/em&gt; estimate, or MAP.&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+\theta_{MAP}
+&amp;amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} P(y^{(i)}\vert x^{(i)}; \theta)P(\theta)\\
+&amp;amp;= \underset{\theta}{\arg\max}\ \sum\limits_{i=1}^{m} \log{P(y^{(i)}\vert x^{(i)}; \theta)} + \log{P(\theta)}\\
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;The &lt;span class="math"&gt;\(\log{P(\theta)}\)&lt;/span&gt; term can be easily rearranged into what is better known as a &lt;em&gt;regularization term&lt;/em&gt; in machine learning, where the type of prior distribution we place on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; gives the type of regularization term.&lt;/p&gt;
+&lt;p&gt;The argmax finds the point(s) &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; at which the given function attains its maximum value. As such, the typical discriminative model — softmax regression, logistic regression, linear regression, etc. — returns a single, lowly point estimate for the parameter in question.&lt;/p&gt;
+&lt;h3&gt;How do we compute this value?&lt;/h3&gt;
+&lt;p&gt;In the trivial case where &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is 1-dimensional, we can take the derivative of the function in question with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, set it equal to 0, then solve for &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. (Additionally, in order to verify that we have indeed obtained a maximum, we should compute a second derivative and assert that its value is negative.)&lt;/p&gt;
+&lt;p&gt;In the more realistic case where &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is a high-dimensional vector or matrix, we can compute the argmax by way of an optimization routine like stochastic gradient ascent or, as is more common, the argmin by way of stochastic gradient descent.&lt;/p&gt;
+&lt;h3&gt;What if we're uncertain about our parameter estimates?&lt;/h3&gt;
+&lt;p&gt;Consider the following three scenarios — taken from Daphne Koller's &lt;a href="https://www.coursera.org/learn/probabilistic-graphical-models-3-learning/home/welcome"&gt;Learning in Probabilistic Graphical Models&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Two teams play 10 times, and the first wins 7 of the 10 matches.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;gt; &lt;em&gt;Infer that the probability of the first team winning is 0.7.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Seems reasonable, right?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A coin is tossed 10 times, and comes out &lt;code&gt;heads&lt;/code&gt; on 7 of the 10 tosses.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;gt; &lt;em&gt;Infer that the probability of observing &lt;code&gt;heads&lt;/code&gt; is 0.7.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Changing only the analogy, this now seems wholly unreasonable — right?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A coin is tossed 10000 times, and comes out &lt;code&gt;heads&lt;/code&gt; on 7000 of the 10000 tosses.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;gt; &lt;em&gt;Infer that the probability of observing &lt;code&gt;heads&lt;/code&gt; is 0.7.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Finally, increasing the observed counts, the previous scenario now seems plausible.&lt;/p&gt;
+&lt;p&gt;I find this a terrific succession of examples with which to convey the notion of &lt;em&gt;uncertainty&lt;/em&gt; — that the more data we have, the less uncertain we are about what's really going on. This notion is at the heart of Bayesian statistics and is extremely intuitive to us as humans. Unfortunately, when we compute "lowly point estimates," i.e. the argmin of the loss function with respect to our parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, we are discarding this uncertainty entirely. Should our model be fit with &lt;span class="math"&gt;\(n\)&lt;/span&gt; observations where &lt;span class="math"&gt;\(n\)&lt;/span&gt; is not a large number, our estimate would amount to that of Example #2: &lt;em&gt;a coin is tossed &lt;span class="math"&gt;\(n\)&lt;/span&gt; times, and comes out &lt;code&gt;heads&lt;/code&gt; on &lt;code&gt;int(.7n)&lt;/code&gt; of &lt;code&gt;n&lt;/code&gt; tosses — infer that the probability of observing &lt;code&gt;heads&lt;/code&gt; is squarely, unflinchingly, &lt;code&gt;0.7&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;h3&gt;What does including uncertainty look like?&lt;/h3&gt;
+&lt;p&gt;It looks like a &lt;em&gt;distribution&lt;/em&gt; — a range of possible values for &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. Further, these values are of varying plausibility as dictated by the data we've observed. In Example #2, while we'd still say that &lt;span class="math"&gt;\(\Pr(\text{heads}) = .7\)&lt;/span&gt; is the parameter value &lt;em&gt;most likely&lt;/em&gt; to have generated our data, we'd additionally maintain that other values in &lt;span class="math"&gt;\((0, 1)\)&lt;/span&gt; are plausible, albeit less so, as well. Again, this logic should be simple to grasp: it comes easy to us as humans.&lt;/p&gt;
+&lt;h3&gt;Prediction&lt;/h3&gt;
+&lt;p&gt;With the parameter &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; in hand prediction is simple: just plug back into our original function &lt;span class="math"&gt;\(P(y\vert x)\)&lt;/span&gt;. With a point estimate for &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, we compute but a single value for &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h2&gt;Generative models&lt;/h2&gt;
+&lt;p&gt;In generative models, we instead compute &lt;em&gt;component parts&lt;/em&gt; of the desired output distribution &lt;span class="math"&gt;\(P(y\vert x)\)&lt;/span&gt; instead of directly computing &lt;span class="math"&gt;\(P(y\vert x)\)&lt;/span&gt; itself. To examine these parts, we'll turn to Bayes' theorem:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+P(y\vert x) = \frac{P(x\vert y)P(y)}{P(x)}
+$$&lt;/div&gt;
+&lt;p&gt;The numerator posits a generative mechanism for the observed data pairs &lt;span class="math"&gt;\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)&lt;/span&gt; in idiomatic terms; it states that each pair was generated by:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Selecting a label &lt;span class="math"&gt;\(y^{(i)}\)&lt;/span&gt; from &lt;span class="math"&gt;\(P(y)\)&lt;/span&gt;. If our model is predicting &lt;code&gt;red or green or blue&lt;/code&gt;, &lt;span class="math"&gt;\(P(y)\)&lt;/span&gt; is likely a multinomial distribution.&lt;ul&gt;
+&lt;li&gt;If our observed label counts are &lt;code&gt;{'red': 20, 'green': 50, 'blue': 30}&lt;/code&gt;, we would retrodictively believe this multinomial distribution to have had a parameter vector near &lt;span class="math"&gt;\(\pi = [.2, .5, .3]\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Given a label &lt;span class="math"&gt;\(y^{(i)}\)&lt;/span&gt;, select a value &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; from &lt;span class="math"&gt;\(P(x\vert y)\)&lt;/span&gt;. Trivially, this means that we are positing &lt;em&gt;three distinct distributions&lt;/em&gt; of this form: &lt;span class="math"&gt;\(P(x\vert y=\text{red}), P(x\vert y=\text{green}), P(x\vert y=\text{blue})\)&lt;/span&gt;.&lt;ul&gt;
+&lt;li&gt;For example, if &lt;span class="math"&gt;\(y^{(i)} = \text{red}\)&lt;/span&gt;, draw &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; from &lt;span class="math"&gt;\(P(x\vert y=\text{red})\)&lt;/span&gt;, and so forth.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Inference&lt;/h3&gt;
+&lt;p&gt;The inference task is to compute &lt;span class="math"&gt;\(P(y)\)&lt;/span&gt; and each distinct &lt;span class="math"&gt;\(P(x\vert y_k)\)&lt;/span&gt;. In a classification setting, the former is likely a multinomial distribution. The latter might be a multinomial distribution or a set of binomial distributions in the case of discrete-feature data, or a set of Gaussian distributions in the case of continuous-feature data. In fact, these distributions can be whatever you'd like, dictated by the idiosyncrasies of the problem at hand.&lt;/p&gt;
+&lt;p&gt;Finally, we can compute these distributions as per normal: via a maximum likelihood estimate, a MAP estimate, etc.&lt;/p&gt;
+&lt;h3&gt;Prediction&lt;/h3&gt;
+&lt;p&gt;To compute &lt;span class="math"&gt;\(P(y\vert x)\)&lt;/span&gt; we return to Bayes' theorem:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+P(y\vert x) = \frac{P(x\vert y)P(y)}{P(x)}
+$$&lt;/div&gt;
+&lt;p&gt;We have the numerator &lt;span class="math"&gt;\(P(y)\)&lt;/span&gt; and three distinct conditional distributions &lt;span class="math"&gt;\(P(x\vert y=\text{red}), P(x\vert y=\text{green})\)&lt;/span&gt; and &lt;span class="math"&gt;\(P(x\vert y=\text{blue})\)&lt;/span&gt; in hand. What about the denominator?&lt;/p&gt;
+&lt;h3&gt;Conditional probability and marginalization&lt;/h3&gt;
+&lt;p&gt;The axiom of conditional probability allows us to write &lt;span class="math"&gt;\(P(B\vert A)P(A) = P(B, A)\)&lt;/span&gt;, i.e. the &lt;em&gt;joint probability&lt;/em&gt; of &lt;span class="math"&gt;\(B\)&lt;/span&gt; and &lt;span class="math"&gt;\(A\)&lt;/span&gt;. This is a simple algebraic manipulation. As such, we can rewrite Bayes' theorem in its more compact form.&lt;/p&gt;
+&lt;div class="math"&gt;$$
+P(y\vert x) = \frac{P(x, y)}{P(x)}
+$$&lt;/div&gt;
+&lt;p&gt;Another manipulation of probability distributions is the &lt;em&gt;marginalization&lt;/em&gt; operator, which allows us to write:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\int P(x, y)dy = P(x)
+$$&lt;/div&gt;
+&lt;p&gt;As such, we can &lt;em&gt;marginalize &lt;span class="math"&gt;\(y\)&lt;/span&gt; out of the numerator&lt;/em&gt; so as to obtain the denominator we require. This denominator is often called the "evidence."&lt;/p&gt;
+&lt;h3&gt;Marginalization example&lt;/h3&gt;
+&lt;p&gt;Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize &lt;span class="math"&gt;\(A\)&lt;/span&gt;.&lt;/p&gt;
+&lt;table class="table table-striped table-hover"&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(A\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(p\)&lt;/span&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(a^1\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^7\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.03\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(a^2\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.14\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(a^3\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^7\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.09\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(a^1\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.34\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(a^2\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.23\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(a^3\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.17\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The result of this marginalization is &lt;span class="math"&gt;\(P(B)\)&lt;/span&gt;, i.e. "what is the probability of observing each of the distinct values of &lt;span class="math"&gt;\(B\)&lt;/span&gt;?" In this example there are two — &lt;span class="math"&gt;\(b^7\)&lt;/span&gt; and &lt;span class="math"&gt;\(b^8\)&lt;/span&gt;. To marginalize over &lt;span class="math"&gt;\(A\)&lt;/span&gt;, we simply:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Delete the &lt;span class="math"&gt;\(A\)&lt;/span&gt; column.&lt;/li&gt;
+&lt;li&gt;"Collapse" the remaining columns — in this case, &lt;span class="math"&gt;\(B\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Step 1 gives:&lt;/p&gt;
+&lt;table class="table table-striped table-hover"&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(p\)&lt;/span&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^7\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.03\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.14\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^7\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.09\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.34\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.23\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.17\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Step 2 gives:&lt;/p&gt;
+&lt;table class="table table-striped table-hover"&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(p\)&lt;/span&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^7\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.03 + .09 = .12\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(b^8\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(.14 + .34 + .23 + .17 = .88\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;The denominator&lt;/h3&gt;
+&lt;p&gt;In the context of our generative model with a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the result of this marginalization is a &lt;em&gt;scalar&lt;/em&gt; — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(x, y)\)&lt;/span&gt;:&lt;/p&gt;
+&lt;table class="table table-striped table-hover"&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(y\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(X\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(P(y, X)\)&lt;/span&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(\text{red}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(x\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(P(y = \text{red}, x)\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(\text{green}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(x\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(P(y = \text{green}, x)\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(\text{blue}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(x\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(P(y = \text{blue}, x)\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int P(x, y)dy = P(x)\)&lt;/span&gt;:&lt;/p&gt;
+&lt;table class="table table-striped table-hover"&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(X\)&lt;/span&gt;&lt;/th&gt;
+&lt;th&gt;&lt;span class="math"&gt;\(P(y, X)\)&lt;/span&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(x\)&lt;/span&gt;&lt;/td&gt;
+&lt;td&gt;&lt;span class="math"&gt;\(P(y = \text{red}, x) + P(y = \text{green}, x) + P(y = \text{blue}, x)\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The resulting probability distribution is over a single value: it is a scalar. This scalar &lt;em&gt;normalizes&lt;/em&gt; the respective numerator terms such that:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\frac{P(y = \text{red}, x)}{P(x)} +
+\frac{P(y = \text{green}, x)}{P(x)} +
+\frac{P(y = \text{blue}, x)}{P(x)}
+= 1
+$$&lt;/div&gt;
+&lt;p&gt;This gives &lt;span class="math"&gt;\(P(y\vert x)\)&lt;/span&gt;: a valid probability distribution over the class labels &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h3&gt;Partition function&lt;/h3&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(x)\)&lt;/span&gt; often takes another name and even another variable: &lt;span class="math"&gt;\(Z\)&lt;/span&gt;, the &lt;em&gt;partition function&lt;/em&gt;. The stated purpose of this function is to normalize the numerator such that the above summation-to-1 holds. This normalization is necessary because the numerators typically will not sum to 1 themselves, which follows logically from the fact that:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+\sum\limits_{k = 1}^K P(y = k) = 1
+\end{align*}
+$$&lt;/div&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+P(x\vert y = k) \neq 1
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;Since &lt;span class="math"&gt;\((1)\)&lt;/span&gt; is always true, the "&lt;span class="math"&gt;\(\neq\)&lt;/span&gt;" in &lt;span class="math"&gt;\((2)\)&lt;/span&gt; would need to become an "&lt;span class="math"&gt;\(=\)&lt;/span&gt;" such that:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\sum\limits_{k = 1}^K P(y = k)P(x\vert y = k) = 1
+$$&lt;/div&gt;
+&lt;p&gt;Unfortunately, &lt;span class="math"&gt;\(P(x\vert y = k) = 1\)&lt;/span&gt; is rarely if ever the case.&lt;/p&gt;
+&lt;p&gt;As you'll now note, the &lt;span class="math"&gt;\(x\)&lt;/span&gt;-specific partition function gives a result equivalent to that of the marginalized-over-&lt;span class="math"&gt;\(y\)&lt;/span&gt; joint distribution: a scalar value &lt;span class="math"&gt;\(P(x)\)&lt;/span&gt; with which to normalize the numerator. However, crucially, please keep in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;The partition function is a specific component of a probabilistic model. It always yields a scalar&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Marginalization is a &lt;strong&gt;much more general&lt;/strong&gt; operation performed on a probability distribution, which yields a scalar only when the remaining variables(s) are homogeneous, i.e. each remaining column contains a single distinct value.&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;In the majority of cases, marginalization will simply yield a reduced probability distribution over many value configurations, similar to the &lt;span class="math"&gt;\(P(B)\)&lt;/span&gt; example above.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;In practice, this is superfluous&lt;/h3&gt;
+&lt;p&gt;If we neglect to compute &lt;span class="math"&gt;\(P(x)\)&lt;/span&gt;, i.e. if we don't normalize our joint distributions &lt;span class="math"&gt;\(P(x, y = k)\)&lt;/span&gt;, we'll be left with an invalid probability distribution &lt;span class="math"&gt;\(\tilde{P}(y\vert x)\)&lt;/span&gt; whose values do not sum to 1. This distribution might look like &lt;code&gt;P(y|x) = {'red': .00047, 'green': .0011, 'blue': .0000853}&lt;/code&gt;. &lt;em&gt;If our goal is to simply compute the most likely label, taking the argmax of this unnormalized distribution works just fine.&lt;/em&gt; This follows trivially from our Bayesian pool ring:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\underset{y}{\arg\max}\ \frac{P(x, y)}{P(x)} = \underset{y}{\arg\max}\ P(x, y)
+$$&lt;/div&gt;
+&lt;h1&gt;"Fully Bayesian learning"&lt;/h1&gt;
+&lt;p&gt;We previously lamented the shortcomings of "lowly point estimates" and sang the praises of inferring the full distribution instead. Unfortunately, this is often a computationally-hard thing to do.&lt;/p&gt;
+&lt;p&gt;To see why, let's revisit Bayes' theorem. Assume we are estimating the parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; of a softmax regression model and have placed a prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. In concrete terms, this estimate can be written as &lt;span class="math"&gt;\(P(\theta\vert D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)})))\)&lt;/span&gt;: the distribution over our belief in the true value of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given the data we've observed. Bayes' theorem allows us to expand this quantity into:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+P(\theta\vert D) = \frac{P(D\vert\theta)P(\theta)}{P(D)}
+$$&lt;/div&gt;
+&lt;p&gt;Previously, we computed a "lowly point estimate" for this distribution — the MAP — as:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+\theta_{MAP}
+&amp;amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} P(y^{(i)}\vert x^{(i)}; \theta)P(\theta)\\
+&amp;amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} P(\theta\vert (y^{(i)}, x^{(i)}))\\
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;While &lt;span class="math"&gt;\(P(y^{(i)}\vert x^{(i)}; \theta)P(\theta) \neq P(\theta\vert (y^{(i)}, x^{(i)}))\)&lt;/span&gt;, the argmaxes of the respective products &lt;em&gt;are&lt;/em&gt; equal. For this reason, we were able to compute a point estimate for &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt;, i.e. a "summarization" of &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt; in a single value, without ever computing the denominator &lt;span class="math"&gt;\(P(D)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;(As a brief aside, please note that we could summarize &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt; with &lt;em&gt;any&lt;/em&gt; single value from this distribution. We often select the maximum likelihood estimate — the single value of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; that most likely gave rise to our data, or the MAP — the single value of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; that both most likely gave rise to our data and most plausibly occurred itself.)&lt;/p&gt;
+&lt;p&gt;To compute &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt; — trivially, a full distribution as the term suggests — we will need to compute &lt;span class="math"&gt;\(P(D)\)&lt;/span&gt; after all. As before, this can be accomplished via marginalization:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+P(\theta\vert D)
+&amp;amp;= \frac{P(D\vert\theta)P(\theta)}{P(D)}\\
+&amp;amp;= \frac{P(D, \theta)}{P(D)}\\
+&amp;amp;= \frac{P(D, \theta)}{\int P(D, \theta)d\theta}\\
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;Since &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; takes continuous values, we can no longer employ the "delete and collapse" method of marginalization in discrete distributions. Furthermore, in all but trivial cases, &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is a high-dimensional vector or matrix, leaving us to compute a "high-dimensional integral that lacks an analytic (closed-form) solution — the central computational challenge in inference."&lt;sup id="fnref-1"&gt;&lt;a class="footnote-ref" href="#fn-1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;As such, computing the full distribution &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt; is &lt;em&gt;approximating&lt;/em&gt; the full distribution &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt;. To this end, we'll introduce two new families of algorithms.&lt;/p&gt;
+&lt;h2&gt;Markov chain monte carlo&lt;/h2&gt;
+&lt;p&gt;In small to medium-sized models, we often take an alternative ideological approach to approximating &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt;: instead of computing a distribution, i.e. the canonical parameters of a gory algebraic expression which control its shape — we produce &lt;em&gt;samples&lt;/em&gt; from this distribution. Roughly speaking, the aggregate of these samples then gives, retrodictively, the distribution itself. The general family of these methods is known as Markov chain monte carlo, or MCMC.&lt;/p&gt;
+&lt;p&gt;In simple terms, MCMC inference for a given parameter &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; works as follows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Initialize &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; to some value &lt;span class="math"&gt;\(\phi_{\text{current}}\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Compute the prior probability of &lt;span class="math"&gt;\(\phi_{\text{current}}\)&lt;/span&gt; and the probability of having observed our data under &lt;span class="math"&gt;\(\phi_{\text{current}}\)&lt;/span&gt; — &lt;span class="math"&gt;\(P(\phi_{\text{current}})\)&lt;/span&gt; and &lt;span class="math"&gt;\(P(D\vert \phi_{\text{current}})\)&lt;/span&gt;, respectively. Their product gives &lt;span class="math"&gt;\(P(D, \phi_{\text{current}})\)&lt;/span&gt; — the joint probability of having observed the proposed parameter value and our observed data given this value.&lt;/li&gt;
+&lt;li&gt;Add &lt;span class="math"&gt;\(\phi_{\text{current}}\)&lt;/span&gt; to a big green plastic bucket of "accepted values."&lt;/li&gt;
+&lt;li&gt;Propose moving to a new, nearby value &lt;span class="math"&gt;\(\phi_{\text{proposal}}\)&lt;/span&gt;. This value is drawn from an entirely separate &lt;em&gt;sampling distribution&lt;/em&gt; which bears no influence on our prior &lt;span class="math"&gt;\(P(\phi)\)&lt;/span&gt; nor likelihood function &lt;span class="math"&gt;\(P(D\vert \phi)\)&lt;/span&gt;. Repeat Step 2 using &lt;span class="math"&gt;\(\phi_{\text{proposal}}\)&lt;/span&gt; instead of &lt;span class="math"&gt;\(\phi_{\text{current}}\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Walk the following tree:&lt;ul&gt;
+&lt;li&gt;If &lt;span class="math"&gt;\(P(D, \phi_{\text{proposal}}) \gt P(D, \phi_{\text{current}})\)&lt;/span&gt;:&lt;/li&gt;
+&lt;li&gt;Set &lt;span class="math"&gt;\(\phi_{\text{current}} = \phi_{\text{proposal}}\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Move to Step 3.&lt;/li&gt;
+&lt;li&gt;Else:&lt;/li&gt;
+&lt;li&gt;With some small probability:&lt;ul&gt;
+&lt;li&gt;Set &lt;span class="math"&gt;\(\phi_{\text{current}} = \phi_{\text{proposal}}\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Move to Step 3.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Else:&lt;ul&gt;
+&lt;li&gt;Move to Step 4.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;After collecting a few thousand samples — and discarding the first few hundred, in which we drunkenly amble towards the region of high joint probability (a quantity &lt;em&gt;proportional&lt;/em&gt; to the posterior probability) — we now have a bucket of samples from our desired posterior distribution. Nota bene: we never had to touch the high-dimensional integral &lt;span class="math"&gt;\(\int P(D, \theta)d\theta\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h2&gt;Variational inference&lt;/h2&gt;
+&lt;p&gt;In large-scale models, MCMC methods are often too slow. Conversely, variational inference provides a framework for casting the problem of posterior approximation as one of &lt;em&gt;optimization&lt;/em&gt; — far faster than a sampling-based approach. This yields an &lt;em&gt;analytical&lt;/em&gt; approximation to &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt;. The following explanation of variational inference is taken largely from a previous post of mine: &lt;a href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/"&gt;Transfer Learning for Flight Delay Prediction&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For our approximating distribution we'll choose one that is simple, parametric and familiar: the normal (Gaussian) distribution, parameterized by some set of parameters &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt;.&lt;/p&gt;
+&lt;div class="math"&gt;$$q_{\lambda}(\theta\vert D)$$&lt;/div&gt;
+&lt;p&gt;Our goal is to force this distribution to closely resemble the original; the &lt;a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence"&gt;KL divergence&lt;/a&gt; quantifies their difference:&lt;/p&gt;
+&lt;div class="math"&gt;$$KL(q_{\lambda}(\theta\vert D)\Vert P(\theta\vert D)) = \int{q_{\lambda}(\theta\vert D)\log\frac{q_{\lambda}(\theta\vert D)}{P(\theta\vert D)}d\theta}$$&lt;/div&gt;
+&lt;p&gt;To this end, we compute its argmin with respect to &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;$$q_{\lambda}^{*}(\theta\vert D) = \underset{\lambda}{\arg\min}\ \text{KL}(q_{\lambda}(\theta\vert D)\Vert P(\theta\vert D))$$&lt;/div&gt;
+&lt;p&gt;Expanding the divergence, we obtain:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+KL(q_{\lambda}(\theta\vert D)\Vert P(\theta\vert D))
+&amp;amp;= \int{q_{\lambda}(\theta\vert D)\log\frac{q_{\lambda}(\theta\vert D)}{P(\theta\vert D)}d\theta}\\
+&amp;amp;= \int{q_{\lambda}(\theta\vert D)\log\frac{q_{\lambda}(\theta\vert D)P(D)}{P(\theta, D)}d\theta}\\
+&amp;amp;= \int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D) -\log{P(\theta, D)} + \log{P(D)}}\bigg)d\theta}\\
+&amp;amp;= \int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D)} -\log{P(\theta, D)}}\bigg)d\theta + \log{P(D)}\int{q_{\lambda}(\theta\vert D)d\theta}\\
+&amp;amp;= \int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D)} -\log{P(\theta, D)}}\bigg)d\theta + \log{P(D)} \cdot 1
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;Since only the integral depends on &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt;, minimizing the entire expression with respect to &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt; amounts to minimizing this term. Incidentally, the opposite (negative) of this term is called the &lt;a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf"&gt;ELBO&lt;/a&gt;, or the "evidence lower bound."&lt;/p&gt;
+&lt;div class="math"&gt;$$
+ELBO(\lambda) = -\int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D)} -\log{P(\theta, D)}}\bigg)d\theta
+$$&lt;/div&gt;
+&lt;p&gt;To see why, let's plug the ELBO into the equation above and solve for &lt;span class="math"&gt;\(\log{P(D)}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;$$\log{P(D)} = ELBO(\lambda) + KL(q_{\lambda}(\theta\vert D)\Vert P(\theta\vert D))$$&lt;/div&gt;
+&lt;p&gt;In English: "the log of the evidence is at least the lower bound of the evidence plus the divergence from our (variational) approximation of the posterior &lt;span class="math"&gt;\(q_{\lambda}(\theta\vert D)\)&lt;/span&gt; to our true posterior &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt;."&lt;/p&gt;
+&lt;p&gt;As such, minimizing this divergence is equivalent to &lt;em&gt;maximizing&lt;/em&gt; the ELBO, as:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+KL(q_{\lambda}(\theta\vert D)\Vert P(\theta\vert D)) = -ELBO(\lambda) + \log{P(D)}
+$$&lt;/div&gt;
+&lt;h3&gt;Optimization&lt;/h3&gt;
+&lt;p&gt;Let's restate the equation for the ELBO and rearrange further:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+ELBO(\lambda)
+&amp;amp;= -\int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D)} -\log{P(\theta, D)}}\bigg)d\theta\\
+&amp;amp;= -\int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D)} -\log{P(D\vert \theta)} - \log{P(\theta)}}\bigg)d\theta\\
+&amp;amp;= -\int{q_{\lambda}(\theta\vert D)\bigg(\log{q_{\lambda}(\theta\vert D)} - \log{P(\theta)}}\bigg)d\theta + \log{P(D\vert \theta)}\int{q_{\lambda}(\theta\vert D)d\theta}\\
+&amp;amp;= -\int{q_{\lambda}(\theta\vert D)\log{\frac{q_{\lambda}(\theta\vert D)}{P(\theta)}}d\theta} + \log{P(D\vert \theta)} \cdot 1\\
+&amp;amp;= \log{P(D\vert \theta)} -KL(q_{\lambda}(\theta\vert D)\Vert P(\theta))\\
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;Again, our goal is to maximize this expression or minimize its opposite:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+-\log{P(D\vert \theta)} + KL(q_{\lambda}(\theta\vert D)\Vert P(\theta))
+$$&lt;/div&gt;
+&lt;p&gt;One step further, we obtain:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+&amp;amp;= -\log{P(D\vert \theta)} + q_{\lambda}(\theta\vert D)\log{q_{\lambda}(\theta\vert D)} - q_{\lambda}(\theta\vert D)\log{P(\theta)}\\
+&amp;amp;= \mathop{\mathbb{E}}_{q_{\lambda}(\theta\vert D)}[-\log{P(D\vert \theta)} +\log{q_{\lambda}(\theta\vert D)} - \log{P(\theta)}]\\
+&amp;amp;= \mathop{\mathbb{E}}_{q_{\lambda}(\theta\vert D)}[-\big(\log{P(D,  \theta)} -\log{q_{\lambda}(\theta\vert D)}\big)]\\
+&amp;amp;= -\mathop{\mathbb{E}}_{q_{\lambda}(\theta\vert D)}[\log{P(D,  \theta)}] + \mathop{\mathbb{E}}_{q_{\lambda}(\theta\vert D)}[\log{q_{\lambda}(\theta\vert D)}]\\
+\end{align*}
+$$&lt;/div&gt;
+&lt;p&gt;In machine learning parlance: "minimize the negative log joint probability of our data and parameter &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; — a MAP estimate — plus the entropy of our variational approximation." As a &lt;em&gt;higher&lt;/em&gt; entropy is desirable — an approximation which distributes its mass in a &lt;em&gt;conservative&lt;/em&gt; fashion — this minimization is a balancing act between the two terms.&lt;/p&gt;
+&lt;p&gt;For a more in-depth discussion of both entropy and KL-divergence please see &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;Minimizing the Negative Log-Likelihood, in English&lt;/a&gt;.&lt;/p&gt;
+&lt;h1&gt;Posterior predictive distribution&lt;/h1&gt;
+&lt;p&gt;With our estimate for &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; as a full distribution, we can now make a new prediction as a full distribution as well.&lt;/p&gt;
+&lt;div class="math"&gt;$$
+\begin{align*}
+P(y\vert x, D)
+&amp;amp;= \int P(y\vert x, D, \theta)P(\theta\vert x, D)d\theta\\
+&amp;amp;= \int P(y\vert x, \theta)P(\theta\vert D)d\theta\\
+\end{align*}
+$$&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;The right term under the integral is the posterior distribution of our parameter &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given the "training" data, &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt;. Since it does not depend on a new input &lt;span class="math"&gt;\(x\)&lt;/span&gt; we have removed &lt;span class="math"&gt;\(x\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;The left term under the integral is our likelihood function: given an &lt;span class="math"&gt;\(x\)&lt;/span&gt; and a &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, it produces a &lt;span class="math"&gt;\(y\)&lt;/span&gt;. While this function does depend on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; — whose values are pulled from our posterior &lt;span class="math"&gt;\(P(\theta\vert D)\)&lt;/span&gt; — it does not depend on &lt;span class="math"&gt;\(D\)&lt;/span&gt; itself. As such, we have removed &lt;span class="math"&gt;\(D\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Integrating over &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; yields a distribution over &lt;span class="math"&gt;\(y\)&lt;/span&gt;: we've now captured not just the uncertainty in &lt;em&gt;inference&lt;/em&gt;, but also the corresponding uncertain in our &lt;em&gt;predictions&lt;/em&gt;.&lt;/p&gt;
+&lt;h1&gt;What do these distributions actually do for me?&lt;/h1&gt;
+&lt;p&gt;Said differently, "why is it important to quantify uncertainty?"&lt;/p&gt;
+&lt;p&gt;I think we, as humans, are exceptionally qualified to answer this question: we need to look no further than ourselves, our choices, our environment.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The cross-walk says "go." Do I:&lt;ul&gt;
+&lt;li&gt;Close my eyes, lie down for a 15-second nap in the middle of the road, then walk backwards the rest of the way?&lt;/li&gt;
+&lt;li&gt;Quickly look both ways then walk leisurely across the road, keeping an eye out for cyclists at the same time.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;A company emails to say "we'd like to discuss the possibility of a full-time role." Do I:&lt;ul&gt;
+&lt;li&gt;Respond saying "Great! Let's chat further" while continuing to speak with other companies.&lt;/li&gt;
+&lt;li&gt;Respond saying "Great! Let's chat further" and promptly sever all contact with other companies.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;An extremely reliable lifelong friend calls to say they've found me a beautiful studio in Manhattan for $600/month, and would need to confirm in the next 24 hours if I'd like to take it. Do I:&lt;ul&gt;
+&lt;li&gt;Take it.&lt;/li&gt;
+&lt;li&gt;Call three friends to ask if they think that this makes sense.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;An extremely sketchy real estate broker calls to say they've found me a beautiful studio in Manhattan for $600/month, and would need to confirm in the next 24 hours if I'd like to take it. Do I:&lt;ul&gt;
+&lt;li&gt;Take it.&lt;/li&gt;
+&lt;li&gt;Call three friends to ask if they think that this makes sense.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The notion is the same in probabilistic modeling. Furthermore, we often build models with "not big data," and therefore have a substantially non-zero amount of uncertainty in our parameter estimates and subsequent predictions.&lt;/p&gt;
+&lt;p&gt;Finally, with distributional estimates in hand, we can begin to make more robust, measured and logical decisions. We can do this because, while point estimates give a quick summary of the dynamics of our system, distributions tell the full, thorough story: where the peaks are, their width and height, their distance from one another, etc. For an excellent exploration of what we can do with posterior distributions, check out Rasmus Bååth's &lt;a href="http://www.sumsar.net/blog/2015/01/probable-points-and-credible-intervals-part-two/"&gt;Probable Points and Credible Intervals, Part 2: Decision Theory&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Many thanks for reading, and to our pool ring Bayes'.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="girls having drinks on pool rings" class="img-responsive" src="https://ak8.picdn.net/shutterstock/videos/19157749/thumb/2.jpg"/&gt;&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn-1"&gt;
+&lt;p&gt;&lt;a href="http://edwardlib.org/tutorials/inference"&gt;Edward — Inference of Probabilistic Models&lt;/a&gt; &lt;a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/hr&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content></entry><entry><title>Minimizing the Negative Log-Likelihood, in English</title><link href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/" rel="alternate"></link><published>2017-05-18T12:24:00-04:00</published><updated>2017-05-18T12:24:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-18:/2017/05/18/minimizing_the_negative_log_likelihood_in_english/</id><summary type="html">&lt;p&gt;Statistical underpinnings of the machine learning models we know and love. A walk through random variables, entropy, exponential family distributions, generalized linear models, maximum likelihood estimation, cross entropy, KL divergence, maximum a posteriori estimation and going "fully Bayesian."&lt;/p&gt;</summary><content type="html">&lt;p&gt;Roughly speaking, my machine learning journey began on &lt;a href="http://kaggle.com"&gt;Kaggle&lt;/a&gt;. "There's data, a model (i.e. estimator) and a loss function to optimize," I learned. "Regression models predict continuous-valued real numbers; classification models predict 'red,' 'green,' 'blue.' Typically, the former employs the mean squared error or mean absolute error; the latter, the cross-entropy loss. Stochastic gradient descent updates the model's parameters to drive these losses down." Furthermore, to fit these models, just &lt;code&gt;import sklearn&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;A dexterity with the above is often sufficient for — at least from a technical stance — both employment and impact as a data scientist. In industry, commonplace prediction and inference problems — binary churn, credit scoring, product recommendation and A/B testing, for example — are easily matched with an off-the-shelf algorithm plus proficient data scientist for a measurable boost to the company's bottom line. In a vacuum I think this is fine: the winning driver does not &lt;em&gt;need&lt;/em&gt; to know how to build the car. Surely, I've been this person before.&lt;/p&gt;
 &lt;p&gt;Once fluid with "scikit-learn fit and predict," I turned to statistics. I was always aware that the two were related, yet figured them ultimately parallel sub-fields of my job. With the former, I build classification models; with the latter, I infer signup counts with the Poisson distribution and MCMC — right?&lt;/p&gt;
 &lt;p&gt;Before long, I dove deeper into machine learning — reading textbooks, papers and source code and writing this blog. Therein, I began to come across &lt;em&gt;terms I didn't understand used to describe the things that I did.&lt;/em&gt; "I understand what the categorical cross-entropy loss is, what it does and how it's defined," for example: &lt;em&gt;&lt;strong&gt;"why are you calling it the negative log-likelihood?"&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
@@ -132,7 +617,7 @@ $$&lt;/div&gt;
 &lt;p&gt;For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." &lt;em&gt;Can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Maximum entropy distributions&lt;/h2&gt;
 &lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (-\infty, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;uber&lt;/th&gt;
@@ -686,7 +1171,7 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content></entry><entry><title>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</title><link href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/" rel="alternate"></link><published>2017-05-08T12:45:00-04:00</published><updated>2017-05-08T12:45:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-08:/2017/05/08/transfer-learning-flight-delay-prediction/</id><summary type="html">&lt;p&gt;Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;user_id&lt;/th&gt;
@@ -923,7 +1408,7 @@ Mean squared error, deeper regression: 2.3186310632259204
 &lt;p&gt;Unfortunately, this asks us to consider &lt;em&gt;all possible configurations&lt;/em&gt; of the latent vector &lt;span class="math"&gt;\(z\)&lt;/span&gt;. Should &lt;span class="math"&gt;\(z\)&lt;/span&gt; exist on the vertices of a cube in &lt;span class="math"&gt;\(\mathbb{R}^3\)&lt;/span&gt;, this would not be very difficult; should &lt;span class="math"&gt;\(z\)&lt;/span&gt; be a continuous-valued vector in &lt;span class="math"&gt;\(\mathbb{R}^{10}\)&lt;/span&gt;, this becomes a whole lot harder. Computing &lt;span class="math"&gt;\(P(x)\)&lt;/span&gt; is problematic.&lt;/p&gt;
 &lt;h3&gt;Variational inference&lt;/h3&gt;
 &lt;p&gt;In fact, we could attempt to use MCMC to compute &lt;span class="math"&gt;\(P(z\vert x)\)&lt;/span&gt;; however, this is slow to converge. Instead, let's compute an &lt;em&gt;approximation&lt;/em&gt; to this distribution then try to make it closely resemble the (intractable) original. In this vein, we introduce &lt;a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf"&gt;variational inference&lt;/a&gt;, which "allows us to re-write statistical inference problems (i.e. infer the value of a random variable given the value of another random variable) as optimization problems (i.e. find the parameter values that minimize some objective function)."&lt;sup id="fnref-1"&gt;&lt;a class="footnote-ref" href="#fn-1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;Let's choose our approximating distribution as simple, parametric and one we know well: the Normal (Gaussian) distribution. Were we able to compute &lt;span class="math"&gt;\(P(z\vert x) = \frac{P(x, z)}{P(x)}\)&lt;/span&gt;, it is &lt;em&gt;instrinsic&lt;/em&gt; that &lt;span class="math"&gt;\(z\)&lt;/span&gt; is contingent on &lt;span class="math"&gt;\(x\)&lt;/span&gt;; when building our own distribution to approximate &lt;span class="math"&gt;\(P(z\vert x)\)&lt;/span&gt;, we need to be &lt;em&gt;explicit&lt;/em&gt; about this contingency: different values for &lt;span class="math"&gt;\(x\)&lt;/span&gt; should be assumed to have been generated by different values of &lt;span class="math"&gt;\(z\)&lt;/span&gt;. Let's write our approximation as follows, where &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt; parameterizes the Gaussian for a given &lt;span class="math"&gt;\(x\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;Let's choose our approximating distribution as simple, parametric and one we know well: the Normal (Gaussian) distribution. Were we able to compute &lt;span class="math"&gt;\(P(z\vert x) = \frac{P(x, z)}{P(x)}\)&lt;/span&gt;, it is &lt;em&gt;intrinsic&lt;/em&gt; that &lt;span class="math"&gt;\(z\)&lt;/span&gt; is contingent on &lt;span class="math"&gt;\(x\)&lt;/span&gt;; when building our own distribution to approximate &lt;span class="math"&gt;\(P(z\vert x)\)&lt;/span&gt;, we need to be &lt;em&gt;explicit&lt;/em&gt; about this contingency: different values for &lt;span class="math"&gt;\(x\)&lt;/span&gt; should be assumed to have been generated by different values of &lt;span class="math"&gt;\(z\)&lt;/span&gt;. Let's write our approximation as follows, where &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt; parameterizes the Gaussian for a given &lt;span class="math"&gt;\(x\)&lt;/span&gt;:&lt;/p&gt;
 &lt;div class="math"&gt;$$q_{\lambda}(z\vert x)$$&lt;/div&gt;
 &lt;p&gt;Finally, as stated previously, we want to make this approximation closely resemble the original; the &lt;a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence"&gt;KL divergence&lt;/a&gt; quantifies their difference:&lt;/p&gt;
 &lt;div class="math"&gt;$$KL(q_{\lambda}(z\vert x)\Vert P(z\vert x)) = \int{q_{\lambda}(z\vert x)\log\frac{q_{\lambda}(z\vert x)}{P(z\vert x)}dz}$$&lt;/div&gt;
@@ -1335,7 +1820,7 @@ Mean squared error, deeper regression: 2.291221474968889
 &lt;p&gt;Of course, a probability is but a real number that lies on the closed interval &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;How does the input affect the output?&lt;/h2&gt;
 &lt;p&gt;Our input is a list of 4 numbers; each one affects &lt;em&gt;each possible output&lt;/em&gt; to a &lt;em&gt;different extent&lt;/em&gt;. We'll call this effect a "weight." 4 inputs times 3 outputs equals 12 distinct weights. They might look like this:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -1530,7 +2015,7 @@ $$&lt;/div&gt;
 &lt;li&gt;Returns a value for every unique combination of values that the random variables can take, i.e. for every entry in the cross-product space of its scope.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;For example, a factor with scope &lt;span class="math"&gt;\(\{\mathbf{A, B}\}\)&lt;/span&gt; might look like:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -1601,7 +2086,7 @@ P_{\Phi}(\mathbf{X_1, ..., X_n})
 $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(\mathbf{Z}_{\Phi}\)&lt;/span&gt; is the partition function.&lt;/p&gt;
 &lt;p&gt;To compute this function, we simply add up all the values in the unnormalized table. Given &lt;span class="math"&gt;\(\tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})\)&lt;/span&gt; as:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -1640,7 +2125,7 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;Our valid probability distribution then becomes:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -2868,7 +3353,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -4408,7 +4893,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7773,7 +8258,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7876,7 +8361,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7979,7 +8464,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8082,7 +8567,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8185,7 +8670,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8293,7 +8778,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8386,7 +8871,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8478,7 +8963,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8572,7 +9057,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8689,7 +9174,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9164,7 +9649,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9232,7 +9717,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11002,7 +11487,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11122,7 +11607,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11242,7 +11727,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11362,7 +11847,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
