@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-07-06T10:00:00-04:00</updated><entry><title>Further Exploring Common Probabilistic Models</title><link href="https://cavaunpeu.github.io/2017/07/06/further-exploring-common-probabilistic-models/" rel="alternate"></link><published>2017-07-06T10:00:00-04:00</published><updated>2017-07-06T10:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-07-06:/2017/07/06/further-exploring-common-probabilistic-models/</id><summary type="html">&lt;p&gt;Exploring generative vs. discriminative models, and sampling and variational methods for approximate inference through the lens of Bayes' theorem.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;previous post&lt;/a&gt; on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-06-06T10:00:00-04:00</updated><entry><title>Further Exploring Common Probabilistic Models</title><link href="https://cavaunpeu.github.io/2017/06/06/further-exploring-common-probabilistic-models/" rel="alternate"></link><published>2017-06-06T10:00:00-04:00</published><updated>2017-06-06T10:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-06-06:/2017/06/06/further-exploring-common-probabilistic-models/</id><summary type="html">&lt;p&gt;Exploring generative vs. discriminative models, and sampling and variational methods for approximate inference through the lens of Bayes' theorem.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;previous post&lt;/a&gt; on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.&lt;/p&gt;
 &lt;p&gt;In this post, we're going to stay on the surface: instead of deconstructing common models, we're going to further explore the relationships between them — swimming to different corners of the pool itself. Keeping us afloat will be Bayes' theorem — a balanced, dependable yet at times fragile pool ring, so to speak — which we'll take with us wherever we go.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="pool ring" class="img-responsive" src="https://c1.staticflickr.com/7/6151/6137348439_199f5119be_b.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;While there are many potential themes of probabilistic models we might explore, we'll herein focus on two: &lt;strong&gt;generative vs. discriminative models&lt;/strong&gt;, and &lt;strong&gt;"fully Bayesian" vs. "lowly point estimate" learning&lt;/strong&gt;. We will stick to the supervised setting as well.&lt;/p&gt;
@@ -87,7 +87,7 @@ $$&lt;/div&gt;
 &lt;p&gt;As such, we can &lt;em&gt;marginalize &lt;span class="math"&gt;\(y\)&lt;/span&gt; out of the numerator&lt;/em&gt; so as to obtain the denominator we require. This denominator is often called the "evidence."&lt;/p&gt;
 &lt;h3&gt;Marginalization example&lt;/h3&gt;
 &lt;p&gt;Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize &lt;span class="math"&gt;\(A\)&lt;/span&gt;.&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(A\)&lt;/span&gt;&lt;/th&gt;
@@ -134,7 +134,7 @@ $$&lt;/div&gt;
 &lt;li&gt;"Collapse" the remaining columns — in this case, &lt;span class="math"&gt;\(B\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Step 1 gives:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -169,7 +169,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;Step 2 gives:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -190,7 +190,7 @@ $$&lt;/div&gt;
 &lt;h3&gt;The denominator&lt;/h3&gt;
 &lt;p&gt;In the context of our generative model with a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the result of this marginalization is a &lt;em&gt;scalar&lt;/em&gt; — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(P(x, y)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(y\)&lt;/span&gt;&lt;/th&gt;
@@ -217,7 +217,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\int P(x, y)dy = P(x)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(X\)&lt;/span&gt;&lt;/th&gt;
@@ -621,7 +621,7 @@ $$&lt;/div&gt;
 &lt;p&gt;For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." &lt;em&gt;Can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Maximum entropy distributions&lt;/h2&gt;
 &lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (-\infty, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;uber&lt;/th&gt;
@@ -683,11 +683,11 @@ $$&lt;/div&gt;
 &lt;p&gt;As such, we'd like the most conservative distribution that obeys the "utterly banal" constraints stated above. This is the &lt;a href="https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution"&gt;&lt;em&gt;maximum entropy distribution&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;For &lt;code&gt;temperature&lt;/code&gt;, the maximum entropy distribution is the &lt;a href="https://en.wikipedia.org/wiki/Normal_distribution"&gt;Gaussian distribution&lt;/a&gt;. Its probability density function is given as:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(y\vert \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}
+P(y\vert \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}
 $$&lt;/div&gt;
 &lt;p&gt;For &lt;code&gt;cat or dog&lt;/code&gt;, it is the &lt;a href="https://en.wikipedia.org/wiki/Binomial_distribution"&gt;binomial distribution&lt;/a&gt;. Its probability mass function  (for a single observation) is given as:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp;amp; \text{outcome = cat}\\
 \phi &amp;amp; \text{outcome = dog}\\
@@ -696,7 +696,7 @@ $$&lt;/div&gt;
 &lt;p&gt;(I've written the probability of the positive event as &lt;span class="math"&gt;\(\phi\)&lt;/span&gt;, e.g. &lt;span class="math"&gt;\(\phi = .5\)&lt;/span&gt; for a fair coin.)&lt;/p&gt;
 &lt;p&gt;For &lt;code&gt;red or green or blue&lt;/code&gt;, it is the &lt;a href="https://en.wikipedia.org/wiki/Multinomial_distribution"&gt;multinomial distribution&lt;/a&gt;. Its probability mass function (for a single observation) is given as:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 \phi_{\text{red}} &amp;amp; \text{outcome = red}\\
 \phi_{\text{green}} &amp;amp; \text{outcome = green}\\
@@ -727,7 +727,7 @@ $$&lt;/div&gt;
 &lt;p&gt;I don't relish quoting this paragraph — and especially one so deliriously ambiguous. This said, the reality is that exponential functions provide, at a minimum, a unifying framework for deriving the canonical activation and loss functions we've come to know and love. To move forward, we simply have to cede that the "mathematical conveniences, on account of some useful algebraic properties, etc." that motivate this "certain form" are not totally heinous nor misguided.&lt;/p&gt;
 &lt;p&gt;A distribution belongs to the exponential family if it can be written in the following form:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(y; \eta) = b(y)\exp(\eta^T T(y) - a(\eta))
+P(y; \eta) = b(y)\exp(\eta^T T(y) - a(\eta))
 $$&lt;/div&gt;
 &lt;p&gt;where:&lt;/p&gt;
 &lt;ul&gt;
@@ -740,7 +740,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Since we're working with the single-parameter form, we'll assume that &lt;span class="math"&gt;\(\sigma^2\)&lt;/span&gt; is known and equals &lt;span class="math"&gt;\(1\)&lt;/span&gt;.&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
-p(y\vert \mu, \sigma^2)
+P(y\vert \mu, \sigma^2)
 &amp;amp;= \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}\\
 &amp;amp;= \frac{1}{\sqrt{2\pi}}\exp{\bigg(-\frac{(y - \mu)^2}{2}\bigg)}\\
 &amp;amp;= \frac{1}{\sqrt{2\pi}}\exp{\bigg(-\frac{1}{2}(y^2 - 2\mu y + \mu^2)\bigg)}\\
@@ -766,7 +766,7 @@ $$&lt;/div&gt;
 &lt;p&gt;We previously defined the binomial distribution (for a single observation) in a crude, piecewise form. We'll now define it in a more compact form which will make it easier to show that it is a member of the exponential family. Again, &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; gives the probability of observing the true class, i.e. &lt;span class="math"&gt;\(\Pr(\text{cat}) = .7 \implies \phi = .3\)&lt;/span&gt;.&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
-p(y\vert \phi)
+P(y\vert \phi)
 &amp;amp;= \phi^y(1-\phi)^{1-y}\\
 &amp;amp;= \exp\bigg(\log\bigg(\phi^y(1-\phi)^{1-y}\bigg)\bigg)\\
 &amp;amp;= \exp\bigg(y\log{\phi} + \log(1-\phi) - y\log(1-\phi)\bigg)\\
@@ -797,7 +797,7 @@ $$&lt;/div&gt;
 &lt;h3&gt;Multinomial distribution&lt;/h3&gt;
 &lt;p&gt;Like the binomial distribution, we'll first rewrite the multinomial (for a single observation) in a more compact form. &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; gives a vector of class probabilities for the &lt;span class="math"&gt;\(K\)&lt;/span&gt; classes; &lt;span class="math"&gt;\(k\)&lt;/span&gt; denotes one of these classes.&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
+P(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
 $$&lt;/div&gt;
 &lt;p&gt;This is almost pedantic: it says that &lt;span class="math"&gt;\(\Pr(y=k)\)&lt;/span&gt; equals the probability of observing class &lt;span class="math"&gt;\(k\)&lt;/span&gt;. For example, given&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'rain'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'snow'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;37&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'sleet'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mo"&gt;03&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'hail'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
@@ -813,7 +813,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Expanding into the exponential family form gives:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
-p(y\vert \pi)
+P(y\vert \pi)
 &amp;amp;= \prod\limits_{k=1}^{K}\pi_k^{y_k}\\
 &amp;amp;= \exp\bigg(\sum\limits_{k=1}^{K}y_k\log{\pi_k}\bigg)\\
 &amp;amp;= \exp\bigg(\sum\limits_{k=1}^{K-1}y_k\log{\pi_k} + \bigg(1 - \sum\limits_{k=1}^{K-1}y_k\bigg)\log\bigg(1 - \sum\limits_{k=1}^{K-1}\pi_k\bigg)\bigg)\\
@@ -878,7 +878,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Each protagonist model outputs a response variable that is distributed according to some (exponential family) distribution. However, the &lt;em&gt;canonical parameter&lt;/em&gt; of this distribution, i.e. the thing we pass in, will &lt;em&gt;vary per observation&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;Consider the logistic regression model that's predicting &lt;code&gt;cat or dog&lt;/code&gt;. If we input a picture of a cat, we'll output "cat" according to the stated distribution.&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp;amp; \text{outcome = cat}\\
 \phi &amp;amp; \text{outcome = dog}\\
@@ -886,7 +886,7 @@ p(\text{outcome}) =
 $$&lt;/div&gt;
 &lt;p&gt;If we input a picture of a dog, we'll output "dog" according the same distribution.&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp;amp; \text{outcome = cat}\\
 \phi &amp;amp; \text{outcome = dog}\\
@@ -928,7 +928,7 @@ $$&lt;/div&gt;
 &lt;p&gt;We've now discussed how each response variable is generated, and how we compute the parameters for those distributions on a per-observation basis. Now, how do we quantify how good these parameters are?&lt;/p&gt;
 &lt;p&gt;To get us started, let's go back to predicting &lt;code&gt;cat or dog&lt;/code&gt;. If we input a picture of a cat, we should compute &lt;span class="math"&gt;\(\phi \approx 0\)&lt;/span&gt; given our binomial distribution.&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp;amp; \text{outcome = cat}\\
 \phi &amp;amp; \text{outcome = dog}\\
@@ -949,16 +949,16 @@ $$&lt;/div&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;We'd like to pick the parameter that most likely gave rise to our data. This is the &lt;em&gt;maximum likelihood estimate&lt;/em&gt;. Mathematically, we define it as:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-\underset{\text{parameter}}{\arg\max}\ p(y\vert \text{parameter})
+\underset{\text{parameter}}{\arg\max}\ P(y\vert \text{parameter})
 $$&lt;/div&gt;
 &lt;p&gt;As we've now seen (ad nauseum), &lt;span class="math"&gt;\(y\)&lt;/span&gt; depends on the parameter its distribution receives. Additionally, this parameter — &lt;span class="math"&gt;\(\mu, \phi\)&lt;/span&gt; or &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; — is defined in terms of &lt;span class="math"&gt;\(\eta\)&lt;/span&gt;. Further, &lt;span class="math"&gt;\(\eta = \theta^T x\)&lt;/span&gt;. As such, &lt;span class="math"&gt;\(y\)&lt;/span&gt; is a function of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; and the observed data &lt;span class="math"&gt;\(x\)&lt;/span&gt;. This is perhaps &lt;em&gt;the&lt;/em&gt; elementary truism of machine learning — you've known this since Day 1.&lt;/p&gt;
 &lt;p&gt;Since our observed data are fixed, &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is the only thing that we can vary. Let's rewrite our argmax in these terms:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-\underset{\theta}{\arg\max}\ p(y\vert x; \theta)
+\underset{\theta}{\arg\max}\ P(y\vert x; \theta)
 $$&lt;/div&gt;
 &lt;p&gt;Finally, this expression gives the argmax over a single data point, i.e. training observation, &lt;span class="math"&gt;\((x^{(i)}, y^{(i)})\)&lt;/span&gt;. To give the likelihood over all observations (assuming they are independent of one another, i.e. the outcome of the first observation should not be expected to impact that of the third), we take the product.&lt;/p&gt;
 &lt;div class="math"&gt;$$
-\underset{\theta}{\arg\max} \prod\limits_{i=1}^{m}p(y^{(i)}\vert x^{(i)}; \theta)
+\underset{\theta}{\arg\max} \prod\limits_{i=1}^{m}P(y^{(i)}\vert x^{(i)}; \theta)
 $$&lt;/div&gt;
 &lt;p&gt;The product of numbers in &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt; gets very small, very quickly. Let's maximize the log-likelihood instead so we can work with sums.&lt;/p&gt;
 &lt;h3&gt;Linear regression&lt;/h3&gt;
@@ -1016,13 +1016,13 @@ $$&lt;/div&gt;
 &lt;p&gt;Why don't we use this in machine learning models instead of the cross entropy? The KL-Divergence between distributions requires us to know the true, underlying probabilities of both the actual distribution &lt;span class="math"&gt;\(p\)&lt;/span&gt; and our prediction thereof. Unfortunately, we never have the former: that's why we build the model.&lt;/p&gt;
 &lt;h1&gt;Maximum a posteriori estimation&lt;/h1&gt;
 &lt;p&gt;When estimating &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; via the MLE, we put no constraints on the permissible values thereof. More explicitly, we allow &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; to be &lt;em&gt;equally likely to assume any real number&lt;/em&gt; — be it &lt;span class="math"&gt;\(0\)&lt;/span&gt;, or &lt;span class="math"&gt;\(10\)&lt;/span&gt;, or &lt;span class="math"&gt;\(-20\)&lt;/span&gt;, or &lt;span class="math"&gt;\(2.37 \times 10^{36}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;In practice, this assumption is both unrealistic and superfluous: typically, we do wish to constrain &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; (our weights) to a non-infinite range of values. We do this by putting a &lt;em&gt;prior&lt;/em&gt; on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. Whereas the MLE computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ p(y\vert x; \theta)\)&lt;/span&gt;, the maximum a posteriori estimate, or MAP, computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ p(y\vert x; \theta)p(\theta)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;In practice, this assumption is both unrealistic and superfluous: typically, we do wish to constrain &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; (our weights) to a non-infinite range of values. We do this by putting a &lt;em&gt;prior&lt;/em&gt; on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. Whereas the MLE computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)\)&lt;/span&gt;, the maximum a posteriori estimate, or MAP, computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)P(\theta)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;As before, we start by taking the log. Our joint likelihood with prior now reads:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
 \theta_{MAP}
-&amp;amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} p(y^{(i)}\vert x^{(i)}; \theta)p(\theta)\\
-&amp;amp;= \underset{\theta}{\arg\max}\ \sum\limits_{i=1}^{m} \log{p(y^{(i)}\vert x^{(i)}; \theta)} + \log{p(\theta)}\\
+&amp;amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} P(y^{(i)}\vert x^{(i)}; \theta)P(\theta)\\
+&amp;amp;= \underset{\theta}{\arg\max}\ \sum\limits_{i=1}^{m} \log{P(y^{(i)}\vert x^{(i)}; \theta)} + \log{P(\theta)}\\
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;We dealt with the left term in the previous section. Now, we'll simply tack on the log-prior to the respective log-likelihoods.&lt;/p&gt;
@@ -1032,7 +1032,7 @@ $$&lt;/div&gt;
 $$&lt;/div&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
-\log{p(\theta\vert 0, V)}
+\log{P(\theta\vert 0, V)}
 &amp;amp;= \log\Bigg(\frac{1}{\sqrt{2\pi}V}\exp{\bigg(-\frac{(\theta - 0)^2}{2V^2}\bigg)}\Bigg)\\
 &amp;amp;= \log{C_1} -\frac{\theta^2}{2V^2}\\
 &amp;amp;= \log{C_1} - C_2\theta^2\\
@@ -1067,19 +1067,19 @@ $$&lt;/div&gt;
 &lt;h1&gt;Going fully Bayesian&lt;/h1&gt;
 &lt;p&gt;The key goal of a predictive model is to compute the following distribution:&lt;/p&gt;
 &lt;div class="math"&gt;$$
-p(y\vert x, D) = \int p(y\vert x, D, \theta)p(\theta\vert x, D)d\theta
+P(y\vert x, D) = \int P(y\vert x, D, \theta)P(\theta\vert x, D)d\theta
 $$&lt;/div&gt;
 &lt;p&gt;By term, this reads:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(p(y\vert x, D)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)&lt;/span&gt;, i.e. some training data, and a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt;, compute the distribution of the possible values of the response &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;ul&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(P(y\vert x, D)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)&lt;/span&gt;, i.e. some training data, and a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt;, compute the distribution of the possible values of the response &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;ul&gt;
 &lt;li&gt;In machine learning, we typically select the &lt;em&gt;expected&lt;/em&gt; value of that distribution, i.e. a single value, or point estimate.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(p(y\vert x, D, \theta)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D\)&lt;/span&gt;, a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt; and &lt;em&gt;any plausible value of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;&lt;/em&gt;, i.e. perhaps not the optimal value, compute &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;ul&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(P(y\vert x, D, \theta)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D\)&lt;/span&gt;, a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt; and &lt;em&gt;any plausible value of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;&lt;/em&gt;, i.e. perhaps not the optimal value, compute &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;ul&gt;
 &lt;li&gt;This is given by the functional form of the model in question, i.e. &lt;span class="math"&gt;\(y = \theta^Tx\)&lt;/span&gt; in the case of linear regression.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(p(\theta\vert x, D)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D\)&lt;/span&gt; and a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt;, compute the distribution of the values of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; that plausibly gave rise to our data.&lt;ul&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(P(\theta\vert x, D)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D\)&lt;/span&gt; and a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt;, compute the distribution of the values of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; that plausibly gave rise to our data.&lt;ul&gt;
 &lt;li&gt;The &lt;span class="math"&gt;\(x\)&lt;/span&gt; plays no part; it's simply there such that the expression under the integral factors correctly.&lt;/li&gt;
 &lt;li&gt;In machine learning, we typically select the MLE or MAP estimate of that distribution, i.e. a single value, or point estimate.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1175,7 +1175,7 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content></entry><entry><title>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</title><link href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/" rel="alternate"></link><published>2017-05-08T12:45:00-04:00</published><updated>2017-05-08T12:45:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-08:/2017/05/08/transfer-learning-flight-delay-prediction/</id><summary type="html">&lt;p&gt;Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;user_id&lt;/th&gt;
@@ -1824,7 +1824,7 @@ Mean squared error, deeper regression: 2.291221474968889
 &lt;p&gt;Of course, a probability is but a real number that lies on the closed interval &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;How does the input affect the output?&lt;/h2&gt;
 &lt;p&gt;Our input is a list of 4 numbers; each one affects &lt;em&gt;each possible output&lt;/em&gt; to a &lt;em&gt;different extent&lt;/em&gt;. We'll call this effect a "weight." 4 inputs times 3 outputs equals 12 distinct weights. They might look like this:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -2019,7 +2019,7 @@ $$&lt;/div&gt;
 &lt;li&gt;Returns a value for every unique combination of values that the random variables can take, i.e. for every entry in the cross-product space of its scope.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;For example, a factor with scope &lt;span class="math"&gt;\(\{\mathbf{A, B}\}\)&lt;/span&gt; might look like:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -2090,7 +2090,7 @@ P_{\Phi}(\mathbf{X_1, ..., X_n})
 $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(\mathbf{Z}_{\Phi}\)&lt;/span&gt; is the partition function.&lt;/p&gt;
 &lt;p&gt;To compute this function, we simply add up all the values in the unnormalized table. Given &lt;span class="math"&gt;\(\tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})\)&lt;/span&gt; as:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -2129,7 +2129,7 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;Our valid probability distribution then becomes:&lt;/p&gt;
-&lt;table class="table-striped table-hover table"&gt;
+&lt;table class="table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -3357,7 +3357,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -4897,7 +4897,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8262,7 +8262,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8365,7 +8365,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8468,7 +8468,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8571,7 +8571,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8674,7 +8674,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8782,7 +8782,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8875,7 +8875,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8967,7 +8967,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9061,7 +9061,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9178,7 +9178,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9653,7 +9653,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9721,7 +9721,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11491,7 +11491,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11611,7 +11611,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11731,7 +11731,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11851,7 +11851,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;

@@ -207,7 +207,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." <em>Can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (-\infty, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table-striped table-hover table">
+<table class="table table-striped table-hover">
 <thead>
 <tr>
 <th>uber</th>
@@ -269,11 +269,11 @@ $$</div>
 <p>As such, we'd like the most conservative distribution that obeys the "utterly banal" constraints stated above. This is the <a href="https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution"><em>maximum entropy distribution</em></a>.</p>
 <p>For <code>temperature</code>, the maximum entropy distribution is the <a href="https://en.wikipedia.org/wiki/Normal_distribution">Gaussian distribution</a>. Its probability density function is given as:</p>
 <div class="math">$$
-p(y\vert \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}
+P(y\vert \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}
 $$</div>
 <p>For <code>cat or dog</code>, it is the <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution</a>. Its probability mass function  (for a single observation) is given as:</p>
 <div class="math">$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp; \text{outcome = cat}\\
 \phi &amp; \text{outcome = dog}\\
@@ -282,7 +282,7 @@ $$</div>
 <p>(I've written the probability of the positive event as <span class="math">\(\phi\)</span>, e.g. <span class="math">\(\phi = .5\)</span> for a fair coin.)</p>
 <p>For <code>red or green or blue</code>, it is the <a href="https://en.wikipedia.org/wiki/Multinomial_distribution">multinomial distribution</a>. Its probability mass function (for a single observation) is given as:</p>
 <div class="math">$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 \phi_{\text{red}} &amp; \text{outcome = red}\\
 \phi_{\text{green}} &amp; \text{outcome = green}\\
@@ -313,7 +313,7 @@ $$</div>
 <p>I don't relish quoting this paragraph — and especially one so deliriously ambiguous. This said, the reality is that exponential functions provide, at a minimum, a unifying framework for deriving the canonical activation and loss functions we've come to know and love. To move forward, we simply have to cede that the "mathematical conveniences, on account of some useful algebraic properties, etc." that motivate this "certain form" are not totally heinous nor misguided.</p>
 <p>A distribution belongs to the exponential family if it can be written in the following form:</p>
 <div class="math">$$
-p(y; \eta) = b(y)\exp(\eta^T T(y) - a(\eta))
+P(y; \eta) = b(y)\exp(\eta^T T(y) - a(\eta))
 $$</div>
 <p>where:</p>
 <ul>
@@ -326,7 +326,7 @@ $$</div>
 <p>Since we're working with the single-parameter form, we'll assume that <span class="math">\(\sigma^2\)</span> is known and equals <span class="math">\(1\)</span>.</p>
 <div class="math">$$
 \begin{align*}
-p(y\vert \mu, \sigma^2)
+P(y\vert \mu, \sigma^2)
 &amp;= \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\bigg(-\frac{(y - \mu)^2}{2\sigma^2}\bigg)}\\
 &amp;= \frac{1}{\sqrt{2\pi}}\exp{\bigg(-\frac{(y - \mu)^2}{2}\bigg)}\\
 &amp;= \frac{1}{\sqrt{2\pi}}\exp{\bigg(-\frac{1}{2}(y^2 - 2\mu y + \mu^2)\bigg)}\\
@@ -352,7 +352,7 @@ $$</div>
 <p>We previously defined the binomial distribution (for a single observation) in a crude, piecewise form. We'll now define it in a more compact form which will make it easier to show that it is a member of the exponential family. Again, <span class="math">\(\phi\)</span> gives the probability of observing the true class, i.e. <span class="math">\(\Pr(\text{cat}) = .7 \implies \phi = .3\)</span>.</p>
 <div class="math">$$
 \begin{align*}
-p(y\vert \phi)
+P(y\vert \phi)
 &amp;= \phi^y(1-\phi)^{1-y}\\
 &amp;= \exp\bigg(\log\bigg(\phi^y(1-\phi)^{1-y}\bigg)\bigg)\\
 &amp;= \exp\bigg(y\log{\phi} + \log(1-\phi) - y\log(1-\phi)\bigg)\\
@@ -383,7 +383,7 @@ $$</div>
 <h3>Multinomial distribution</h3>
 <p>Like the binomial distribution, we'll first rewrite the multinomial (for a single observation) in a more compact form. <span class="math">\(\pi\)</span> gives a vector of class probabilities for the <span class="math">\(K\)</span> classes; <span class="math">\(k\)</span> denotes one of these classes.</p>
 <div class="math">$$
-p(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
+P(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
 $$</div>
 <p>This is almost pedantic: it says that <span class="math">\(\Pr(y=k)\)</span> equals the probability of observing class <span class="math">\(k\)</span>. For example, given</p>
 <div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
@@ -399,7 +399,7 @@ $$</div>
 <p>Expanding into the exponential family form gives:</p>
 <div class="math">$$
 \begin{align*}
-p(y\vert \pi)
+P(y\vert \pi)
 &amp;= \prod\limits_{k=1}^{K}\pi_k^{y_k}\\
 &amp;= \exp\bigg(\sum\limits_{k=1}^{K}y_k\log{\pi_k}\bigg)\\
 &amp;= \exp\bigg(\sum\limits_{k=1}^{K-1}y_k\log{\pi_k} + \bigg(1 - \sum\limits_{k=1}^{K-1}y_k\bigg)\log\bigg(1 - \sum\limits_{k=1}^{K-1}\pi_k\bigg)\bigg)\\
@@ -464,7 +464,7 @@ $$</div>
 <p>Each protagonist model outputs a response variable that is distributed according to some (exponential family) distribution. However, the <em>canonical parameter</em> of this distribution, i.e. the thing we pass in, will <em>vary per observation</em>.</p>
 <p>Consider the logistic regression model that's predicting <code>cat or dog</code>. If we input a picture of a cat, we'll output "cat" according to the stated distribution.</p>
 <div class="math">$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp; \text{outcome = cat}\\
 \phi &amp; \text{outcome = dog}\\
@@ -472,7 +472,7 @@ p(\text{outcome}) =
 $$</div>
 <p>If we input a picture of a dog, we'll output "dog" according the same distribution.</p>
 <div class="math">$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp; \text{outcome = cat}\\
 \phi &amp; \text{outcome = dog}\\
@@ -514,7 +514,7 @@ $$</div>
 <p>We've now discussed how each response variable is generated, and how we compute the parameters for those distributions on a per-observation basis. Now, how do we quantify how good these parameters are?</p>
 <p>To get us started, let's go back to predicting <code>cat or dog</code>. If we input a picture of a cat, we should compute <span class="math">\(\phi \approx 0\)</span> given our binomial distribution.</p>
 <div class="math">$$
-p(\text{outcome}) =
+P(\text{outcome}) =
 \begin{cases}
 1 - \phi &amp; \text{outcome = cat}\\
 \phi &amp; \text{outcome = dog}\\
@@ -535,16 +535,16 @@ $$</div>
 </blockquote>
 <p>We'd like to pick the parameter that most likely gave rise to our data. This is the <em>maximum likelihood estimate</em>. Mathematically, we define it as:</p>
 <div class="math">$$
-\underset{\text{parameter}}{\arg\max}\ p(y\vert \text{parameter})
+\underset{\text{parameter}}{\arg\max}\ P(y\vert \text{parameter})
 $$</div>
 <p>As we've now seen (ad nauseum), <span class="math">\(y\)</span> depends on the parameter its distribution receives. Additionally, this parameter — <span class="math">\(\mu, \phi\)</span> or <span class="math">\(\pi\)</span> — is defined in terms of <span class="math">\(\eta\)</span>. Further, <span class="math">\(\eta = \theta^T x\)</span>. As such, <span class="math">\(y\)</span> is a function of <span class="math">\(\theta\)</span> and the observed data <span class="math">\(x\)</span>. This is perhaps <em>the</em> elementary truism of machine learning — you've known this since Day 1.</p>
 <p>Since our observed data are fixed, <span class="math">\(\theta\)</span> is the only thing that we can vary. Let's rewrite our argmax in these terms:</p>
 <div class="math">$$
-\underset{\theta}{\arg\max}\ p(y\vert x; \theta)
+\underset{\theta}{\arg\max}\ P(y\vert x; \theta)
 $$</div>
 <p>Finally, this expression gives the argmax over a single data point, i.e. training observation, <span class="math">\((x^{(i)}, y^{(i)})\)</span>. To give the likelihood over all observations (assuming they are independent of one another, i.e. the outcome of the first observation should not be expected to impact that of the third), we take the product.</p>
 <div class="math">$$
-\underset{\theta}{\arg\max} \prod\limits_{i=1}^{m}p(y^{(i)}\vert x^{(i)}; \theta)
+\underset{\theta}{\arg\max} \prod\limits_{i=1}^{m}P(y^{(i)}\vert x^{(i)}; \theta)
 $$</div>
 <p>The product of numbers in <span class="math">\([0, 1]\)</span> gets very small, very quickly. Let's maximize the log-likelihood instead so we can work with sums.</p>
 <h3>Linear regression</h3>
@@ -602,13 +602,13 @@ $$</div>
 <p>Why don't we use this in machine learning models instead of the cross entropy? The KL-Divergence between distributions requires us to know the true, underlying probabilities of both the actual distribution <span class="math">\(p\)</span> and our prediction thereof. Unfortunately, we never have the former: that's why we build the model.</p>
 <h1>Maximum a posteriori estimation</h1>
 <p>When estimating <span class="math">\(\theta\)</span> via the MLE, we put no constraints on the permissible values thereof. More explicitly, we allow <span class="math">\(\theta\)</span> to be <em>equally likely to assume any real number</em> — be it <span class="math">\(0\)</span>, or <span class="math">\(10\)</span>, or <span class="math">\(-20\)</span>, or <span class="math">\(2.37 \times 10^{36}\)</span>.</p>
-<p>In practice, this assumption is both unrealistic and superfluous: typically, we do wish to constrain <span class="math">\(\theta\)</span> (our weights) to a non-infinite range of values. We do this by putting a <em>prior</em> on <span class="math">\(\theta\)</span>. Whereas the MLE computes <span class="math">\(\underset{\theta}{\arg\max}\ p(y\vert x; \theta)\)</span>, the maximum a posteriori estimate, or MAP, computes <span class="math">\(\underset{\theta}{\arg\max}\ p(y\vert x; \theta)p(\theta)\)</span>.</p>
+<p>In practice, this assumption is both unrealistic and superfluous: typically, we do wish to constrain <span class="math">\(\theta\)</span> (our weights) to a non-infinite range of values. We do this by putting a <em>prior</em> on <span class="math">\(\theta\)</span>. Whereas the MLE computes <span class="math">\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)\)</span>, the maximum a posteriori estimate, or MAP, computes <span class="math">\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)P(\theta)\)</span>.</p>
 <p>As before, we start by taking the log. Our joint likelihood with prior now reads:</p>
 <div class="math">$$
 \begin{align*}
 \theta_{MAP}
-&amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} p(y^{(i)}\vert x^{(i)}; \theta)p(\theta)\\
-&amp;= \underset{\theta}{\arg\max}\ \sum\limits_{i=1}^{m} \log{p(y^{(i)}\vert x^{(i)}; \theta)} + \log{p(\theta)}\\
+&amp;= \underset{\theta}{\arg\max}\ \log \prod\limits_{i=1}^{m} P(y^{(i)}\vert x^{(i)}; \theta)P(\theta)\\
+&amp;= \underset{\theta}{\arg\max}\ \sum\limits_{i=1}^{m} \log{P(y^{(i)}\vert x^{(i)}; \theta)} + \log{P(\theta)}\\
 \end{align*}
 $$</div>
 <p>We dealt with the left term in the previous section. Now, we'll simply tack on the log-prior to the respective log-likelihoods.</p>
@@ -618,7 +618,7 @@ $$</div>
 $$</div>
 <div class="math">$$
 \begin{align*}
-\log{p(\theta\vert 0, V)}
+\log{P(\theta\vert 0, V)}
 &amp;= \log\Bigg(\frac{1}{\sqrt{2\pi}V}\exp{\bigg(-\frac{(\theta - 0)^2}{2V^2}\bigg)}\Bigg)\\
 &amp;= \log{C_1} -\frac{\theta^2}{2V^2}\\
 &amp;= \log{C_1} - C_2\theta^2\\
@@ -653,19 +653,19 @@ $$</div>
 <h1>Going fully Bayesian</h1>
 <p>The key goal of a predictive model is to compute the following distribution:</p>
 <div class="math">$$
-p(y\vert x, D) = \int p(y\vert x, D, \theta)p(\theta\vert x, D)d\theta
+P(y\vert x, D) = \int P(y\vert x, D, \theta)P(\theta\vert x, D)d\theta
 $$</div>
 <p>By term, this reads:</p>
 <ul>
-<li><span class="math">\(p(y\vert x, D)\)</span>: given historical data <span class="math">\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)</span>, i.e. some training data, and a new observation <span class="math">\(x\)</span>, compute the distribution of the possible values of the response <span class="math">\(y\)</span>.<ul>
+<li><span class="math">\(P(y\vert x, D)\)</span>: given historical data <span class="math">\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)</span>, i.e. some training data, and a new observation <span class="math">\(x\)</span>, compute the distribution of the possible values of the response <span class="math">\(y\)</span>.<ul>
 <li>In machine learning, we typically select the <em>expected</em> value of that distribution, i.e. a single value, or point estimate.</li>
 </ul>
 </li>
-<li><span class="math">\(p(y\vert x, D, \theta)\)</span>: given historical data <span class="math">\(D\)</span>, a new observation <span class="math">\(x\)</span> and <em>any plausible value of <span class="math">\(\theta\)</span></em>, i.e. perhaps not the optimal value, compute <span class="math">\(y\)</span>.<ul>
+<li><span class="math">\(P(y\vert x, D, \theta)\)</span>: given historical data <span class="math">\(D\)</span>, a new observation <span class="math">\(x\)</span> and <em>any plausible value of <span class="math">\(\theta\)</span></em>, i.e. perhaps not the optimal value, compute <span class="math">\(y\)</span>.<ul>
 <li>This is given by the functional form of the model in question, i.e. <span class="math">\(y = \theta^Tx\)</span> in the case of linear regression.</li>
 </ul>
 </li>
-<li><span class="math">\(p(\theta\vert x, D)\)</span>: given historical data <span class="math">\(D\)</span> and a new observation <span class="math">\(x\)</span>, compute the distribution of the values of <span class="math">\(\theta\)</span> that plausibly gave rise to our data.<ul>
+<li><span class="math">\(P(\theta\vert x, D)\)</span>: given historical data <span class="math">\(D\)</span> and a new observation <span class="math">\(x\)</span>, compute the distribution of the values of <span class="math">\(\theta\)</span> that plausibly gave rise to our data.<ul>
 <li>The <span class="math">\(x\)</span> plays no part; it's simply there such that the expression under the integral factors correctly.</li>
 <li>In machine learning, we typically select the MLE or MAP estimate of that distribution, i.e. a single value, or point estimate.</li>
 </ul>
