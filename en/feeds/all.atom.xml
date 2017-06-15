@@ -1,5 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-06-06T10:00:00-04:00</updated><entry><title>Further Exploring Common Probabilistic Models</title><link href="https://cavaunpeu.github.io/2017/07/06/further-exploring-common-probabilistic-models/" rel="alternate"></link><published>2017-06-06T10:00:00-04:00</published><updated>2017-06-06T10:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-06-06:/2017/07/06/further-exploring-common-probabilistic-models/</id><summary type="html">&lt;p&gt;Exploring generative vs. discriminative models, and sampling and variational methods for approximate inference through the lens of Bayes' theorem.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;previous post&lt;/a&gt; on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/</id><updated>2017-06-15T18:00:00-04:00</updated><entry><title>Random Effects Neural Networks</title><link href="https://cavaunpeu.github.io/2017/06/15/random-effects-neural-networks/" rel="alternate"></link><published>2017-06-15T18:00:00-04:00</published><updated>2017-06-15T18:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-06-15:/2017/06/15/random-effects-neural-networks/</id><summary type="html">&lt;p&gt;Coupling nimble probabilistic models with neural architectures in Edward and Keras: "what worked and what didn't," a conceptual overview of random effects, and directions for further exploration.&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Random Effects Neural Networks with Edward and Keras&lt;/h1&gt;
+&lt;p&gt;Bayesian probabilistic models provide a nimble and expressive framework for modeling "small-world" data. In contrast, deep learning offers a more rigid yet much more powerful framework for modeling data of massive size. &lt;a href="http://edwardlib.org/"&gt;Edward&lt;/a&gt; is a probabilistic programming library that bridges this gap: "black-box" variational inference enables us to fit extremely flexible Bayesian models to large-scale data. Furthermore, these models themselves may take advantage of classic deep-learning architectures of arbitrary complexity.&lt;/p&gt;
+&lt;p&gt;Edward uses &lt;a href="https://www.tensorflow.org/"&gt;TensorFlow&lt;/a&gt; for symbolic gradients and data flow graphs. As such, it interfaces cleanly with other libraries that do the same, namely &lt;a href="https://research.googleblog.com/2016/08/tf-slim-high-level-library-to-define.html"&gt;TF-Slim&lt;/a&gt;, &lt;a href="https://github.com/google/prettytensor"&gt;PrettyTensor&lt;/a&gt; and &lt;a href="https://keras.io/"&gt;Keras&lt;/a&gt;. Personally, I've been working often with the latter, and am consistently delighted by the ease with which it allows me to specify complex neural architectures.&lt;/p&gt;
+&lt;p&gt;The aim of this post is to lay a practical foundation for Bayesian modeling in Edward, then explore how, and how easily, we can extend these models in the direction of classical deep learning via Keras. It will give both a conceptual overview of the models below, as well as notes on the practical considerations of their implementation —  what worked and what didn't. Finally, this post will conclude with concrete ways in which to extend these models further, of which there are many.&lt;/p&gt;
+&lt;p&gt;If you're just getting started with Edward or Keras, I recommend first perusing the &lt;a href="http://edwardlib.org/tutorials"&gt;Edward tutorials&lt;/a&gt; and &lt;a href="https://keras.io/"&gt;Keras documentation&lt;/a&gt; respectively.&lt;/p&gt;
+&lt;p&gt;To "pull us down the path," we build three models in additive fashion: a Bayesian linear regression model, a Bayesian linear regression model with random effects, and a neural network with random effects. We fit them on the &lt;a href="https://www.kaggle.com/c/zillow-prize-1"&gt;Zillow Prize&lt;/a&gt; dataset, which asks us to predict &lt;code&gt;logerror&lt;/code&gt; (in house-price estimate, i.e. the "Zestimate") given metadata for a list of homes. These models are intended to be demonstrative, not performant: they will not win you the prize in their current form.&lt;/p&gt;
+&lt;h2&gt;Data preparation&lt;/h2&gt;
+&lt;h3&gt;Build training DataFrame&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;transactions_df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;properties_df&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;how&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'left'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;left_on&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'id_parcel'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;right_on&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'id_parcel'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Drop columns containing too many nulls&lt;/h3&gt;
+&lt;p&gt;Bayesian probabilistic models allow us to flexibly model &lt;em&gt;missing&lt;/em&gt; data itself. To this end, we conceive of a given predictor as a vector of both:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Observed values.&lt;/li&gt;
+&lt;li&gt;Parameters in place of missing values, which will form a posterior distribution for what this value might have been.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In a (partially-specified, for brevity) linear model, this might look as follows:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+y_i \sim \mathcal{N}(\mu_i, \sigma)\\
+\mu_i = \alpha + \beta_N N_i\\
+N_i \sim \mathcal{N}(\nu, \sigma_N)\\
+$$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(N_i\)&lt;/span&gt; is our sometimes-missing predictor. When &lt;span class="math"&gt;\(N_i\)&lt;/span&gt; is observed, &lt;span class="math"&gt;\(\mathcal{N}(\nu, \sigma_N)\)&lt;/span&gt; serves as a likelihood: given this data-point, we tweak retrodictive distributions on the parameters &lt;span class="math"&gt;\((\nu, \sigma_N)\)&lt;/span&gt; by which it was produced. Conversely, when &lt;span class="math"&gt;\(N_i\)&lt;/span&gt; is missing it serves as a prior: after learning distributions of &lt;span class="math"&gt;\((\nu, \sigma_N)\)&lt;/span&gt; we can generate a likely value of &lt;span class="math"&gt;\(N_i\)&lt;/span&gt; itself. Finally, inference will give us (presumably-wide) distributions on the model's belief in what was the true value of each missing &lt;span class="math"&gt;\(N_i\)&lt;/span&gt; conditional on the data observed.&lt;/p&gt;
+&lt;p&gt;I tried this in Edward, albeit briefly, to no avail. Dustin Tran gives an &lt;a href="https://discourse.edwardlib.org/t/how-to-handle-missing-values-in-gaussian-matrix-factorization/95/2"&gt;example&lt;/a&gt; of how one might accomplish this task in the case of Gaussian Matrix Factorization. In my case, I wasn't able to apply a 2-D missing-data-mask placeholder to a 2-D data placeholder via &lt;a href="https://www.tensorflow.org/api_docs/python/tf/gather"&gt;&lt;code&gt;tf.gather&lt;/code&gt;&lt;/a&gt; nor &lt;a href="https://www.tensorflow.org/api_docs/python/tf/gather_nd"&gt;&lt;code&gt;tf.gather_nd&lt;/code&gt;&lt;/a&gt;. With more effort, I'm sure I could make this work. Help appreciated.&lt;/p&gt;
+&lt;p&gt;For now, we'll first drop columns containing too many null values, then, after choosing a few of the predictors most correlated with the target, drop the remaining rows containing nulls.&lt;/p&gt;
+&lt;h3&gt;Select three fixed-effect predictors&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;fixed_effect_predictors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s1"&gt;'area_live_finished'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;'num_bathroom'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;'build_year'&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Select one random-effect predictor&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;zip_codes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'region_zip'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;astype&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'category'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;codes&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Split data into train, validation sets&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Dataset sizes:
+    X_train:  (36986, 3)
+    X_val:    (36986, 3)
+    y_train:  (36986,)
+    y_val:    (36986,)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Bayesian linear regression&lt;/h1&gt;
+&lt;p&gt;Using three fixed-effect predictors we'll fit a model of the following form:&lt;/p&gt;
+&lt;div class="math"&gt;$$
+y_i \sim \mathcal{N}(\mu_i, 1)\\
+\mu_i = \alpha + \beta x_i\\
+\alpha \sim \mathcal{N}(0, 1)\\
+\beta \sim \mathcal{N}(0, 1)\\
+$$&lt;/div&gt;
+&lt;p&gt;Having normalized our data to have mean 0 and unit-variance, we place our priors on a similar scale.&lt;/p&gt;
+&lt;p&gt;To infer posterior distributions of the model's parameters conditional on the data observed we employ variational inference — one of three inference classes supported in Edward. This approach posits posterior inference as posterior &lt;em&gt;approximation&lt;/em&gt; via &lt;em&gt;optimization&lt;/em&gt;, where optimization is done via stochastic, gradient-based methods. This is what enables us to scale complex probabilistic functional forms to large-scale data.&lt;/p&gt;
+&lt;p&gt;For an introduction to variational inference and Edward's API thereof, please reference:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://edwardlib.org/tutorials/inference"&gt;Edward: Inference of Probabilistic Models&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://edwardlib.org/tutorials/variational-inference"&gt;Edward: Variational Inference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://edwardlib.org/tutorials/klqp"&gt;Edward: KL(q||p) Minimization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://edwardlib.org/api/inference"&gt;Edward: API and Documentation - Inference&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Additionally, I provide an introduction to the basic math behind variational inference and the &lt;a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf"&gt;ELBO&lt;/a&gt; in a blog post of mine: &lt;a href="http://willwolf.io/2017/07/06/further-exploring-common-probabilistic-models/"&gt;Further Exploring Common Probabilistic Models&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Fit model&lt;/h3&gt;
+&lt;p&gt;For the approximate q-distributions, we apply the &lt;a href="https://www.tensorflow.org/api_docs/python/tf/nn/softplus"&gt;softplus function&lt;/a&gt; — &lt;code&gt;log(exp(z) + 1)&lt;/code&gt; — to the scale parameter values at the suggestion of the Edward docs.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;D&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X_train&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;
+
+&lt;span class="c1"&gt;# fixed-effects placeholders&lt;/span&gt;
+&lt;span class="n"&gt;fixed_effects&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;placeholder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;float32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+
+&lt;span class="c1"&gt;# fixed-effects parameters&lt;/span&gt;
+&lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="err"&gt;α&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# model&lt;/span&gt;
+&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ed&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# approximate fixed-effects distributions&lt;/span&gt;
+&lt;span class="n"&gt;qβ_fixed_effects&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;])),&lt;/span&gt;
+    &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;softplus&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;])))&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;qα&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])),&lt;/span&gt;
+    &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;softplus&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])))&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Infer parameters&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;latent_vars&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qβ_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qα&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="n"&gt;sess&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;INIT_OP&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ed&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;KLqp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;latent_vars&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;X_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_iter&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;250&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;250/250 [100%] ██████████████████████████████ Elapsed: 4s | Loss: 35405.105
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Criticize model&lt;/h3&gt;
+&lt;h4&gt;Visualize data fit given parameter priors&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="data fit given parameter priors" class="img-responsive" src="https://cavaunpeu.github.io/figures/data_fit_given_parameter_priors.png"/&gt;&lt;/p&gt;
+&lt;h4&gt;Visualize data fit given parameter posteriors&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="data fit given parameter posteriors" class="img-responsive" src="https://cavaunpeu.github.io/figures/data_fit_given_parameter_posteriors.png"/&gt;&lt;/p&gt;
+&lt;p&gt;It appears as if our model fits the data along the first two dimensions. This said, we could improve this fit considerably. This will become apparent when we compute the MAE on our validation set.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;param_posteriors = {
+  β_fixed_effects: qβ_fixed_effects.mean(),
+  α: qα.mean()
+}
+X_val_feed_dict = {
+  fixed_effects: X_val
+}
+y_posterior = ed.copy(y, param_posteriors)
+
+print(f'Mean validation `logerror`: {y_val.mean()}')
+compute_mean_absolute_error(y_posterior, X_val_feed_dict)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Mean validation `logerror`: 0.012986094738549725
+Mean absolute error on validation data: 0.089943
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Inspect residuals&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="bayesian linear regression residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_residuals.png"/&gt;&lt;/p&gt;
+&lt;p&gt;"The residuals appear normally distributed with mean 0: this is a good sanity check for the model."&lt;sup&gt;1&lt;/sup&gt; However, with respect to the magnitude of the mean of the validation &lt;code&gt;logerror&lt;/code&gt;, our validation score is terrible. This is likely due to the fact that three predictors are not nearly sufficient for capturing the variation in the response. (Additionally, because the response itself is an &lt;em&gt;error&lt;/em&gt;, it should be fundamentally harder to capture than the thing actually being predicted — the house price. This is because Zillow's team has already built models to capture this signal, then effectively threw the remaining "uncaptured" signal into this competition, i.e. "figure out how to get right the little that we got wrong.")&lt;/p&gt;
+&lt;h4&gt;Inspect parameter posteriors&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="bayesian linear regression posteriors" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_posteriors.png"/&gt;&lt;/p&gt;
+&lt;p&gt;In keeping with the definition of multivariate linear regression itself, the above parameter posteriors tell us: "conditional on the assumption that the log-error and fixed effects can be related by a straight line, what is the predictive value of one variable once I already know the values of all other variables?"&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;h2&gt;Bayesian linear regression with random effects&lt;/h2&gt;
+&lt;p&gt;Random effects models — also known as hierarchical models — allow us to ascribe distinct behaviors to different "clusters" of observations, i.e. groups that may each act in a materially unique way. Furthermore, these models allow us to infer these tendencies in a &lt;em&gt;collaborative&lt;/em&gt; fashion: while each cluster is assumed to behave differently, it can learn its parameters by heeding to the behavior of the population at large. In this example, we assume that houses in different zipcodes — holding all other predictors constant — should be priced in different ways.&lt;/p&gt;
+&lt;p&gt;For clarity, let's consider the two surrounding extremes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Estimate a single set of parameters for the population, i.e. the vanilla, &lt;a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html"&gt;scikit-learn linear regression&lt;/a&gt;, Bayesian or not. This confers no distinct behaviors to houses in different zipcodes.&lt;/li&gt;
+&lt;li&gt;Estimate a set of parameters for each individual zipcode, i.e. split the data into its cluster groups and estimate a single model for each. This confers maximally distinct behaviors to houses in different zip codes: the behavior of one cluster knows nothing about that of the others.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Random-effects models "walk the line" between these two approaches — between maximally &lt;em&gt;underfitting&lt;/em&gt; and maximally &lt;em&gt;overfitting&lt;/em&gt; the behavior of each cluster. To this effect, its parameter estimates exhibit the canonical "shrinkage" phenomenon: the estimate for a given parameter is balanced between the within-cluster expectation and the global expectation. Smaller clusters exhibit larger shrinkage; larger clusters, i.e. those for which we've observed more data, are more bullheaded (in typical Bayesian fashion). A later plot illustrates this point.&lt;/p&gt;
+&lt;p&gt;We specify our random-effects functional form as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_random_effects&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ed&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;With respect to the previous model, we've simply added &lt;code&gt;α_random_effects&lt;/code&gt; to the mean of our response. As such, this is a &lt;em&gt;varying-intercepts&lt;/em&gt; model: the intercept term will be different for each cluster. To this end, we learn the &lt;em&gt;global&lt;/em&gt; intercept &lt;code&gt;α&lt;/code&gt; as well as the &lt;em&gt;offsets&lt;/em&gt; from this intercept &lt;code&gt;α_random_effects&lt;/code&gt; — a random variable with as many dimensions as there are zipcodes. In keeping with the notion of "offset," we ascribe it a prior of &lt;code&gt;(0, σ_zc)&lt;/code&gt;. This approach allows us to flexibly extend the model to include more random effects, e.g. city, architecture style, etc. With only one, however, we could have equivalently included the global intercept &lt;em&gt;inside&lt;/em&gt; of our prior, i.e. &lt;code&gt;α_random_effects ~ Normal(α, σ_zc)&lt;/code&gt;, with priors on both &lt;code&gt;α&lt;/code&gt; and &lt;code&gt;σ_zc&lt;/code&gt; as per usual. This way, our random effect would no longer be a zip-code-specific &lt;em&gt;offset&lt;/em&gt; from the global intercept, but a vector of zip-code-specific intercepts outright.&lt;/p&gt;
+&lt;p&gt;Finally, as Richard McElreath notes, "we can think of the &lt;code&gt;σ_zc&lt;/code&gt; parameter for each cluster as a crude measure of that cluster's "relevance" in explaining variation in the response variable."&lt;sup&gt;3&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;Fit model&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;n_zip_codes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;zip_codes&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# random-effect placeholder&lt;/span&gt;
+&lt;span class="n"&gt;zip_codes_ph&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;placeholder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;int32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+
+&lt;span class="c1"&gt;# random-effect parameter&lt;/span&gt;
+&lt;span class="err"&gt;σ&lt;/span&gt;&lt;span class="n"&gt;_zip_code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;exp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([]))))&lt;/span&gt;
+&lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_zip_code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_zip_codes&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;σ&lt;/span&gt;&lt;span class="n"&gt;_zip_code&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_zip_codes&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# model&lt;/span&gt;
+&lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_random_effects&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gather&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_zip_code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;zip_codes_ph&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_random_effects&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ed&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# approximate random-effect distribution&lt;/span&gt;
+&lt;span class="n"&gt;qα_zip_code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;n_zip_codes&lt;/span&gt;&lt;span class="p"&gt;])),&lt;/span&gt;
+    &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;softplus&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Variable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random_normal&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;n_zip_codes&lt;/span&gt;&lt;span class="p"&gt;])))&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Infer parameters&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;latent_vars&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qβ_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qα&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_zip_code&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qα_zip_code&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="n"&gt;sess&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;INIT_OP&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ed&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;KLqp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;latent_vars&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;X_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;zip_codes_ph&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;zip_codes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;train_index&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_iter&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;250&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;250/250 [100%] ██████████████████████████████ Elapsed: 6s | Loss: 34898.613
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Criticize model&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Mean absolute error on validation data: 0.084635
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Inspect residuals&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="bayesian linear regression with random effects residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_with_random_effects_residuals.png"/&gt;&lt;/p&gt;
+&lt;h3&gt;Plot shrinkage&lt;/h3&gt;
+&lt;p&gt;To illustrate shrinkage we'll pare our model down to intercepts only (removing the fixed effects entirely). We'll first fit a random-effects model on the full dataset then compute the cluster-specific-intercept posterior means. Next, we'll fit a separate model to each individual cluster and compute the intercept posterior mean of each. The plot below shows how estimates from the former can be viewed as "estimates from the latter — shrunk towards the global-intercept posterior mean."&lt;/p&gt;
+&lt;p&gt;Finally, &lt;span style="color: #377eb8"&gt;blue&lt;/span&gt;, &lt;span style="color: #4daf4a"&gt;green&lt;/span&gt; and &lt;span style="color: #ff7f00"&gt;orange&lt;/span&gt; points represent small, medium and large clusters respectively. As mentioned before, the larger the cluster size, i.e. the more data points we've observed belonging to a given cluster, the &lt;em&gt;less&lt;/em&gt; prone it is to shrinkage towards the mean.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="shrinkage plot" class="img-responsive" src="https://cavaunpeu.github.io/figures/shrinkage_plot.png"/&gt;&lt;/p&gt;
+&lt;h2&gt;Neural network with random effects&lt;/h2&gt;
+&lt;p&gt;Neural networks are powerful function approximators. Keras is a library that lets us flexibly define complex neural architectures. Thus far, we've been approximating the relationship between our fixed effects and response variable with a simple dot product; can we leverage Keras to make this relationship more expressive? Is it painless? Finally, how does it integrate with Edward's existing APIs and constructs? Can we couple nimble generative models with deep neural networks?&lt;/p&gt;
+&lt;p&gt;While my experimentation was brief, all answers point delightfully towards "yes" for two simple reasons:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Edward and Keras both run on TensorFlow.&lt;/li&gt;
+&lt;li&gt;"Black-box" variational inference makes everything scale.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This said, we must be nonetheless explicit about what's "Bayesian" and what's not, i.e. for which parameters do we infer full (approximate) posterior distributions, and for which do we infer point estimates of the posterior distribution.&lt;/p&gt;
+&lt;p&gt;Below, we drop a &lt;code&gt;neural_network&lt;/code&gt; in place of our dot product. Our latent variables remain &lt;code&gt;β_fixed_effects&lt;/code&gt;, &lt;code&gt;α&lt;/code&gt; and &lt;code&gt;α_zip_code&lt;/code&gt;: while we will infer their full (approximate) posterior distributions as before, we'll only compute &lt;em&gt;point estimates&lt;/em&gt; for the parameters of the neural network as in the typical case. Conversely, to the best of my knowledge, to infer full distributions for the latter, we'll need to specify our network manually in raw TensorFlow, i.e. ditch Keras entirely. We then treat our weights and biases as standard latent variables and infer their approximate posteriors via variational inference.  Edward's documentation contains a straightforward &lt;a href="http://edwardlib.org/tutorials/bayesian-neural-network"&gt;tutorial&lt;/a&gt; to this end.&lt;/p&gt;
+&lt;h3&gt;Fit model&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;neural_network&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;λ&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mo"&gt;001&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;input_dim&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;dense&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Dense&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;activation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'tanh'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;kernel_regularizer&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;l2&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;λ&lt;/span&gt;&lt;span class="p"&gt;))(&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Dense&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;activation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'linear'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'output'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;kernel_regularizer&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;l2&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;λ&lt;/span&gt;&lt;span class="p"&gt;))(&lt;/span&gt;&lt;span class="n"&gt;dense&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;K&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;squeeze&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# model&lt;/span&gt;
+&lt;span class="n"&gt;fixed_effects&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;placeholder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;float32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_random_effects&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;neural_network&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;μ&lt;/span&gt;&lt;span class="n"&gt;_y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;latent_vars&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="err"&gt;β&lt;/span&gt;&lt;span class="n"&gt;_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qβ_fixed_effects&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qα&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="err"&gt;α&lt;/span&gt;&lt;span class="n"&gt;_zip_code&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qα_zip_code&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="n"&gt;sess&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;INIT_OP&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ed&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;KLqp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;latent_vars&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;fixed_effects&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;X_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;zip_codes_ph&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;zip_codes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;train_index&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
+&lt;span class="n"&gt;optimizer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;train&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RMSPropOptimizer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.01&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;epsilon&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;initialize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;optimizer&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;optimizer&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;inference&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_iter&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;1000/1000 [100%] ██████████████████████████████ Elapsed: 18s | Loss: 34446.191
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Criticize model&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Mean absolute error on validation data: 0.081484
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Inspect residuals&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="neural network with random effects residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_network_with_random_effects_residuals.png"/&gt;&lt;/p&gt;
+&lt;h1&gt;Future work&lt;/h1&gt;
+&lt;p&gt;We've now laid a stable, if trivially simple foundation for building models with Edward and Keras. From here, I see two distinct paths to building more expressive probabilistic models using these tools:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Build probabilistic models in Edward, and abstract deep-network-like subgraphs into Keras layers. This allows us to flexibly define complex neural architectures, e.g. a &lt;a href="https://keras.io/getting-started/functional-api-guide/#video-question-answering-model"&gt;video question answering model&lt;/a&gt;, with a nominal amount of code, yet restricts us from, or at least makes it awkward to, infer full posterior distributions for the subgraph parameters.&lt;/li&gt;
+&lt;li&gt;Build probabilistic models in Edward, and specify deep-network-like subgraphs with raw TensorFlow — ditching Keras entirely. Defining deep-network-like subgraphs becomes more cumbersome, while inferring full posterior distributions for the subgraph parameters becomes more natural and consistent with the flow of Edward code.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This work has shown a few basic variants of (generalized) Bayesian linear regression models. From here, there's tons more to explore — varying-slopes models, Gaussian process regression, mixture models and probabilistic matrix factorizations to name a random few.&lt;/p&gt;
+&lt;p&gt;Edward and Keras have proven a flexible, expressive and powerful duo for performing inference in deep probabilistic models. The models we built were simple; the only direction to go, and to go rather painlessly, is more.&lt;/p&gt;
+&lt;p&gt;Many thanks for reading.&lt;/p&gt;
+&lt;h2&gt;Code&lt;/h2&gt;
+&lt;p&gt;The &lt;a href="https://github.com/cavaunpeu/random-effects-neural-networks"&gt;repository&lt;/a&gt; and &lt;a href="http://nbviewer.jupyter.org/github/cavaunpeu/random-effects-neural-networks/blob/master/zillow.ipynb"&gt;rendered notebook&lt;/a&gt; for this project can be found at their respective links.&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://edwardlib.org/tutorials/linear-mixed-effects-models"&gt;Edward - Linear Mixed Effects Models&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;McElreath, Richard. "Chapter 5." Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Boca Raton, FL: CRC, Taylor &amp;amp; Francis Group, 2016. N. pag. Print.&lt;/li&gt;
+&lt;li&gt;McElreath, Richard. "Chapter 12." Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Boca Raton, FL: CRC, Taylor &amp;amp; Francis Group, 2016. N. pag. Print.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://twiecki.github.io/blog/2014/03/17/bayesian-glms-3/"&gt;The Best Of Both Worlds: Hierarchical Linear Regression in PyMC3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html"&gt;Keras as a simplified interface to TensorFlow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://cbonnett.github.io/MDN_EDWARD_KERAS_TF.html"&gt;Mixture Density Networks with Edward, Keras and TensorFlow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://sl8r000.github.io/ab_testing_statistics/use_a_hierarchical_model/"&gt;Use a Hierarchical Model&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;McElreath, Richard. "Chapter 14." Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Boca Raton, FL: CRC, Taylor &amp;amp; Francis Group, 2016. N. pag. Print.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content></entry><entry><title>Further Exploring Common Probabilistic Models</title><link href="https://cavaunpeu.github.io/2017/07/06/further-exploring-common-probabilistic-models/" rel="alternate"></link><published>2017-06-06T10:00:00-04:00</published><updated>2017-06-06T10:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-06-06:/2017/07/06/further-exploring-common-probabilistic-models/</id><summary type="html">&lt;p&gt;Exploring generative vs. discriminative models, and sampling and variational methods for approximate inference through the lens of Bayes' theorem.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The &lt;a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/"&gt;previous post&lt;/a&gt; on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.&lt;/p&gt;
 &lt;p&gt;In this post, we're going to stay on the surface: instead of deconstructing common models, we're going to further explore the relationships between them — swimming to different corners of the pool itself. Keeping us afloat will be Bayes' theorem — a balanced, dependable yet at times fragile pool ring, so to speak — which we'll take with us wherever we go.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="pool ring" class="img-responsive" src="https://c1.staticflickr.com/7/6151/6137348439_199f5119be_b.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;While there are many potential themes of probabilistic models we might explore, we'll herein focus on two: &lt;strong&gt;generative vs. discriminative models&lt;/strong&gt;, and &lt;strong&gt;"fully Bayesian" vs. "lowly point estimate" learning&lt;/strong&gt;. We will stick to the supervised setting as well.&lt;/p&gt;
@@ -87,7 +385,7 @@ $$&lt;/div&gt;
 &lt;p&gt;As such, we can &lt;em&gt;marginalize &lt;span class="math"&gt;\(y\)&lt;/span&gt; out of the numerator&lt;/em&gt; so as to obtain the denominator we require. This denominator is often called the "evidence."&lt;/p&gt;
 &lt;h3&gt;Marginalization example&lt;/h3&gt;
 &lt;p&gt;Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize &lt;span class="math"&gt;\(A\)&lt;/span&gt;.&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(A\)&lt;/span&gt;&lt;/th&gt;
@@ -134,7 +432,7 @@ $$&lt;/div&gt;
 &lt;li&gt;"Collapse" the remaining columns — in this case, &lt;span class="math"&gt;\(B\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Step 1 gives:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -169,7 +467,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;Step 2 gives:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -190,7 +488,7 @@ $$&lt;/div&gt;
 &lt;h3&gt;The denominator&lt;/h3&gt;
 &lt;p&gt;In the context of our generative model with a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the result of this marginalization is a &lt;em&gt;scalar&lt;/em&gt; — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(P(x, y)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(y\)&lt;/span&gt;&lt;/th&gt;
@@ -217,7 +515,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\int P(x, y)dy = P(x)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(X\)&lt;/span&gt;&lt;/th&gt;
@@ -621,7 +919,7 @@ $$&lt;/div&gt;
 &lt;p&gt;For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." &lt;em&gt;Can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Maximum entropy distributions&lt;/h2&gt;
 &lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (-\infty, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;uber&lt;/th&gt;
@@ -1175,7 +1473,7 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content></entry><entry><title>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</title><link href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/" rel="alternate"></link><published>2017-05-08T12:45:00-04:00</published><updated>2017-05-08T12:45:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-08:/2017/05/08/transfer-learning-flight-delay-prediction/</id><summary type="html">&lt;p&gt;Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;user_id&lt;/th&gt;
@@ -1824,7 +2122,7 @@ Mean squared error, deeper regression: 2.291221474968889
 &lt;p&gt;Of course, a probability is but a real number that lies on the closed interval &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;How does the input affect the output?&lt;/h2&gt;
 &lt;p&gt;Our input is a list of 4 numbers; each one affects &lt;em&gt;each possible output&lt;/em&gt; to a &lt;em&gt;different extent&lt;/em&gt;. We'll call this effect a "weight." 4 inputs times 3 outputs equals 12 distinct weights. They might look like this:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -2019,7 +2317,7 @@ $$&lt;/div&gt;
 &lt;li&gt;Returns a value for every unique combination of values that the random variables can take, i.e. for every entry in the cross-product space of its scope.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;For example, a factor with scope &lt;span class="math"&gt;\(\{\mathbf{A, B}\}\)&lt;/span&gt; might look like:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -2090,7 +2388,7 @@ P_{\Phi}(\mathbf{X_1, ..., X_n})
 $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(\mathbf{Z}_{\Phi}\)&lt;/span&gt; is the partition function.&lt;/p&gt;
 &lt;p&gt;To compute this function, we simply add up all the values in the unnormalized table. Given &lt;span class="math"&gt;\(\tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})\)&lt;/span&gt; as:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -2129,7 +2427,7 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;Our valid probability distribution then becomes:&lt;/p&gt;
-&lt;table class="table table-striped table-hover"&gt;
+&lt;table class="table-striped table-hover table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -3357,7 +3655,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -4897,7 +5195,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8262,7 +8560,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8365,7 +8663,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8468,7 +8766,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8571,7 +8869,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8674,7 +8972,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8782,7 +9080,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8875,7 +9173,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -8967,7 +9265,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9061,7 +9359,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9178,7 +9476,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9653,7 +9951,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -9721,7 +10019,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11491,7 +11789,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11611,7 +11909,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11731,7 +12029,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -11851,7 +12149,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-hover table dataframe table-striped"&gt;
+&lt;table border="1" class="table table-striped table-hover dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
