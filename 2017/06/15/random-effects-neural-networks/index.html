@@ -132,7 +132,7 @@ $$</div>
 <li><a href="http://edwardlib.org/tutorials/klqp">Edward: KL(q||p) Minimization</a></li>
 <li><a href="http://edwardlib.org/api/inference">Edward: API and Documentation - Inference</a></li>
 </ul>
-<p>Additionally, I provide an introduction to the basic math behind variational inference and the <a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf">ELBO</a> in a blog post of mine: <a href="http://willwolf.io/2017/07/06/further-exploring-common-probabilistic-models/">Further Exploring Common Probabilistic Models</a>.</p>
+<p>Additionally, I provide an introduction to the basic math behind variational inference and the <a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf">ELBO</a> in the previous post on this blog: <a href="https://cavaunpeu.github.io/2017/07/06/further-exploring-common-probabilistic-models/">Further Exploring Common Probabilistic Models</a>.</p>
 <h3>Fit model</h3>
 <p>For the approximate q-distributions, we apply the <a href="https://www.tensorflow.org/api_docs/python/tf/nn/softplus">softplus function</a> — <code>log(exp(z) + 1)</code> — to the scale parameter values at the suggestion of the Edward docs.</p>
 <div class="highlight"><pre><span></span><span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
