@@ -81,7 +81,7 @@
 <p>Before long, I dove deeper into machine learning — reading textbooks, papers and source code and writing this blog. Therein, I began to come across <em>terms I didn't understand used to describe the things that I did.</em> "I understand what the categorical cross-entropy loss is, what it does and how it's defined," for example: <em><strong>"why are you calling it the negative log-likelihood?"</strong></em></p>
 <p>Marginally wiser, I now know two truths about the above:</p>
 <ol>
-<li>Techniques we anoint as "machine learning" - classification and regression models, notably - have their underpinnings almost entirely in statistics. For this reason, terminology often flows between the two.</li>
+<li>Techniques we anoint as "machine learning" — classification and regression models, notably — have their underpinnings almost entirely in statistics. For this reason, terminology often flows between the two.</li>
 <li>None of this stuff is new.</li>
 </ol>
 <p>The goal of this post is to take three models we know, love, and know how to use and explain what's really going on underneath the hood. I will assume the reader is familiar with concepts in both machine learning and statistics, and comes in search of a deeper understanding of the connections therein. There will be math — but only as much as necessary. Most of the derivations can be skipped without consequence.</p>
@@ -208,7 +208,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." <em>Can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (-\infty, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table-striped table-hover table">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th>uber</th>
@@ -380,7 +380,7 @@ a(\eta)
 &amp;= \log(1 + e^{\eta})\\
 \end{align*}
 $$</div>
-<p>You will recognize our expression for <span class="math">\(\phi\)</span> - the probability of observing the true class - as the sigmoid function.</p>
+<p>You will recognize our expression for <span class="math">\(\phi\)</span> — the probability of observing the true class — as the sigmoid function.</p>
 <h3>Multinomial distribution</h3>
 <p>Like the binomial distribution, we'll first rewrite the multinomial (for a single observation) in a more compact form. <span class="math">\(\pi\)</span> gives a vector of class probabilities for the <span class="math">\(K\)</span> classes; <span class="math">\(k\)</span> denotes one of these classes.</p>
 <div class="math">$$
@@ -681,7 +681,7 @@ $$</div>
 </li>
 <li>We now have a <em>full distribution</em> over the possible values of the response <span class="math">\(y\)</span>.</li>
 </ul>
-<p><em><strong>&gt;Instead of a point estimate for <span class="math">\(\theta\)</span>, and a point estimate for <span class="math">\(y\)</span> given a new observation <span class="math">\(x\)</span> (which makes use of <span class="math">\(\theta\)</span>), we have distributions for each</strong></em>.</p>
+<p><em><strong>&gt; Instead of a point estimate for <span class="math">\(\theta\)</span>, and a point estimate for <span class="math">\(y\)</span> given a new observation <span class="math">\(x\)</span> (which makes use of <span class="math">\(\theta\)</span>), we have distributions for each</strong></em>.</p>
 <p>Unfortunately, in complex systems with a non-trivial functional form and number of weights, this computation becomes intractably large. As such, in fully Bayesian modeling, we approximate these distributions. In classic machine learning, we assign them a single value (point estimate). It's a bit lazy, really.</p>
 <p><img alt="@betanalpha bayesian tweet" class="img-responsive" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/></p>
 <h1>Summary</h1>
