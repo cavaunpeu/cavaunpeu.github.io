@@ -165,10 +165,12 @@
 </pre></div>
 <h2>Flight-delay models</h2>
 <p>Let's build two baseline models with the data we have. Both models have a single ReLU output and are trained to minimize the mean squared error of the predicted delay via stochastic gradient descent.</p>
-<p>ReLU was chosen as an output activation because delays are both bounded below at 0 and bi-modal. I considered three separate strategies for predicting this distribution.
-1. Train a network with two outputs: <code>total_delay</code> and <code>total_delay == 0</code> (Boolean). Optimize this network with a composite loss function: mean squared error and binary cross-entropy, respectively.
-2. Train a "poor-man's" hierarchical model: a logistic regression to predict <code>total_delay == 0</code> and a standard regression to predict <code>total_delay</code>. Then, compute the final prediction as a thresholded ternary, e.g. <code>y_pred = np.where(y_pred_lr &gt; threshhold, 0, y_pred_reg)</code>. Train the regression model with both all observations, and just those where <code>total_delay &gt; 0</code>, and see which works best.
-3. Train a single network with a ReLU activation. This gives a reasonably elegant way to clip our outputs below at 0, and mean-squared-error still tries to place our observations into the correct mode (of the bimodal output distribution; this said, mean-squared-error may try to "play it safe" and predict between the modes).</p>
+<p>ReLU was chosen as an output activation because delays are both bounded below at 0 and bi-modal. I considered three separate strategies for predicting this distribution.</p>
+<ol>
+<li>Train a network with two outputs: <code>total_delay</code> and <code>total_delay == 0</code> (Boolean). Optimize this network with a composite loss function: mean squared error and binary cross-entropy, respectively.</li>
+<li>Train a "poor-man's" hierarchical model: a logistic regression to predict <code>total_delay == 0</code> and a standard regression to predict <code>total_delay</code>. Then, compute the final prediction as a thresholded ternary, e.g. <code>y_pred = np.where(y_pred_lr &gt; threshhold, 0, y_pred_reg)</code>. Train the regression model with both all observations, and just those where <code>total_delay &gt; 0</code>, and see which works best.</li>
+<li>Train a single network with a ReLU activation. This gives a reasonably elegant way to clip our outputs below at 0, and mean-squared-error still tries to place our observations into the correct mode (of the bimodal output distribution; this said, mean-squared-error may try to "play it safe" and predict between the modes).</li>
+</ol>
 <p>I chose Option #3 because it performed best in brief experimentation and was the simplest to both fit and explain.</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseEmbeddingModel</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
 
