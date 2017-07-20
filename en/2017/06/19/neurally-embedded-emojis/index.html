@@ -349,7 +349,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 <li>Compute the cosine similarity between <code>question</code>, <code>correct_answer</code> via <code>SQAM_1</code> — <code>correct_cos_sim</code>.</li>
 <li>Compute the cosine similarity between <code>question</code>, <code>incorrect_answer</code> via <code>SQAM_2</code> — <code>incorrect_cos_sim</code>.</li>
 </ol>
-<p>The model is trained to minimize the following: <code>max(0, margin - correct_cos_sim + incorrect_cos_sim)</code>, a variant of the <a href="https://en.wikipedia.org/wiki/Hinge_loss">hinge loss</a>. This ensures that <code>(question, correct_answer)</code> pairs have a higher cosine similarity than <code>(question, incorrect_answer)</code> pairs, mediated by <code>margin</code>. Note that this function is differentiable: it is simply a [ReLU](https://en.wikipedia.org/wiki/Rectifier_(neural_networks).</p>
+<p>The model is trained to minimize the following: <code>max(0, margin - correct_cos_sim + incorrect_cos_sim)</code>, a variant of the <a href="https://en.wikipedia.org/wiki/Hinge_loss">hinge loss</a>. This ensures that <code>(question, correct_answer)</code> pairs have a higher cosine similarity than <code>(question, incorrect_answer)</code> pairs, mediated by <code>margin</code>. Note that this function is differentiable: it is simply a <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">ReLU</a>.</p>
 <h3>Architecture</h3>
 <p>A single SQAM receives two inputs: a <code>question</code> — a max-padded sequence of token ids — and an <code>answer</code> — an emoji's 16-D latent code.</p>
 <p>To process the <code>question</code> we employ the following steps, i.e. network layers:</p>
@@ -577,7 +577,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 <div class="highlight"><pre><span></span><span class="n">prediction_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">],</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'prediction_model'</span><span class="p">)</span>
 </pre></div>
 <h3>Fit contrastive model</h3>
-<p>Fitting <code>contrastive_model</code> will implicitly fit <code>prediction_model</code> as well, so long as latter has been compiled.</p>
+<p>Fitting <code>contrastive_model</code> will implicitly fit <code>prediction_model</code> as well, so long as the latter has been compiled.</p>
 <div class="highlight"><pre><span></span><span class="c1"># compile</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="o">.</span><span class="mo">001</span><span class="p">,</span> <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
 
@@ -667,7 +667,7 @@ Epoch 3/3
     😡 (Negative): 0.73435
 </pre></div>
 <h3>Additionally, we can predict on the full set of emojis</h3>
-<p>Some emoji embeddings contain <code>np.inf</code> values, unfortunately. We could likely mitigate this by further tweaking hyperparameters of our autoencoder.</p>
+<p>Some emoji embeddings contain <code>np.inf</code> values, unfortunately. We could likely mitigate this by further tweaking the hyperparameters of our autoencoder.</p>
 <div class="highlight"><pre><span></span><span class="n">all_embeddings</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">emojis</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 <span class="n">inf_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">all_embeddings</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{100 * inf_mask.mean():.3}</span><span class="si">% o</span><span class="s1">f values are `np.inf`.'</span><span class="p">)</span>
@@ -703,7 +703,7 @@ Epoch 3/3
 <p>Not particularly useful. These emojis have 0 notion of sentiment, though: the model is simply predicting on their (pixel-based) latent codes.</p>
 <h2>Future work</h2>
 <p>In this work, we trained a convolutional variational autoencoder to model the distribution of emojis. Next, we trained a Siamese question-answer model to answer text questions with emoji answers. Finally, we were able to use the latter to predict on novel emojis from the former.</p>
-<p>Moving forward, I see a few logical next steps:</p>
+<p>Moving forward, I see a few logical steps:</p>
 <ul>
 <li>Use emoji embeddings that are conscious of sentiment — likely trained via a different network altogether. This way, we could make more meaningful (sentiment-based) predictions on novel emojis.</li>
 <li>Predict on emojis generated from the autoencoder.</li>

@@ -302,7 +302,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 &lt;li&gt;Compute the cosine similarity between &lt;code&gt;question&lt;/code&gt;, &lt;code&gt;correct_answer&lt;/code&gt; via &lt;code&gt;SQAM_1&lt;/code&gt; — &lt;code&gt;correct_cos_sim&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;Compute the cosine similarity between &lt;code&gt;question&lt;/code&gt;, &lt;code&gt;incorrect_answer&lt;/code&gt; via &lt;code&gt;SQAM_2&lt;/code&gt; — &lt;code&gt;incorrect_cos_sim&lt;/code&gt;.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;The model is trained to minimize the following: &lt;code&gt;max(0, margin - correct_cos_sim + incorrect_cos_sim)&lt;/code&gt;, a variant of the &lt;a href="https://en.wikipedia.org/wiki/Hinge_loss"&gt;hinge loss&lt;/a&gt;. This ensures that &lt;code&gt;(question, correct_answer)&lt;/code&gt; pairs have a higher cosine similarity than &lt;code&gt;(question, incorrect_answer)&lt;/code&gt; pairs, mediated by &lt;code&gt;margin&lt;/code&gt;. Note that this function is differentiable: it is simply a [ReLU](https://en.wikipedia.org/wiki/Rectifier_(neural_networks).&lt;/p&gt;
+&lt;p&gt;The model is trained to minimize the following: &lt;code&gt;max(0, margin - correct_cos_sim + incorrect_cos_sim)&lt;/code&gt;, a variant of the &lt;a href="https://en.wikipedia.org/wiki/Hinge_loss"&gt;hinge loss&lt;/a&gt;. This ensures that &lt;code&gt;(question, correct_answer)&lt;/code&gt; pairs have a higher cosine similarity than &lt;code&gt;(question, incorrect_answer)&lt;/code&gt; pairs, mediated by &lt;code&gt;margin&lt;/code&gt;. Note that this function is differentiable: it is simply a &lt;a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)"&gt;ReLU&lt;/a&gt;.&lt;/p&gt;
 &lt;h3&gt;Architecture&lt;/h3&gt;
 &lt;p&gt;A single SQAM receives two inputs: a &lt;code&gt;question&lt;/code&gt; — a max-padded sequence of token ids — and an &lt;code&gt;answer&lt;/code&gt; — an emoji's 16-D latent code.&lt;/p&gt;
 &lt;p&gt;To process the &lt;code&gt;question&lt;/code&gt; we employ the following steps, i.e. network layers:&lt;/p&gt;
@@ -530,7 +530,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;prediction_model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;question&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;answer&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;qa_model&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;question&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;answer&lt;/span&gt;&lt;span class="p"&gt;]),&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'prediction_model'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Fit contrastive model&lt;/h3&gt;
-&lt;p&gt;Fitting &lt;code&gt;contrastive_model&lt;/code&gt; will implicitly fit &lt;code&gt;prediction_model&lt;/code&gt; as well, so long as latter has been compiled.&lt;/p&gt;
+&lt;p&gt;Fitting &lt;code&gt;contrastive_model&lt;/code&gt; will implicitly fit &lt;code&gt;prediction_model&lt;/code&gt; as well, so long as the latter has been compiled.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# compile&lt;/span&gt;
 &lt;span class="n"&gt;optimizer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Adam&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mo"&gt;001&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;clipnorm&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;1.&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
@@ -620,7 +620,7 @@ Epoch 3/3
     😡 (Negative): 0.73435
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Additionally, we can predict on the full set of emojis&lt;/h3&gt;
-&lt;p&gt;Some emoji embeddings contain &lt;code&gt;np.inf&lt;/code&gt; values, unfortunately. We could likely mitigate this by further tweaking hyperparameters of our autoencoder.&lt;/p&gt;
+&lt;p&gt;Some emoji embeddings contain &lt;code&gt;np.inf&lt;/code&gt; values, unfortunately. We could likely mitigate this by further tweaking the hyperparameters of our autoencoder.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;all_embeddings&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;predict&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;emojis&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;astype&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;float64&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;inf_mask&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isinf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;all_embeddings&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;any&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;'{100 * inf_mask.mean():.3}&lt;/span&gt;&lt;span class="si"&gt;% o&lt;/span&gt;&lt;span class="s1"&gt;f values are `np.inf`.'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -656,7 +656,7 @@ Epoch 3/3
 &lt;p&gt;Not particularly useful. These emojis have 0 notion of sentiment, though: the model is simply predicting on their (pixel-based) latent codes.&lt;/p&gt;
 &lt;h2&gt;Future work&lt;/h2&gt;
 &lt;p&gt;In this work, we trained a convolutional variational autoencoder to model the distribution of emojis. Next, we trained a Siamese question-answer model to answer text questions with emoji answers. Finally, we were able to use the latter to predict on novel emojis from the former.&lt;/p&gt;
-&lt;p&gt;Moving forward, I see a few logical next steps:&lt;/p&gt;
+&lt;p&gt;Moving forward, I see a few logical steps:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Use emoji embeddings that are conscious of sentiment — likely trained via a different network altogether. This way, we could make more meaningful (sentiment-based) predictions on novel emojis.&lt;/li&gt;
 &lt;li&gt;Predict on emojis generated from the autoencoder.&lt;/li&gt;
