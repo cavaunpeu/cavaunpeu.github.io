@@ -132,7 +132,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Tomémoslo pasa a paso.&lt;/p&gt;
 &lt;h3&gt;Derivadas Algebraicas&lt;/h3&gt;
 &lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-&lt;h4&gt;&lt;span class="math"&gt;\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hh}}}\)&lt;/span&gt;:&lt;/h4&gt;
+&lt;h4&gt;&lt;span class="math"&gt;\(\frac{\partial \mathbf{J_t}}{\partial \mathbf{W^{hy}}}\)&lt;/span&gt;:&lt;/h4&gt;
 &lt;p&gt;Empezando con&lt;span class="math"&gt;\(\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}}\)&lt;/span&gt;, notamos que un cambio en &lt;span class="math"&gt;\(\mathbf{W^{hy}}\)&lt;/span&gt; impacta a &lt;span class="math"&gt;\(\mathbf{J_3}\)&lt;/span&gt; sólo cuando &lt;span class="math"&gt;\(t=3\)&lt;/span&gt;, y no a ninguna otra cantidad. Sigue que:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}} =
@@ -141,7 +141,7 @@ $$&lt;/div&gt;
 \frac{\partial \mathbf{J_2}}{\partial \mathbf{W^{hy}}} =
 \frac{\partial \mathbf{J_2}}{\partial \mathbf{p_2}}
 \frac{\partial \mathbf{p_2}}{\partial \mathbf{y_2}}\frac{\partial \mathbf{y_2}}{\partial \mathbf{W^{hy}}}\\
-\frac{\partial \mathbf{J_3}}{\partial \mathbf{W^{hy}}} =
+\frac{\partial \mathbf{J_1}}{\partial \mathbf{W^{hy}}} =
 \frac{\partial \mathbf{J_1}}{\partial \mathbf{p_1}}
 \frac{\partial \mathbf{p_1}}{\partial \mathbf{y_1}}\frac{\partial \mathbf{y_1}}{\partial \mathbf{W^{hy}}}
 $$&lt;/div&gt;
