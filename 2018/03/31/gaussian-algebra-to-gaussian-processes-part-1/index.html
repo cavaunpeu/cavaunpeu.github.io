@@ -21,9 +21,9 @@
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
   <meta name="twitter:domain" content="https://cavaunpeu.github.io">
-    <meta property="twitter:title" content="From Gaussian Algebra to Gaussian Processes"/>
+    <meta property="twitter:title" content="From Gaussian Algebra to Gaussian Processes, Part 1"/>
     <meta property="twitter:description" content="A thorough, straightforward, un-intimidating introduction to Gaussian processes in NumPy."/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_40_0.png"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_40_0.png"/>
 
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
@@ -69,7 +69,7 @@
 		<div class="col-md-10 col-md-offset-1">
 <div class="article" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="text-center article-header">
-		<h1 itemprop="name headline" class="article-title">From Gaussian Algebra to Gaussian Processes</h1>
+		<h1 itemprop="name headline" class="article-title">From Gaussian Algebra to Gaussian Processes, Part 1</h1>
 		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
 			<h4 itemprop="name">Will Wolf</h4>
 		</span>
@@ -95,8 +95,7 @@
 <ul>
 <li><strong>What a Gaussian process is and how to build one in NumPy</strong> — including those cool, swirly error blobs.</li>
 <li><strong>The motivations behind their functional form</strong>, i.e. how the GP comes to be.</li>
-<li>The <strong>fancy statements</strong> above.</li>
-<li>The <strong>fancy words</strong> above.</li>
+<li>The <strong>fancy statements</strong> and <strong>fancy terms</strong> above.</li>
 </ul>
 <p>Let's get started.</p>
 <h2>Playing with Gaussians</h2>
@@ -132,7 +131,7 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'`Gaussian(mu=.123, var=.456)` Density'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_8_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_8_0.png"/></p>
 <p>If we increase the variance <code>var</code>, what happens?</p>
 <div class="highlight"><pre><span></span><span class="n">bigger_number</span> <span class="o">=</span> <span class="mf">3.45</span>
 
@@ -145,7 +144,7 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'`Gaussian(mu=.123, var=bigger_number)` Density'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_10_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_10_0.png"/></p>
 <p>The density gets fatter. This should be familiar to you.</p>
 <p>Similarly, we can draw <em>samples</em> from a <code>Gaussian</code> distribution, e.g. from the initial <code>Gaussian(mu=.123, var=.456)</code> above. Its corresponding density plot (also above) governs this procedure, where <code>(x, y)</code> tuples give the (unnormalized) probability <code>y</code> that a given sample will take the value <code>x</code>.</p>
 <p><code>x</code>-values with large corresponding <code>y</code>-values are more likely to be sampled. Here, values near .123 are most likely to be sampled.</p>
@@ -168,7 +167,7 @@
 <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of 500 samples from `Gaussian(mu=.123, var=.456)`'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_13_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/></p>
 <p>This looks similar to the true <code>Gaussian(mu=.123, var=.456)</code> density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate (look similar to) the true density.</p>
 <p>Now, we'll start to move a bit faster.</p>
 <h2>2D Gaussians</h2>
@@ -184,7 +183,7 @@
 <ol>
 <li>How much the values in the first element of the list vary</li>
 <li>How much the values in the second element of the list vary</li>
-<li>How much the first and second elements vary with each other, e.g. if the first element is larger than expected, to what extent does the second element "follow suit" (and assume a value larger than expected as well)?</li>
+<li>How much the first and second elements vary with each other, e.g. if the first element is larger than expected, to what extent does the second element "follow suit" (and assume a value larger than expected as well)</li>
 </ol>
 <p>The second parameter is the <strong>covariance matrix</strong>, <code>cov</code>. The elements on the diagonal give Items 1 and 2. The elements off the diagonal give Item 3. The covariance matrix is always square, and its values are always non-negative.</p>
 <p>Given a 2D <code>mu</code> and 2x2 <code>cov</code>, we can draw samples from the 2D Gaussian. Here, we'll use NumPy. Inline, we comment on the expected shape of the samples.</p>
@@ -252,9 +251,9 @@
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Draws from 2D-Gaussians with Varying (mu, cov)'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_17_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_17_1.png"/></p>
 <h2>Gaussians are closed under linear maps</h2>
-<p>The Gaussian for the blue dots tells us the following:</p>
+<p>Each cloud of Gaussian dots tells us the following:</p>
 <div class="math">$$
 (x, y) \sim \text{Normal}(\mu, \Sigma)
 $$</div>
@@ -281,9 +280,9 @@ $$</div>
 <p><strong>Each draw from our Gaussian will yield 200 <code>y</code>-values, each corresponding to its original <code>x</code>. In other words, it will yield 200 <code>(x, y)</code> tuples — which we can plot.</strong></p>
 <p>To make it clear that <span class="math">\(A\)</span> was computed as a function of <span class="math">\(X\)</span>, let's rename it to <span class="math">\(A = \phi(X)^T\)</span>, and rewrite our distribution as follows:</p>
 <div class="math">$$
-w\phi(X)^T \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
+\phi(X)^Tw \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
 $$</div>
-<p>In addition, let's set <span class="math">\(\mu_w =\)</span> <code>np.array([0, 0])</code> and <span class="math">\(\Sigma_w =\)</span> np.diag([1, 2])`. Finally, we'll take draws, then plot.</p>
+<p>In addition, let's set <span class="math">\(\mu_w =\)</span> <code>np.array([0, 0])</code> and <span class="math">\(\Sigma_w =\)</span> <code>np.diag([1, 2])</code>. Finally, we'll take draws, then plot.</p>
 <div class="highlight"><pre><span></span><span class="c1"># x-values</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
@@ -308,24 +307,24 @@ $$</div>
     <span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_lm</span><span class="p">,</span> <span class="n">cov_lm</span><span class="p">)</span>  <span class="c1"># lm.shape: (200,)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lm</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_20_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_20_0.png"/></p>
 <p><strong>This distribution over linear maps gives a distribution over functions</strong>, where the "mean function" is <span class="math">\(\phi(X)^T\mu_w\)</span> (which reads directly from the <code>mu_lm</code> variable above).</p>
-<p><strong>Notwithstanding, I find this phrasing to be confusing</strong>; to me, a "distribution over functions" sounds like some opaque object that spits out algebraic symbols via logic miles above my cognitive ceiling. As such, I instead think of this in more intuitive terms, as a <strong>distribution over function evaluations</strong>: a vector of floats <span class="math">\(y\)</span>, where each <span class="math">\(y_i\)</span> corresponds to its initial input <span class="math">\(x_i\)</span>.</p>
-<p>For example, given a vector <code>x = np.array([1, 2, 3])</code> and a function <code>lambda x: x**2</code>, an evaluation of this function gives <code>y = np.array([1, 4, 9])</code>. We now have tuples <code>[(1, 1), (2, 4), (3, 9)]</code>, which we can plot. This gives one "function evaluation."</p>
-<p>Above, we did this 17 times then plotted the 200 resulting <code>(x, y)</code> tuples (as our input was a 200D vector <span class="math">\(X\)</span>). This gave 17 curves. The curves are similar because of the given mean function <code>mu_lm</code>; they are different because of the given covariance matrix <code>cov_lm</code>.</p>
-<p>Let's try some different "features" for our x-values then plot the same thing.</p>
+<p><strong>Notwithstanding, I find this phrasing to be confusing</strong>; to me, a "distribution over functions" sounds like some opaque object that spits out algebraic symbols via logic miles above my cognitive ceiling. As such, I instead think of this in more intuitive terms as a <strong>distribution over function evaluations</strong>, where a single function evaluation is a list of <code>(x, y)</code> tuples and nothing more.</p>
+<p>For example, given a vector <code>x = np.array([1, 2, 3])</code> and a function <code>lambda x: x**2</code>, an evaluation of this function gives <code>y = np.array([1, 4, 9])</code>. We now have tuples <code>[(1, 1), (2, 4), (3, 9)]</code> from which we can create a line plot. This gives one "function evaluation."</p>
+<p>Above, we sampled 17 function evaluations, then plotted the 200 resulting <code>(x, y)</code> tuples (as our input was a 200D vector <span class="math">\(X\)</span>) for each. The evaluations are similar because of the given mean function <code>mu_lm</code>; they are different because of the given covariance matrix <code>cov_lm</code>.</p>
+<p>Let's try some different "features" for our <code>x</code>-values then plot the same thing.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Make different, though still arbitrary, features</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_23_0.png"/></p>
-<p>The features we choose give a "language" with which we can express a relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>. Some features are more expressive than others; ome restrict us entirely from expressing certain relationships.</p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_23_0.png"/></p>
+<p>"The features we choose give a 'language' with which we can express a relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>."<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> Some features are more expressive than others; some restrict us entirely from expressing certain relationships.</p>
 <p>For further illustration, let's employ step functions as features and see what happens.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Make features, as before</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_25_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_25_0.png"/></p>
 <h2>Gaussians are closed under conditioning and marginalization</h2>
-<p>Let's revisit the 2D Gaussians plotted above. They took the form:</p>
+<p>Let's revisit the 2D Gaussians plotted above. They took the form (where <span class="math">\(\mathcal{N}\)</span> denotes the Normal, i.e. Gaussian distribution):</p>
 <div class="math">$$
 (x, y) \sim \mathcal{N}(\mu, \Sigma)
 $$</div>
@@ -341,7 +340,7 @@ P(x, y) = \mathcal{N}\bigg([\mu_x, \mu_y],
     \Sigma_{xy}^T &amp; \Sigma_y\\
     \end{bmatrix}\bigg)
 $$</div>
-<p><em>NB: In this case, all 4 "Sigmas" in the 2x2 covariance matrix are scalars. If our covariance were bigger, say 31x31, but we still wrote it as we did above, then these 4 "Sigmas" would be </em>matrices<em> (with an aggregate size totaling 31x31).</em></p>
+<p><em>NB: In this case, all 4 "Sigmas" in the 2x2 covariance matrix are floats. If our covariance were bigger, say 31x31, then these 4 Sigmas would be <strong>matrices</strong> (with an aggregate size totaling 31x31).</em></p>
 <p>What if we wanted to know the distribution over <span class="math">\(y\)</span> conditional on <span class="math">\(x\)</span> taking on a certain value, e.g. <span class="math">\(P(y\vert x &gt; 1)\)</span>?</p>
 <p><span class="math">\(y\)</span> is a single element, so the resulting conditional will be a univariate distribution. To gain intuition, let's do this in a very crude manner:</p>
 <div class="highlight"><pre><span></span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[]</span>
@@ -355,7 +354,7 @@ $$</div>
 <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of y-values, when x &gt; 1'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_28_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_28_0.png"/></p>
 <p>Cool! Looks kind of Gaussian as well.</p>
 <p>Instead, what if we wanted to know the functional form of the real density, <span class="math">\(P(y\vert x)\)</span>, instead of this empirical distribution of its samples? One of the axioms of conditional probability tells us that:</p>
 <div class="math">$$
@@ -375,9 +374,9 @@ $$</div>
    &amp;= \mathcal{N}(\mu_x, \Sigma_x)
 \end{align*}
 $$</div>
-<p><strong>Marginalizing a &gt; 1D Gaussian over one of its elements yields another Gaussian</strong>: you just "pluck out" the elements you'd like to examine. <strong>In other words, Gaussians are closed under marginalization.</strong> It's almost too easy to warrant a formula.</p>
-<p>As an example, imagine we had the following Gaussian, and wanted to compute the marginal over the first 2 elements:</p>
-<div class="highlight"><pre><span></span><span class="c1"># 3D Gaussian</span>
+<p><strong>Marginalizing a &gt; 1D Gaussian over one of its elements yields another Gaussian</strong>: you just "pluck out" the elements you'd like to examine. <strong>In other words, Gaussians are closed under marginalization.</strong> "It's almost too easy to warrant a formula."<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
+<p>As an example, imagine we had the following Gaussian <span class="math">\(P(a, b, c)\)</span>, and wanted to compute the marginal over the first 2 elements, i.e. <span class="math">\(P(a, b) = \int P(a, b, c)dc\)</span>:</p>
+<div class="highlight"><pre><span></span><span class="c1"># P(a, b, c)</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
 <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
     <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">33</span><span class="p">],</span>
@@ -385,7 +384,7 @@ $$</div>
     <span class="p">[</span><span class="mi">77</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">99</span><span class="p">]</span>
 <span class="p">])</span>
 
-<span class="c1"># Marginal over the first 2 elements</span>
+<span class="c1"># P(a, b)</span>
 <span class="n">mu_marginal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="n">cov_marginal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
     <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
@@ -417,10 +416,10 @@ $$</div>
 <h2>Inferring the weights</h2>
 <p>We previously posited a distribution over some vector of weights, <span class="math">\(w \sim \text{Normal}(\mu_w, \Sigma_w)\)</span>. In addition, we posited a distribution over the linear map of these weights onto some matrix <span class="math">\(A = \phi(X)^T\)</span>:</p>
 <div class="math">$$
-w\phi(X)^T \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
+\phi(X)^Tw \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
 $$</div>
-<p>Given some ground-truth realizations from this distribution <span class="math">\(y\)</span>, i.e. ground-truth "function evaluations," we'd like to infer the weights <span class="math">\(w\)</span> most consistent with these values.</p>
-<p><em>In machine learning, we equivalently say that given a model and some observed data <code>(X_train, y_train)</code>, we compute/train/infer/optimize the weights of said model (often via backpropagation).</em></p>
+<p>Given some ground-truth samples from this distribution <span class="math">\(y\)</span>, i.e. ground-truth "function evaluations," we'd like to infer the weights <span class="math">\(w\)</span> most consistent with <span class="math">\(y\)</span>.</p>
+<p><em>In machine learning, we equivalently say that given a model and some observed data <code>(X_train, y_train)</code>, we'd like to compute/train/optimize the weights of said model (often via backpropagation).</em></p>
 <p>Most precisely, our goal is to infer <span class="math">\(P(w\vert y)\)</span> (where <span class="math">\(y\)</span> are our observed function evaluations). To do this, we simply posit a joint distribution over both quantities:</p>
 <div class="math">$$
 P(w, y) =
@@ -441,8 +440,8 @@ P(w\vert y)
     &amp;= \mathcal{N}(\mu_w + \Sigma_{wy}(\phi(X)^T\Sigma_w \phi(X))^{-1}(y - \mu_w^T \phi(X)), \Sigma_w - \Sigma_{wy}(\phi(X)^T\Sigma_w \phi(X))^{-1}\Sigma_{wy}^T)
 \end{align*}
 $$</div>
-<p>This formula gives the posterior distribution over our weights given the model and observed data tuples <code>(x, y)</code>.</p>
-<p>Until now, we've assumed a 2D <span class="math">\(w\)</span>, and therefore a <span class="math">\(\phi(X)\)</span> in <span class="math">\(\mathbb{R}^2\)</span> as well. Moving forward, let's work with weights and features in <span class="math">\(\mathbb{R}^{20}\)</span> which will give us a more expressive language with which to capture the true relationship between some quantity <span class="math">\(x\)</span> and its corresponding <span class="math">\(y\)</span>. <span class="math">\(\mathbb{R}^{20}\)</span> is an arbitrary choice.</p>
+<p>This formula gives the posterior distribution over our weights <span class="math">\(P(w\vert y)\)</span> given the model and observed data tuples <code>(x, y)</code>.</p>
+<p>Until now, we've assumed a 2D <span class="math">\(w\)</span>, and therefore a <span class="math">\(\phi(X)\)</span> in <span class="math">\(\mathbb{R}^2\)</span> as well. Moving forward, we'll work with weights and features in a higher-dimensional space, <span class="math">\(\mathbb{R}^{20}\)</span>; this will give us a more expressive language with which to capture the true relationship between some quantity <span class="math">\(x\)</span> and its corresponding <span class="math">\(y\)</span>. <span class="math">\(\mathbb{R}^{20}\)</span> is an arbitrary choice; it could have been <span class="math">\(\mathbb{R}^{17}\)</span>, or <span class="math">\(\mathbb{R}^{31}\)</span>, or <span class="math">\(\mathbb{R}^{500}\)</span> as well.</p>
 <div class="highlight"><pre><span></span><span class="c1"># The true function that maps `x` to `y`. This is what we are trying to recover with our mathematical model.</span>
 <span class="k">def</span> <span class="nf">true_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">7</span>
@@ -495,22 +494,22 @@ $$</div>
 <span class="c1"># Compute weights posterior</span>
 <span class="n">mu_w_post</span><span class="p">,</span> <span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">compute_weights_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
-<p>As with our prior over our weights, we can equivalently draw samples from the posterior, then plot. These samples will be 20D vectors; we reduce them to 2D for ease of visualization.</p>
+<p>As with our prior over our weights, we can equivalently draw samples from the posterior over our weights, then plot. These samples will be 20D vectors; we reduce them to 2D for ease of visualization.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Draw samples</span>
 <span class="n">samples_prior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 <span class="n">samples_post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_w_post</span><span class="p">,</span> <span class="n">cov_w_post</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
-<span class="c1"># Reduce to 2D for ease of plotting</span>
+<span class="c1"># Reduce to 2D for ease of visualization</span>
 <span class="n">first_dim_prior</span><span class="p">,</span> <span class="n">second_dim_prior</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">samples_prior</span><span class="p">))</span>
 <span class="n">first_dim_post</span><span class="p">,</span> <span class="n">second_dim_post</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">samples_post</span><span class="p">))</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_34_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_34_1.png"/></p>
 <p>Samples from the prior are plotted in orange; samples from the posterior are plotted in blue. As this is a stochastic dimensionality-reduction algorithm, the results will be slightly different each time.</p>
-<p>At best, we can see that the posterior has slightly larger values in its covariance matrix, and has probably maintained a similar mean. This type of change (read: a small one) is expected, as we've only conditioned on 6 ground-truth tuples.</p>
+<p>At best, we can see that the posterior has slightly larger values in its covariance matrix, evidenced by the fact that the blue cloud is more disperse than the orange, and has probably maintained a similar mean. The magnitude of change (read: a small one) is expected, as we've only conditioned on 6 ground-truth tuples.</p>
 <h1>Predicting on new data</h1>
-<p>We'd now like to sample new function evaluations given the updated distribution (i.e. posterior distribution) over weights. Previously, we generated these samples by centering a multivariate Gaussian on <span class="math">\(\phi(x)^T\mu_{w}\)</span>, where <span class="math">\(\mu_w\)</span> was the mean of the prior distribution over weights. How do we do this with our posterior over weights instead?</p>
+<p>Previously, we sampled function evaluations by centering a multivariate Gaussian on <span class="math">\(\phi(X)^T\mu_{w}\)</span>, where <span class="math">\(\mu_w\)</span> was the mean of the prior distribution over weights. We'd now like to do the same thing, but use our posterior over weights instead. How does this work?</p>
 <p><strong>Well, Gaussians are closed under linear maps.</strong> So, we just follow the formula we had used above.</p>
-<p>This time, instead of input vector <span class="math">\(X\)</span>, we'll use a new input vector called <span class="math">\(X_{*}\)</span>.</p>
+<p>This time, instead of input vector <span class="math">\(X\)</span>, we'll use a new input vector called <span class="math">\(X_{*}\)</span>, i.e. the "new data" on which we'd like to predict.</p>
 <div class="math">$$
 \phi(X_{*})^Tw \sim \text{Normal}(\phi(X_{*})^T\mu_{w, \text{post}},\ \phi(X_{*})^T \Sigma_{w, \text{post}}\phi(X_{*}))
 $$</div>
@@ -529,7 +528,7 @@ $$</div>
 
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 </pre></div>
-<p>To plot, we typically just plot the error bars, i.e. the space within <code>(mu_y_post - var_y_post, mu_y_post + var_y_post)</code> for each <code>x</code>, as well as the ground-truth tuples as big red dots. <strong>This gives nothing more than a picture of the mean-vector and covariance of our posterior.</strong> Optionally, we can plot true function evaluations from this posterior as well, as we did with our prior.</p>
+<p>To plot, we typically just plot the error bars, i.e. the space within <code>(mu_y_post - var_y_post, mu_y_post + var_y_post)</code> for each <code>x</code>, as well as the ground-truth tuples as big red dots. <strong>This gives nothing more than a picture of the mean-vector and covariance of our posterior.</strong> Optionally, we can plot samples from this posterior as well, as we did with our prior.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">ylim</span><span class="p">)</span>
@@ -546,7 +545,7 @@ $$</div>
     <span class="c1"># Scatter-plot our original 6 `(x, y)` tuples</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s1">'ro'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
-    <span class="c1"># Optionally plot actual function evaluations from this posterior</span>
+    <span class="c1"># Optionally plot actual samples (function evaluations) from this posterior</span>
     <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
             <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">)</span>
@@ -555,14 +554,14 @@ $$</div>
 
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_40_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_40_0.png"/></p>
 <p>The posterior distribution is nothing more than a distribution over function evaluations (25 of which are shown above) <em>most consistent with our model and observed data tuples.</em> As such, and to give further intuition, a crude way of computing this distribution might be continuously <em>drawing samples from our prior over function evaluations, and keeping only the ones that pass through, i.e. are "most consistent with," all of the red points above.</em></p>
 <p>Finally, we stated before that <strong>the features we choose (i.e. our <code>phi_func</code>) give a "language" with which we can express the relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>.</strong> Here, we've chosen a language with 20 words. What if we chose a different 20?</p>
 <div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">20</span>
 
 
 <span class="c1"># Params of distribution over weights</span>
-<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># mu_w.shape: (D, )</span>
+<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># mu_w.shape: (D,)</span>
 <span class="n">cov_w</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>  <span class="c1"># cov_w.shape: (D, D)</span>
 
 
@@ -574,7 +573,7 @@ $$</div>
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_42_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_42_0.png"/></p>
 <p>Not great. As a brief aside, how do we read the plot above? It's simply a function, a transformation, a lookup: given an <span class="math">\(x\)</span>, it tells us the corresponding expected value <span class="math">\(y\)</span>, and the variance around this estimate.</p>
 <p>For instance, right around <span class="math">\(x = -3\)</span>, we can see that <span class="math">\(y\)</span> is somewhere in <span class="math">\([-1, 1]\)</span>; given that we've only conditioned on 6 "training points," we're still quite unsure as to what the true answer is. To this effect, a GP (and other fully-Bayesian models) allows us to quantify this uncertainty judiciously.</p>
 <p>Now, let's try some more features and examine the model we're able to build.</p>
@@ -582,19 +581,19 @@ $$</div>
 <span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_44_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_44_1.png"/></p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_45_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_45_0.png"/></p>
 <p>That last one might look familiar. Therein, the features we chose (still arbitrarily, really) are called "radial basis functions" (among other names).</p>
-<p>We've loosely examined when we change the language through which we can express our model. Next, what if we changed the size of its vocabulary?</p>
+<p>We've loosely examined what happens when we change the language through which we articulate our model. Next, what if we changed the size of its vocabulary?</p>
 <p>First, let's backtrack, and try 8 of these radial basis functions instead of 20.</p>
 <div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">8</span>
 
 
 <span class="c1"># Params of distribution over weights</span>
-<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># mu_w.shape: (D, )</span>
+<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># mu_w.shape: (D,)</span>
 <span class="n">cov_w</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>  <span class="c1"># cov_w.shape: (D, D)</span>
 
 
@@ -605,13 +604,13 @@ $$</div>
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_47_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_47_0.png"/></p>
 <p>Very different! Holy overfit. What about 250?</p>
 <div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">250</span>
 
 
 <span class="c1"># Params of distribution over weights</span>
-<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># mu_w.shape: (D, )</span>
+<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># mu_w.shape: (D,)</span>
 <span class="n">cov_w</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>  <span class="c1"># cov_w.shape: (D, D)</span>
 
 
@@ -622,17 +621,17 @@ $$</div>
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes/output_49_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_49_0.png"/></p>
 <p>It appears that the more features we use, the more expressive, and/or less endemically prone to overfitting, our model becomes.</p>
 <p>So, how far do we take this? <code>D = 1000</code>? <code>D = 50000</code>? How high can we go? <strong>We'll pick up here in the next post.</strong></p>
 <h1>Summary</h1>
-<p>In this tutorial, we've arrived at the mechanical notion of a Gaussian process via simple Gaussian algebra, and a bit of Gaussian calculus.</p>
+<p>In this tutorial, we've arrived at the mechanical notion of a Gaussian process via simple Gaussian algebra.</p>
 <p><strong>Thus far, we've elucidated the following ideas:</strong></p>
 <ul>
 <li>A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations). √</li>
 <li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest). √</li>
 <li>Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula). √</li>
-<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X)^T\)</span>) √</li>
+<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X_{*})^T\)</span>) √</li>
 <li>Covariances (the second thing we need in order to specify a multivariate Gaussian) √</li>
 </ul>
 <p><strong>Conversely, we did not yet cover (directly):</strong></p>
@@ -642,19 +641,30 @@ $$</div>
 <li>A Gaussian process is non-parametric, i.e. it has an infinite number of parameters (duh?).</li>
 </ul>
 <p>These will be the subject of the following post.</p>
-<p>Thanks for reading, and don't let arcane pedagogy discourage you. There's almost always a clearer explanation at bay.</p>
+<p>Thanks for reading, and <strong>don't let arcane pedagogy discourage you:</strong> there's almost always a clearer explanation (or at least its attempt) at bay.</p>
 <h2>Code</h2>
 <p>The <a href="https://github.com/cavaunpeu/gaussian-processes">repository</a> and <a href="https://nbviewer.jupyter.org/github/cavaunpeu/gaussian-processes/blob/master/gaussian-processes-part-1.ipynb">rendered notebook</a> for this project can be found at their respective links.</p>
 <h2>References</h2>
+<div class="footnote">
+<hr>
 <ol>
-<li><a href="https://www.youtube.com/watch?v=50Vgw11qn0o">Gaussian Processes 1 - Philipp Hennig - MLSS 2013 Tübingen
-</a></li>
-<li><a href="Gaussian Processes for Machine Learning">Gaussian Processes for Machine Learning</a>. Carl Edward Rasmussen and Christopher K. I. Williams
-The MIT Press, 2006. ISBN 0-262-18253-X.</li>
-<li><a href="https://blog.dominodatalab.com/fitting-gaussian-process-models-python/">Fitting Gaussian Process Models in Python</a></li>
-<li><a href="http://sashagusev.github.io/2016-01/GP.html">Gaussian process regression
-</a></li>
+<li id="fn-1">
+<p><a href="https://www.youtube.com/watch?v=50Vgw11qn0o">Gaussian Processes 1 - Philipp Hennig - MLSS 2013 Tübingen
+</a> (from which this post takes heavy inspiration) <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2-1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+<li id="fn-2">
+<p><a href="Gaussian Processes for Machine Learning">Gaussian Processes for Machine Learning</a>. Carl Edward Rasmussen and Christopher K. I. Williams
+The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+</li>
+<li id="fn-3">
+<p><a href="https://blog.dominodatalab.com/fitting-gaussian-process-models-python/">Fitting Gaussian Process Models in Python</a> <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a></p>
+</li>
+<li id="fn-4">
+<p><a href="http://sashagusev.github.io/2016-01/GP.html">Gaussian process regression
+</a> <a class="footnote-backref" href="#fnref-4" title="Jump back to footnote 4 in the text">↩</a></p>
+</li>
 </ol>
+</hr></div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -718,7 +728,7 @@ The MIT Press, 2006. ISBN 0-262-18253-X.</li>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'willwolf';
-    var disqus_title = 'From Gaussian Algebra to Gaussian Processes';
+    var disqus_title = 'From Gaussian Algebra to Gaussian Processes, Part 1';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
