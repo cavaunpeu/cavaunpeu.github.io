@@ -183,9 +183,9 @@
 <ol>
 <li>How much the values in the first element of the list vary</li>
 <li>How much the values in the second element of the list vary</li>
-<li>How much the first and second elements vary with each other, e.g. if the first element is larger than expected, to what extent does the second element "follow suit" (and assume a value larger than expected as well)</li>
+<li>How much the first and second elements vary with each other, e.g. if the first element is larger than expected (i.e. larger than its corresponding mean), to what extent does the second element "follow suit" (and assume a value larger than expected as well)</li>
 </ol>
-<p>The second parameter is the <strong>covariance matrix</strong>, <code>cov</code>. The elements on the diagonal give Items 1 and 2. The elements off the diagonal give Item 3. The covariance matrix is always square, and its values are always non-negative.</p>
+<p>The second parameter is the <strong>covariance matrix</strong>, <code>cov</code>. The elements on the diagonal give Items 1 and 2. The elements off the diagonal give Item 3. The covariance matrix is always square, and the values along its diagonal are always non-negative.</p>
 <p>Given a 2D <code>mu</code> and 2x2 <code>cov</code>, we can draw samples from the 2D Gaussian. Here, we'll use NumPy. Inline, we comment on the expected shape of the samples.</p>
 <div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
