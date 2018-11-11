@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@willwolf_">
+  <meta name="twitter:creator" content="@willwolf_">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+    <meta property="twitter:title" content="A Thorough Introduction to Boltzmann Machines"/>
+    <meta property="twitter:description" content="A pedantic walk through Boltzmann machines, with focus on the computational thorn-in-side of the partition function."/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_23_1.png"/>
+
+	<!-- CSS -->
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">A Thorough Introduction to Boltzmann Machines</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2018-10-20T14:00:00-04:00" itemprop="datePublished">October 20, 2018</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>The principal task of machine learning is to fit a model to some data. Thinking on the level of APIs, a model is an object with two methods:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+<h2>Likelihood</h2>
+<p>How likely is the query point(s) <span class="math">\(x\)</span> under our model? In other words, how likely was it that our model produced <span class="math">\(x\)</span>?</p>
+<p>The likelihood gives a value proportional to a valid probability, but is not necessarily a valid probability itself.</p>
+<p>(Finally, the likelihood is often used as an umbrella term for, or interchangeably with, the probability density. The mainstream machine learning community would do well to agree to the use of one of these terms, and to sunset the other; while their definitions may differ slightly, the confusion brought about by their dual used in almost identical contexts simply does not warrant by the pedagogical purity we maintain by keeping them distinct.</p>
+<h2>Sample</h2>
+<p>Draw samples from the model.</p>
+<h2>Denotation</h2>
+<p>Canonically, we denote an instance of our <code>Model</code> in mathematical syntax as follows:</p>
+<div class="math">$$
+x \sim p(x)
+$$</div>
+<p>Again, this simple denotation implies two methods: that we can evaluate the likelihood of having observed <span class="math">\(x\)</span> under our model <span class="math">\(p\)</span>, and that we can sample a new value <span class="math">\(x\)</span> from our model <span class="math">\(p\)</span>.</p>
+<p>Often, we work with <em>conditional</em> models, such as <span class="math">\(y \sim p(y\vert x)\)</span>, in classification and regression tasks. The same two implicit methods apply.</p>
+<h2>Boltzmann machines</h2>
+<p>A Boltzmann machine is one of the simplest mechanisms for modeling <span class="math">\(p(x)\)</span>. It is an undirected graphical model where every dimension <span class="math">\(x_i\)</span> of a given observation <span class="math">\(x\)</span> influences every other dimension. <strong>As such, we might use it to model data which we believe to exhibit this property, e.g. an image.</strong> For <span class="math">\(x \in R^3\)</span>, our model would look as follows:</p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/boltzmann-machine.svg"/></p>
+<p>For <span class="math">\(x \in R^n\)</span>, a given node <span class="math">\(x_i\)</span> would have <span class="math">\(n - 1\)</span> outgoing connections in total—one to each of the other nodes <span class="math">\(x_j\)</span> for <span class="math">\(j \neq i\)</span>.</p>
+<p>Finally, a Boltzmann machine strictly operates on <em>binary</em> data. This keeps things simple.</p>
+<h2>Computing the likelihood</h2>
+<p>A Boltzmann machines admits the following formula for computing the likelihood of data points <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>:</p>
+<div class="math">$$
+H(x) = \sum\limits_{i \neq j} w_{i, j} x_i x_j + \sum\limits_i b_i x_i
+$$</div>
+<div class="math">$$
+p(x) = \frac{\exp{(H(x))}}{Z}
+$$</div>
+<div class="math">$$
+\mathcal{L}(x^{(1)}, ..., x^{(n)}) = \prod\limits_{i=1}^n p(x^{(i)})
+$$</div>
+<p>Note:</p>
+<ul>
+<li>Since our weights can be negative, <span class="math">\(H(x)\)</span> can be negative. As a likelihood gives an optionally-normalized probability, it must be non-negative.</li>
+<li>To enforce this constraint, we exponentiate <span class="math">\(H(x)\)</span> in the second equation.</li>
+<li>To normalize, we divide by the normalization constant <span class="math">\(Z\)</span>, i.e. the sum of the likelihoods of all possible values of <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>.</li>
+</ul>
+<h2>Computing the partition function, with examples</h2>
+<p>In the case of 2-dimensional binary <span class="math">\(x\)</span>, the only possible "configurations" of <span class="math">\(x\)</span> are: <span class="math">\([0, 0], [0, 1], [1, 0], [1, 1]\)</span>, i.e. 4 distinct values. This means that in evaluating the likelihood of one datum <span class="math">\(x\)</span>, the normalization constant <span class="math">\(Z\)</span> would be a sum of 4 terms.</p>
+<p>Now, with two data points <span class="math">\(x^{(1)}\)</span> and <span class="math">\(x^{(2)}\)</span>, there are 16 possible "configurations":</p>
+<ol>
+<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [0, 0]\)</span></li>
+<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [0, 1]\)</span></li>
+<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [1, 0]\)</span></li>
+<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [1, 1]\)</span></li>
+<li><span class="math">\(x^{(1)} = [0, 1]\)</span>, <span class="math">\(x^{(2)} = [0, 0]\)</span></li>
+<li><span class="math">\(x^{(1)} = [0, 1]\)</span>, <span class="math">\(x^{(2)} = [0, 1]\)</span></li>
+<li>Etc.</li>
+</ol>
+<p>This means that in evaluating the likelihood of <span class="math">\(\mathcal{L}(x^{(1)}, x^{(2)})\)</span>, the normalization constant <span class="math">\(Z\)</span> would be a sum of 16 terms.</p>
+<p>More generally, given <span class="math">\(d\)</span>-dimensional <span class="math">\(x\)</span>, where each <span class="math">\(x_i\)</span> can assume one of <span class="math">\(v\)</span> distinct values, and <span class="math">\(n\)</span> data points <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>—in evaluating the likelihood of <span class="math">\(\mathcal{L}(x^{(1)}, ..., x^{(n)})\)</span> the normalization constant <span class="math">\(Z\)</span> would be a sum of <span class="math">\((v^d)^n\)</span> terms. <strong>With a non-trivially large <span class="math">\(v\)</span> or <span class="math">\(d\)</span> (in the discrete case), or a non-trivially large <span class="math">\(k\)</span> in the continuous case, this becomes intractable to compute.</strong></p>
+<p>In the case of a Boltzmann machine, <span class="math">\(v = 2\)</span>, which is not large. Below, we will vary <span class="math">\(d\)</span> and examine its impact on the tractability (in terms of, "can we actually compute <span class="math">\(Z\)</span> before the end of the universe?") of inference.</p>
+<h2>The likelihood function in code</h2>
+<p>In code, the likelihood function looks as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_unnormalized_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_H</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_combinations</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+    <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="err">@</span> <span class="n">x</span>
+    <span class="k">return</span> <span class="n">h</span>
+
+<span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    :param x: a vector of shape (n_units,) or (n, n_units),</span>
+<span class="sd">        where the latter is a matrix of multiple data points</span>
+<span class="sd">        for which to compute the joint likelihood.</span>
+<span class="sd">    """</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">raise</span><span class="p">(</span><span class="s1">'Please pass 1 or more points of `n_units` dimensions'</span><span class="p">)</span>
+
+    <span class="c1"># compute unnormalized likelihoods</span>
+    <span class="n">multiple_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="n">multiple_samples</span><span class="p">:</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unnormalized_likelihood</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unnormalized_likelihood</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+
+    <span class="c1"># compute partition function</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_unnormalized_likelihood</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_configs</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lik</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
+</pre></div>
+<p>This code block is longer than you might expect because it includes a few supplementary behaviors, namely:</p>
+<ul>
+<li>Computing the likelihood of one or more points</li>
+<li>Avoiding redundant computation of <code>Z</code></li>
+<li>Optionally computing the log-likelihood</li>
+</ul>
+<p>Above all, note that: the likelihood is a function of the model's parameters, i.e. <code>self.weights</code> and <code>self.biases</code>, which we can vary, and the data <code>x</code>, which we can't.</p>
+<h2>Training the model</h2>
+<p>At the outset, the parameters <code>self.weights</code> and <code>self.biases</code> of our model are initialized at random. Trivially, such that the values returned by <code>likelihood</code> and <code>sample</code> are useful, we must first update these parameters by fitting this model to observed data.</p>
+<p>To do so, we will employ the principal of maximum likelihood: compute the parameters that make the observed data maximally likely under the model, via gradient ascent.</p>
+<h2>Gradients</h2>
+<p>Since our model is simple, we can derive exact gradients by hand. We will work with the log-likelihood instead of the true likelihood to avoid issues of computational underflow. Below, we simplify this expression, then compute its various gradients.</p>
+<h3><span class="math">\(\log{\mathcal{L}}\)</span></h3>
+<div class="math">$$
+\mathcal{L}(x^{(1)}, ..., x^{(n)}) = \prod\limits_{k=1}^n \frac{\exp{(H(x^{(k)})}}{Z}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\log{\mathcal{L}(x^{(1)}, ..., x^{(n)})}
+&amp;= \sum\limits_{k=1}^n \log{\frac{\exp{(H(x^{(k)})}}{Z}}\\
+&amp;= \sum\limits_{k=1}^n \log{\big(\exp{(H(x^{(k)})}\big)} - \log{Z}\\
+&amp;= \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}
+\end{align*}
+$$</div>
+<p>This gives the total likelihood. Our aim is to maximize the expected likelihood with respect to the data generating distribution.</p>
+<h3>Expected likelihood</h3>
+<div class="math">$$
+\begin{align*}
+\mathop{\mathbb{E}}_{x \sim p_{\text{data}}}\big[ \mathcal{L}(x) \big]
+&amp;= \sum\limits_{k=1}^N p_{\text{data}}(x = x^{(k)}) \mathcal{L(x^{(k)})}\\
+&amp;= \sum\limits_{k=1}^N \frac{1}{N} \mathcal{L(x^{(k)})}\\
+&amp;= \frac{1}{N} \sum\limits_{k=1}^N  \mathcal{L(x^{(k)})}\\
+\end{align*}
+$$</div>
+<p>In other words, the average. We will continue to denote this as <span class="math">\(\mathcal{L}\)</span>, i.e. <span class="math">\(\mathcal{L} = \frac{1}{N} \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}\)</span>.</p>
+<p>Now, deriving the gradient with respect to our weights:</p>
+<h3><span class="math">\(\nabla_{w_{i, j}}\log{\mathcal{L}}\)</span>:</h3>
+<div class="math">$$
+\begin{align*}
+\nabla_{w_{i, j}} \frac{1}{N} \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}
+&amp;= \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}}  H(x^{(k)}) - \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}} \log{Z}
+\end{align*}
+$$</div>
+<h3>First term:</h3>
+<div class="math">$$
+\begin{align*}
+\frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}}  H(x^{(k)})
+&amp;= \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}} \sum\limits_{i \neq j} w_{i, j} x_i^{(k)} x_j^{(k)} + \sum\limits_i b_i x_i^{(k)}\\
+&amp;= \frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\\
+&amp;= \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j]
+\end{align*}
+$$</div>
+<h3>Second term:</h3>
+<p>NB: <span class="math">\(\sum\limits_{\mathcal{x}}\)</span> implies a summation over all <span class="math">\((v^d)^n\)</span> possible configurations of values that <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span> can assume.</p>
+<div class="math">$$
+\begin{align*}
+\nabla_{w_{i, j}} \log{Z}
+&amp;= \nabla_{w_{i, j}} \log{\sum\limits_{\mathcal{x}}} \exp{(H(x))}\\
+&amp;= \frac{1}{\sum\limits_{\mathcal{x}} \exp{(H(x))}} \nabla_{w_{i, j}} \sum\limits_{\mathcal{x}} \exp{(H(x))}\\
+&amp;= \frac{1}{Z} \nabla_{w_{i, j}} \sum\limits_{\mathcal{x}} \exp{(H(x))}\\
+&amp;= \frac{1}{Z} \sum\limits_{\mathcal{x}} \exp{(H(x))} \nabla_{w_{i, j}} H(x)\\
+&amp;= \sum\limits_{\mathcal{x}} \frac{\exp{(H(x))}}{Z} \nabla_{w_{i, j}} H(x)\\
+&amp;= \sum\limits_{\mathcal{x}} P(x) \nabla_{w_{i, j}} H(x)\\
+&amp;= \sum\limits_{\mathcal{x}} P(x) [x_i  x_j]\\
+&amp;= \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]
+\end{align*}
+$$</div>
+<h3>Putting it back together</h3>
+<p>Combining these constituent parts, we arrive at the following formula:</p>
+<div class="math">$$
+\nabla_{w_{i, j}}\log{\mathcal{L}} = \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j] - \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]
+$$</div>
+<p>Finally, following the same logic, we derive the exact gradient with respect to our biases:</p>
+<div class="math">$$
+\nabla_{b_i}\log{\mathcal{L}} = \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i] - \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i]
+$$</div>
+<p>The first and second terms of each gradient are called, respectively, <strong>the positive and negative phases.</strong></p>
+<h2>Computing the positive phase</h2>
+<p>In the following toy example, our data are small: we can compute the positive phase using all of the training data, i.e. <span class="math">\(\frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\)</span>. Were our data bigger, we could approximate this expectation with a mini-batch of training data and we do in SGD.</p>
+<h2>Computing the negative phase</h2>
+<p>Again, this term asks us to compute then sum the log-likelihood over every possible data configuration in the support of our model, which is <span class="math">\(O(nv^d)\)</span>. <strong>With non-trivially large <span class="math">\(v\)</span> or <span class="math">\(d\)</span>, this becomes intractable to compute.</strong></p>
+<p>Below, we'll begin our toy example computing the true negative-phase, <span class="math">\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, with varying data dimensionalities <span class="math">\(d\)</span>. Then, once this computation becomes slow, we'll look to approximate this expectation later on.</p>
+<h2>Parameter updates in code</h2>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_parameters_with_true_negative_phase</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span>
+    <span class="n">model_distribution</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="n">config</span><span class="p">))</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">all_configs</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">var_combinations</span><span class="p">:</span>
+        <span class="c1"># positive phase</span>
+        <span class="n">positive_phase</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># negative phase</span>
+        <span class="n">negative_phase</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">config</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">likelihood</span> <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">model_distribution</span><span class="p">])</span>
+
+        <span class="c1"># update weights</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_phase</span> <span class="o">-</span> <span class="n">negative_phase</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">biases</span><span class="p">):</span>
+        <span class="c1"># positive phase</span>
+        <span class="n">positive_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># negative phase</span>
+        <span class="n">negative_phase</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">likelihood</span> <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">model_distribution</span><span class="p">])</span>
+
+        <span class="c1"># update biases</span>
+        <span class="n">biases</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_phase</span> <span class="o">-</span> <span class="n">negative_phase</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">biases</span><span class="p">)</span>
+</pre></div>
+<h2>Train model, visualize model distribution</h2>
+<p>Finally, we're ready to train. Using the true negative phase, let's train our model for 100 epochs with <span class="math">\(d=3\)</span> then visualize results.</p>
+<div class="highlight"><pre><span></span><span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mo">01</span>
+
+
+<span class="k">def</span> <span class="nf">reset_data_and_parameters</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_obs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">]):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Generate training data, weights, biases, and a list of all data configurations</span>
+<span class="sd">    in our model's support.</span>
+
+<span class="sd">    In addition, generate a list of tuples of the indices of adjacent nodes, which</span>
+<span class="sd">    we'll use to update parameters without duplication.</span>
+
+<span class="sd">    For example, with `n_units=3`, we generate a matrix of weights with shape (3, 3);</span>
+<span class="sd">    however, there are only 3 distinct weights in this matrix that we'll actually</span>
+<span class="sd">    want to update: those connecting Node 0 --&gt; Node 1, Node 1 --&gt; Node 2, and</span>
+<span class="sd">    Node 0 --&gt; Node 2. This function returns a list containing these tuples</span>
+<span class="sd">    named `var_combinations.</span>
+
+<span class="sd">    :param n_units: the dimensionality of our data `d`</span>
+<span class="sd">    :param n_obs: the number of observations in our training set</span>
+<span class="sd">    :param p: a vector of the probabilities of observing a 1 in each index</span>
+<span class="sd">        of the training data. The length of this vector must equal `n_units`</span>
+
+<span class="sd">    :return: weights, biases, var_combinations, all_configs, data</span>
+<span class="sd">    """</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="c1"># initialize data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_units</span><span class="p">))</span>
+
+    <span class="c1"># initialize parameters</span>
+    <span class="n">biases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_units</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_units</span><span class="p">,</span> <span class="n">n_units</span><span class="p">)</span>
+
+    <span class="c1"># a few other pieces we'll need</span>
+    <span class="n">var_combinations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_units</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">all_configs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="n">n_units</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span>
+
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="n">biases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_combinations</span> <span class="o">=</span> <span class="n">var_combinations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_configs</span> <span class="o">=</span> <span class="n">all_configs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_inv_logit</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_unnormalized_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_H</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_combinations</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="err">@</span> <span class="n">x</span>
+        <span class="k">return</span> <span class="n">h</span>
+
+    <span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        :param x: a vector of shape (n_units,) or (n, n_units),</span>
+<span class="sd">            where the latter is a matrix of multiple data points</span>
+<span class="sd">            for which to compute the joint likelihood.</span>
+<span class="sd">        """</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s1">'Please pass 1 or more points of `n_units` dimensions'</span><span class="p">)</span>
+
+        <span class="c1"># compute unnormalized likelihoods</span>
+        <span class="n">multiple_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">multiple_samples</span><span class="p">:</span>
+            <span class="n">likelihood</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unnormalized_likelihood</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">likelihood</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_unnormalized_likelihood</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+
+        <span class="c1"># compute partition function</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_unnormalized_likelihood</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_configs</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lik</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">init_sample</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">burn_in</span> <span class="o">&gt;</span> <span class="n">n_samples</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">"Can't burn in for more samples than there are in the chain"</span><span class="p">)</span>
+
+        <span class="n">init_sample</span> <span class="o">=</span> <span class="n">init_sample</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">]</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">init_sample</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">_gibbs_step</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">sample</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inv_logit</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># make copy</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sample</span><span class="p">):</span>
+                <span class="n">sample</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gibbs_step</span><span class="p">(</span><span class="n">sample</span><span class="o">=</span><span class="n">sample</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">sample</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sample</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">burn_in</span><span class="p">:])</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">every_n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">update_parameters_with_true_negative_phase</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span>
+    <span class="n">model_distribution</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="n">config</span><span class="p">))</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">all_configs</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">var_combinations</span><span class="p">:</span>
+        <span class="c1"># positive phase</span>
+        <span class="n">positive_phase</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># negative phase</span>
+        <span class="n">negative_phase</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">config</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">likelihood</span> <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">model_distribution</span><span class="p">])</span>
+
+        <span class="c1"># update weights</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_phase</span> <span class="o">-</span> <span class="n">negative_phase</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">biases</span><span class="p">):</span>
+        <span class="c1"># positive phase</span>
+        <span class="n">positive_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># negative phase</span>
+        <span class="n">negative_phase</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">likelihood</span> <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">model_distribution</span><span class="p">])</span>
+
+        <span class="c1"># update biases</span>
+        <span class="n">biases</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_phase</span> <span class="o">-</span> <span class="n">negative_phase</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">biases</span><span class="p">)</span>
+</pre></div>
+<h2>Train</h2>
+<div class="highlight"><pre><span></span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">reset_data_and_parameters</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">])</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span> <span class="o">=</span> <span class="n">update_parameters_with_true_negative_phase</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">lik</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Epoch: {i:2} | Likelihood: {lik}'</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="n">Epoch</span><span class="o">:</span>  <span class="mi">0</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">209.63758306786653</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">10</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">162.04280784271083</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">20</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">160.49961381649555</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">30</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">159.79539070373576</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">40</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">159.2853717231018</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">50</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">158.90186293631422</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">60</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">158.6084020645482</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">70</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">158.38094343579155</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">80</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">158.20287017780586</span>
+<span class="n">Epoch</span><span class="o">:</span> <span class="mi">90</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">158.06232196551673</span>
+</pre></div>
+<h2>Visualize samples</h2>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_n_samples</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    NB: We add some jitter to the points so as to better visualize density in a given corner of the model.</span>
+<span class="sd">    """</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">'3d'</span><span class="p">)</span>
+
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mo">05</span>
+    <span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mo">05</span>
+    <span class="n">z</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mo">05</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Node 0'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Node 1'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">'Node 2'</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">plot_n_samples</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">f</span><span class="s1">'{n_samples} Samples from Model'</span><span class="p">)</span>
+</pre></div>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_7_0.png"/></p>
+<p>The plot roughly matches the data-generating distribution: most points assume values of either <span class="math">\([1, 0, 1]\)</span>, or <span class="math">\([1, 0, 0]\)</span> (given <span class="math">\(p=[.8, .1, .5]\)</span>).</p>
+<h2>Sampling, via Gibbs</h2>
+<p>The second, final method we need to implement is <code>sample</code>. In a Boltzmann machine, we typically do this via <a href="http://www.mit.edu/~ilkery/papers/GibbsSampling.pdf">Gibbs sampling</a>.</p>
+<p>To effectuate this sampling scheme, we'll need a model of each data dimension conditional on the other data dimensions. For example, for <span class="math">\(d=3\)</span>, we'll need to define:</p>
+<ul>
+<li><span class="math">\(p(x_0\vert x_1, x_2)\)</span></li>
+<li><span class="math">\(p(x_1\vert x_0, x_2)\)</span></li>
+<li><span class="math">\(p(x_2\vert x_0, x_1)\)</span></li>
+</ul>
+<p>Given that each dimension must assume a 0 or a 1, the above 3 models must necessarily return the probability of observing a 1 (where 1 minus this value gives the probability of observing a 0).</p>
+<p>Let's derive these models using the workhorse axiom of conditional probability, starting with the first:</p>
+<div class="math">$$
+\begin{align*}
+p(x_0 = 1\vert x_1, x_2)
+&amp;= \frac{p(x_0 = 1, x_1, x_2)}{p(x_1, x_2)}\\
+&amp;= \frac{p(x_0 = 1, x_1, x_2)}{\sum\limits_{x_0 \in [0, 1]} p(x_0, x_1, x_2)}\\
+&amp;= \frac{p(x_0 = 1, x_1, x_2)}{p(x_0 = 0, x_1, x_2) + p(x_0 = 1, x_1, x_2)}\\
+&amp;= \frac{1}{1 + \frac{p(x_0 = 0, x_1, x_2)}{p(x_0 = 1, x_1, x_2)}}\\
+&amp;= \frac{1}{1 + \frac{\exp{(H(x_0 = 0, x_1, x_2)))}}{\exp{(H(x_0 = 1, x_1, x_2)))}}}\\
+&amp;= \frac{1}{1 + \exp{(H(x_0 = 0, x_1, x_2) - H(x_0 = 1, x_1, x_2))}}\\
+&amp;= \frac{1}{1 + \exp{(\sum\limits_{i \neq j} w_{i, j} x_i x_j + \sum\limits_i b_i x_i - (\sum\limits_{i \neq j} w_{i, j} x_i x_j + \sum\limits_i b_i x_i))}}\\
+&amp;= \frac{1}{1 + \exp{(-\sum\limits_{j \neq i = 0} w_{i, j} x_j - b_i)}}\\
+&amp;= \sigma\bigg(\sum\limits_{j \neq i = 0} w_{i, j} x_j + b_i\bigg)\\
+\end{align*}
+$$</div>
+<p>Pleasantly enough, this model resolves to a simple Binomial GLM, i.e. logistic regression, involving only its neighboring units and the weights that connect them.</p>
+<p>With the requisite conditionals in hand, let's run this chain and compare it with our (trained) model's true probability distribution.</p>
+<h2>True probability distribution</h2>
+<div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span>
+
+<span class="n">distribution</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="n">config</span><span class="p">))</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">all_configs</span><span class="p">]</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">([</span><span class="n">likelihood</span> <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{list(config)}: {likelihood:.4}'</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span>[0, 0, 0]: 0.07327
+[0, 0, 1]: 0.09227
+[0, 1, 0]: 0.01366
+[0, 1, 1]: 0.01938
+[1, 0, 0]: 0.3351
+[1, 0, 1]: 0.3622
+[1, 1, 0]: 0.04693
+[1, 1, 1]: 0.05715
+</pre></div>
+<h2>Empirical probability distribution, via Gibbs</h2>
+<div class="highlight"><pre><span></span><span class="n">empirical_dist</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+    <span class="n">empirical_dist</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">sample</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n_samples</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">empirical_dist</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="mi">8</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">:</span>
+    <span class="n">empirical_probability</span> <span class="o">=</span> <span class="n">empirical_dist</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">config</span><span class="p">)]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{list(config)}: {likelihood:.4} (true), {empirical_probability:.4} (empirical)'</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span>[0, 0, 0]: 0.07327 (true), 0.05102 (empirical)
+[0, 0, 1]: 0.09227 (true), 0.09184 (empirical)
+[0, 1, 0]: 0.01366 (true), 0.0102 (empirical)
+[0, 1, 1]: 0.01938 (true), 0.02041 (empirical)
+[1, 0, 0]: 0.3351 (true), 0.3673 (empirical)
+[1, 0, 1]: 0.3622 (true), 0.398 (empirical)
+[1, 1, 0]: 0.04693 (true), 0.03061 (empirical)
+[1, 1, 1]: 0.05715 (true), 0.03061 (empirical)
+</pre></div>
+<p>Close, ish enough.</p>
+<h2>Scaling up, and hitting the bottleneck</h2>
+<p>With data of vary dimensionality <code>n_units</code>, the following plot gives the time in seconds that it takes to train this model for 10 epochs.</p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_15_1.png"/></p>
+<p>To reduce computational burden, and/or to fit a Boltzmann machine to data of non-trivial dimensionality (e.g. a 28x28 grey-scale image, which implies a random variable with 28x28=784 dimensions), we need to compute the positive and/or negative phase of our gradient faster than we currently are.</p>
+<p>To compute the former more quickly, we could employ mini-batches as in canonical stochastic gradient descent.</p>
+<p>In this post, we'll instead focus on ways to speed up the latter. Revisiting its expression, <span class="math">\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, we readily see that we can create an unbiased estimator for this value by drawing Monte Carlo samples from our model, i.e.</p>
+<div class="math">$$
+\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j] \approx \frac{1}{N}\sum\limits_{k=1}^N x^{(k)}_i  x^{(k)}_j\quad\text{where}\quad x^{(k)} \sim p_{\text{model}}
+$$</div>
+<p>So, now we just need a way to draw these samples. Luckily, we have a Gibbs sampler to tap!</p>
+<p><strong>Instead of computing the true negative phase, i.e. summing <span class="math">\(x_i  x_j\)</span> over all permissible configurations <span class="math">\(X\)</span> under our model, we can approximate it by evaluating this expression for a few model samples, then taking the mean.</strong></p>
+<p>We define this update mechanism here:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_parameters_with_gibbs_sampling</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+                                          <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">model_samples</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">var_combinations</span><span class="p">:</span>
+        <span class="c1"># positive phase</span>
+        <span class="n">positive_phase</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># negative phase</span>
+        <span class="n">negative_phase</span> <span class="o">=</span> <span class="p">(</span><span class="n">model_samples</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">model_samples</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># update weights</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_phase</span> <span class="o">-</span> <span class="n">negative_phase</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">biases</span><span class="p">):</span>
+        <span class="c1"># positive phase</span>
+        <span class="n">positive_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># negative phase</span>
+        <span class="n">negative_phase</span> <span class="o">=</span> <span class="n">model_samples</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># update biases</span>
+        <span class="n">biases</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_phase</span> <span class="o">-</span> <span class="n">negative_phase</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">biases</span><span class="p">)</span>
+</pre></div>
+<p>Next, we'll define a function that we can parameterize by an optimization algorithm (computing the true negative phase, or approximating it via Gibbs sampling, in the above case) which will train a model for <span class="math">\(n\)</span> epochs and return data requisite for plotting.</p>
+<h2>How does training progress for varying data dimensionalities?</h2>
+<p>Finally, for data of <code>n_units</code> 3, 4, 5, etc., let’s train models for 100 epochs and plot likelihood curves.</p>
+<p>When training with the approximate negative phase, we’ll:</p>
+<ul>
+<li>Derive model samples from a <strong>1000-sample Gibbs chain. Of course, this is a parameter we can tune, which will affect both model accuracy and training runtime. However, we don’t explore that in this post;</strong> instead, we just pick something reasonable and hold this value constant throughout our experiments.</li>
+<li>Train several models for a given <code>n_units</code>; Seaborn will average results for us then plot a single line (I think).</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">all_updates</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mi">1</span>
+<span class="n">min_units</span><span class="p">,</span> <span class="n">max_units</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span>
+
+<span class="k">for</span> <span class="n">n_units</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_units</span><span class="p">,</span> <span class="n">max_units</span><span class="p">):</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">n_units</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_units</span><span class="p">)</span>
+    <span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">if</span> <span class="n">n_units</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">alpha</span> <span class="o">/=</span> <span class="mi">10</span>
+
+    <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="n">train_model_for_n_epochs</span><span class="p">(</span>
+            <span class="n">update_parameters_with_gibbs_sampling</span><span class="p">,</span>
+            <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span>
+        <span class="p">)</span>
+        <span class="n">all_updates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">))</span>
+
+
+    <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="n">train_model_for_n_epochs</span><span class="p">(</span>
+            <span class="n">update_parameters_with_true_negative_phase</span><span class="p">,</span>
+            <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span>
+        <span class="p">)</span>
+        <span class="n">all_updates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">))</span>
+</pre></div>
+<h2>Plot</h2>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_23_1.png"/></p>
+<p><strong>When we let each algorithm run for 100 epochs, the true negative phase gives a model which assigns higher likelihood to the observed data in all of the above training runs.</strong></p>
+<p>Notwithstanding, the central point is that 100 epochs of the true negative phase takes a long time to run.</p>
+<p>As such, let’s run each for an equal amount of time, and plot results. Below, we define a function to train models for <span class="math">\(n\)</span> seconds (or 1 epoch—whichever comes first).</p>
+<div class="highlight"><pre><span></span><span class="n">all_updates</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">n_seconds</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mi">1</span>
+<span class="n">min_units</span><span class="p">,</span> <span class="n">max_units</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span>
+
+<span class="k">for</span> <span class="n">n_units</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_units</span><span class="p">,</span> <span class="n">max_units</span><span class="p">):</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">n_units</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_units</span><span class="p">)</span>
+    <span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">if</span> <span class="n">n_units</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">alpha</span> <span class="o">/=</span> <span class="mi">10</span>
+
+    <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="n">train_model_for_n_seconds</span><span class="p">(</span>
+            <span class="n">update_parameters_with_gibbs_sampling</span><span class="p">,</span>
+            <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
+            <span class="n">n_seconds</span><span class="o">=</span><span class="n">n_seconds</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span>
+        <span class="p">)</span>
+        <span class="n">all_updates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">))</span>
+
+
+    <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="n">train_model_for_n_seconds</span><span class="p">(</span>
+            <span class="n">update_parameters_with_true_negative_phase</span><span class="p">,</span>
+            <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
+            <span class="n">n_seconds</span><span class="o">=</span><span class="n">n_seconds</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span>
+        <span class="p">)</span>
+        <span class="n">all_updates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">))</span>
+</pre></div>
+<h2>How many epochs do we actually get through?</h2>
+<p>Before plotting results, let’s examine how many epochs each algorithm completes in its allotted time. In fact, for some values of <code>n_units</code>, we couldn’t even complete a single epoch (when computing the true negative phase) in <span class="math">\(\leq 1\)</span> second.</p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_28_1.png"/></p>
+<p>Finally, we look at performance. With <code>n_units &lt;= 7</code>, we see that 1 second of training with the true negative phase yields a better model. Conversely, <strong>using 7 or more units, the added performance given by using the true negative phase is overshadowed by the amount of time it takes the model to train.</strong></p>
+<h2>Plot</h2>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_31_1.png"/></p>
+<p>Of course, we re-stress that the exact ablation results are conditional (amongst other things) on <strong>the number of Gibbs samples we chose to draw. Changing this will change the results, but not that about which we care the most: the overall trend.</strong></p>
+<h2>Summary</h2>
+<p>Throughout this post, we've given a thorough introduction to a Boltzmann machine: what it does, how it trains, and some of the computational burdens and considerations inherent.</p>
+<p>In the next post, we'll look at cheaper, more inventive algorithms for avoiding the computation of the negative phase, and describe how they're used in common machine learning models and training routines.</p>
+<h2>Code</h2>
+<p>The <a href="https://github.com/cavaunpeu/boltzmann-machines">repository</a> and <a href="https://nbviewer.jupyter.org/github/cavaunpeu/boltzmann-machines/blob/master/boltzmann-machines-part-1.ipynb">rendered notebook</a> for this project can be found at their respective links.</p>
+<h2>References</h2>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn-1">
+<p><a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec19.pdf">CSC321 Lecture 19: Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+<li id="fn-2">
+<p><a href="https://theclevermachine.wordpress.com/2014/09/23/derivation-maximum-likelihood-for-boltzmann-machines/">Derivation: Maximum Likelihood for Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+</li>
+<li id="fn-3">
+<p><a href="https://www.cs.toronto.edu/~hinton/csc321/readings/boltz321.pdf">Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a></p>
+</li>
+</ol>
+</hr></div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf';
+    var disqus_title = 'A Thorough Introduction to Boltzmann Machines';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@willwolf_">
+  <meta name="twitter:creator" content="@willwolf_">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+    <meta property="twitter:title" content="From Gaussian Algebra to Gaussian Processes, Part 2"/>
+    <meta property="twitter:description" content="Introducing the RBF kernel, and motivating its ubiquitous use in Gaussian processes."/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/>
+
+	<!-- CSS -->
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">From Gaussian Algebra to Gaussian Processes, Part 2</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2018-06-12T08:00:00-04:00" itemprop="datePublished">June 12, 2018</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>In the previous post, we covered the following topics:</p>
+<ul>
+<li>A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations). √</li>
+<li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest). √</li>
+<li>Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula). √</li>
+<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X_{*})^T\)</span>) √</li>
+<li>Covariances (the second thing we need in order to specify a multivariate Gaussian) √</li>
+</ul>
+<p><strong>If any of the above is still not clear, please look no further, and re-visit the <a href="">previous post</a>.</strong></p>
+<p>Conversely, we did not directly cover:</p>
+<ul>
+<li>Kernels</li>
+<li>Squared-exponentials</li>
+</ul>
+<p>Here, we'll explain these two.</p>
+<h2>The more features we use, the more expressive our model</h2>
+<p>We concluded the previous post by plotting posteriors over function evaluations given various <code>phi_func</code>s, i.e. a function that creates "features" <span class="math">\(\phi(X)\)</span> given an input <span class="math">\(X\)</span>.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 5 inputs</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>  <span class="c1"># 5 corresponding outputs, which we'll use later on</span>
+
+<span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">))])</span>  <span class="c1"># makes D=2 features for each input</span>
+
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+<p>One common such set of features are those given by "radial basis functions", a.k.a. the "squared exponential" function, defined as:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+<p>Again, the choice of which features to use is ultimately arbitrary, i.e. a choice left to the modeler.</p>
+<p>Throughout the exercise, we saw that the larger the dimensionality <span class="math">\(d\)</span> of our feature function <code>phi_func</code>, the more expressive, i.e. less endemically prone to overfitting, our model became.</p>
+<p><strong>So, how far can we take this?</strong></p>
+<h2>Computing features is expensive</h2>
+<p>Ideally, we'd compute as many features as possible for each input element, i.e. employ <code>phi_func(x, D=some_huge_number)</code>. Unfortunately, the cost of doing so adds up, and ultimately becomes intractable past meaningfully-large values of <span class="math">\(d\)</span>.</p>
+<p><strong>Perhaps there's a better way?</strong></p>
+<h2>How are these things used?</h2>
+<p>Let's bring back our GP equations, and prepare ourselves to <em>squint</em>! In the previous post, we outlined the following modeling process:</p>
+<ol>
+<li>Define prior distribution over weights and function evaluations, <span class="math">\(P(w, y)\)</span>.</li>
+<li>Marginalizing <span class="math">\(P(w, y)\)</span> over <span class="math">\(y\)</span>, i.e. <span class="math">\(\int P(w, y)dy\)</span>, and given some observed function evaluations <span class="math">\(y\)</span>, compute the posterior distribution over weights, <span class="math">\(P(w\vert y)\)</span>.</li>
+<li>Linear-mapping <span class="math">\(P(w\vert y)\)</span> onto some new, transformed test input <span class="math">\(\phi(X_*)^T\)</span>, compute the posterior distribution over function evaluations, <span class="math">\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)</span>.</li>
+</ol>
+<p>Now, let's unpack #2 and #3.</p>
+<h3><span class="math">\(P(w\vert y)\)</span></h3>
+<ul>
+<li>First, the mathematical equation:</li>
+</ul>
+<div class="math">$$
+\begin{align*}
+P(w\vert y)
+    &amp;= \mathcal{N}(\mu_w + \Sigma_{wy}\Sigma_y^{-1}(y - \mu_y), \Sigma_w - \Sigma_{wy}\Sigma_y^{-1}\Sigma_{wy}^T)\\
+    \\
+    &amp;= \mathcal{N}(\mu_w + \Sigma_{wy}(\phi(X)^T\Sigma_w \phi(X))^{-1}(y - \mu_w^T \phi(X)), \Sigma_w - \Sigma_{wy}(\phi(X)^T\Sigma_w \phi(X))^{-1}\Sigma_{wy}^T)
+\end{align*}
+$$</div>
+<ul>
+<li>Next, this equation in code:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># Define initial parameters</span>
+<span class="n">D</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># dimensionality of `phi_func`</span>
+
+<span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># often a vector of zeros, though it doesn't have to be</span>
+<span class="n">cov_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># often the identity matrix, though it doesn't have to be</span>
+
+<span class="c1"># Featurize `X_train`</span>
+<span class="n">phi_x</span> <span class="o">=</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
+
+<span class="c1"># Params of prior distribution over function evals</span>
+<span class="n">mu_y</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w</span>
+     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="n">cov_y</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
+
+<span class="c1"># Params of posterior distribution over weights</span>
+<span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">-</span> <span class="n">mu_y</span><span class="p">)</span>
+          <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
+<span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
+           <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
+</pre></div>
+<h3><span class="math">\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)</span></h3>
+<p>Here, <span class="math">\(X_*\)</span> is a set of test points, e.g. <code>np.linspace(-10, 10, 200)</code>.</p>
+<p>In addition, let's call <span class="math">\(X_* \rightarrow\)</span> <code>X_test</code> and <span class="math">\(y_* \rightarrow\)</span> <code>y_test</code>.</p>
+<ul>
+<li>The mathematical equations in code:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># Featurize `X_test`</span>
+<span class="n">phi_x_test</span> <span class="o">=</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
+
+<span class="c1"># The following two equations were defined above</span>
+<span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
+<span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
+
+<span class="c1"># The mean of the posterior distribution over function evaluations</span>
+<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w_post</span>
+               <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
+
+<span class="c1"># The covariance of the posterior distribution over function evaluations</span>
+<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w_post</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
+                  <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> \
+                  <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+</pre></div>
+<h2>Never alone</h2>
+<p>Squinting at the equations for <code>mu_y_test_post</code> and <code>cov_y_test_post</code>, we see that <code>phi_x</code> and <code>phi_x_test</code> appear <strong>only in the presence of another <code>phi_x</code>, or <code>phi_x_test</code>.</strong></p>
+<p>These four distinct such terms are:</p>
+<div class="highlight"><pre><span></span><span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+<span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
+<span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
+<span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+</pre></div>
+<p>In mathematical notation, they are (respectively):</p>
+<ul>
+<li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X_*)\)</span></li>
+<li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X)\)</span></li>
+<li><span class="math">\(\phi(X)^T\Sigma_w \phi(X)\)</span></li>
+<li><span class="math">\(\phi(X)^T\Sigma_w \phi(X_*)\)</span></li>
+</ul>
+<h2>Simplifying further</h2>
+<p>These are nothing more than <em>scaled</em> (via the <span class="math">\(\Sigma_w\)</span> term) dot products in some expanded feature space <span class="math">\(\phi\)</span>.</p>
+<p><em>Until now, we've explicitly chosen what this <span class="math">\(\phi\)</span> function is.</em></p>
+<p>If the scaling matrix <span class="math">\(\Sigma_w\)</span> is <a href="https://en.wikipedia.org/wiki/Positive-definite_matrix">positive definite</a>, we can state the following, using <span class="math">\(\phi(X)^T\Sigma_w \phi(X)\)</span>, i.e. <code>phi_x.T @ cov_w @ phi_x</code>, as an example:</p>
+<div class="math">$$
+\begin{align*}
+\Sigma_w = (\sqrt{\Sigma_w})^2
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\phi(X)^T \Sigma_w \phi(X)
+    &amp;= \big(\sqrt{\Sigma_w}\phi(X)\big)^T\big(\sqrt{\Sigma_w}\phi(X)\big)\\
+    &amp;= \varphi(X)^T\varphi(X)\\
+    &amp;= \varphi(X) \cdot \varphi(X)\\
+\end{align*}
+$$</div>
+<p>As such, our four distinct scaled-dot-product terms can be rewritten as:</p>
+<ul>
+<li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X_*) = \varphi(X_*) \cdot \varphi(X_*)\)</span></li>
+<li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X) = \varphi(X_*) \cdot \varphi(X)\)</span></li>
+<li><span class="math">\(\phi(X)^T\Sigma_w \phi(X) = \varphi(X) \cdot \varphi(X)\)</span></li>
+<li><span class="math">\(\phi(X)^T\Sigma_w \phi(X_*) = \varphi(X) \cdot \varphi(X_*)\)</span></li>
+</ul>
+<p><strong>In other words, these terms can be equivalently written as dot-products in some space <span class="math">\(\varphi\)</span>.</strong></p>
+<p><em>We have <strong>not</strong> explicitly chosen what this <span class="math">\(\varphi\)</span> function is.</em></p>
+<h2>Kernels</h2>
+<p>A "kernel" is a function which gives the similarity between individual elements in two sets, i.e. a Gram matrix.</p>
+<p>For instance, imagine we have two sets of countries, <span class="math">\(\{\text{France}, \text{Germany}, \text{Iceland}\}\)</span> and <span class="math">\(\{\text{Morocco}, \text{Denmark}\}\)</span>, and that similarity is given by an integer value in <span class="math">\([1, 5]\)</span>, where 1 is the least similar, and 5 is the most. Applying a kernel to these sets might give a Gram matrix such as:</p>
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="table-hover table table-striped dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>France</th>
+<th>Germany</th>
+<th>Iceland</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Morocco</th>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<th>Denmark</th>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>When you hear the term "kernel" in the context of machine learning, think "similarity between things in lists." That's it.</strong></p>
+<p>NB: A "list" could be a list of vectors, i.e. a matrix. A vector, or a matrix, are the canonical inputs to a kernel.</p>
+<h2>Mercer's Theorem</h2>
+<p>Mercer's Theorem has as a key result that any kernel function can be expressed as a dot product, i.e.</p>
+<div class="math">$$
+K(X, X') = \varphi(X) \cdot \varphi (X')
+$$</div>
+<p>where <span class="math">\(\varphi\)</span> is some function that creates <span class="math">\(d\)</span> features out of <span class="math">\(X\)</span> (in the same vein as <code>phi_func</code> from above).<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup></p>
+<h3>Example</h3>
+<p>To illustrate, I'll borrow an example from <a href="https://stats.stackexchange.com/questions/152897/how-to-intuitively-explain-what-a-kernel-is">CrossValidated</a>:</p>
+<p>"For example, consider a simple polynomial kernel <span class="math">\(K(\mathbf x, \mathbf y) = (1 + \mathbf x^T \mathbf y)^2\)</span> with <span class="math">\(\mathbf x, \mathbf y \in \mathbb R^2\)</span>. This doesn't seem to correspond to any mapping function <span class="math">\(\varphi\)</span>, it's just a function that returns a real number. Assuming that <span class="math">\(\mathbf x = (x_1, x_2)\)</span> and <span class="math">\(\mathbf y = (y_1, y_2)\)</span>, let's expand this expression:</p>
+<div class="math">$$
+\begin{align}
+K(\mathbf x, \mathbf y)
+    &amp;= (1 + \mathbf x^T \mathbf y)^2\\
+    &amp;= (1 + x_1 \, y_1  + x_2 \, y_2)^2\\
+    &amp;= 1 + x_1^2 y_1^2 + x_2^2 y_2^2 + 2 x_1 y_1 + 2 x_2 y_2 + 2 x_1 x_2 y_1 y_2
+\end{align}
+$$</div>
+<p>Note that this is nothing else but a dot product between two vectors <span class="math">\((1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)</span> and <span class="math">\((1, y_1^2, y_2^2, \sqrt{2} y_1, \sqrt{2} y_2, \sqrt{2} y_1 y_2)\)</span>, and <span class="math">\(\varphi(\mathbf x) = \varphi(x_1, x_2) = (1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)</span>. So the kernel <span class="math">\(K(\mathbf x, \mathbf y) = (1 + \mathbf x^T \mathbf y)^2 = \varphi(\mathbf x) \cdot \varphi(\mathbf y)\)</span> computes a dot product in 6-dimensional space without explicitly visiting this space."</p>
+<h3>What this means</h3>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/kernels-for-gaussian-processes.svg"/></p>
+<ul>
+<li>We start with inputs <span class="math">\(X\)</span> and <span class="math">\(Y\)</span>.</li>
+<li>Our goal is to compute the similarity between then, <span class="math">\(\text{Sim}(X, Y)\)</span>.</li>
+</ul>
+<h4>Bottom path</h4>
+<ul>
+<li>Lifting these inputs into some feature space, then computing their dot-product in that space, i.e. <span class="math">\(\varphi(X) \cdot \varphi (Y)\)</span> (where <span class="math">\(F = \varphi\)</span>, since I couldn't figure out how to draw a <span class="math">\(\varphi\)</span> in <a href="http://draw.io">draw.io</a>), is one strategy for computing this similarity.</li>
+<li>Unfortunately, this robustness comes at a cost: <strong>the computation is extremely expensive.</strong></li>
+</ul>
+<h4>Top Path</h4>
+<ul>
+<li>A valid kernel computes similarity between inputs. The function it employs might be extremely simple, e.g. <span class="math">\((X - Y)^{123}\)</span>; <strong>the computation is extremely cheap.</strong></li>
+</ul>
+<h4>Mercer!</h4>
+<ul>
+<li>Mercer's Theorem tells us that every valid kernel, i.e. the top path, is <em>implicitly traversing the bottom path.</em> <strong>In other words, kernels allow us to directly compute the result of an extremely expensive computation, extremely cheaply.</strong></li>
+</ul>
+<h2>How does this help?</h2>
+<p>Once more, the Gaussian process equations are littered with the following terms:</p>
+<ul>
+<li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X_*) = \varphi(X_*) \cdot \varphi(X_*)\)</span></li>
+<li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X) = \varphi(X_*) \cdot \varphi(X)\)</span></li>
+<li><span class="math">\(\phi(X)^T\Sigma_w \phi(X) = \varphi(X) \cdot \varphi(X)\)</span></li>
+<li><span class="math">\(\phi(X)^T\Sigma_w \phi(X_*) = \varphi(X) \cdot \varphi(X_*)\)</span></li>
+</ul>
+<p>In addition, we previously established that the more we increase the dimensionality <span class="math">\(d\)</span> of our given feature function, the more flexible our model becomes.</p>
+<p>Finally, past any meaningfully large value of <span class="math">\(d\)</span>, and irrespective of what <span class="math">\(\varphi\)</span> actually is, <strong>this computation becomes intractably expensive.</strong></p>
+<h3>Kernels!</h3>
+<p>You know where this is going.</p>
+<p>Given Mercer's theorem, we can state the following equalities:</p>
+<ul>
+<li><span class="math">\(\varphi(X_*) \cdot \varphi(X_*) = K(X_*, X_*)\)</span></li>
+<li><span class="math">\(\varphi(X_*) \cdot \varphi(X) = K(X_*, X)\)</span></li>
+<li><span class="math">\(\varphi(X) \cdot \varphi(X) = K(X, X)\)</span></li>
+<li><span class="math">\(\varphi(X) \cdot \varphi(X_*) = K(X, X_*)\)</span></li>
+</ul>
+<h2>Which kernels to choose?</h2>
+<p>At the outset, we stated that our primary goal was to increase <span class="math">\(d\)</span>. As such, <strong>let's pick the kernel whose implicit <span class="math">\(\varphi\)</span> has the largest dimensionality possible.</strong></p>
+<p>In the example above, we saw that the kernel <span class="math">\(k(\mathbf x, \mathbf y)\)</span> was implicitly computing a <span class="math">\(d=6\)</span>-dimensional dot-product. Which kernels compute a <span class="math">\(d=100\)</span>-dimensional dot-product? <span class="math">\(d=1000\)</span>?</p>
+<p><strong>How about <span class="math">\(d=\infty\)</span>?</strong></p>
+<h2>Radial basis function, a.k.a. the "squared-exponential"</h2>
+<p>This kernel is implicitly computing a <span class="math">\(d=\infty\)</span>-dimensional dot-product. That's it. <strong>That's why it's so ubiquitous in Gaussian processes.</strong></p>
+<h2>Rewriting our equations</h2>
+<p>With all of the above in mind, let's rewrite the equations for the parameters of our posterior distribution over function evaluations.</p>
+<div class="highlight"><pre><span></span><span class="c1"># The mean of the posterior distribution over function evaluations</span>
+<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w_post</span>
+               <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
+
+               <span class="c1"># Now, substituting in our kernels</span>
+               <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="err">@</span> <span class="n">y_train</span>
+
+<span class="c1"># The covariance of the posterior distribution over function evaluations</span>
+<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w_post</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
+                  <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> \
+                  <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+
+                <span class="c1"># Now, substituting in our kernels</span>
+                <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> \
+                  <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="err">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+<h2>Defining the kernel in code</h2>
+<p>Mathematically, the RBF kernel is defined as follows:</p>
+<div class="math">$$
+K(X, Y) = \exp(-\frac{1}{2}\vert X - Y \vert ^2)
+$$</div>
+<p>To conclude, let's define a Python function for the parameters of our posterior over function evaluations, using this RBF kernel as <code>k</code>, then plot the resulting distribution.</p>
+<div class="highlight"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 5 inputs</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>  <span class="c1"># 5 corresponding outputs, which we'll use below</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># vector of test inputs</span>
+
+
+<span class="k">def</span> <span class="nf">rbf_kernel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: (len(x), 1)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># shape: (1, len(y))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># shape: (len(x), len(y))</span>
+
+
+<span class="k">def</span> <span class="nf">k</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">rbf_kernel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+
+<span class="c1"># The following quantity is used in both `mu_y_test_post` and `cov_y_test_post`;</span>
+<span class="c1"># we extract it into a separate variable for readability</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span>
+
+<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">A</span> <span class="err">@</span> <span class="n">y_train</span>            
+<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="err">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+<h2>Visualizing results</h2>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
+<p>And for good measure, with some samples from the posterior:</p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/></p>
+<h2>In summary</h2>
+<p>In this post, we've unpacked the notion of a kernel, and its ubiquitous use in Gaussian Processes.</p>
+<p>In addition, we've introduced the RBF kernel, i.e. "squared exponential" kernel, and motivated its widespread application in these models.</p>
+<h2>Code</h2>
+<p>The <a href="https://github.com/cavaunpeu/gaussian-processes">repository</a> and <a href="https://nbviewer.jupyter.org/github/cavaunpeu/gaussian-processes/blob/master/gaussian-processes-part-2.ipynb">rendered notebook</a> for this project can be found at their respective links.</p>
+<h2>References</h2>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn-1">
+<p><a href="http://gaussianprocess.org/gpml/?">Gaussian Processes for Machine Learning</a>. Carl Edward Rasmussen and Christopher K. I. Williams
+The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+<li id="fn-2">
+<p><a href="https://www.quora.com/What-is-an-intuitive-explanation-of-Mercers-Theorem">What is an intuitive explanation of Mercer's Theorem?</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+</li>
+</ol>
+</hr></div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf';
+    var disqus_title = 'From Gaussian Algebra to Gaussian Processes, Part 2';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

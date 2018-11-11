@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@willwolf_">
+  <meta name="twitter:creator" content="@willwolf_">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+    <meta property="twitter:title" content="Deriving Expectation-Maximization"/>
+    <meta property="twitter:description" content="Deriving the expectation-maximization algorithm, and the beginnings of its application to LDA. Once finished, its intimate connection to variational inference is immediately apparent!"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/em-for-lda/initial_decomp.png"/>
+
+	<!-- CSS -->
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Deriving Expectation-Maximization</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2018-11-11T16:00:00-05:00" itemprop="datePublished">November 11, 2018</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>Consider a model with parameters <span class="math">\(\theta\)</span> and latent variables <span class="math">\(\mathbf{Z}\)</span>; the expectation-maximization algorithm (EM) is a mechanism for computing the values of <span class="math">\(\theta\)</span> that, under this model, maximize the likelihood of some observed data <span class="math">\(\mathbf{X}\)</span>.</p>
+<p>The joint probability of our model can be written as follows:</p>
+<div class="math">$$
+p(\mathbf{X}, \mathbf{Z}\vert \theta) = p(\mathbf{X}\vert \mathbf{Z}, \theta)p(\mathbf{Z}\vert \theta)
+$$</div>
+<p>where, once more, our stated goal is to maximize the marginal likelihood of our data:</p>
+<div class="math">$$
+\log{p(\mathbf{X}\vert\theta)} = \log{\sum_{\mathbf{Z}}p(\mathbf{X, Z}\vert\theta)}
+$$</div>
+<p>An example of a latent variable model is the Latent Dirichlet Allocation<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> (LDA) model for uncovering latent topics in documents of text. Once finished deriving the general EM equations, we'll (begin to) apply them to this model.</p>
+<h2>Why not maximum likelihood estimation?</h2>
+<p>As the adage goes, computing the MLE with respect to this marginal is "hard." I loosely understand why. In any case, Bishop<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup> states:</p>
+<blockquote>
+<p>A key observation is that the summation over the latent variables appears inside the logarithm. Even if the joint distribution <span class="math">\(p(\mathbf{X, Z}\vert\theta)\)</span> belongs to the exponential family, the marginal distribution <span class="math">\(p(\mathbf{X}\vert\theta)\)</span> typically does not as a result of this summation. The presence of the sum prevents the logarithm from acting directly on the joint distribution, resulting in complicated expressions for the maximum likelihood solution.</p>
+</blockquote>
+<p><strong>We'll want something else to maximize instead.</strong></p>
+<h2>A lower bound</h2>
+<p>Instead of maximizing the log-marginal <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> (with respect to model parameters <span class="math">\(\theta\)</span>), let's maximize a lower-bound with a less-problematic form.</p>
+<p>One candidate for this form is <span class="math">\(\log{p(\mathbf{X}, \mathbf{Z}\vert \theta)}\)</span> which, almost tautologically, removes the summation over latent variables <span class="math">\(\mathbf{Z}\)</span>.</p>
+<p>As such, let's derive a lower-bound which features this term. As <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> is often called the log-"evidence," we'll call our expression the "evidence lower-bound," or ELBO.</p>
+<h2>Jensen's inequality</h2>
+<p><a href="https://en.wikipedia.org/wiki/Jensen%27s_inequality">Jensen's inequality</a><sup id="fnref-3"><a class="footnote-ref" href="#fn-3">3</a></sup> generalizes the statement that the line secant to a <strong>concave function</strong> lies below this function. An example is illustrative:</p>
+<p><img alt="png" class="img-responsive" src="https://alliance.seas.upenn.edu/~cis520/dynamic/2017/wiki/uploads/Lectures/jensen.png"/></p>
+<p>First, we note that the red line is below the blue for all points for which it is defined.</p>
+<p>Second, working through the example, and assuming:</p>
+<ul>
+<li><span class="math">\(y = f(x) = \exp(-(x - 2)^2)\)</span></li>
+<li><span class="math">\(v_1 = 1; v_2 = 2.5; \alpha = .3\)</span></li>
+</ul>
+<div class="math">$$
+\begin{align*}
+f(v_1) &amp;\approx .3679\\
+f(v_2) &amp;\approx .7788\\
+\alpha f(v_1) + (1 - \alpha)f(v_2) &amp;\approx \bf{.6555}\\
+\end{align*}
+$$</div>
+<div class="math">$$
+\begin{align*}
+\alpha v_1 + (1 - \alpha)v_2 &amp;= 2.05\\
+f(\alpha v_1 + (1 - \alpha)v_2) &amp;\approx \bf{.9975}\\
+\end{align*}
+$$</div>
+<p>we see that <strong><span class="math">\(\alpha f(v_1) + (1 - \alpha)f(v_2) \leq f(\alpha v_1 + (1 - \alpha)v_2)\)</span></strong>.</p>
+<p>Finally, we arrive at a general form:</p>
+<div class="math">$$
+\mathop{\mathbb{E}_{v}}[f(v)] \leq f(\mathop{\mathbb{E}_{v}}[v])
+$$</div>
+<p>where <span class="math">\(p(v) = \alpha\)</span>.</p>
+<h2>Deriving the ELBO</h2>
+<p>In trying to align <span class="math">\(\log{p(\mathbf{X}\vert\theta)}
+= \log{\sum\limits_{\mathbf{Z}}p(\mathbf{X, Z}\vert\theta)}\)</span> with <span class="math">\(f(\mathop{\mathbb{E}_{v}}[v])\)</span>, we see a function <span class="math">\(f = \log\)</span> yet no expectation inside. However, given the summation over <span class="math">\(\mathbf{Z}\)</span>, introducing some distribution <span class="math">\(q(\mathbf{Z})\)</span> would give us the expectation we desire.</p>
+<div class="math">$$
+\begin{align*}
+\log{p(\mathbf{X}\vert\theta)}
+&amp;= \log{\sum_{\mathbf{Z}}p(\mathbf{X, Z}\vert\theta)}\\
+&amp;= \log{\sum_{\mathbf{Z}}q(\mathbf{Z})\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\\
+&amp;= \log{\mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg]\
+\end{align*}
+$$</div>
+<p>where <span class="math">\(q(\mathbf{Z})\)</span> is some distribution over <span class="math">\(\mathbf{Z}\)</span> with parameters <span class="math">\(\lambda\)</span> (omitted for cleanliness) and known form (e.g. a Gaussian). It is often referred to as a <strong>variational distribution</strong>.</p>
+<p>From here, via Jensen's inequality, we can derive the lower-bound:</p>
+<div class="math">$$
+\begin{align*}
+\log{p(\mathbf{X}\vert\theta)} = \log{\mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}\bigg]}
+&amp;\geq \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg]\\
+&amp;= \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg] + R
+\end{align*}
+$$</div>
+<p><em>Et voilà</em>, we see that this term contains <span class="math">\(\log{p(\mathbf{X, Z}\vert\theta)}\)</span>; the ELBO should be easy to optimize with respect to our parameters <span class="math">\(\theta\)</span>.</p>
+<h1>So, what's <span class="math">\(R\)</span>?</h1>
+<div class="math">$$
+\begin{align*}
+R
+&amp;= \log{p(\mathbf{X}\vert\theta)} -  \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg]\\
+&amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}
+\end{align*}
+$$</div>
+<p>Before expanding further, let's briefly restate basic results of Bayes' theorem as applied to our model:</p>
+<ul>
+<li><span class="math">\(p(\mathbf{Z}\vert\mathbf{X}, \theta) = \frac{p(\mathbf{X}, \mathbf{Z}\vert\theta)}{p(\mathbf{X}\vert\theta)}\)</span></li>
+<li><span class="math">\(\log{p(\mathbf{X}, \mathbf{Z}\vert\theta)} = \log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)}\)</span></li>
+</ul>
+<p>Additionally, we note that as <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> does not depend on <span class="math">\(q(\mathbf{Z})\)</span>, <span class="math">\(\mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X}\vert\theta)}\bigg] = \log{p(\mathbf{X}\vert\theta)}\)</span>.</p>
+<p><strong>Continuing:</strong></p>
+<div class="math">$$
+\begin{align*}
+R
+&amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\\
+&amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{X, Z}\vert\theta) - \log{q(\mathbf{Z})}}\bigg)\\
+&amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\bigg)\\
+&amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})\log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\bigg)\\
+&amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{X}\vert\theta)} -  \big(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\big)\bigg)\\
+&amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})-  \big(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} - \log{q(\mathbf{Z})}\big)\\
+&amp;=
+-\sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{p(\mathbf{Z}\vert\mathbf{X}, \theta)}{q(\mathbf{Z})}}\\
+&amp;= \text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\\
+\end{align*}
+$$</div>
+<p><strong>Putting it back together:</strong></p>
+<div class="math">$$
+\log{p(\mathbf{X}\vert\theta)} = \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg] + \text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)
+$$</div>
+<h2>The EM algorithm</h2>
+<p>The algorithm can be described by a few simple observations.</p>
+<ol>
+<li><span class="math">\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)</span> is a divergence metric which is strictly non-negative.</li>
+<li>As <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> does not depend on <span class="math">\(q(\mathbf{Z})\)</span>—if we decrease <span class="math">\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)</span> <em>by changing <span class="math">\(q(\mathbf{Z})\)</span></em>, the ELBO must increase to compensate.</li>
+</ol>
+<p>(For intuition, imagine we're able to decrease <span class="math">\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)</span> to 0, which occurs when setting <span class="math">\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)</span>.)</p>
+<ol>
+<li>If we increase the ELBO <em>by changing <span class="math">\(\theta\)</span></em>, <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> will increase as well. <em>In addition, as <span class="math">\(p(\mathbf{Z}\vert\mathbf{X}, \theta)\)</span> now (likely) diverges from <span class="math">\(q(\mathbf{Z})\)</span> in non-zero amount, <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> will increase even more.</em></li>
+</ol>
+<p><strong>The EM algorithm is a repeated alternation between Step 2 (E-step) and Step 3 (M-step).</strong> After each M-Step, <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> is guaranteed to increase (unless it is already at a maximum)<sup id="fnref2-2"><a class="footnote-ref" href="#fn-2">2</a></sup>.</p>
+<p>A graphic<sup id="fnref3-2"><a class="footnote-ref" href="#fn-2">2</a></sup> (<em>Pattern Recognition and Machine Learning, Chapter 9</em>) is further illustrative.</p>
+<h3>Initial decomposition</h3>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/initial_decomp.png"/></p>
+<p>Here, the ELBO is written as <span class="math">\(\mathcal{L}(q, \theta)\)</span>.</p>
+<h3>E-step</h3>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/e_step.png"/></p>
+<p>Holding the parameters <span class="math">\(\theta\)</span> constant, minimize <span class="math">\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)</span> with respect to <span class="math">\(q(\mathbf{Z})\)</span>. Remember, as <span class="math">\(q\)</span> is a distribution with a fixed functional form, this amounts to updating its parameters <span class="math">\(\lambda\)</span>.</p>
+<p>The caption implies that we can always compute <span class="math">\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)</span>. We will below that this is not the case for LDA, nor for many interesting models.</p>
+<h3>M-step</h3>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/m_step.png"/></p>
+<p>In the M-step, maximize the ELBO with respect to the model parameters <span class="math">\(\theta\)</span>.</p>
+<p>Expanding the ELBO:</p>
+<div class="math">$$
+\begin{align*}
+\mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg]
+&amp;= \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X, Z}\vert\theta)}\bigg] - \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{q(\mathbf{Z})}\bigg]\\
+&amp;= \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X, Z}\vert\theta)}\bigg] + \mathbf{H}[q(\mathbf{Z})]
+\end{align*}
+$$</div>
+<p>we see that it decomposes into an expectation of the joint distribution over data and latent variables with respect to the variational distribution <span class="math">\(q(\mathbf{Z})\)</span>, plus the entropy of <span class="math">\(q(\mathbf{Z})\)</span>.</p>
+<p>Maximizing this expression with respect to <span class="math">\(\theta\)</span>, we treat the latter as a constant.</p>
+<h2>EM for LDA</h2>
+<p>In the next few posts, we'll use the Latent Dirichlet Allocation (LDA) model as a running example.</p>
+<p>Since the original paper<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup> is beautiful, I'll default to citing its passages as much as possible.</p>
+<h3>Model</h3>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/lda_formulation.png"/></p>
+<p>"Given the parameters <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span>, the joint distribution of a topic mixture <span class="math">\(\theta\)</span>, a set of of <span class="math">\(N\)</span> topics <span class="math">\(\mathbf{z}\)</span>, and a set of <span class="math">\(N\)</span> words <span class="math">\(\mathbf{w}\)</span> is given by:"<sup id="fnref3-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
+<div class="math">$$
+p(\theta, \mathbf{z}, \mathbf{w}\vert \alpha, \beta) = p(\theta\vert \alpha)\prod\limits_{n=1}^{N}p(z_n\vert \theta)p(w_n\vert z_n, \beta)
+$$</div>
+<h3>Log-evidence</h3>
+<p>The (problematic) log-evidence of a single document:</p>
+<div class="math">$$
+\log{p(\mathbf{w}\vert \alpha, \beta)} = \log{\int p(\theta\vert \alpha)\prod\limits_{n=1}^{N}\sum\limits_{z_n} p(z_n\vert \theta)p(w_n\vert z_n, \beta)d\theta}
+$$</div>
+<p>NB: The parameters of our model are <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span>, and <span class="math">\(\{\theta, \mathbf{z}\}\)</span> are our <em>latent variables.</em></p>
+<h3>ELBO</h3>
+<div class="math">$$
+\mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\bigg(\frac{p(\theta\vert \alpha)}{q(\mathbf{Z})}}\prod\limits_{n=1}^{N}p(z_n\vert \theta)p(w_n\vert z_n, \beta)\bigg)\bigg]
+$$</div>
+<p>where <span class="math">\(\mathbf{Z} = \{\theta, \mathbf{z}\}\)</span>.</p>
+<h3>KL term</h3>
+<div class="math">$$
+\text{KL}\big(q(\mathbf{Z})\Vert \frac{p(\theta, \mathbf{z}, \mathbf{w}\vert \alpha, \beta)}{p(\mathbf{w}\vert \alpha, \beta)}\big)
+$$</div>
+<p>Peering at the denominator, we see that the expression under the integral is exponential in the number of words <span class="math">\(N\)</span>; for any non-trivial <span class="math">\(N\)</span> and number of topics, it is intractable to compute. As such, the "ideal" E-step solution <span class="math">\(q(\mathbf{Z}) = p(\theta, \mathbf{z}\vert \mathbf{w}, \alpha, \beta)\)</span> admits no analytical form.</p>
+<p>In the next post, we'll cover how to minimize this KL term with respect to <span class="math">\(q(\mathbf{Z})\)</span> in detail. This effort will begin with the derivation of the mean-field algorithm.</p>
+<h2>Summary</h2>
+<p>In this post, we motivated the expectation-maximization algorithm then derived its general form. We then, briefly, applied it to the LDA model.</p>
+<p>In the next post, we'll expand this logic into mean-field variational Bayes, and eventually, variational inference more broadly.</p>
+<p>Thanks for reading.</p>
+<h2>References</h2>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn-1">
+<p>D.M. Blei, A.Y. Ng, and M.I. Jordan. Latent Dirichlet allocation. JMLR, 3:993–1022, 2003. <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2-1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref3-1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+<li id="fn-2">
+<p>C. M. Bishop. Pattern recognition and machine learning,
+page 229. Springer-Verlag New York, 2006. <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a><a class="footnote-backref" href="#fnref2-2" title="Jump back to footnote 2 in the text">↩</a><a class="footnote-backref" href="#fnref3-2" title="Jump back to footnote 2 in the text">↩</a></p>
+</li>
+<li id="fn-3">
+<p>Wikipedia contributors. "Jensen's inequality." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 29 Oct. 2018. Web. 11 Nov. 2018. <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a></p>
+</li>
+</ol>
+</hr></div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf';
+    var disqus_title = 'Deriving Expectation-Maximization';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
+				<div id="social-links">
+					<h4>
+						Social:
+						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+					</h4>
+				</div>
+				<div id="travel-blog">
+					<h4>
+						Links:
+						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2017</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
