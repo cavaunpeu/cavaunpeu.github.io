@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -110,11 +110,11 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="n">zip_codes</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'region_zip'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
 </pre></div>
 <h3>Split data into train, validation sets</h3>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    X_train:  (36986, 3)
-    X_val:    (36986, 3)
-    y_train:  (36986,)
-    y_val:    (36986,)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">X_train</span><span class="p">:</span>  <span class="p">(</span><span class="mi">36986</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">X_val</span><span class="p">:</span>    <span class="p">(</span><span class="mi">36986</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">y_train</span><span class="p">:</span>  <span class="p">(</span><span class="mi">36986</span><span class="p">,)</span>
+    <span class="n">y_val</span><span class="p">:</span>    <span class="p">(</span><span class="mi">36986</span><span class="p">,)</span>
 </pre></div>
 <h1>Bayesian linear regression</h1>
 <p>Using three fixed-effect predictors we'll fit a model of the following form:</p>
@@ -169,7 +169,7 @@ $$</div>
 <span class="n">inference</span> <span class="o">=</span> <span class="n">ed</span><span class="o">.</span><span class="n">KLqp</span><span class="p">(</span><span class="n">latent_vars</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="n">fixed_effects</span><span class="p">:</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_train</span><span class="p">})</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>250/250 [100%] ██████████████████████████████ Elapsed: 4s | Loss: 35405.105
+<div class="highlight"><pre><span></span><span class="mi">250</span><span class="o">/</span><span class="mi">250</span> <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="err">██████████████████████████████</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">4</span><span class="n">s</span> <span class="o">|</span> <span class="n">Loss</span><span class="p">:</span> <span class="mi">35405</span><span class="p">.</span><span class="mi">105</span>
 </pre></div>
 <h3>Criticize model</h3>
 <h4>Visualize data fit given parameter priors</h4>
@@ -177,20 +177,20 @@ $$</div>
 <h4>Visualize data fit given parameter posteriors</h4>
 <p><img alt="data fit given parameter posteriors" class="img-responsive" src="https://cavaunpeu.github.io/figures/data_fit_given_parameter_posteriors.png"/></p>
 <p>It appears as if our model fits the data along the first two dimensions. This said, we could improve this fit considerably. This will become apparent when we compute the MAE on our validation set.</p>
-<div class="highlight"><pre><span></span>param_posteriors = {
-  β_fixed_effects: qβ_fixed_effects.mean(),
-  α: qα.mean()
-}
-X_val_feed_dict = {
-  fixed_effects: X_val
-}
-y_posterior = ed.copy(y, param_posteriors)
+<div class="highlight"><pre><span></span><span class="n">param_posteriors</span> <span class="o">=</span> <span class="err">{</span>
+  <span class="err">β</span><span class="n">_fixed_effects</span><span class="p">:</span> <span class="n">qβ_fixed_effects</span><span class="p">.</span><span class="nf">mean</span><span class="p">(),</span>
+  <span class="err">α</span><span class="p">:</span> <span class="n">qα</span><span class="p">.</span><span class="nf">mean</span><span class="p">()</span>
+<span class="err">}</span>
+<span class="n">X_val_feed_dict</span> <span class="o">=</span> <span class="err">{</span>
+  <span class="n">fixed_effects</span><span class="p">:</span> <span class="n">X_val</span>
+<span class="err">}</span>
+<span class="n">y_posterior</span> <span class="o">=</span> <span class="n">ed</span><span class="p">.</span><span class="nf">copy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">param_posteriors</span><span class="p">)</span>
 
-print(f'Mean validation `logerror`: {y_val.mean()}')
-compute_mean_absolute_error(y_posterior, X_val_feed_dict)
+<span class="nf">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Mean validation `logerror`: {y_val.mean()}'</span><span class="p">)</span>
+<span class="nf">compute_mean_absolute_error</span><span class="p">(</span><span class="n">y_posterior</span><span class="p">,</span> <span class="n">X_val_feed_dict</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Mean validation `logerror`: 0.012986094738549725
-Mean absolute error on validation data: 0.089943
+<div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="n">validation</span> <span class="ss">`logerror`</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">012986094738549725</span>
+<span class="n">Mean</span> <span class="n">absolute</span> <span class="n">error</span> <span class="k">on</span> <span class="n">validation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">089943</span>
 </pre></div>
 <h4>Inspect residuals</h4>
 <p><img alt="bayesian linear regression residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_residuals.png"/></p>
@@ -244,10 +244,10 @@ Mean absolute error on validation data: 0.089943
 <span class="n">inference</span> <span class="o">=</span> <span class="n">ed</span><span class="o">.</span><span class="n">KLqp</span><span class="p">(</span><span class="n">latent_vars</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="n">fixed_effects</span><span class="p">:</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">zip_codes_ph</span><span class="p">:</span> <span class="n">zip_codes</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_train</span><span class="p">})</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>250/250 [100%] ██████████████████████████████ Elapsed: 6s | Loss: 34898.613
+<div class="highlight"><pre><span></span><span class="mi">250</span><span class="o">/</span><span class="mi">250</span> <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="err">██████████████████████████████</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">6</span><span class="n">s</span> <span class="o">|</span> <span class="n">Loss</span><span class="p">:</span> <span class="mi">34898</span><span class="p">.</span><span class="mi">613</span>
 </pre></div>
 <h3>Criticize model</h3>
-<div class="highlight"><pre><span></span>Mean absolute error on validation data: 0.084635
+<div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="k">absolute</span> <span class="n">error</span> <span class="k">on</span> <span class="n">validation</span> <span class="k">data</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">084635</span>
 </pre></div>
 <h4>Inspect residuals</h4>
 <p><img alt="bayesian linear regression with random effects residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_with_random_effects_residuals.png"/></p>
@@ -287,10 +287,10 @@ Mean absolute error on validation data: 0.089943
 <span class="n">inference</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>1000/1000 [100%] ██████████████████████████████ Elapsed: 18s | Loss: 34446.191
+<div class="highlight"><pre><span></span><span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span> <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="err">██████████████████████████████</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">18</span><span class="n">s</span> <span class="o">|</span> <span class="n">Loss</span><span class="p">:</span> <span class="mi">34446</span><span class="p">.</span><span class="mi">191</span>
 </pre></div>
 <h3>Criticize model</h3>
-<div class="highlight"><pre><span></span>Mean absolute error on validation data: 0.081484
+<div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="k">absolute</span> <span class="n">error</span> <span class="k">on</span> <span class="n">validation</span> <span class="k">data</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">081484</span>
 </pre></div>
 <h4>Inspect residuals</h4>
 <p><img alt="neural network with random effects residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_network_with_random_effects_residuals.png"/></p>

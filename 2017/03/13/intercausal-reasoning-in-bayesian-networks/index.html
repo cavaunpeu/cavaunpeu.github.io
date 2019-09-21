@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -994,8 +994,10 @@ h6:hover .anchor-link {
 .highlight .mh { color: #666666 } /* Literal.Number.Hex */
 .highlight .mi { color: #666666 } /* Literal.Number.Integer */
 .highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
 .highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -1006,9 +1008,11 @@ h6:hover .anchor-link {
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
 <style type="text/css">
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
@@ -3809,8 +3813,8 @@ Zz/7GcuXLyc3NxePx8PixYsZO3ZsSGe+XleWi7b2T3uTz+fj1VdfZcCAATz33HMATJ48mUWLFoVs
 5vYkJCSEZW4ATSmlgh1CCCGEEEIIIfqCsDtFUAghhBBCCCFClXSwhBBCCCGEEKKbSAdLCCGEEEoN
 wdMAAAA5SURBVEIIIbqJdLCEEEIIIYQQoptIB0sIIYQQQgghuol0sIQQQgghhBCim0gHSwghhBBC
 CCG6yf8DIowHef8vnVgAAAAASUVORK5CYII=
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -4608,8 +4612,8 @@ yA01c3zo7+9XJpPR9773Pa1evdpyYtjk43nfVb6d213l4/nbVT6eo31y6b746U9/qu9///syxmhg
 YEBf+MIXWr69hDHGtPynAgAAAAAAK9r/mWsAAAAAANA0Cn0AAAAAADxCoQ8AAAAAgEco9AEAAAAA
 8AiFPgAAAAAAHqHQBwAAAADAIxT6AAAAAAB4hEIfAAAAAACP/B+4hJvqq2CiywAAAABJRU5ErkJg
 gg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -5200,8 +5204,8 @@ ceNGYPybn0gkiMViC/q1iMynGzlWZqJjRRajqcfKTHReEbmxY2UmC32sNHVPcCwWY8OGDRw6dIj1
 dPmxMuEHP/jB5K91XhG5sWNlQr3PK019JRjgL//yL6+4ktAYw1e/+tVr+lylUok333yTz33uc3NV
 nkjD0LEicm10rIhcm2Y/ViyjCd4iIiIi0mKa/kqwiIiIiMj1UggWERERkZajECwiIiIiLUchWERE
 RERajkKwiIiIiLQchWARERERaTn/B+ZqIwGwgfrmAAAAAElFTkSuQmCC
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -5240,21 +5244,21 @@ P(A = 1|T = 1)
   &amp;= \frac{P(T = 1, A = 1)P(A = 1)}{P(A = 1)P(T = 1)}\\
   &amp;= \frac{P(T = 1, A = 1)}{P(T = 1)}\\
 \end{align*}$
-<br>
+<br/>
 $\begin{align*}
 P(T = 1, A = 1)
   &amp;= \sum_{P}P(P, A = 1, T = 1))\\
   &amp;= P(P = 0, A = 1, T = 1) + P(P = 1, A = 1, T = 1)\\
   &amp;= P(P = 0)P(A = 1)P(T = 1 \ |\  P = 0, A = 1) + P(P = 1)P(A = 1)P(T = 1 \ |\  P = 1, A = 1)
 \end{align*}$
-<br>
+<br/>
 $\begin{align*}
 P(T = 1)
   &amp;= \sum_{A, P}P(A, P, T = 1))\\
   &amp;= \sum_{A, P}P(A)P(P)P(T = 1\ |\ A, P))\\
   &amp;=
     P(A = 0)P(P = 0)P(T = 1\ |\ A = 0, P = 0) + P(A = 0)P(P = 1)P(T = 1\ |\ A = 0, P = 1) + P(A = 1)P(P = 0)P(T = 1\ |\ A = 1, P = 0) + P(A = 1)P(P = 1)P(T = 1\ |\ A = 1, P = 1)
-\end{align*}$</br></br></p>
+\end{align*}$</p>
 </div>
 </div>
 </div>
@@ -5628,8 +5632,8 @@ dAmz2UxbWxsrKysAnD9/nrKyMr3NFpEDx/RNXxcQEZE82tjYoKWlhYmJiZ8qQxER2e+064iIiORN
 PB4nkUhgt9sVskXkwNEbbRERyRu3200mk2F0dJTa2trdXo6IyH9KQVtEREREJA/UDCkiIiIikgcK
 2iIiIiIieaCgLSIiIiKSBwraIiIiIiJ5oKAtIiIiIpIHCtoiIiIiInnwB4q0SO0V65r7AAAAAElF
 TkSuQmCC
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -5643,18 +5647,18 @@ TkSuQmCC
 P(A = 1\ |\ T = 1, P = 1)
   &amp;= \frac{P(A = 1, T = 1, P = 1)}{P(T = 1, P = 1)}
 \end{align*}$
-<br>
+<br/>
 $\begin{align*}
 P(A = 1, T = 1, P = 1)
   &amp;= P(T = 1\ |\ A = 1, P = 1)P(A = 1)P(P = 1)
 \end{align*}$
-<br>
+<br/>
 $\begin{align*}
 P(T = 1, P = 1)
   &amp;= \sum_{A}P(A, P = 1, T = 1)\\
   &amp;= P(A = 0, P = 1, T = 1) + P(A = 1, P = 1, T = 1)\\
   &amp;= P(T = 1\ |\ A = 0, P = 1)P(P = 1)P(A = 0) + P(T = 1\ |\ A = 1, P = 1)P(P = 1)P(A = 1)
-\end{align*}$</br></br></p>
+\end{align*}$</p>
 </div>
 </div>
 </div>
@@ -6053,8 +6057,8 @@ ERUVRUVFxbQyZmRkYLFYyMnJ4ffffwcgMTGRmTNn6qq2iNzSQsY104CIiBhgeHiYFStW0NTUNK0h
 KSIiwURPIxERkZuutbWVAwcOsGDBAjXaInJL05VtERG56TIzMxkdHaWmpgan02l0HBGRgFGzLSIi
 IiISILpBUkREREQkQNRsi4iIiIgEiJptEREREZEAUbMtIiIiIhIgarZFRERERAJEzbaIiIiISID8
 D2skSxiUJ7AvAAAAAElFTkSuQmCC
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -7077,8 +7081,8 @@ s2fPRkNDAwCguLgY2dnZjIYTQggAm8Q7LhBCCLlMtLW1YezYsdiyZYuhNBdCCLkS4a4phBBCLgs7
 duxAWVkZhg0bRgknhBAwIk4IIeQyMX36dHR0dGD9+vUoKipK9OkQQkjCoYgTQgghhBCSALhYkxBC
 CCGEkARAESeEEEIIISQBUMQJIYQQQghJABRxQgghhBBCEgBFnBBCCCGEkARAESeEEEIIISQB/H8j
 gCV3PQ3SewAAAABJRU5ErkJggg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>

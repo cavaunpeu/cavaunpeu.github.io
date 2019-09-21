@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -994,8 +994,10 @@ h6:hover .anchor-link {
 .highlight .mh { color: #666666 } /* Literal.Number.Hex */
 .highlight .mi { color: #666666 } /* Literal.Number.Integer */
 .highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
 .highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -1006,9 +1008,11 @@ h6:hover .anchor-link {
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
 <style type="text/css">
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
@@ -1119,7 +1123,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="prompt input_prompt">In [143]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">1</span><span class="n">e3</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e3</span><span class="p">)</span>
 <span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1130,7 +1134,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="output_area"><div class="prompt output_prompt">Out[143]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th>song_id</th>
@@ -1657,8 +1661,8 @@ V1dXTZ48We+9955cXV1Vvnz5+1ovgP+GzWT0RW0AZAlr1qzRokWLtGDBgowuJUWrVq2Sm5ubatas
 qYSEBL399tuqWrWq2rZtm9GlAcjiOKQI4KFRtGhRzZo1S40bN1bDhg31xBNPqGXLlhldFoCHACNc
 AAAAFmOECwAAwGIELgAAAIsRuAAAACxG4AIAALAYgQsAAMBiBC4AAACL/R8WAdOG/jmsrQAAAABJ
 RU5ErkJggg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -1841,8 +1845,8 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">grid_search_results</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">'Result'</span><span class="p">,</span> <span class="s1">'alpha lmbda'</span><span class="p">)</span>
-<span class="n">alpha_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="n">e0</span><span class="p">,</span> <span class="mi">1</span><span class="n">e1</span><span class="p">,</span> <span class="mi">1</span><span class="n">e2</span><span class="p">]</span>
-<span class="n">lmbda_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="n">e0</span><span class="p">,</span> <span class="mi">1</span><span class="n">e1</span><span class="p">,</span> <span class="mi">1</span><span class="n">e2</span><span class="p">]</span>
+<span class="n">alpha_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">]</span>
+<span class="n">lmbda_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">]</span>
 
 <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alpha_values</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">lmbda</span> <span class="ow">in</span> <span class="n">lmbda_values</span><span class="p">:</span>
@@ -1897,15 +1901,15 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
         <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">lbmda_index</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">alpha_index</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="s1">r'$\alpha$ = </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span> <span class="o">+</span> <span class="s1">r'$\lambda$ = </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lmbda</span><span class="p">),</span> 
+            <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'$\alpha$ = </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">'$\lambda$ = </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lmbda</span><span class="p">),</span> 
             <span class="n">ha</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> 
             <span class="n">va</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> 
             <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> 
             <span class="n">color</span><span class="o">=</span><span class="s1">'w'</span>
         <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Grid Search Results'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">r'$\lambda$ Values'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">r'$\alpha$ Values'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$\lambda$ Values'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$\alpha$ Values'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2544,8 +2548,8 @@ mHHRhAT+HNs6ePBgv8Psf8nJyWHhwoUUFxfzyCOP0NzczKpVq/jhhx8GfKliQkIC5eXlfPPNN+Tm
 5rJnzx4KCwsBSExMZPPmzSQmJrJs2TJWrFhBNBqlrKwMgJkzZ1JRUcH27dvJycmhoqKCkpISMjMz
 h/tYJEm6LJH4+eYBJEmSJGkEmJBIkiRJCsaGRJIkSVIwNiSSJEmSgrEhkSRJkhSMDYkkSZKkYGxI
 JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -2586,7 +2590,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [7]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">1</span><span class="n">e3</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2670,7 +2674,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[165]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -4643,8 +4647,8 @@ oV96f0ZGhjo7O7Vu3TqNjo7KarXKYrH8VhYAAIA/jV9nAwAA0JdH5O7cuaOqqiodP37c6DgAAACT
 DpNIAAAAkg4cOKBbt27p5MmT42vZ2dnq7+//YW9GRoYyMzM9GQ8AAMBwTCIBAAAAAADALQ7WBgAA
 AAAAgFuUSAAAAAAAAHCLEgkATppIGwAAAB9JREFUAAAAAABuUSIBAAAAAADALUokAAAAAAAAuPVf
 dwfdM93TubkAAAAASUVORK5CYII=
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -5938,8 +5942,8 @@ w7BYLIqOjpYkubm5ydPTU+np6dd8HZyHh4e2bNmirKwsvfbaazp//rzS0tJ09913q6ys7LL9nnrq
 KWVnZ2vTpk1yc3PTE088IT8/P2e7j4+PNm/erDVr1shischkMmnt2rUaPny4Kisrr6lWAAD+isnB
 +hEAAAAAMDSWegIAAACAwRH8AAAAAMDgCH4AAAAAYHAEPwAAAAAwOIIfAAAAABgcwQ8AAAAADI7g
 BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -6035,7 +6039,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[211]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6138,7 +6142,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[212]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6241,7 +6245,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[213]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6344,7 +6348,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[214]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6447,7 +6451,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[215]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6555,7 +6559,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[216]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6648,7 +6652,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[217]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6740,7 +6744,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[218]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6834,7 +6838,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[219]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6951,7 +6955,7 @@ $$<p>Let's briefly see what this looks like.</p>
 <div class="output_area"><div class="prompt output_prompt">Out[220]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7347,8 +7351,8 @@ BZC2ThcsWAAnJyckJyejSZMm+Pbbb2FoaAhPT09MmDABhoaGaNCgwSfNl+i/gL8ORqQDR44cwfbt
 2+Hn55ffpWh08OBBmJiYwN7eHiqVCqNHj0bTpk3Rr1+//C6NiLLBQ+VEhVTVqlWxdu1adOnSBZ06
 dULp0qXRs2fP/C6LiLTgHjcREZGMcI+biIhIRhjcREREMsLgJiIikhEGNxERkYwwuImIiGSEwU1E
 RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -7426,7 +7430,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7494,7 +7498,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -8101,8 +8105,8 @@ Fi5cqFmzZunVV1/VnDlzlJ2drf79++vOO++U9NddaJ06dVJAQIBuv/12paSkuHW/LlSjRg2NHTtW
 L730kuts2+zZsy/7v/bJkydrzJgxmjdvnuusQFBQkF5//XWNGzdObdu2VWZmpusxJwDs4DAXXiMA
 AACANbi0CgAAYCmCHAAAgKUIcgAAAJYiyAEAAFiKIAcAAGApghwAAIClCHIAAACWIsgBAABY6v8B
 I1yu2QjYhF4AAAAASUVORK5CYII=
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -8445,8 +8449,8 @@ ta85rlu3LmeddVYGDBiQ0aNH5+/+7u+q3TK9yJ5+fvqy6667Ls8++2yWLVuWZcuWJfnfN1vpD2+O
 3rx5aWpqysiRIzNx4sRqt3TQtLe357LLLstRRx2V888/P0nyt3/7t7ngggsO+HuVKj4XAgAAgIJx
 mjEAAACFI8wCAABQOMIsAAAAhSPMAgAAUDjCLAAAAIUjzAIAAFA4wiwAAACFI8wCAABQOP8PENe7
 KRMqaLIAAAAASUVORK5CYII=
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -8969,8 +8973,8 @@ tKeftb7s0ksvzUMPPZQVK1ZkxYoVSZLLL788RxxxRI0742B47Wtfm1tvvTWTJ09OURRZuHBhnz4I
 8K53vSvz58/PjBkz8uijj+bDH/5wBg0aVOu2et3cuXOzYMGCNDc3Z9SoUZk4cWKtW+o1nZ2d+fSn
 P52jjz46Z511VpLkH/7hHzJ79uz9vq9KUfTRv4EBAABAn+U0YwAAAEpHmAUAAKB0hFkAAABKR5gF
 AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
-">
-</img></div>
+"/>
+</div>
 </div>
 </div>
 </div>
@@ -9264,7 +9268,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[443]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9384,7 +9388,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[444]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9504,7 +9508,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[445]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9624,7 +9628,7 @@ Validation: 0.19050085125816704
 <div class="output_area"><div class="prompt output_prompt">Out[446]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>

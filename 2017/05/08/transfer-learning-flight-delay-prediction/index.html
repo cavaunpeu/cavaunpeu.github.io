@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -76,7 +76,7 @@
 		<time datetime="2017-05-08T12:45:00-04:00" itemprop="datePublished">May 8, 2017</time>
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:</p>
-<table class="table-hover table-striped table">
+<table class="table-striped table-hover table">
 <thead>
 <tr>
 <th>user_id</th>
@@ -158,10 +158,10 @@
 <span class="k">print</span><span class="p">(</span><span class="s1">'    Validation: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">'    Test:       {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    Train:      (30000, 657)
-    Validation: (10000, 657)
-    Test:       (10000, 657)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">Train</span><span class="p">:</span>      <span class="p">(</span><span class="mi">30000</span><span class="p">,</span> <span class="mi">657</span><span class="p">)</span>
+    <span class="n">Validation</span><span class="p">:</span> <span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">657</span><span class="p">)</span>
+    <span class="n">Test</span><span class="p">:</span>       <span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">657</span><span class="p">)</span>
 </pre></div>
 <h2>Flight-delay models</h2>
 <p>Let's build two baseline models with the data we have. Both models have a single ReLU output and are trained to minimize the mean squared error of the predicted delay via stochastic gradient descent.</p>
@@ -193,7 +193,7 @@
 
 <span class="k">class</span> <span class="nc">SimpleRegression</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
@@ -215,7 +215,7 @@
 
 <span class="k">class</span> <span class="nc">DeeperRegression</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dropout_p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dropout_p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
@@ -269,8 +269,8 @@
 <span class="k">print</span><span class="p">(</span><span class="s1">'Mean squared error, simple regression: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_simple</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">'Mean squared error, deeper regression: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_deeper</span><span class="p">))</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Mean squared error, simple regression: 2.331459019628268
-Mean squared error, deeper regression: 2.3186310632259204
+<div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="n">squared</span> <span class="n">error</span><span class="p">,</span> <span class="k">simple</span> <span class="n">regression</span><span class="p">:</span> <span class="mi">2</span><span class="p">.</span><span class="mi">331459019628268</span>
+<span class="n">Mean</span> <span class="n">squared</span> <span class="n">error</span><span class="p">,</span> <span class="n">deeper</span> <span class="n">regression</span><span class="p">:</span> <span class="mi">2</span><span class="p">.</span><span class="mi">3186310632259204</span>
 </pre></div>
 <h2>Learning airport embeddings</h2>
 <p>We propose two networks through which to learn airport embeddings: a dot product siamese network, and a <a href="https://jaan.io/what-is-variational-autoencoder-vae-tutorial/">variational autoencoder</a>.</p>
@@ -399,10 +399,10 @@ $$</div>
 <span class="k">print</span><span class="p">(</span><span class="s1">'    Validation: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_val_r</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">'    Test:       {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_test_r</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    Train:      (87630, 6)
-    Validation: (21907, 6)
-    Test:       (21907, 6)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">Train</span><span class="p">:</span>      <span class="p">(</span><span class="mi">87630</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">Validation</span><span class="p">:</span> <span class="p">(</span><span class="mi">21907</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">Test</span><span class="p">:</span>       <span class="p">(</span><span class="mi">21907</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 </pre></div>
 <h2>Dot product embedding model</h2>
 <p>To start, let's train our model with a single latent dimension then visualize the results on the world map.</p>
@@ -411,7 +411,7 @@ $$</div>
 
 <span class="k">class</span> <span class="nc">DotProductEmbeddingModel</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_unique_airports</span><span class="o">=</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_unique_airports</span><span class="o">=</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">):</span>
         <span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
@@ -470,7 +470,7 @@ $$</div>
 <h2>Variational autoencoder</h2>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">'''A custom "variational" Keras layer that completes the</span>
 <span class="sd">        variational autoencoder.</span>
 
@@ -480,7 +480,7 @@ $$</div>
 <span class="sd">        '''</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_dim</span> <span class="o">=</span> <span class="n">output_dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_std</span> <span class="o">=</span> <span class="n">epsilon_std</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z_mean_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_weight</span><span class="p">(</span>
@@ -526,7 +526,7 @@ $$</div>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariationalAutoEncoderEmbeddingModel</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dense_layer_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_unique_airports</span><span class="o">=</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dense_layer_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="err">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_unique_airports</span><span class="o">=</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">):</span>
         <span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
@@ -588,10 +588,10 @@ $$</div>
 <span class="k">print</span><span class="p">(</span><span class="s1">'    Validation: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_val_r_origin</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">'    Test:       {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_test_r_origin</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    Train:      (87630, 3186)
-    Validation: (21907, 3186)
-    Test:       (21907, 3186)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">Train</span><span class="p">:</span>      <span class="p">(</span><span class="mi">87630</span><span class="p">,</span> <span class="mi">3186</span><span class="p">)</span>
+    <span class="n">Validation</span><span class="p">:</span> <span class="p">(</span><span class="mi">21907</span><span class="p">,</span> <span class="mi">3186</span><span class="p">)</span>
+    <span class="n">Test</span><span class="p">:</span>       <span class="p">(</span><span class="mi">21907</span><span class="p">,</span> <span class="mi">3186</span><span class="p">)</span>
 </pre></div>
 <h2>Fit</h2>
 <p><img alt="vae product embedding model fit" class="img-responsive" src="https://cavaunpeu.github.io/figures/vae_product_embedding_model_fit.png"/></p>
@@ -600,10 +600,10 @@ $$</div>
 <h2>Finally, transfer the learning</h2>
 <p>Retrain both models with 20 latent dimensions, then join the embedding back to our original dataset.</p>
 <h2>Extract embeddings, construct joint dataset</h2>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    Train:      (30000, 151)
-    Validation: (10000, 151)
-    Test:       (10000, 151)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">Train</span><span class="p">:</span>      <span class="p">(</span><span class="mi">30000</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+    <span class="n">Validation</span><span class="p">:</span> <span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+    <span class="n">Test</span><span class="p">:</span>       <span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
 </pre></div>
 <h2>Train original models</h2>
 <div class="highlight"><pre><span></span><span class="n">simple_reg</span> <span class="o">=</span> <span class="n">SimpleRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="err">λ</span><span class="o">=.</span><span class="mo">05</span><span class="p">)</span>
@@ -628,8 +628,8 @@ $$</div>
 <span class="k">print</span><span class="p">(</span><span class="s1">'Mean squared error, simple regression: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_simple</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">'Mean squared error, deeper regression: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_deeper</span><span class="p">))</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Mean squared error, simple regression: 2.3176028493805263
-Mean squared error, deeper regression: 2.291221474968889
+<div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="n">squared</span> <span class="n">error</span><span class="p">,</span> <span class="k">simple</span> <span class="n">regression</span><span class="p">:</span> <span class="mi">2</span><span class="p">.</span><span class="mi">3176028493805263</span>
+<span class="n">Mean</span> <span class="n">squared</span> <span class="n">error</span><span class="p">,</span> <span class="n">deeper</span> <span class="n">regression</span><span class="p">:</span> <span class="mi">2</span><span class="p">.</span><span class="mi">291221474968889</span>
 </pre></div>
 <h2>Summary</h2>
 <p>In fitting these models to both the original and "augmented" datasets, I spent time tuning their parameters — regularization strengths, amount of dropout, number of epochs, learning rates, etc. Additionally, the respective datasets are of different dimensionality. For these reasons, comparison between the two sets of models is clearly not "apples to apples."</p>
@@ -654,13 +654,13 @@ Mean squared error, deeper regression: 2.291221474968889
 <h2>Code</h2>
 <p>The <a href="https://github.com/cavaunpeu/flight-delays">repository</a> and <a href="http://nbviewer.jupyter.org/github/cavaunpeu/flight-delays/blob/master/notebooks/flight-prediction.ipynb?flush_cache=true">rendered notebook</a> for this project can be found at their respective links.</p>
 <div class="footnote">
-<hr>
+<hr/>
 <ol>
 <li id="fn-1">
 <p><a href="http://blog.evjang.com/2016/08/variational-bayes.html">A Beginner's Guide to Variational Methods: Mean-Field Approximation</a> <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
 </ol>
-</hr></div>
+</div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",

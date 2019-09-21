@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -265,8 +265,8 @@ $$</div>
 
 <span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_units</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_units</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_units</span><span class="p">,</span> <span class="n">n_units</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -446,8 +446,8 @@ $$</div>
 
 <span class="n">samples</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>CPU times: user 4min 10s, sys: 4.09 s, total: 4min 14s
-Wall time: 4min 17s
+<div class="highlight"><pre><span></span><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="k">user</span> <span class="mi">4</span><span class="k">min</span> <span class="mi">10</span><span class="n">s</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mi">4</span><span class="p">.</span><span class="mi">09</span> <span class="n">s</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mi">4</span><span class="k">min</span> <span class="mi">14</span><span class="n">s</span>
+<span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mi">4</span><span class="k">min</span> <span class="mi">17</span><span class="n">s</span>
 </pre></div>
 <p>Takes forever!</p>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/additional-strategies-partition-function/output_18_0.png"/></p>
@@ -461,7 +461,7 @@ Wall time: 4min 17s
 <p>The <a href="https://github.com/cavaunpeu/boltzmann-machines">repository</a> and <a href="https://nbviewer.jupyter.org/github/cavaunpeu/boltzmann-machines/blob/master/boltzmann-machines-part-2.ipynb">rendered notebook</a> for this project can be found at their respective links.</p>
 <h2>References</h2>
 <div class="footnote">
-<hr>
+<hr/>
 <ol>
 <li id="fn-1">
 <p>@book{Goodfellow-et-al-2016,
@@ -476,7 +476,7 @@ year={2016}
 <p><a href="https://arxiv.org/abs/1805.03642">Adversarial Contrastive Estimation</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
 </ol>
-</hr></div>
+</div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",

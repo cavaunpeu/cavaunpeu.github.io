@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -325,7 +325,7 @@ $$</div>
 
 <span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="n">biases</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">var_combinations</span> <span class="o">=</span> <span class="n">var_combinations</span>
@@ -505,14 +505,14 @@ $$</div>
 <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{list(config)}: {likelihood:.4}'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>[0, 0, 0]: 0.07327
-[0, 0, 1]: 0.09227
-[0, 1, 0]: 0.01366
-[0, 1, 1]: 0.01938
-[1, 0, 0]: 0.3351
-[1, 0, 1]: 0.3622
-[1, 1, 0]: 0.04693
-[1, 1, 1]: 0.05715
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">07327</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09227</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01366</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01938</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3351</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3622</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">04693</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05715</span>
 </pre></div>
 <h2>Empirical probability distribution, via Gibbs</h2>
 <div class="highlight"><pre><span></span><span class="n">empirical_dist</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -527,14 +527,14 @@ $$</div>
     <span class="n">empirical_probability</span> <span class="o">=</span> <span class="n">empirical_dist</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">config</span><span class="p">)]</span>
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{list(config)}: {likelihood:.4} (true), {empirical_probability:.4} (empirical)'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>[0, 0, 0]: 0.07327 (true), 0.05102 (empirical)
-[0, 0, 1]: 0.09227 (true), 0.09184 (empirical)
-[0, 1, 0]: 0.01366 (true), 0.0102 (empirical)
-[0, 1, 1]: 0.01938 (true), 0.02041 (empirical)
-[1, 0, 0]: 0.3351 (true), 0.3673 (empirical)
-[1, 0, 1]: 0.3622 (true), 0.398 (empirical)
-[1, 1, 0]: 0.04693 (true), 0.03061 (empirical)
-[1, 1, 1]: 0.05715 (true), 0.03061 (empirical)
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">07327</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05102</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09227</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09184</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01366</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0102</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01938</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">02041</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3351</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3673</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3622</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">398</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">04693</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">03061</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05715</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">03061</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
 </pre></div>
 <p>Close, ish enough.</p>
 <h2>Scaling up, and hitting the bottleneck</h2>
@@ -679,7 +679,7 @@ $$</div>
 <p>The <a href="https://github.com/cavaunpeu/boltzmann-machines">repository</a> and <a href="https://nbviewer.jupyter.org/github/cavaunpeu/boltzmann-machines/blob/master/boltzmann-machines-part-1.ipynb">rendered notebook</a> for this project can be found at their respective links.</p>
 <h2>References</h2>
 <div class="footnote">
-<hr>
+<hr/>
 <ol>
 <li id="fn-1">
 <p><a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec19.pdf">CSC321 Lecture 19: Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
@@ -691,7 +691,7 @@ $$</div>
 <p><a href="https://www.cs.toronto.edu/~hinton/csc321/readings/boltz321.pdf">Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a></p>
 </li>
 </ol>
-</hr></div>
+</div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",

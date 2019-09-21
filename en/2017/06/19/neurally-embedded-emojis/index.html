@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -174,11 +174,11 @@
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">emojis</span><span class="p">[</span><span class="n">train_mask</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span>
 <span class="n">X_val</span> <span class="o">=</span> <span class="n">y_val</span> <span class="o">=</span> <span class="n">emojis</span><span class="p">[</span><span class="o">~</span><span class="n">train_mask</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    X_train:  (685, 36, 36, 4)
-    X_val:    (182, 36, 36, 4)
-    y_train:  (685, 36, 36, 4)
-    y_val:    (182, 36, 36, 4)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">X_train</span><span class="p">:</span>  <span class="p">(</span><span class="mi">685</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">X_val</span><span class="p">:</span>    <span class="p">(</span><span class="mi">182</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">y_train</span><span class="p">:</span>  <span class="p">(</span><span class="mi">685</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">y_val</span><span class="p">:</span>    <span class="p">(</span><span class="mi">182</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 <p>Before we begin, let's examine some emojis.</p>
 <p><img alt="emojis" class="img-responsive" src="https://cavaunpeu.github.io/images/emojis.png"/></p>
@@ -191,7 +191,7 @@
 <p>This is taken from a previous post of mine, <a href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/">Transfer Learning for Flight Delay Prediction via Variational Autoencoders</a>.</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">'''A custom "variational" Keras layer that completes the</span>
 <span class="sd">        variational autoencoder.</span>
 
@@ -201,7 +201,7 @@
 <span class="sd">        '''</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_std</span> <span class="o">=</span> <span class="n">epsilon_std</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z_mean_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_weight</span><span class="p">(</span>
@@ -304,14 +304,14 @@ This is an iterative approach, where you start with a straightforward baseline a
 <p>As promised we'll generate emojis. Again, latent codes are distributed as a (16-dimensional) Gaussian; to generate, we'll simply take samples thereof and feed them to our <code>decoder</code>.</p>
 <p>While scanning a 16-dimensional hypercube, i.e. taking (evenly-spaced, usually) samples from our latent space, is a few lines of Numpy, visualizing a 16-dimensional grid is impractical. In solution, we'll work on a 2-dimensional grid while treating subsets of our latent space as homogenous.</p>
 <p>For example, if our 2-D sample were <code>(0, 1)</code>, we could posit 16-D samples as:</p>
-<div class="highlight"><pre><span></span>A. `(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)`
-B. `(0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1)`
-C. `(0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1)`
+<div class="highlight"><pre><span></span><span class="n">A</span><span class="p">.</span> <span class="o">`</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">`</span>
+<span class="n">B</span><span class="p">.</span> <span class="o">`</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">`</span>
+<span class="k">C</span><span class="p">.</span> <span class="o">`</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">`</span>
 </pre></div>
 <p>Then, if another sample were <code>(2, 3.5)</code>, we could posit 16-D samples as:</p>
-<div class="highlight"><pre><span></span>A. `(2, 2, 2, 2, 2, 2, 2, 2, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5)`
-B. `(2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5)`
-C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
+<div class="highlight"><pre><span></span><span class="n">A</span><span class="p">.</span> <span class="o">`</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">`</span>
+<span class="n">B</span><span class="p">.</span> <span class="o">`</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">`</span>
+<span class="k">C</span><span class="p">.</span> <span class="o">`</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">`</span>
 </pre></div>
 <p>There is no math here: I'm just creating 16-element lists in different ways. We'll then plot "A-lists," "B-lists," etc. separately.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compose_code_A</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
@@ -398,7 +398,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
         vertical-align: top;
     }
 </style>
-<table border="1" class="table-hover table-striped dataframe table">
+<table border="1" class="table-striped table-hover table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -492,13 +492,13 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 <span class="n">y_train_dummy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">questions_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">y_val_dummy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">questions_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Dataset sizes:
-    questions_train:         (4079, 20)
-    correct_answers_train:   (4079, 16)
-    incorrect_answers_train: (4079, 16)
-    questions_val:           (921, 20)
-    correct_answers_val:     (921, 16)
-    incorrect_answers_val:   (921, 16)
+<div class="highlight"><pre><span></span><span class="n">Dataset</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="n">questions_train</span><span class="p">:</span>         <span class="p">(</span><span class="mi">4079</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">correct_answers_train</span><span class="p">:</span>   <span class="p">(</span><span class="mi">4079</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">incorrect_answers_train</span><span class="p">:</span> <span class="p">(</span><span class="mi">4079</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">questions_val</span><span class="p">:</span>           <span class="p">(</span><span class="mi">921</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">correct_answers_val</span><span class="p">:</span>     <span class="p">(</span><span class="mi">921</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">incorrect_answers_val</span><span class="p">:</span>   <span class="p">(</span><span class="mi">921</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 </pre></div>
 <h3>Build embedding layer from Glove vectors</h3>
 <div class="highlight"><pre><span></span><span class="n">GLOVE_EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">100</span>
@@ -593,13 +593,13 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
     <span class="n">validation_data</span><span class="o">=</span><span class="p">([</span><span class="n">questions_val</span><span class="p">,</span> <span class="n">correct_answers_val</span><span class="p">,</span> <span class="n">incorrect_answers_val</span><span class="p">],</span> <span class="n">y_val_dummy</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Train on 4089 samples, validate on 911 samples
-Epoch 1/3
-4089/4089 [==============================] - 18s - loss: 0.1069 - val_loss: 0.0929
-Epoch 2/3
-4089/4089 [==============================] - 14s - loss: 0.0796 - val_loss: 0.0822
-Epoch 3/3
-4089/4089 [==============================] - 14s - loss: 0.0675 - val_loss: 0.0828
+<div class="highlight"><pre><span></span><span class="n">Train</span> <span class="k">on</span> <span class="mi">4089</span> <span class="n">samples</span><span class="p">,</span> <span class="n">validate</span> <span class="k">on</span> <span class="mi">911</span> <span class="n">samples</span>
+<span class="n">Epoch</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
+<span class="mi">4089</span><span class="o">/</span><span class="mi">4089</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">18</span><span class="n">s</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1069</span> <span class="o">-</span> <span class="n">val_loss</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0929</span>
+<span class="n">Epoch</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span>
+<span class="mi">4089</span><span class="o">/</span><span class="mi">4089</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">14</span><span class="n">s</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0796</span> <span class="o">-</span> <span class="n">val_loss</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0822</span>
+<span class="n">Epoch</span> <span class="mi">3</span><span class="o">/</span><span class="mi">3</span>
+<span class="mi">4089</span><span class="o">/</span><span class="mi">4089</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">14</span><span class="n">s</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0675</span> <span class="o">-</span> <span class="n">val_loss</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0828</span>
 </pre></div>
 <h3>Predict on new tweets</h3>
 <blockquote>
@@ -637,10 +637,10 @@ Epoch 3/3
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'    😈 (Neutral) : {neutral_pred[0]:0.5}'</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'    😡 (Negative): {negative_pred[0]:0.5}'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Predictions:
-    🎉 (Positive): 0.51141
-    😈 (Neutral) : 0.56273
-    😡 (Negative): 0.9728
+<div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span>
+    <span class="err">🎉</span> <span class="p">(</span><span class="n">Positive</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">51141</span>
+    <span class="err">😈</span> <span class="p">(</span><span class="n">Neutral</span><span class="p">)</span> <span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">56273</span>
+    <span class="err">😡</span> <span class="p">(</span><span class="n">Negative</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">9728</span>
 </pre></div>
 <h3>Tweet #2</h3>
 <div class="highlight"><pre><span></span><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
@@ -649,10 +649,10 @@ Epoch 3/3
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'    😈 (Neutral) : {neutral_pred[0]:0.5}'</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'    😡 (Negative): {negative_pred[0]:0.5}'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Predictions:
-    🎉 (Positive): 0.41422
-    😈 (Neutral) : 0.61587
-    😡 (Negative): 0.99161
+<div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span>
+    <span class="err">🎉</span> <span class="p">(</span><span class="n">Positive</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">41422</span>
+    <span class="err">😈</span> <span class="p">(</span><span class="n">Neutral</span><span class="p">)</span> <span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">61587</span>
+    <span class="err">😡</span> <span class="p">(</span><span class="n">Negative</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99161</span>
 </pre></div>
 <h3>Tweet #3</h3>
 <div class="highlight"><pre><span></span><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
@@ -661,10 +661,10 @@ Epoch 3/3
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'    😈 (Neutral) : {neutral_pred[0]:0.5}'</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'    😡 (Negative): {negative_pred[0]:0.5}'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>Predictions:
-    🎉 (Positive): 0.87107
-    😈 (Neutral) : 0.46741
-    😡 (Negative): 0.73435
+<div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span>
+    <span class="err">🎉</span> <span class="p">(</span><span class="n">Positive</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">87107</span>
+    <span class="err">😈</span> <span class="p">(</span><span class="n">Neutral</span><span class="p">)</span> <span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">46741</span>
+    <span class="err">😡</span> <span class="p">(</span><span class="n">Negative</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">73435</span>
 </pre></div>
 <h3>Additionally, we can predict on the full set of emojis</h3>
 <p>Some emoji embeddings contain <code>np.inf</code> values, unfortunately. We could likely mitigate this by further tweaking the hyperparameters of our autoencoder.</p>
@@ -674,7 +674,7 @@ Epoch 3/3
 
 <span class="n">all_embeddings</span> <span class="o">=</span> <span class="n">all_embeddings</span><span class="p">[</span><span class="o">~</span><span class="n">inf_mask</span><span class="p">]</span>
 </pre></div>
-<div class="highlight"><pre><span></span>4.15% of values are `np.inf`.
+<div class="highlight"><pre><span></span><span class="mi">4</span><span class="p">.</span><span class="mi">15</span><span class="o">%</span> <span class="k">of</span> <span class="k">values</span> <span class="k">are</span> <span class="o">`</span><span class="n">np</span><span class="p">.</span><span class="n">inf</span><span class="o">`</span><span class="p">.</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="n">n_questions</span><span class="p">,</span> <span class="n">n_sentiments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_embeddings</span><span class="p">)</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="n">n_sentiments</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>

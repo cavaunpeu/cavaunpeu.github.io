@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -114,36 +114,36 @@ $$</div>
 <p>Ultimately, <span class="math">\(\phi_i\)</span> is the linear model. Should we want to add additional predictors, we would append them here. So, why do we subtract <span class="math">\(\phi_i\)</span> from <span class="math">\(\alpha_k\)</span> instead of add? Intuitively, it would make sense for an increase in the value of a predictor variable, given a positive coefficient, to shift probability mass towards <em>larger</em> ordinal values. This makes for a more fluid interpretation of our model parameters. Subtracting <span class="math">\(\phi_i\)</span> does just this: <em>increasing</em> the value of a given predictor <em>decreases</em> the log-cumulative-odds of every outcome value <span class="math">\(k\)</span> below the maximum (<em>every</em> outcome value below the maximum, because we have one linear model <span class="math">\(\phi_i\)</span> which we must subtract, separately, from each intercept <span class="math">\(\alpha_k\)</span> in order to compute <span class="math">\(\log{\big(\frac{p_k}{1 - p_k}\big)}\)</span>) which shifts probability mass upwards. This way, the desired dynamic — "a bigger predictor should lead to a bigger outcome given a positive coefficient" — holds.</p>
 <p>Let's move to R to fit and compare these models. I'm enjoying R more and more for the ease of plotting with <a href="http://docs.ggplot2.org/current/">ggplot2</a>, as well as the functional "chains" offered by <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> ("to be pronounced with a sophisticated french accent," apparently) and Hadley Wickham's <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">dplyr</a>.</p>
 <p>First, let's simulate some scores then plot the results.</p>
-<div class="highlight"><pre><span></span>N <span class="o">&lt;-</span> <span class="m">50</span> probabilities <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="m">.1</span><span class="p">,</span> <span class="m">.2</span><span class="p">,</span> <span class="m">.3</span><span class="p">,</span> <span class="m">.3</span><span class="p">,</span> <span class="m">.1</span><span class="p">)</span>
-feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span class="o">=</span> N<span class="p">,</span> size <span class="o">=</span> <span class="m">1</span><span class="p">,</span> prob <span class="o">=</span> probabilities<span class="p">)</span> <span class="o">%&gt;%</span> t <span class="o">%&gt;%</span> <span class="kp">max.col</span>
+<div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">&lt;-</span> <span class="m">50</span> <span class="n">probabilities</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">.1</span><span class="p">,</span> <span class="m">.2</span><span class="p">,</span> <span class="m">.3</span><span class="p">,</span> <span class="m">.3</span><span class="p">,</span> <span class="m">.1</span><span class="p">)</span>
+<span class="n">feedback</span> <span class="o">&lt;-</span> <span class="nf">rmultinom</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">t</span> <span class="o">%&gt;%</span> <span class="n">max.col</span>
 </pre></div>
 <p><img alt="explicit feedback scores" class="img-responsive" src="https://cavaunpeu.github.io/figures/empirical_distribution_explicit_feedback_scores.png"/></p>
 <p>Next, let's fit an ordered categorical GLM in the Stan modeling language. Note that we don't have any predictor variables <span class="math">\(x_i\)</span>; therefore, the only variables we will be estimating are our intercepts <span class="math">\(\alpha_k\)</span>.</p>
 <div class="highlight"><pre><span></span><span class="kn">data</span><span class="p">{</span>
-    <span class="kt">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">N</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">&lt;</span><span class="k">lower</span><span class="p">=</span><span class="mf">1</span><span class="o">&gt;</span> <span class="n">N</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">obs</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
 <span class="p">}</span>
 <span class="kn">parameters</span><span class="p">{</span>
-    <span class="kt">ordered</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="n">cutpoints</span><span class="p">;</span>
+    <span class="kt">ordered</span><span class="p">[</span><span class="mf">4</span><span class="p">]</span> <span class="n">cutpoints</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="kn">model</span><span class="p">{</span>
     <span class="kt">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">phi</span><span class="p">;</span>
-    <span class="n">cutpoints</span> <span class="o">~</span> <span class="nb">normal</span><span class="p">(</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cutpoints</span> <span class="o">~</span><span class="w"> </span><span class="nb">normal</span><span class="p">(</span> <span class="mf">0</span> <span class="p">,</span> <span class="mf">10</span> <span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mf">1</span><span class="o">:</span><span class="n">N</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span>
-    <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">~</span> <span class="nb">ordered_logistic</span><span class="p">(</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">cutpoints</span> <span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mf">1</span><span class="o">:</span><span class="n">N</span> <span class="p">)</span>
+    <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">~</span><span class="w"> </span><span class="nb">ordered_logistic</span><span class="p">(</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">cutpoints</span> <span class="p">);</span>
 <span class="p">}</span>
 <span class="kn">generated quantities</span><span class="p">{</span>
     <span class="kt">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">phi</span><span class="p">;</span>
     <span class="kt">real</span> <span class="n">dev</span><span class="p">;</span>
-    <span class="n">dev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mf">1</span><span class="o">:</span><span class="n">N</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">N</span> <span class="p">)</span>
-    <span class="n">dev</span> <span class="o">=</span> <span class="n">dev</span> <span class="o">+</span> <span class="p">(</span><span class="mi">-2</span><span class="p">)</span><span class="o">*</span><span class="n">ordered_logistic_lpmf</span><span class="p">(</span> <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="err">|</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">cutpoints</span> <span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="k">in</span> <span class="mf">1</span><span class="o">:</span><span class="n">N</span> <span class="p">)</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="n">dev</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">2</span><span class="p">)</span><span class="o">*</span><span class="nb">ordered_logistic_lpmf</span><span class="p">(</span> <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">|</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">cutpoints</span> <span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 <p>Our model estimates four values: <span class="math">\(\alpha_1, \alpha_2, \alpha_3\)</span> and <span class="math">\(\alpha_4\)</span>. Why four and not five? The cumulative probability of the final outcome, <span class="math">\(\text{Pr}(y_i \leq 5)\)</span> is always 1.</p>
@@ -156,7 +156,7 @@ feedback <span class="o">&lt;-</span> rmultinom<span class="p">(</span>n <span c
 <p>The width of the band quantifies the uncertainty in our estimate of the true cumulative distribution function. We used 50 samples: it should be reasonably wide. With 500,000 samples, the red band would be indistinguishable from the dotted line.</p>
 <p>Finally, let's simulate new observations from each model. Our posterior contains a distribution of <em>cumulative distribution functions</em>: how do we translate this into multinomial samples?</p>
 <p>First, samples from this distribution can be transformed into probability mass functions with the follow code:</p>
-<div class="highlight"><pre><span></span>simulated_probabilities <span class="o">&lt;-</span> <span class="kp">cbind</span><span class="p">(</span>cutpoint_samples<span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="o">-</span> <span class="kp">cbind</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> cutpoint_samples<span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">simulated_probabilities</span> <span class="o">&lt;-</span> <span class="nf">cbind</span><span class="p">(</span><span class="n">cutpoint_samples</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="o">-</span> <span class="nf">cbind</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">cutpoint_samples</span><span class="p">)</span>
 </pre></div>
 <p>Next, we can use each sample from <code>simulated_probabilities</code> to roll a multinomial die. Here, I'll adopt the strategy Erik uses in the original post: with each sample, we'll simulate a large number — I've chosen 500 — of multinomial throws. This will give a histogram of empirical counts — similar to the first plot shown at the top of this post. With this distribution, we'll compute a weighted average. After repeating this for a large number of samples from our posterior, we'll have a distribution of weighted averages. (Incidentally, as Erik highlights in his post, the shape of this distribution can be assumed Normal as given by the <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Central Limit Theorem</a>.)</p>
 <p>The following plot compares the results for both the ordered categorical and multinomial models. Remember, we obtain the posterior of the latter through the Dirichlet-Multinomial conjugacy described above. Sampling from this posterior follows trivially. While vanilla histograms should do the trick, let's plot the inferred densities just to be safe.</p>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="cosas de data science y pensamientos sobre el mundo">
+	<meta name="description" content="cosas de machine learning y pensamientos sobre el mundo">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/es/">will wolf</a></h1>
-          <h4 id="site-subtitle">cosas de data science y pensamientos sobre el mundo</h4>
+          <h4 id="site-subtitle">cosas de machine learning y pensamientos sobre el mundo</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -106,16 +106,16 @@
 </ol>
 <p>Trayendo el contenedor a la panadería es igual a un sencillo <code>docker run</code> con el servidor remoto como el <code>docker-machine</code>. Trayendo los ingredientes a la panadería, esto es colocando datos en el sistema de archivo local del servidor remoto, es mucho menos "sexy." En el sentido más simple, es igual a usar <code>scp</code> or <code>rsync</code> para transferir un archivo del entorno local al servidor remoto hasta usar <code>curl</code> para descargar un archivo directamente en el servidor remoto mismo.</p>
 <p>En la práctica, esto se ve generalmente así:</p>
-<div class="highlight"><pre><span></span><span class="x">docker</span>
-<span class="x">    --tlsverify</span>
-<span class="x">    --tlscacert="</span><span class="p">$</span><span class="nv">HOME</span><span class="x">/.docker/machine/certs/ca.pem"</span>
-<span class="x">    --tlscert="</span><span class="p">$</span><span class="nv">HOME</span><span class="x">/.docker/machine/certs/cert.pem"</span>
-<span class="x">    --tlskey="</span><span class="p">$</span><span class="nv">HOME</span><span class="x">/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78</span>
-<span class="x">run</span>
-<span class="x">    --rm</span>
-<span class="x">    -i</span>
-<span class="x">    -v</span>
-<span class="x">    /data:/data kaggle-contest build_model.sh</span>
+<div class="highlight"><pre><span></span><span class="n">docker</span>
+    <span class="c1">--tlsverify</span>
+    <span class="c1">--tlscacert="$HOME/.docker/machine/certs/ca.pem"</span>
+    <span class="c1">--tlscert="$HOME/.docker/machine/certs/cert.pem"</span>
+    <span class="c1">--tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78</span>
+<span class="n">run</span>
+    <span class="c1">--rm</span>
+    <span class="o">-</span><span class="n">i</span>
+    <span class="o">-</span><span class="n">v</span>
+    <span class="o">/</span><span class="k">data</span><span class="p">:</span><span class="o">/</span><span class="k">data</span> <span class="n">kaggle</span><span class="o">-</span><span class="n">contest</span> <span class="n">build_model</span><span class="p">.</span><span class="n">sh</span>
 </pre></div>
 <h2>Utensilios de cocina que no se compran en la tienda</h2>
 <p>Para hacer su pastel, Enrique usó una tabla de cortar única en el mundo que Beto hizo a mano para él. ¿Cómo puede usarla en la panadería? En términos de Kaggle: ¿cómo puedo usar una librería en mi proyecto que no está disponible en un repositorio de paquetes público (una que construí yo mismo)?</p>
@@ -127,14 +127,14 @@
 <h2>Feliz cocinada</h2>
 <p>Trasladar tu entorno local al interior de un contenedor de Docker, y/o "Dockerizar" este entorno una vez que estés listo para usar un servidor remoto para hacer el trabajo pesado, asegurará que solo tendrás que averiguar cómo hacer el pastel una sola vez. Haz tus prototipos localmente, luego enviarlos sin estrés a la panadería para la producción de escala masiva.</p>
 <p>¡Muy buen provecho!</p>
-<hr>
+<hr/>
 <p>Recursos adicionales:</p>
 <p>Aquí dejamos dos recursos adicionales que creo útiles para aprender
 sobre Docker para Kaggle:</p>
 <ol>
 <li><a href="https://speakerdeck.com/smly/workflow-serialization-and-docker-for-kaggle">Workflow, Serialization &amp; Docker for Kaggle</a></li>
 <li><a href="http://blog.kaggle.com/2016/02/05/how-to-get-started-with-data-science-in-containers/">How to get started with data science in containers</a></li>
-</ol></hr></div>
+</ol></div>
 	<hr>
 	<h2>Comments</h2>
 <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>

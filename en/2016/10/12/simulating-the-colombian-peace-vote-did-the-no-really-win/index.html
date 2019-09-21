@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="data science things and thoughts on the world">
+	<meta name="description" content="machine learning things and thoughts on the world">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">data science things and thoughts on the world</h4>
+          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -160,10 +160,10 @@
 <p>Our first frustration comes at <span class="math">\(p_{\text{yes}} = .5001\)</span>: if <span class="math">\(V_t * p_{\text{yes}} = 13,066,047 * .5001 \approx 6,534,330\)</span> voters wanted "Yes" vs. <span class="math">\(\approx 6,531,716\)</span> who wanted "No," the "No" vote would have still won <span class="math">\(0.191\%\)</span> of the time. Again, this reversal derives from human error: both on the part of the voter in casting an invalid ballot, and on the part of the the poll-worker incorrectly classifying that ballot by hand.</p>
 <p>As we move further down, the results get tighter. At <span class="math">\(p_{\text{yes}} = .50001\)</span>, the "Yes" vote can only be expected to have won <span class="math">\(1 - .38688 = 61.312\%\)</span> of the time. Finally, at <span class="math">\(p_{\text{yes}} = .5000001\)</span> (which, keep in mind, implies an "I intend to vote 'Yes'" vs. "I intend to vote 'No'" differential of just <span class="math">\(13,066,047 * (p_{\text{yes}} - (1 - p_{\text{yes}})) \approx 3\)</span> voters), the "No" vote actually wins the <em>majority</em> of the 100,000 hypothetical trials. At that point, we're really just flipping coins.</p>
 <p>In summary, as the authors of the above post suggest, it would be statistically irresponsible to claim a definitive win for the "No." Conversely, the true, underlying margin does prove to be extremely tight: maybe a majority vote just isn't the best way to handle these issues after all.</p>
-<hr>
+<hr/>
 <p>Code:</p>
 <p>The <a href="http://nbviewer.jupyter.org/github/cavaunpeu/colombia-vote-simulation/blob/master/colombia-vote-simulation.ipynb">notebook</a> and <a href="https://github.com/cavaunpeu/colombia-vote-simulation">repo</a> for the analysis can be found here.</p>
-<hr>
+<hr/>
 <p>Key references include:</p>
 <ul>
 <li><a href="https://theconversation.com/colombia-did-not-vote-no-in-its-peace-referendum-what-the-statistics-reveal-66471">Colombia did not vote ‘no’ in its peace referendum – what the statistics reveal</a></li>
@@ -226,7 +226,7 @@
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script></hr></hr></div>
+</script></div>
 	<hr>
 	<h2>Comments</h2>
 <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
