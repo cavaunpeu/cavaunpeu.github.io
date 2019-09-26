@@ -315,6 +315,73 @@ page 229. Springer-Verlag New York, 2006. &lt;a class="footnote-backref" href="
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
+&lt;/script&gt;</content></entry><entry><title>Deriving Variational Message Passing</title><link href="https://cavaunpeu.github.io/2018/11/23/variational-message-passing/" rel="alternate"></link><published>2018-11-23T10:00:00-05:00</published><updated>2018-11-23T10:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-11-23:/2018/11/23/variational-message-passing/</id><summary type="html"></summary><content type="html">&lt;h1&gt;Notes&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;The update for one of the independent variational factors is the same as per normal: it's the equation given by MFVB.&lt;/li&gt;
+&lt;li&gt;When you look at the terms involved, you realize that it's a sum, with contributions from the Markov blanket--the parents, children, and co-parents--of the node in question.&lt;/li&gt;
+&lt;li&gt;This is the case because it is only the terms that include &lt;span class="math"&gt;\(H_j\)&lt;/span&gt; &lt;em&gt;that belong in the variational likelihood of variable &lt;span class="math"&gt;\(H_j\)&lt;/span&gt;&lt;/em&gt;. This is a straightforward point.&lt;/li&gt;
+&lt;li&gt;An expectation is taken of this sum, &lt;em&gt;over all variational factors except &lt;span class="math"&gt;\(Q(H_j)\)&lt;/span&gt;&lt;/em&gt;. Note that: &lt;span class="math"&gt;\(H_j\)&lt;/span&gt;, which need appear in a function that concerns &lt;span class="math"&gt;\(H_j\)&lt;/span&gt;, is utterly distinct from &lt;span class="math"&gt;\(Q(H_j)\)&lt;/span&gt; (the function is given by an expectation over all variational factors except &lt;span class="math"&gt;\(Q(H_j)\)&lt;/span&gt;).&lt;/li&gt;
+&lt;li&gt;By using conjugate-exponential variational factors, the sum that gives the optimal, updated &lt;span class="math"&gt;\(Q^{*}(H_j)\)&lt;/span&gt; (a posterior) gives a distribution with same form as the pre-update &lt;span class="math"&gt;\(Q^(H_j)\)&lt;/span&gt; (the prior).&lt;/li&gt;
+&lt;li&gt;
+&lt;h2&gt;As such, we can say, tautologically, that the update only changes the value's of the distribution's parameters.&lt;/h2&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
 &lt;/script&gt;</content></entry><entry><title>Deriving Expectation-Maximization</title><link href="https://cavaunpeu.github.io/2018/11/11/em-for-lda/" rel="alternate"></link><published>2018-11-11T16:00:00-05:00</published><updated>2018-11-11T16:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-11-11:/2018/11/11/em-for-lda/</id><summary type="html">&lt;p&gt;Deriving the expectation-maximization algorithm, and the beginnings of its application to LDA. Once finished, its intimate connection to variational inference is apparent.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Consider a model with parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; and latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;; the expectation-maximization algorithm (EM) is a mechanism for computing the values of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; that, under this model, maximize the likelihood of some observed data &lt;span class="math"&gt;\(\mathbf{X}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;The joint probability of our model can be written as follows:&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -1847,7 +1914,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -3203,7 +3270,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7246,7 +7313,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -8786,7 +8853,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12151,7 +12218,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12254,7 +12321,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12357,7 +12424,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12460,7 +12527,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12563,7 +12630,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12671,7 +12738,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12764,7 +12831,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12856,7 +12923,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12950,7 +13017,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13067,7 +13134,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13542,7 +13609,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13610,7 +13677,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15380,7 +15447,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15500,7 +15567,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15620,7 +15687,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15740,7 +15807,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped dataframe table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
