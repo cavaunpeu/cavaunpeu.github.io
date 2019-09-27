@@ -85,9 +85,21 @@
 <li>This is the case because it is only the terms that include <span class="math">\(H_j\)</span> <em>that belong in the variational likelihood of variable <span class="math">\(H_j\)</span></em>. This is a straightforward point.</li>
 <li>An expectation is taken of this sum, <em>over all variational factors except <span class="math">\(Q(H_j)\)</span></em>. Note that: <span class="math">\(H_j\)</span>, which need appear in a function that concerns <span class="math">\(H_j\)</span>, is utterly distinct from <span class="math">\(Q(H_j)\)</span> (the function is given by an expectation over all variational factors except <span class="math">\(Q(H_j)\)</span>).</li>
 <li>By using conjugate-exponential variational factors, the sum that gives the optimal, updated <span class="math">\(Q^{*}(H_j)\)</span> (a posterior) gives a distribution with same form as the pre-update <span class="math">\(Q^(H_j)\)</span> (the prior).</li>
-<li>
-<h2>As such, we can say, tautologically, that the update only changes the value's of the distribution's parameters.</h2>
-</li>
+<li>As such, we can say, tautologically, that the update only changes the value's of the distribution's parameters.</li>
+<li>Conjugate-exponential distributions implies: the child distribution's functional form can be rewritten such that the natural statistic vector is that of its parent (for all parents).</li>
+<li><em>However</em>, the authors argue that is ultimately <em>incidental</em>; in rewriting <span class="math">\(P(\text{child}|Y)\)</span> for a given parent <span class="math">\(Y\)</span>, <em>isolate <span class="math">\(Y\)</span> in the natural statistic vector which, because of the pre-ordained conjugacy, will deterministically give you the <span class="math">\(\mathbf{u}_{\mathbf{Y}}(Y)\)</span> of <span class="math">\(P(Y)\)</span>.</em></li>
+<li>In turn, this gives you <span class="math">\(\phi_{XY}\)</span>, without having had to make reference to <span class="math">\(P(Y)\)</span> and its form.</li>
+<li>The reparameterizations of the child distribution w.r.t. the natural statistic of each of its parents are all equal, of course.</li>
+<li>As such, the child distribution is a <em>multi-linear</em> function of the respective natural statistics.</li>
+<li>A multi-linear function of variables a, b, c is one linear w.r.t. a, b and c. For example, y = 2a + 3b + 5c.</li>
+<li>If there are two reparameterizations, we might rewrite the child distribution as: <code>child_distribution = 2 * reparam_parent_1 - reparam_parent_2</code>, which would be multi-linear in the natural statistics of the parent distributions.</li>
+<li>Now, turn back to the optimal MFVB update at the beginning:</li>
+<li>As this is a function of <span class="math">\(Y\)</span>, it only involves distributions over <span class="math">\(Y\)</span>.</li>
+<li>All of these distributions--which form the Markov blanket of <span class="math">\(Y\)</span>--can be rewritten in terms of the natural statistic of <span class="math">\(Y\)</span>.</li>
+<li>(Similarly, within the MB, we could reparameterize one w.r.t. the natural statistic of another, then "propagate" this reparameterization to the rest, i.e. write the rest in terms of the same natural statistic., as all adjacent nodes in the MB are conjugate-exponential by definition.)</li>
+<li>(unpack me slowly): "Forexample,theexpectationofthenaturalstatisticsoftheGaussianwrttheGaussiangive themeanandsecondcentralmoment- thesufficientstatisticsofaGaussian.Also,thenaturalparametersofany exponentialfamilydistrbutioncanbeexpressedasa functionoftheexpectationofthenaturalstatisticswrtthedistribution.
+"</li>
+<li>hypothesis: the expectation of the natural statistic vector w.r.t. the distribution is equal to the natural parameter vector.</li>
 </ul>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
