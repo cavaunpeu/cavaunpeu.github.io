@@ -315,85 +315,6 @@ page 229. Springer-Verlag New York, 2006. &lt;a class="footnote-backref" href="
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content></entry><entry><title>Deriving Variational Message Passing</title><link href="https://cavaunpeu.github.io/2018/11/23/variational-message-passing/" rel="alternate"></link><published>2018-11-23T10:00:00-05:00</published><updated>2018-11-23T10:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-11-23:/2018/11/23/variational-message-passing/</id><summary type="html"></summary><content type="html">&lt;h1&gt;Notes&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;The update for one of the independent variational factors is the same as per normal: it's the equation given by MFVB.&lt;/li&gt;
-&lt;li&gt;When you look at the terms involved, you realize that it's a sum, with contributions from the Markov blanket--the parents, children, and co-parents--of the node in question.&lt;/li&gt;
-&lt;li&gt;This is the case because it is only the terms that include &lt;span class="math"&gt;\(H_j\)&lt;/span&gt; &lt;em&gt;that belong in the variational likelihood of variable &lt;span class="math"&gt;\(H_j\)&lt;/span&gt;&lt;/em&gt;. This is a straightforward point.&lt;/li&gt;
-&lt;li&gt;An expectation is taken of this sum, &lt;em&gt;over all variational factors except &lt;span class="math"&gt;\(Q(H_j)\)&lt;/span&gt;&lt;/em&gt;. Note that: &lt;span class="math"&gt;\(H_j\)&lt;/span&gt;, which need appear in a function that concerns &lt;span class="math"&gt;\(H_j\)&lt;/span&gt;, is utterly distinct from &lt;span class="math"&gt;\(Q(H_j)\)&lt;/span&gt; (the function is given by an expectation over all variational factors except &lt;span class="math"&gt;\(Q(H_j)\)&lt;/span&gt;).&lt;/li&gt;
-&lt;li&gt;By using conjugate-exponential variational factors, the sum that gives the optimal, updated &lt;span class="math"&gt;\(Q^{*}(H_j)\)&lt;/span&gt; (a posterior) gives a distribution with same form as the pre-update &lt;span class="math"&gt;\(Q^(H_j)\)&lt;/span&gt; (the prior).&lt;/li&gt;
-&lt;li&gt;As such, we can say, tautologically, that the update only changes the value's of the distribution's parameters.&lt;/li&gt;
-&lt;li&gt;Conjugate-exponential distributions implies: the child distribution's functional form can be rewritten such that the natural statistic vector is that of its parent (for all parents).&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;However&lt;/em&gt;, the authors argue that is ultimately &lt;em&gt;incidental&lt;/em&gt;; in rewriting &lt;span class="math"&gt;\(P(\text{child}|Y)\)&lt;/span&gt; for a given parent &lt;span class="math"&gt;\(Y\)&lt;/span&gt;, &lt;em&gt;isolate &lt;span class="math"&gt;\(Y\)&lt;/span&gt; in the natural statistic vector which, because of the pre-ordained conjugacy, will deterministically give you the &lt;span class="math"&gt;\(\mathbf{u}_{\mathbf{Y}}(Y)\)&lt;/span&gt; of &lt;span class="math"&gt;\(P(Y)\)&lt;/span&gt;.&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;In turn, this gives you &lt;span class="math"&gt;\(\phi_{XY}\)&lt;/span&gt;, without having had to make reference to &lt;span class="math"&gt;\(P(Y)\)&lt;/span&gt; and its form.&lt;/li&gt;
-&lt;li&gt;The reparameterizations of the child distribution w.r.t. the natural statistic of each of its parents are all equal, of course.&lt;/li&gt;
-&lt;li&gt;As such, the child distribution is a &lt;em&gt;multi-linear&lt;/em&gt; function of the respective natural statistics.&lt;/li&gt;
-&lt;li&gt;A multi-linear function of variables a, b, c is one linear w.r.t. a, b and c. For example, y = 2a + 3b + 5c.&lt;/li&gt;
-&lt;li&gt;If there are two reparameterizations, we might rewrite the child distribution as: &lt;code&gt;child_distribution = 2 * reparam_parent_1 - reparam_parent_2&lt;/code&gt;, which would be multi-linear in the natural statistics of the parent distributions.&lt;/li&gt;
-&lt;li&gt;Now, turn back to the optimal MFVB update at the beginning:&lt;/li&gt;
-&lt;li&gt;As this is a function of &lt;span class="math"&gt;\(Y\)&lt;/span&gt;, it only involves distributions over &lt;span class="math"&gt;\(Y\)&lt;/span&gt;.&lt;/li&gt;
-&lt;li&gt;All of these distributions--which form the Markov blanket of &lt;span class="math"&gt;\(Y\)&lt;/span&gt;--can be rewritten in terms of the natural statistic of &lt;span class="math"&gt;\(Y\)&lt;/span&gt;.&lt;/li&gt;
-&lt;li&gt;(Similarly, within the MB, we could reparameterize one w.r.t. the natural statistic of another, then "propagate" this reparameterization to the rest, i.e. write the rest in terms of the same natural statistic., as all adjacent nodes in the MB are conjugate-exponential by definition.)&lt;/li&gt;
-&lt;li&gt;(unpack me slowly): "Forexample,theexpectationofthenaturalstatisticsoftheGaussianwrttheGaussiangive themeanandsecondcentralmoment- thesufficientstatisticsofaGaussian.Also,thenaturalparametersofany exponentialfamilydistrbutioncanbeexpressedasa functionoftheexpectationofthenaturalstatisticswrtthedistribution.
-"&lt;/li&gt;
-&lt;li&gt;hypothesis: the expectation of the natural statistic vector w.r.t. the distribution is equal to the natural parameter vector.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width &lt; 768) ? "left" : align;
-        indent = (screen.width &lt; 768) ? "0em" : indent;
-        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
 &lt;/script&gt;</content></entry><entry><title>Deriving Expectation-Maximization</title><link href="https://cavaunpeu.github.io/2018/11/11/em-for-lda/" rel="alternate"></link><published>2018-11-11T16:00:00-05:00</published><updated>2018-11-11T16:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-11-11:/2018/11/11/em-for-lda/</id><summary type="html">&lt;p&gt;Deriving the expectation-maximization algorithm, and the beginnings of its application to LDA. Once finished, its intimate connection to variational inference is apparent.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Consider a model with parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; and latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;; the expectation-maximization algorithm (EM) is a mechanism for computing the values of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; that, under this model, maximize the likelihood of some observed data &lt;span class="math"&gt;\(\mathbf{X}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;The joint probability of our model can be written as follows:&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -1926,7 +1847,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -3282,7 +3203,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -4049,7 +3970,7 @@ $$&lt;/div&gt;
 &lt;p&gt;As such, we can &lt;em&gt;marginalize &lt;span class="math"&gt;\(y\)&lt;/span&gt; out of the numerator&lt;/em&gt; so as to obtain the denominator we require. This denominator is often called the "evidence."&lt;/p&gt;
 &lt;h3&gt;Marginalization example&lt;/h3&gt;
 &lt;p&gt;Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize &lt;span class="math"&gt;\(A\)&lt;/span&gt;.&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(A\)&lt;/span&gt;&lt;/th&gt;
@@ -4096,7 +4017,7 @@ $$&lt;/div&gt;
 &lt;li&gt;"Collapse" the remaining columns — in this case, &lt;span class="math"&gt;\(B\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Step 1 gives:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -4131,7 +4052,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;Step 2 gives:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -4152,7 +4073,7 @@ $$&lt;/div&gt;
 &lt;h3&gt;The denominator&lt;/h3&gt;
 &lt;p&gt;In the context of our generative model with a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the result of this marginalization is a &lt;em&gt;scalar&lt;/em&gt; — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(P(x, y)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(y\)&lt;/span&gt;&lt;/th&gt;
@@ -4179,7 +4100,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\int P(x, y)dy = P(x)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(X\)&lt;/span&gt;&lt;/th&gt;
@@ -4583,7 +4504,7 @@ $$&lt;/div&gt;
 &lt;p&gt;For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." &lt;em&gt;Can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Maximum entropy distributions&lt;/h2&gt;
 &lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (-\infty, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;uber&lt;/th&gt;
@@ -5137,7 +5058,7 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content></entry><entry><title>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</title><link href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/" rel="alternate"></link><published>2017-05-08T12:45:00-04:00</published><updated>2017-05-08T12:45:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-08:/2017/05/08/transfer-learning-flight-delay-prediction/</id><summary type="html">&lt;p&gt;Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;user_id&lt;/th&gt;
@@ -5788,7 +5709,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Of course, a probability is but a real number that lies on the closed interval &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;How does the input affect the output?&lt;/h2&gt;
 &lt;p&gt;Our input is a list of 4 numbers; each one affects &lt;em&gt;each possible output&lt;/em&gt; to a &lt;em&gt;different extent&lt;/em&gt;. We'll call this effect a "weight." 4 inputs times 3 outputs equals 12 distinct weights. They might look like this:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -5983,7 +5904,7 @@ $$&lt;/div&gt;
 &lt;li&gt;Returns a value for every unique combination of values that the random variables can take, i.e. for every entry in the cross-product space of its scope.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;For example, a factor with scope &lt;span class="math"&gt;\(\{\mathbf{A, B}\}\)&lt;/span&gt; might look like:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -6054,7 +5975,7 @@ P_{\Phi}(\mathbf{X_1, ..., X_n})
 $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(\mathbf{Z}_{\Phi}\)&lt;/span&gt; is the partition function.&lt;/p&gt;
 &lt;p&gt;To compute this function, we simply add up all the values in the unnormalized table. Given &lt;span class="math"&gt;\(\tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})\)&lt;/span&gt; as:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -6093,7 +6014,7 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;Our valid probability distribution then becomes:&lt;/p&gt;
-&lt;table class="table table-hover table-striped"&gt;
+&lt;table class="table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -7325,7 +7246,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -8865,7 +8786,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12230,7 +12151,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12333,7 +12254,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12436,7 +12357,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12539,7 +12460,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12642,7 +12563,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12750,7 +12671,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12843,7 +12764,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12935,7 +12856,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13029,7 +12950,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13146,7 +13067,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13621,7 +13542,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13689,7 +13610,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15459,7 +15380,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15579,7 +15500,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15699,7 +15620,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15819,7 +15740,7 @@ Validation: 0.19050085125816704
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
