@@ -51,16 +51,16 @@
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
               <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
               <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
-              <li><a href="https://cavaunpeu.github.io/feeds/all.atom.xml" title="willwolf.io Atom feed"><span class="icon-rss"></span> RSS</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -166,7 +166,7 @@ $$</div>
 <p>As such, we can <em>marginalize <span class="math">\(y\)</span> out of the numerator</em> so as to obtain the denominator we require. This denominator is often called the "evidence."</p>
 <h3>Marginalization example</h3>
 <p>Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize <span class="math">\(A\)</span>.</p>
-<table class="table-hover table-striped table">
+<table class="table table-striped table-hover">
 <thead>
 <tr>
 <th><span class="math">\(A\)</span></th>
@@ -213,7 +213,7 @@ $$</div>
 <li>"Collapse" the remaining columns — in this case, <span class="math">\(B\)</span>.</li>
 </ol>
 <p>Step 1 gives:</p>
-<table class="table-hover table-striped table">
+<table class="table table-striped table-hover">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -248,7 +248,7 @@ $$</div>
 </tbody>
 </table>
 <p>Step 2 gives:</p>
-<table class="table-hover table-striped table">
+<table class="table table-striped table-hover">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -269,7 +269,7 @@ $$</div>
 <h3>The denominator</h3>
 <p>In the context of our generative model with a given input <span class="math">\(x\)</span>, the result of this marginalization is a <em>scalar</em> — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:</p>
 <p><span class="math">\(P(x, y)\)</span>:</p>
-<table class="table-hover table-striped table">
+<table class="table table-striped table-hover">
 <thead>
 <tr>
 <th><span class="math">\(y\)</span></th>
@@ -296,7 +296,7 @@ $$</div>
 </tbody>
 </table>
 <p><span class="math">\(\int P(x, y)dy = P(x)\)</span>:</p>
-<table class="table-hover table-striped table">
+<table class="table table-striped table-hover">
 <thead>
 <tr>
 <th><span class="math">\(X\)</span></th>
