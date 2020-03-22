@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,19 +20,19 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
     <meta property="twitter:title" content="Random Effects Neural Networks in Edward and Keras"/>
     <meta property="twitter:description" content="Coupling nimble probabilistic models with neural architectures in Edward and Keras: &#34;what worked and what didn&#39;t,&#34; a conceptual overview of random effects, and directions for further exploration."/>
-    <meta property="twitter:image" content="/images/random_colors.jpg"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/images/random_colors.jpg"/>
 
 	<!-- CSS -->
-	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -44,23 +44,23 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
           <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
-              <li><a href="/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -136,7 +136,7 @@ $$</div>
 <li><a href="http://edwardlib.org/tutorials/klqp">Edward: KL(q||p) Minimization</a></li>
 <li><a href="http://edwardlib.org/api/inference">Edward: API and Documentation - Inference</a></li>
 </ul>
-<p>Additionally, I provide an introduction to the basic math behind variational inference and the <a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf">ELBO</a> in the previous post on this blog: <a href="/2017/07/06/further-exploring-common-probabilistic-models/">Further Exploring Common Probabilistic Models</a>.</p>
+<p>Additionally, I provide an introduction to the basic math behind variational inference and the <a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf">ELBO</a> in the previous post on this blog: <a href="https://cavaunpeu.github.io/2017/07/06/further-exploring-common-probabilistic-models/">Further Exploring Common Probabilistic Models</a>.</p>
 <h3>Fit model</h3>
 <p>For the approximate q-distributions, we apply the <a href="https://www.tensorflow.org/api_docs/python/tf/nn/softplus">softplus function</a> — <code>log(exp(z) + 1)</code> — to the scale parameter values at the suggestion of the Edward docs.</p>
 <div class="highlight"><pre><span></span><span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
@@ -176,9 +176,9 @@ $$</div>
 </pre></div>
 <h3>Criticize model</h3>
 <h4>Visualize data fit given parameter priors</h4>
-<p><img alt="data fit given parameter priors" class="img-responsive" src="/figures/data_fit_given_parameter_priors.png"/></p>
+<p><img alt="data fit given parameter priors" class="img-responsive" src="https://cavaunpeu.github.io/figures/data_fit_given_parameter_priors.png"/></p>
 <h4>Visualize data fit given parameter posteriors</h4>
-<p><img alt="data fit given parameter posteriors" class="img-responsive" src="/figures/data_fit_given_parameter_posteriors.png"/></p>
+<p><img alt="data fit given parameter posteriors" class="img-responsive" src="https://cavaunpeu.github.io/figures/data_fit_given_parameter_posteriors.png"/></p>
 <p>It appears as if our model fits the data along the first two dimensions. This said, we could improve this fit considerably. This will become apparent when we compute the MAE on our validation set.</p>
 <div class="highlight"><pre><span></span><span class="n">param_posteriors</span> <span class="o">=</span> <span class="err">{</span>
   <span class="err">β</span><span class="n">_fixed_effects</span><span class="p">:</span> <span class="n">qβ_fixed_effects</span><span class="p">.</span><span class="nf">mean</span><span class="p">(),</span>
@@ -196,10 +196,10 @@ $$</div>
 <span class="n">Mean</span> <span class="n">absolute</span> <span class="n">error</span> <span class="k">on</span> <span class="n">validation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">089943</span>
 </pre></div>
 <h4>Inspect residuals</h4>
-<p><img alt="bayesian linear regression residuals" class="img-responsive" src="/figures/bayesian_linear_regression_residuals.png"/></p>
+<p><img alt="bayesian linear regression residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_residuals.png"/></p>
 <p>"The residuals appear normally distributed with mean 0: this is a good sanity check for the model."<sup>1</sup> However, with respect to the magnitude of the mean of the validation <code>logerror</code>, our validation score is terrible. This is likely due to the fact that three predictors are not nearly sufficient for capturing the variation in the response. (Additionally, because the response itself is an <em>error</em>, it should be fundamentally harder to capture than the thing actually being predicted — the house price. This is because Zillow's team has already built models to capture this signal, then effectively threw the remaining "uncaptured" signal into this competition, i.e. "figure out how to get right the little that we got wrong.")</p>
 <h4>Inspect parameter posteriors</h4>
-<p><img alt="bayesian linear regression posteriors" class="img-responsive" src="/figures/bayesian_linear_regression_posteriors.png"/></p>
+<p><img alt="bayesian linear regression posteriors" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_posteriors.png"/></p>
 <p>In keeping with the definition of multivariate linear regression itself, the above parameter posteriors tell us: "conditional on the assumption that the log-error and fixed effects can be related by a straight line, what is the predictive value of one variable once I already know the values of all other variables?"<sup>2</sup></p>
 <h2>Bayesian linear regression with random effects</h2>
 <p>Random effects models — also known as hierarchical models — allow us to ascribe distinct behaviors to different "clusters" of observations, i.e. groups that may each act in a materially unique way. Furthermore, these models allow us to infer these tendencies in a <em>collaborative</em> fashion: while each cluster is assumed to behave differently, it can learn its parameters by heeding to the behavior of the population at large. In this example, we assume that houses in different zipcodes — holding all other predictors constant — should be priced in different ways.</p>
@@ -253,11 +253,11 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="k">absolute</span> <span class="n">error</span> <span class="k">on</span> <span class="n">validation</span> <span class="k">data</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">084635</span>
 </pre></div>
 <h4>Inspect residuals</h4>
-<p><img alt="bayesian linear regression with random effects residuals" class="img-responsive" src="/figures/bayesian_linear_regression_with_random_effects_residuals.png"/></p>
+<p><img alt="bayesian linear regression with random effects residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_linear_regression_with_random_effects_residuals.png"/></p>
 <h3>Plot shrinkage</h3>
 <p>To illustrate shrinkage we'll pare our model down to intercepts only (removing the fixed effects entirely). We'll first fit a random-effects model on the full dataset then compute the cluster-specific-intercept posterior means. Next, we'll fit a separate model to each individual cluster and compute the intercept posterior mean of each. The plot below shows how estimates from the former can be viewed as "estimates from the latter — shrunk towards the global-intercept posterior mean."</p>
 <p>Finally, <span style="color: #377eb8">blue</span>, <span style="color: #4daf4a">green</span> and <span style="color: #ff7f00">orange</span> points represent small, medium and large clusters respectively. As mentioned before, the larger the cluster size, i.e. the more data points we've observed belonging to a given cluster, the <em>less</em> prone it is to shrinkage towards the mean.</p>
-<p><img alt="shrinkage plot" class="img-responsive" src="/figures/shrinkage_plot.png"/></p>
+<p><img alt="shrinkage plot" class="img-responsive" src="https://cavaunpeu.github.io/figures/shrinkage_plot.png"/></p>
 <h2>Neural network with random effects</h2>
 <p>Neural networks are powerful function approximators. Keras is a library that lets us flexibly define complex neural architectures. Thus far, we've been approximating the relationship between our fixed effects and response variable with a simple dot product; can we leverage Keras to make this relationship more expressive? Is it painless? Finally, how does it integrate with Edward's existing APIs and constructs? Can we couple nimble generative models with deep neural networks?</p>
 <p>While my experimentation was brief, all answers point delightfully towards "yes" for two simple reasons:</p>
@@ -296,7 +296,7 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="k">absolute</span> <span class="n">error</span> <span class="k">on</span> <span class="n">validation</span> <span class="k">data</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">081484</span>
 </pre></div>
 <h4>Inspect residuals</h4>
-<p><img alt="neural network with random effects residuals" class="img-responsive" src="/figures/neural_network_with_random_effects_residuals.png"/></p>
+<p><img alt="neural network with random effects residuals" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_network_with_random_effects_residuals.png"/></p>
 <h1>Future work</h1>
 <p>We've now laid a stable, if trivially simple foundation for building models with Edward and Keras. From here, I see two distinct paths to building more expressive probabilistic models using these tools:</p>
 <ol>
@@ -439,6 +439,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 </body>
 </html>

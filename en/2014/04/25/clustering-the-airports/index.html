@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,19 +20,19 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
     <meta property="twitter:title" content="Clustering South American Airports"/>
     <meta property="twitter:description" content="A data-enthused look at air travel on my favorite continent: South America and the Falkland Islands."/>
-    <meta property="twitter:image" content="/figures/sa_airports_sna_plot.png"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/sa_airports_sna_plot.png"/>
 
 	<!-- CSS -->
-	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -44,23 +44,23 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
           <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
-              <li><a href="/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -83,15 +83,15 @@
 <p>Traveling by plane in South America is not particularly pragmatic nor affordable: the air network is relatively limited, and flights are therefore costly. Most travelers opt to take the bus instead. When flying to South America, you're likely to enter via one of its major international air hubs: Bogotá, Lima, Santiago, Buenos Aires or São Paulo, for example. Needless to say, these airports are major connecting points for intra-continental travel as well.</p>
 <p>In addition to these big airports we'll have a series of, qualitatively speaking, "semi-big" airports, "small" airports, "super tiny single-runway Cessna Jet only" airports, etc. Perhaps we can be more explicit with our grouping? It's one thing to attempt to classify these airports into distinct groups by how many McDonald's each houses. It's another to use the data. Here, I'll attempt this classification using <a href="http://en.wikipedia.org/wiki/Shortest_path_problem">shortest path analysis</a> and <a href="http://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a>.</p>
 <p>First, I grab a list of all worldwide flight routes from <a href="http://openflights.org/data.html">OpenFlights</a>, current as of January 2012 and containing "59036 routes between 3209 airports on 531 airlines spanning the globe." We filter for South America and employ R's "igraph" package - a library dedicated to network analysis and visualization. I then produce a basic social network graph for all flights between Chile, Argentina and Paraguay merely for example - a visual of some of the data at hand and a testament to the graphical power of R.</p>
-<p><img alt="SNA Plot" class="img-responsive" src="/figures/sa_airports_sna_plot.png"/></p>
+<p><img alt="SNA Plot" class="img-responsive" src="https://cavaunpeu.github.io/figures/sa_airports_sna_plot.png"/></p>
 <p>The <code>simplify</code> function is used to eliminate reverse routes: we don't need to map flights between Buenos Aires and Santiago as well as those from Santiago to Buenos Aires. As assumed, the visual confirms that most flights between these countries are done through the capitals: Buenos Aires, Santiago, and Asunción. Also, within Argentina, there appears to be a few "middle-range" airports as well, namely but not limited to Mendoza, Bariloche, and El Calafate. Clearly, there are countless "bottom-range" airports too serviced only by one city (within these three countries); Ciudad Del Este, for example. How many distinct groups of varying size/volume/connectivity can we form?</p>
 <p>To answer this question, we compute the shortest path - or number of distinct airports through which one must fly - from every city in South America to all other cities. These values are then be used to inform centroid locations for our k-means analysis.</p>
 <p>Unfortunately, we still must tell R how many clusters we seek. Should there be 4 distinct airport groups? 8? Why? The more clusters we have, the closer values within each cluster move to their respective centroid mean, a metric given by <code>withinss</code> or "within groups sum of squares." Therefore, we first run the analysis for varying numbers of clusters in search of the k value at which the "marginal return of adding one more cluster is less than was the marginal return for adding the clusters prior to that." We run trials for <span class="math">\(k = 2\)</span> to <span class="math">\(k = 9\)</span>. The article <a href="http://blog.revolutionanalytics.com/2013/12/k-means-clustering-86-single-malt-scotch-whiskies.html">"K-means Clustering 86 Single Malt Scotch Whiskies"</a> on the Revolution Analytics blog was referenced heavily for this step.</p>
-<p><img alt="Within SS Plot" class="img-responsive" src="/figures/sa_airports_withinss_plot.png"/></p>
+<p><img alt="Within SS Plot" class="img-responsive" src="https://cavaunpeu.github.io/figures/sa_airports_withinss_plot.png"/></p>
 <p>From the graph, it appears that <span class="math">\(k = 3\)</span> is the value we want: "the marginal return of adding one more cluster is less than was the marginal return for adding the clusters prior to that." However, the k-means clustering algorithm does incorporate a random number generator, so it is important to examine the impact of randomness on our results. In addition, after producing this graph a few times, it was immediately clear that our trend varies slightly across trials. In solution, we'll run 100 trials in ggplot, plot them in points, and examine the smoothing line instead.</p>
-<p><img alt="K-Means Smooth" class="img-responsive" src="/figures/sa_airports_kmeans_smooth.png"/></p>
+<p><img alt="K-Means Smooth" class="img-responsive" src="https://cavaunpeu.github.io/figures/sa_airports_kmeans_smooth.png"/></p>
 <p>The plot seems to corroborate what we previously thought: <span class="math">\(k = 3\)</span> clusters is the best choice for our data set. To be absolutely certain, we can explicitly compute the predicted "loess" values that fall on our smooth line for integers in <span class="math">\([2,9]\)</span> and see where the "marginal returns cutoff point" really is. Simple subtraction.</p>
-<p><img alt="For k-means clustering analysis on SA airports." class="img-responsive" src="/figures/sa_airports_predicted_withinss_plot.png"/></p>
+<p><img alt="For k-means clustering analysis on SA airports." class="img-responsive" src="https://cavaunpeu.github.io/figures/sa_airports_predicted_withinss_plot.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">PredSumVal</span> <span class="n">K</span>
 <span class="m">1</span>   <span class="m">43854.32</span> <span class="m">2</span>
 <span class="m">2</span>   <span class="m">33887.51</span> <span class="m">3</span>
@@ -218,6 +218,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 </body>
 </html>

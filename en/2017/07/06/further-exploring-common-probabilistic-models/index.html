@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,19 +20,19 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
     <meta property="twitter:title" content="Further Exploring Common Probabilistic Models"/>
     <meta property="twitter:description" content="Exploring generative vs. discriminative models, and sampling and variational methods for approximate inference through the lens of Bayes&#39; theorem."/>
-    <meta property="twitter:image" content="/images/pool_ring.jpg"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/images/pool_ring.jpg"/>
 
 	<!-- CSS -->
-	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -44,23 +44,23 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
           <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
-              <li><a href="/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -78,7 +78,7 @@
 		</span>
 		<time datetime="2017-06-06T10:00:00-04:00" itemprop="datePublished">June 6, 2017</time>
 	</div>
-	<div itemprop="articleBody" class="article-body"><p>The <a href="/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">previous post</a> on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.</p>
+	<div itemprop="articleBody" class="article-body"><p>The <a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">previous post</a> on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.</p>
 <p>In this post, we're going to stay on the surface: instead of deconstructing common models, we're going to further explore the relationships between them — swimming to different corners of the pool itself. Keeping us afloat will be Bayes' theorem — a balanced, dependable yet at times fragile pool ring, so to speak — which we'll take with us wherever we go.</p>
 <p><img alt="pool ring" class="img-responsive" src="https://c1.staticflickr.com/7/6151/6137348439_199f5119be_b.jpg"/></p>
 <p>While there are many potential themes of probabilistic models we might explore, we'll herein focus on two: <strong>generative vs. discriminative models</strong>, and <strong>"fully Bayesian" vs. "lowly point estimate" learning</strong>. We will stick to the supervised setting as well.</p>
@@ -86,7 +86,7 @@
 <h1>Discriminative vs. generative models</h1>
 <p>The goal of a supervised model is to compute the distribution over outcomes <span class="math">\(y\)</span> given an input <span class="math">\(x\)</span>, written <span class="math">\(P(y\vert x)\)</span>. If <span class="math">\(y\)</span> is discrete, this distribution is a probability mass function, e.g. a multinomial or binomial distribution. If continuous, it is a probability density function, e.g. a Gaussian distribution.</p>
 <h2>Discriminative models</h2>
-<p>In discriminative models, we immediately direct our focus to this output distribution. Taking an example from the <a href="/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">previous post</a>, let's assume a softmax regression which receives some data <span class="math">\(x\)</span> and predicts a multi-class label <code>red or green or blue</code>. The model's output distribution is therefore multinomial; a multinomial distribution requires as a parameter a vector <span class="math">\(\pi\)</span> of respective outcome probabilities, e.g. <code>{red: .27, green: .11, blue: .62}</code>. We can compute these individual probabilities via the softmax function, where:</p>
+<p>In discriminative models, we immediately direct our focus to this output distribution. Taking an example from the <a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">previous post</a>, let's assume a softmax regression which receives some data <span class="math">\(x\)</span> and predicts a multi-class label <code>red or green or blue</code>. The model's output distribution is therefore multinomial; a multinomial distribution requires as a parameter a vector <span class="math">\(\pi\)</span> of respective outcome probabilities, e.g. <code>{red: .27, green: .11, blue: .62}</code>. We can compute these individual probabilities via the softmax function, where:</p>
 <ul>
 <li><span class="math">\(\pi_k = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)</span></li>
 <li><span class="math">\(\eta_k = \theta_k^Tx\)</span></li>
@@ -166,7 +166,7 @@ $$</div>
 <p>As such, we can <em>marginalize <span class="math">\(y\)</span> out of the numerator</em> so as to obtain the denominator we require. This denominator is often called the "evidence."</p>
 <h3>Marginalization example</h3>
 <p>Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize <span class="math">\(A\)</span>.</p>
-<table class="table-striped table table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th><span class="math">\(A\)</span></th>
@@ -213,7 +213,7 @@ $$</div>
 <li>"Collapse" the remaining columns — in this case, <span class="math">\(B\)</span>.</li>
 </ol>
 <p>Step 1 gives:</p>
-<table class="table-striped table table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -248,7 +248,7 @@ $$</div>
 </tbody>
 </table>
 <p>Step 2 gives:</p>
-<table class="table-striped table table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -269,7 +269,7 @@ $$</div>
 <h3>The denominator</h3>
 <p>In the context of our generative model with a given input <span class="math">\(x\)</span>, the result of this marginalization is a <em>scalar</em> — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:</p>
 <p><span class="math">\(P(x, y)\)</span>:</p>
-<table class="table-striped table table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th><span class="math">\(y\)</span></th>
@@ -296,7 +296,7 @@ $$</div>
 </tbody>
 </table>
 <p><span class="math">\(\int P(x, y)dy = P(x)\)</span>:</p>
-<table class="table-striped table table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th><span class="math">\(X\)</span></th>
@@ -404,7 +404,7 @@ $$</div>
 </ol>
 <p>After collecting a few thousand samples — and discarding the first few hundred, in which we drunkenly amble towards the region of high joint probability (a quantity <em>proportional</em> to the posterior probability) — we now have a bucket of samples from our desired posterior distribution. Nota bene: we never had to touch the high-dimensional integral <span class="math">\(\int P(D, \theta)d\theta\)</span>.</p>
 <h2>Variational inference</h2>
-<p>In large-scale models, MCMC methods are often too slow. Conversely, variational inference provides a framework for casting the problem of posterior approximation as one of <em>optimization</em> — far faster than a sampling-based approach. This yields an <em>analytical</em> approximation to <span class="math">\(P(\theta\vert D)\)</span>. The following explanation of variational inference is taken largely from a previous post of mine: <a href="/2017/05/08/transfer-learning-flight-delay-prediction/">Transfer Learning for Flight Delay Prediction</a>.</p>
+<p>In large-scale models, MCMC methods are often too slow. Conversely, variational inference provides a framework for casting the problem of posterior approximation as one of <em>optimization</em> — far faster than a sampling-based approach. This yields an <em>analytical</em> approximation to <span class="math">\(P(\theta\vert D)\)</span>. The following explanation of variational inference is taken largely from a previous post of mine: <a href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/">Transfer Learning for Flight Delay Prediction</a>.</p>
 <p>For our approximating distribution we'll choose one that is simple, parametric and familiar: the normal (Gaussian) distribution, parameterized by some set of parameters <span class="math">\(\lambda\)</span>.</p>
 <div class="math">$$q_{\lambda}(\theta\vert D)$$</div>
 <p>Our goal is to force this distribution to closely resemble the original; the <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">KL divergence</a> quantifies their difference:</p>
@@ -459,7 +459,7 @@ $$</div>
 \end{align*}
 $$</div>
 <p>In machine learning parlance: "minimize the negative log joint probability of our data and parameter <span class="math">\(\theta\)</span> — a MAP estimate — plus the entropy of our variational approximation." As a <em>higher</em> entropy is desirable — an approximation which distributes its mass in a <em>conservative</em> fashion — this minimization is a balancing act between the two terms.</p>
-<p>For a more in-depth discussion of both entropy and KL-divergence please see <a href="/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">Minimizing the Negative Log-Likelihood, in English</a>.</p>
+<p>For a more in-depth discussion of both entropy and KL-divergence please see <a href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">Minimizing the Negative Log-Likelihood, in English</a>.</p>
 <h1>Posterior predictive distribution</h1>
 <p>With our estimate for <span class="math">\(\theta\)</span> as a full distribution, we can now make a new prediction as a full distribution as well.</p>
 <div class="math">$$
@@ -631,6 +631,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 </body>
 </html>

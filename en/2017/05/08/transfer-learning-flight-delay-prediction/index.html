@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
+		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,19 +20,19 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="">
+  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
     <meta property="twitter:title" content="Transfer Learning for Flight Delay Prediction via Variational Autoencoders"/>
     <meta property="twitter:description" content="Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning."/>
-    <meta property="twitter:image" content="/images/vae_map.png"/>
+    <meta property="twitter:image" content="https://cavaunpeu.github.io/images/vae_map.png"/>
 
 	<!-- CSS -->
-	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -44,23 +44,23 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
           <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
-              <li><a href="/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -79,7 +79,7 @@
 		<time datetime="2017-05-08T12:45:00-04:00" itemprop="datePublished">May 8, 2017</time>
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:</p>
-<table class="table-striped table table-hover">
+<table class="table table-hover table-striped">
 <thead>
 <tr>
 <th>user_id</th>
@@ -254,7 +254,7 @@
 <span class="n">simple_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">simple_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">simple_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="simple regression initial" class="img-responsive" src="/figures/transfer_learning_simple_regression_initial.png"/></p>
+<p><img alt="simple regression initial" class="img-responsive" src="https://cavaunpeu.github.io/figures/transfer_learning_simple_regression_initial.png"/></p>
 <h2>Deeper regression</h2>
 <div class="highlight"><pre><span></span><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="err">λ</span><span class="o">=.</span><span class="mo">03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mo">0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
@@ -262,7 +262,7 @@
 <span class="n">deeper_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">deeper_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">deeper_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="deeper regression initial" class="img-responsive" src="/figures/transfer_learning_deeper_regression_initial.png"/></p>
+<p><img alt="deeper regression initial" class="img-responsive" src="https://cavaunpeu.github.io/figures/transfer_learning_deeper_regression_initial.png"/></p>
 <h2>Test set predictions</h2>
 <div class="highlight"><pre><span></span><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">y_pred_deeper</span> <span class="o">=</span> <span class="n">deeper_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
@@ -292,7 +292,7 @@
 <p><em><strong>Discriminative classifiers jump directly to estimating <span class="math">\(P(Y\vert x)\)</span> without modeling its component parts <span class="math">\(P(x, Y)\)</span> and <span class="math">\(P(x)\)</span>.</strong></em></p>
 <p>Instead, as the intermediate step, they simply compute an <em>unnormalized</em> joint distribution <span class="math">\(\tilde{P}(x, Y)\)</span> and a normalizing "partition function." The following then gives the model's predictions for the same reason that <span class="math">\(\frac{.2}{1} = \frac{3}{15}\)</span>:</p>
 <div class="math">$$P(Y\vert x) = \frac{P(x, Y)}{P(x)} = \frac{\tilde{P}(x, Y)}{\text{partition function}}$$</div>
-<p>This is explained much more thoroughly in a previous blog post: <a href="/2017/04/19/deriving-the-softmax-from-first-principles/">Deriving the Softmax from First Principles</a>.</p>
+<p>This is explained much more thoroughly in a previous blog post: <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">Deriving the Softmax from First Principles</a>.</p>
 <h3>Generative models</h3>
 <p>Conversely, a variational autoencoder is a <em>generative</em> model: instead of jumping <em>directly</em> to the conditional probability of all possible outputs given a specific input, they first compute the true component parts: the joint probability distribution over data and inputs alike, <span class="math">\(P(X, Y)\)</span>, and the distribution over our data, <span class="math">\(P(X)\)</span>.</p>
 <p>The joint probability can be rewritten as <span class="math">\(P(X, Y) = P(Y)P(X\vert Y)\)</span>: as such, generative models tell us the distribution over classes in our dataset, as well as the distribution of inputs within each class. Suppose we are trying to predict t-shirt colors with a 3-feature input; generative models would tell us: "30% of your t-shirts are green - typically produced by inputs near <code>x = [1, 2, 3]</code>; 40% are red - typically produced by inputs near <code>x = [10, 20, 30]</code>; 30% are blue - typically produced by inputs near <code>x = [100, 200, 300]</code>. This is in contrast to a discriminative model which would simply compute: given an input <span class="math">\(x\)</span>, your output probabilities are: <span class="math">\(\{\text{red}: .2, \text{green}: .3, \text{blue}: .5\}\)</span>.</p>
@@ -308,7 +308,7 @@
 <p><em><strong>In the context of autoencoders (and dimensionality reduction algorithms), "learning 'structure' in our data" means nothing more than finding that ceramic plate amidst a galaxy of stars</strong></em>.</p>
 <h3>Graphical models</h3>
 <p>Variational autoencoders do not have the same notion of an "output" - namely, "does a route between two airports exist?" - as our dot product siamese network. To detail this model, we'll start near first principles with probabilistic graphical models with our notion of the ceramic plate in mind:</p>
-<p><img alt="VAE pgm" class="img-responsive" src="/images/vae_pgm.png"/></p>
+<p><img alt="VAE pgm" class="img-responsive" src="https://cavaunpeu.github.io/images/vae_pgm.png"/></p>
 <p>Coordinates on the plate detail airport character; choosing coordinates - say, <code>[global_hub_ness = 500, is_in_asia = 500]</code> - allows us to <em>generate</em> an airport. In this case, it might be Seoul. In variational autoencoders, ceramic-plate coordinates are called the "latent vector," denoted <span class="math">\(z\)</span>. The joint probability of our graphical model is given as:</p>
 <div class="math">$$P(z)P(x\vert z) = P(z, x)$$</div>
 <p>Our goal is to infer the priors that likely generated these data via Bayes' rule:</p>
@@ -458,9 +458,9 @@ $$</div>
 <span class="n">dp_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mo">001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">)</span>
 <span class="n">SVG</span><span class="p">(</span><span class="n">model_to_dot</span><span class="p">(</span><span class="n">dp_model</span><span class="o">.</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'dot'</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s1">'svg'</span><span class="p">))</span>
 </pre></div>
-<p><img alt="dot product embedding model" class="img-responsive" src="/figures/dot_product_embedding_model.svg"/></p>
+<p><img alt="dot product embedding model" class="img-responsive" src="https://cavaunpeu.github.io/figures/dot_product_embedding_model.svg"/></p>
 <h2>Fit</h2>
-<p><img alt="dot product embedding model fit" class="img-responsive" src="/figures/dot_product_embedding_model_fit.png"/></p>
+<p><img alt="dot product embedding model fit" class="img-responsive" src="https://cavaunpeu.github.io/figures/dot_product_embedding_model_fit.png"/></p>
 <h2>Visualize embeddings</h2>
 <p>To visualize results, we'll:
 1. Compose a list of unique origin airports.
@@ -575,7 +575,7 @@ $$</div>
                   <span class="n">loss_weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">])</span>
 <span class="n">SVG</span><span class="p">(</span><span class="n">model_to_dot</span><span class="p">(</span><span class="n">vae_model</span><span class="o">.</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'dot'</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s1">'svg'</span><span class="p">))</span>
 </pre></div>
-<p><img alt="vae embedding model" class="img-responsive" src="/figures/vae_embedding_model.svg"/></p>
+<p><img alt="vae embedding model" class="img-responsive" src="https://cavaunpeu.github.io/figures/vae_embedding_model.svg"/></p>
 <div class="highlight"><pre><span></span><span class="c1"># build VAE training, test sets</span>
 <span class="n">one_hot_airports</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">)</span>
 
@@ -597,7 +597,7 @@ $$</div>
     <span class="n">Test</span><span class="p">:</span>       <span class="p">(</span><span class="mi">21907</span><span class="p">,</span> <span class="mi">3186</span><span class="p">)</span>
 </pre></div>
 <h2>Fit</h2>
-<p><img alt="vae product embedding model fit" class="img-responsive" src="/figures/vae_product_embedding_model_fit.png"/></p>
+<p><img alt="vae product embedding model fit" class="img-responsive" src="https://cavaunpeu.github.io/figures/vae_product_embedding_model_fit.png"/></p>
 <h2>Visualize</h2>
 <p><iframe allowfullscreen="" frameborder="0" height="800" src="https://willwolf-public.s3.amazonaws.com/transfer-learning-flight-delays/vae_model_map.html" width="946"></iframe></p>
 <h2>Finally, transfer the learning</h2>
@@ -615,14 +615,14 @@ $$</div>
 
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">simple_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="simple regression augmented" class="img-responsive" src="/figures/transfer_learning_simple_regression_augmented.png"/></p>
+<p><img alt="simple regression augmented" class="img-responsive" src="https://cavaunpeu.github.io/figures/transfer_learning_simple_regression_augmented.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="err">λ</span><span class="o">=.</span><span class="mo">03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mo">0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
 <span class="n">deeper_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">deeper_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">deeper_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="deeper regression augmented" class="img-responsive" src="/figures/transfer_learning_deeper_regression_augmented.png"/></p>
+<p><img alt="deeper regression augmented" class="img-responsive" src="https://cavaunpeu.github.io/figures/transfer_learning_deeper_regression_augmented.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">y_pred_deeper</span> <span class="o">=</span> <span class="n">deeper_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">mse_simple</span> <span class="o">=</span> <span class="n">mean_squared_error_scikit</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_simple</span><span class="p">)</span>
@@ -784,6 +784,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 </body>
 </html>
