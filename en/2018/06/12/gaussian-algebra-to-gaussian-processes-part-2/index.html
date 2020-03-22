@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,19 +20,19 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+  <meta name="twitter:domain" content="">
     <meta property="twitter:title" content="From Gaussian Algebra to Gaussian Processes, Part 2"/>
     <meta property="twitter:description" content="Introducing the RBF kernel, and motivating its ubiquitous use in Gaussian processes."/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/>
+    <meta property="twitter:image" content="/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/>
 
 	<!-- CSS -->
-	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -44,23 +44,23 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a id="site-title" href="/">will wolf</a></h1>
           <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
-              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="/es/" title=Español>ES</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -243,7 +243,7 @@ $$</div>
         text-align: right;
     }
 </style>
-<table border="1" class="table-striped table-hover table dataframe">
+<table border="1" class="table-hover table-striped table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -289,7 +289,7 @@ K(\mathbf x, \mathbf y)
 $$</div>
 <p>Note that this is nothing else but a dot product between two vectors <span class="math">\((1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)</span> and <span class="math">\((1, y_1^2, y_2^2, \sqrt{2} y_1, \sqrt{2} y_2, \sqrt{2} y_1 y_2)\)</span>, and <span class="math">\(\varphi(\mathbf x) = \varphi(x_1, x_2) = (1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)</span>. So the kernel <span class="math">\(K(\mathbf x, \mathbf y) = (1 + \mathbf x^T \mathbf y)^2 = \varphi(\mathbf x) \cdot \varphi(\mathbf y)\)</span> computes a dot product in 6-dimensional space without explicitly visiting this space."</p>
 <h3>What this means</h3>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/kernels-for-gaussian-processes.svg"/></p>
+<p><img alt="png" class="img-responsive" src="/figures/gaussian-algebra-to-gaussian-processes-part-2/kernels-for-gaussian-processes.svg"/></p>
 <ul>
 <li>We start with inputs <span class="math">\(X\)</span> and <span class="math">\(Y\)</span>.</li>
 <li>Our goal is to compute the similarity between then, <span class="math">\(\text{Sim}(X, Y)\)</span>.</li>
@@ -380,9 +380,9 @@ $$</div>
 <span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="err">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 <h2>Visualizing results</h2>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
 <p>And for good measure, with some samples from the posterior:</p>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/></p>
 <h2>In summary</h2>
 <p>In this post, we've unpacked the notion of a kernel, and its ubiquitous use in Gaussian Processes.</p>
 <p>In addition, we've introduced the RBF kernel, i.e. "squared exponential" kernel, and motivated its widespread application in these models.</p>
@@ -521,16 +521,6 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
-</script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-97412095-1', 'auto');
-  ga('send', 'pageview');
-
 </script>
 </body>
 </html>

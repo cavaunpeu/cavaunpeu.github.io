@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,19 +20,19 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+  <meta name="twitter:domain" content="">
     <meta property="twitter:title" content="Bayesian Inference via Simulated Annealing"/>
     <meta property="twitter:description" content="A toy, hand-rolled Bayesian model, optimized via simulated annealing."/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/bayesian_inference_simulated_annealing_traceplot.png"/>
+    <meta property="twitter:image" content="/figures/bayesian_inference_simulated_annealing_traceplot.png"/>
 
 	<!-- CSS -->
-	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -44,23 +44,23 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a id="site-title" href="/">will wolf</a></h1>
           <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
-              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
+              <li><a href="/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
+                  <a id="inactiveLanguage" href="/es/" title=Español>ES</a>
                 </li>
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -80,7 +80,7 @@
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>I recently finished a <a href="https://www.coursera.org/learn/discrete-optimization">course</a> on discrete optimization and am currently working through Richard McElreath's <em>excellent</em> <a href="http://xcelab.net/rm/statistical-rethinking/">textbook</a> Statistical Rethinking. Combining the two, and duly jazzed by this <a href="https://www.youtube.com/watch?v=SC5CX8drAtU">video</a> on the Traveling Salesman Problem, I'd thought I'd build a toy Bayesian model and try to optimize it via simulated annealing.</p>
 <p>This work was brief, amusing and experimental. The result is a simple <a href="https://willwolf.shinyapps.io/bayesian-inference-simulated-annealing/">Shiny app</a> that contrasts MCMC search via simulated annealing versus the (more standard) Metropolis algorithm. While far from groundbreaking, I did pick up the following few bits of intuition along the way.</p>
-<p><img alt="traceplot" class="img-responsive" src="https://cavaunpeu.github.io/figures/bayesian_inference_simulated_annealing_traceplot.png"/></p>
+<p><img alt="traceplot" class="img-responsive" src="/figures/bayesian_inference_simulated_annealing_traceplot.png"/></p>
 <h3>A new favorite analogy for Bayesian inference</h3>
 <p>I like teaching things to anyone who will listen. Fancy models are useless if your boss doesn't understand. Simple analogies are immensely effective for communicating almost anything at all.</p>
 <p>The goal of Bayesian inference is, given some data, to figure out which parameters were employed in generating that data. The data itself come from generative processes - a Binomial process, a Poisson process, a Normal process (as is used in this post), for example - which each require parameters to get off the ground (in the same way that an oven needs a temperature and a time limit before it can start making bread) - <span class="math">\(n\)</span> and <span class="math">\(p\)</span>; <span class="math">\(\lambda\)</span>; <span class="math">\(\mu\)</span> and <span class="math">\(\sigma\)</span>, respectively. In statistical inference, we work backwards: we're given the data, we hypothesize from which type of process(es) it was generated, and we then do our best to guess what these initial parameters were. Of course, we'll never actually know: if we did, we wouldn't need to do any modeling at all.</p>
@@ -232,16 +232,6 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
-</script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-97412095-1', 'auto');
-  ga('send', 'pageview');
-
 </script>
 </body>
 </html>
