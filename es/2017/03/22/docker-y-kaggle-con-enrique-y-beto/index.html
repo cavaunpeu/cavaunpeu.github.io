@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="cosas de machine learning">
+	<meta name="description" content="escritura sobre machine learning, la geopolítica, y la vida">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/es/">will wolf</a></h1>
-          <h4 id="site-subtitle">cosas de machine learning</h4>
+            <h4 id="site-subtitle-with-links">escritura sobre <a id="sitesubtitle-machine-learning" href="/es/machine-learning">machine learning</a>, la geopolítica, y la vida</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/" title=English>EN</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -80,7 +77,7 @@
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>Este post tiene como objetivo familiarizarlos con lo que es Docker, por qué y cómo usarlo para Kaggle. Para hacer las cosas más simples, hablaremos principalmente de Plaza Sésamo y pasteles en lugar de computadoras y datos.</p>
 <p>Una mañana de lunes, Enrique sale de debajo de su cobija rayada, pone los dos pies en el piso y abre la ventana de su cuarto. Echa un vistazo hacia la metrópoli llena de galletas y muñecos de peluche, endereza el cuello de su suéter color banana, suelta un fuerte bostezo matutino y exclama: "Hoy, voy a preparar pasteles para mi querido compañero Beto."</p>
-<p><img alt="ernie and bert" class="img-responsive" src="https://cavaunpeu.github.io/es/../images/ernie_and_bert.png"/></p>
+<p><img alt="ernie and bert" class="img-responsive" src="https://cavaunpeu.github.io/es/images/ernie_and_bert.png"/></p>
 <p>Por mala suerte, Enrique nunca ha hecho pasteles antes. ¡Pero no importa! Se precipita con prisa hacia la cocina, toma un libro de cocina, organiza los ingredientes y prende su hornito Easy-Bake. "Lo pongo a prueba igual. Prepararé el mejor pastel jamás hecho por todos los muñecos de peluche. Y una vez que el resultado me complazca, haré 50 más," grita.</p>
 <p>Horas después, su trabajo termina: su pastel - tres pisos de "mini-pasteles" sabor arándano, fresa y tocino - es simplemente la mejor cosa que haya probado alguna vez en su vida. "¡Mucho mejor que cualquier cosa que ese fraude Cookie Monster haya probado jamás!" dice. Emocionado, Enrique toma una pausa en su cocina ya demasiada sucia para admirar el resultado. Piensa en Beto y se pregunta qué tan rápido se puede entregar el regalo. "Ya que he horneado el pastel perfecto, solo me toca hacer 50 más. ¿Debe ser fácil, verdad?"</p>
 <p>Enrique se da vuelta para mirar su Easy-Bake. "Pues, esa vaina solo cocina un pastel a la vez. ¡Tardaría días en hacer 50 a ese ritmo!" Aún de buen humor, corre a la panadería del pueblo para pedir prestado su horno - ese más grande que el suyo. Se lo dan en seguida y Enrique se pone a cocinar.</p>
@@ -109,16 +106,16 @@
 </ol>
 <p>Trayendo el contenedor a la panadería es igual a un sencillo <code>docker run</code> con el servidor remoto como el <code>docker-machine</code>. Trayendo los ingredientes a la panadería, esto es colocando datos en el sistema de archivo local del servidor remoto, es mucho menos "sexy." En el sentido más simple, es igual a usar <code>scp</code> or <code>rsync</code> para transferir un archivo del entorno local al servidor remoto hasta usar <code>curl</code> para descargar un archivo directamente en el servidor remoto mismo.</p>
 <p>En la práctica, esto se ve generalmente así:</p>
-<div class="highlight"><pre><span></span><span class="n">docker</span>
-    <span class="c1">--tlsverify</span>
-    <span class="c1">--tlscacert="$HOME/.docker/machine/certs/ca.pem"</span>
-    <span class="c1">--tlscert="$HOME/.docker/machine/certs/cert.pem"</span>
-    <span class="c1">--tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78</span>
-<span class="n">run</span>
-    <span class="c1">--rm</span>
-    <span class="o">-</span><span class="n">i</span>
-    <span class="o">-</span><span class="n">v</span>
-    <span class="o">/</span><span class="k">data</span><span class="p">:</span><span class="o">/</span><span class="k">data</span> <span class="n">kaggle</span><span class="o">-</span><span class="n">contest</span> <span class="n">build_model</span><span class="p">.</span><span class="n">sh</span>
+<div class="highlight"><pre><span></span><span class="err">docker</span>
+<span class="err">    --tlsverify</span>
+<span class="err">    --tlscacert="$HOME/.docker/machine/certs/ca.pem"</span>
+<span class="err">    --tlscert="$HOME/.docker/machine/certs/cert.pem"</span>
+<span class="err">    --tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78</span>
+<span class="err">run</span>
+<span class="err">    --rm</span>
+<span class="err">    -i</span>
+<span class="err">    -v</span>
+<span class="err">    /data:/data kaggle-contest build_model.sh</span>
 </pre></div>
 <h2>Utensilios de cocina que no se compran en la tienda</h2>
 <p>Para hacer su pastel, Enrique usó una tabla de cortar única en el mundo que Beto hizo a mano para él. ¿Cómo puede usarla en la panadería? En términos de Kaggle: ¿cómo puedo usar una librería en mi proyecto que no está disponible en un repositorio de paquetes público (una que construí yo mismo)?</p>
@@ -159,21 +156,49 @@ sobre Docker para Kaggle:</p>
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/es/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -181,7 +206,7 @@ sobre Docker para Kaggle:</p>
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

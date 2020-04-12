@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -83,9 +80,124 @@
 * IPython notebook
 *
 */
-/* CSS font colors for translated ANSI colors. */
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
 .ansibold {
   font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
 }
 /* use dark versions for foreground, to improve visibility */
 .ansiblack {
@@ -164,12 +276,20 @@ div.cell {
   /* This acts as a spacer between cells, that is outside the border */
   margin: 0px;
   outline: none;
-  border-left-width: 1px;
-  padding-left: 5px;
-  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
 }
 div.cell.jupyter-soft-selected {
-  border-left-color: #90CAF9;
   border-left-color: #E3F2FD;
   border-left-width: 1px;
   padding-left: 5px;
@@ -182,27 +302,39 @@ div.cell.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected {
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
   border-color: #ababab;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
 }
 @media print {
-  div.cell.selected {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected.jupyter-soft-selected {
-  border-left-width: 0;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
-}
 .edit_mode div.cell.selected {
   border-color: #66BB6A;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
 }
 @media print {
   .edit_mode div.cell.selected {
@@ -235,6 +367,7 @@ div.cell.selected.jupyter-soft-selected {
   }
 }
 div.inner_cell {
+  min-width: 0;
   /* Old browsers */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -255,11 +388,6 @@ div.inner_cell {
   box-flex: 1;
   /* Modern browsers */
   flex: 1;
-}
-@-moz-document url-prefix() {
-  div.inner_cell {
-    overflow-x: hidden;
-  }
 }
 /* input_area and input_prompt must match in top border and margin for alignment */
 div.input_area {
@@ -402,7 +530,9 @@ div.input_area > div.highlight > pre {
 .CodeMirror-lines {
   /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
   /* we have set a different line-height and want this to scale with that. */
-  padding: 0.4em;
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
 }
 .CodeMirror-linenumber {
   padding: 0 8px 0 4px;
@@ -412,11 +542,24 @@ div.input_area > div.highlight > pre {
   border-top-left-radius: 2px;
 }
 .CodeMirror pre {
-  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
-  /* .CodeMirror-lines */
-  padding: 0;
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
   border: 0;
   border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
 }
 /*
 
@@ -664,6 +807,9 @@ div.output_area img.unconfined,
 div.output_area svg.unconfined {
   max-width: none;
 }
+div.output_area .mglyph > img {
+  max-width: none;
+}
 /* This is needed to protect the pre formating from global settings such
    as that of bootstrap */
 .output {
@@ -702,7 +848,7 @@ div.output_area svg.unconfined {
 }
 div.output_area pre {
   margin: 0;
-  padding: 0;
+  padding: 1px 0 1px 0;
   border: 0;
   vertical-align: baseline;
   color: black;
@@ -824,6 +970,10 @@ div.output_unrecognized a:hover {
 .rendered_html h6:first-child {
   margin-top: 1em;
 }
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
 
 
 
@@ -840,16 +990,24 @@ div.output_unrecognized a:hover {
 }
 
 
+
+
+
 .rendered_html pre,
+
 
 
 
 .rendered_html tr,
 .rendered_html th,
 
-.rendered_html td,
 
-
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 .rendered_html * + table {
   margin-top: 1em;
 }
@@ -865,6 +1023,11 @@ div.output_unrecognized a:hover {
 
 .rendered_html img.unconfined,
 
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
 div.text_cell {
   /* Old browsers */
   display: -webkit-box;
@@ -915,8 +1078,15 @@ h6:hover .anchor-link {
   display: none;
 }
 .text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
 .text_cell.unrendered .text_cell_render {
   display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
 }
 .cm-header-1,
 .cm-header-2,
@@ -1016,48 +1186,8 @@ h6:hover .anchor-link {
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
-.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
-<style type="text/css">
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-</style>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style><div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The goal of this work is to perform simple intercausal reasoning on a 3-node Bayesian network.
 <img alt="simple bayesian network" class="img-responsive" src="https://cavaunpeu.github.io/figures/simple_bayesian_network.png"/></p>
@@ -1070,19 +1200,15 @@ h6:hover .anchor-link {
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Problem-setup">Problem setup<a class="anchor-link" href="#Problem-setup">¶</a></h1>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Define-component-probabilities">Define component probabilities<a class="anchor-link" href="#Define-component-probabilities">¶</a></h2>
 </div>
@@ -1093,7 +1219,7 @@ h6:hover .anchor-link {
 <div class="prompt input_prompt">In [4]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">PRESIDENT_PROBABILITY</span> <span class="o">=</span> <span class="o">.</span><span class="mi">05</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">PRESIDENT_PROBABILITY</span> <span class="o">=</span> <span class="o">.</span><span class="mi">05</span>
 <span class="n">ACCIDENT_PROBABILITY</span> <span class="o">=</span> <span class="o">.</span><span class="mi">12</span>
 <span class="n">TRAFFIC_PROBABILITY</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">.</span><span class="mi">15</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">.</span><span class="mi">9</span><span class="p">}</span>
 <span class="n">TRIALS</span> <span class="o">=</span> <span class="mi">200</span>
@@ -1107,16 +1233,14 @@ h6:hover .anchor-link {
 <div class="prompt input_prompt">In [5]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">JointInput</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">'JointInput'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'p'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">JointInput</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">'JointInput'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'p'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Define-PyMC-sampling-parameters">Define PyMC sampling parameters<a class="anchor-link" href="#Define-PyMC-sampling-parameters">¶</a></h2><p>We'll need these later on.</p>
 </div>
@@ -1127,17 +1251,15 @@ h6:hover .anchor-link {
 <div class="prompt input_prompt">In [6]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">N_CHAINS</span> <span class="o">=</span> <span class="mi">4</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">N_CHAINS</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">N_SAMPLES</span> <span class="o">=</span> <span class="mi">2000</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Simulate-data">Simulate data<a class="anchor-link" href="#Simulate-data">¶</a></h2>
 </div>
@@ -1148,7 +1270,7 @@ h6:hover .anchor-link {
 <div class="prompt input_prompt">In [7]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">president</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">PRESIDENT_PROBABILITY</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">TRIALS</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">president</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">PRESIDENT_PROBABILITY</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">TRIALS</span><span class="p">)</span>
 <span class="n">accident</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">ACCIDENT_PROBABILITY</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">TRIALS</span><span class="p">)</span>
 
 <span class="n">traffic_probabilities</span> <span class="o">=</span> <span class="p">[</span><span class="n">TRAFFIC_PROBABILITY</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">)]</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">president</span><span class="p">,</span> <span class="n">accident</span><span class="p">)]</span>
@@ -1163,16 +1285,17 @@ h6:hover .anchor-link {
 <div class="prompt input_prompt">In [8]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span> <span class="n">f</span><span class="s1">'President Mean: {president.mean()}'</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span> <span class="n">f</span><span class="s1">'Accident Mean: {accident.mean()}'</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span> <span class="n">f</span><span class="s1">'Traffic Mean: {traffic.mean()}'</span> <span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">'President Mean: </span><span class="si">{</span><span class="n">president</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">'Accident Mean: </span><span class="si">{</span><span class="n">accident</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">'Traffic Mean: </span><span class="si">{</span><span class="n">traffic</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>President Mean: 0.07
 Accident Mean: 0.16
@@ -1188,16 +1311,14 @@ Traffic Mean: 0.19
 <div class="prompt input_prompt">In [9]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">observed_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'president'</span><span class="p">:</span> <span class="n">president</span><span class="p">,</span> <span class="s1">'accident'</span><span class="p">:</span> <span class="n">accident</span><span class="p">,</span> <span class="s1">'traffic'</span><span class="p">:</span> <span class="n">traffic</span><span class="p">})</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">observed_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'president'</span><span class="p">:</span> <span class="n">president</span><span class="p">,</span> <span class="s1">'accident'</span><span class="p">:</span> <span class="n">accident</span><span class="p">,</span> <span class="s1">'traffic'</span><span class="p">:</span> <span class="n">traffic</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Compute-$P(\text{president})$-and-$P(\text{accident})$-posteriors">Compute $P(\text{president})$ and $P(\text{accident})$ posteriors<a class="anchor-link" href="#Compute-$P(\text{president})$-and-$P(\text{accident})$-posteriors">¶</a></h1><p>One way to estimate the probability of the president being in town given observational data is to compute the observed proportion, i.e. if the president was seen in 4 of 200 trials, then the estimated probability is .02. Of course, this discards all <em>uncertainty</em> in our estimate (of which we have much). Uncertainty declines as the size of our data tends towards infinity, and 200 trials is not infinite.</p>
 <p>Instead, we can express our belief - uncertainty included - in the true probability of observing <code>president</code>, and that of observing <code>accident</code>, as a Beta-distributed posterior. This follows trivially from the <a href="https://dataorigami.net/products/bayesian-beta-binomial-model">Beta-Binomial conjugacy</a>*.</p>
@@ -1210,7 +1331,7 @@ Traffic Mean: 0.19
 <div class="prompt input_prompt">In [10]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">times_president_observed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">president</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">times_president_observed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">president</span><span class="p">)</span>
 <span class="n">times_president_not_observed</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">president</span><span class="p">)</span> <span class="o">-</span> <span class="n">times_president_observed</span>
 
 <span class="n">president_probability_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span>
@@ -1228,7 +1349,7 @@ Traffic Mean: 0.19
 <div class="prompt input_prompt">In [11]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">times_accident_observed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">accident</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">times_accident_observed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">accident</span><span class="p">)</span>
 <span class="n">times_accident_not_observed</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accident</span><span class="p">)</span> <span class="o">-</span> <span class="n">times_accident_observed</span>
 
 <span class="n">accident_probability_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span>
@@ -1241,10 +1362,8 @@ Traffic Mean: 0.19
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Compute-$P(\text{Traffic}\-|\-\text{President},-\text{Accident})$-posterior">Compute $P(\text{Traffic}\ |\ \text{President}, \text{Accident})$ posterior<a class="anchor-link" href="#Compute-$P(\text{Traffic}\-|\-\text{President},-\text{Accident})$-posterior">¶</a></h1><p>This might look a little funky for those used to Bayesian parameter estimation for univariate systems - estimating $P(\text{heads})$ given the results of 15 coinflips, for example.</p>
 <p>So, how do we do this? Do we filter the data for all unique combinations of (<code>president</code>, <code>accident</code>), i.e. $(0, 0)$, $(0, 1)$, $(1, 0)$, $(1, 1)$ then estimate in the same fashion as above? That way, we could estimate $P(\text{traffic} = 1\ |\ \text{president} = 0, \text{accident} = 0)$, $P(\text{traffic} = 1\ |\ \text{president} = 1, \text{accident} = 0)$, etc. In fact, this would work. But what if we added more variables? And what if the values were continuous? This would get messy quickly.</p>
@@ -1262,10 +1381,8 @@ $$</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Baseline-logistic-regression">Baseline logistic regression<a class="anchor-link" href="#Baseline-logistic-regression">¶</a></h2>
 </div>
@@ -1276,7 +1393,7 @@ $$</p>
 <div class="prompt input_prompt">In [12]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">glm</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">glm</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">observed_data</span><span class="p">[[</span><span class="s1">'president'</span><span class="p">,</span> <span class="s1">'accident'</span><span class="p">]],</span> <span class="n">y</span><span class="o">=</span><span class="n">observed_data</span><span class="p">[</span><span class="s1">'traffic'</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -1288,17 +1405,18 @@ $$</p>
 <div class="prompt input_prompt">In [13]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">precision</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="nb">print</span><span class="p">(</span> <span class="n">f</span><span class="s1">'Estimated intercept: {glm.intercept_[0]:.</span><span class="si">{precision}</span><span class="s1">}'</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span> <span class="n">f</span><span class="s1">'Estimated president coefficient: {glm.coef_[0][0]:.</span><span class="si">{precision}</span><span class="s1">}'</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span> <span class="n">f</span><span class="s1">'Estimated accident coefficient: {glm.coef_[0][1]:.</span><span class="si">{precision}</span><span class="s1">}'</span> <span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">precision</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">'Estimated intercept: </span><span class="si">{</span><span class="n">glm</span><span class="o">.</span><span class="n">intercept_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.</span><span class="si">{</span><span class="n">precision</span><span class="si">}}</span><span class="s1">'</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">'Estimated president coefficient: </span><span class="si">{</span><span class="n">glm</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.</span><span class="si">{</span><span class="n">precision</span><span class="si">}}</span><span class="s1">'</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">'Estimated accident coefficient: </span><span class="si">{</span><span class="n">glm</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.</span><span class="si">{</span><span class="n">precision</span><span class="si">}}</span><span class="s1">'</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Estimated intercept: -1.7206
 Estimated president coefficient: 1.1502
@@ -1309,10 +1427,8 @@ Estimated accident coefficient: 1.0845
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Bayesian-logistic-regression">Bayesian logistic regression<a class="anchor-link" href="#Bayesian-logistic-regression">¶</a></h2><p>This way, we get uncertainty in our estimates! Uncertainty is important, as we'll see in following plots.</p>
 <p>Sometimes, the chains immediately flatline to a single value. I'm not sure if this is a Bayesian modeling thing, or a PyMC thing. I did not take the time to investigate. Should this happen when running this notebook, kindly try again. If stuck, restart the kernel and start again from there. Advice on this matter is appreciated.</p>
@@ -1324,7 +1440,7 @@ Estimated accident coefficient: 1.0845
 <div class="prompt input_prompt">In [14]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
     <span class="n">priors</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">'Intercept'</span><span class="p">:</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
         <span class="s1">'president'</span><span class="p">:</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
@@ -1340,7 +1456,8 @@ Estimated accident coefficient: 1.0845
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>100%|██████████| 2000/2000 [00:15&lt;00:00, 127.65it/s]
 </pre>
@@ -1354,7 +1471,7 @@ Estimated accident coefficient: 1.0845
 <div class="prompt input_prompt">In [15]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">warmup</span> <span class="o">=</span> <span class="mi">500</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">warmup</span> <span class="o">=</span> <span class="mi">500</span>
 <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Intercept'</span><span class="p">,</span> <span class="s1">'president'</span><span class="p">,</span> <span class="s1">'accident'</span><span class="p">]</span>
 
 <span class="n">pm</span><span class="o">.</span><span class="n">traceplot</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="n">warmup</span><span class="p">:],</span> <span class="n">varnames</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
@@ -1364,8 +1481,9 @@ Estimated accident coefficient: 1.0845
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA1gAAAGoCAYAAABbkkSYAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzsvXmYXVWZ6P3b+8ynplRVKnMCBBICYZ4CotA4NEijOOCs
 tHbjdFuv3dr9cdv7NF8PYl8/+z52N/dqiwMO4AAqgi2tgogoQ4BACEkqc1VqrjrzsOe91/r+2KdO
@@ -3822,10 +3940,8 @@ CCG6yf8DIowHef8vnVgAAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Compute-counterfactual-predictions">Compute counterfactual predictions<a class="anchor-link" href="#Compute-counterfactual-predictions">¶</a></h1><p>Our chains look stationary, well-mixing and similar to one another. This signals that our sampler probably did its job. Furthermore, the point estimates computed by the baseline model are contained in our posteriors. As the focus of this work is the overall analysis of the graphical model and not on these specific parameter estimates themselves, I don't dig further.</p>
 <p>The next task is to compute counterfactual predictions for $P(\text{Traffic}\ |\ \text{President}, \text{Accident})$, i.e. "given some inputs for $P$ and $A$ in our model, what's the probability of observing <code>traffic</code>?" Remember, our model looks as follows:
@@ -3844,7 +3960,7 @@ $$</p>
 <div class="prompt input_prompt">In [16]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
     <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">compute_counterfactual_predictions</span><span class="p">(</span><span class="n">president_value</span><span class="p">,</span> <span class="n">accident_value</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">):</span>
@@ -3865,7 +3981,7 @@ $$</p>
 <div class="prompt input_prompt">In [17]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">input_combinations</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">input_combinations</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
 <span class="n">counterfactual_predictions</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">observed_proportions</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -3878,10 +3994,8 @@ $$</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Plot-$P(\text{Traffic}\-|\-\text{President},-\text{Accident})$-posteriors">Plot $P(\text{Traffic}\ |\ \text{President}, \text{Accident})$ posteriors<a class="anchor-link" href="#Plot-$P(\text{Traffic}\-|\-\text{President},-\text{Accident})$-posteriors">¶</a></h1><p>Onto each posterior we also plot:</p>
 <ul>
@@ -3897,7 +4011,7 @@ $$</p>
 <div class="prompt input_prompt">In [18]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">subplot_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]):</span>
     <span class="n">predictions</span> <span class="o">=</span> <span class="n">counterfactual_predictions</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">)]</span>
@@ -3909,7 +4023,7 @@ $$</p>
     <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">observed_proportion</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'green'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Observed Proportion'</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">expected_proportion</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'#A60628'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Expected Proportion'</span><span class="p">)</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">f</span><span class="s1">'Posterior Distribution of </span><span class="se">\n</span><span class="s1">P(Traffic = 1 | President = </span><span class="si">{p}</span><span class="s1">, Accident = </span><span class="si">{a}</span><span class="s1">)'</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'Posterior Distribution of </span><span class="se">\n</span><span class="s1">P(Traffic = 1 | President = </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s1">, Accident = </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">)'</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
@@ -3918,8 +4032,9 @@ $$</p>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA/oAAALECAYAAAC44UvIAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xl8U1X+//H3bdIWO9SK0CqiFkRwAaUIyCi4gRsCg/hD
 wUFcUHDQCjojO1RQFFRcwOLCV8fxy/hFEStoccFBHQeUzbKJo5QqIPsilEJLl+T+/uiQaehCEnKb
@@ -4621,10 +4736,8 @@ gg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Plot-mean-and-prediction-interval-for-predicted-$P(\text{traffic})$">Plot mean and prediction interval for predicted $P(\text{traffic})$<a class="anchor-link" href="#Plot-mean-and-prediction-interval-for-predicted-$P(\text{traffic})$">¶</a></h1><p>For each unique combination of $(P, A)$ we have 8000 guesses at what $P(\text{Traffic}\ |\ \text{President}, \text{Accident})$ is implied. For each set, we compute a mean and a 94% interval then plot against the observed proportion to see how we did.</p>
 <p>Given that our data were generated randomly, it is possible that we don't observe any positive occurrences of <code>traffic</code> given varying values of <code>president</code> and <code>accident</code> - especially at $(T = 1\ |\ P = 1, A = 1)$. As such, there would be no data point in the following plot for the corresponding value of $x$.</p>
@@ -4637,7 +4750,7 @@ gg==
 <div class="prompt input_prompt">In [19]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
 <span class="n">y_observed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">observed_proportions</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="p">[(</span><span class="n">key</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">observed_proportions</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
 
@@ -4658,13 +4771,15 @@ gg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[19]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.legend.legend 0x1192d19e8="" at=""></matplotlib.legend.legend></pre>
+<pre>&lt;matplotlib.legend.Legend at 0x1192d19e8&gt;</pre>
 </div>
 </div>
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAsEAAAHfCAYAAACxhQUCAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xl8VOWh//HPOZNACIEsEJQ17IggArIvKiCCgoJWK5ZL
 tdq6t1WvS62K4FartrVotfqqV/3Z1qvWq6itiIKKoAioyCIoSwJhJ9skmfXMOc/vjyEjyBIQwmT5
@@ -5213,10 +5328,8 @@ RERajkKwiIiIiLQchWARERERaTn/B+ZqIwGwgfrmAAAAAElFTkSuQmCC
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Returning-to-our-original-questions">Returning to our original questions<a class="anchor-link" href="#Returning-to-our-original-questions">¶</a></h1><p>To answer our original questions - $P(\text{Accident = 1}\ |\ \text{Traffic = 1})$ and $P(\text{Accident = 1}\ |\ \text{Traffic = 1}, \text{President = 1})$ - we invoke basic axioms of Bayes' Theorem, conditional probability and the factorization of probabilistic graphical models. Here are the key pieces that we'll need:
 $$
@@ -5236,10 +5349,8 @@ $$<p>Starting from the beginning, our goal is to reduce each question down to an
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$">$P(\text{Accident = 1}\ |\ \text{Traffic = 1})$<a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1})$">¶</a></h2><p>$\begin{align*}
 P(A = 1|T = 1)
@@ -5270,7 +5381,7 @@ P(T = 1)
 <div class="prompt input_prompt">In [20]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">compute_P_accident_1_given_traffic_1</span><span class="p">(</span><span class="n">president_probability</span><span class="p">,</span> <span class="n">accident_probability</span><span class="p">,</span> <span class="n">traffic_probability</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">compute_P_accident_1_given_traffic_1</span><span class="p">(</span><span class="n">president_probability</span><span class="p">,</span> <span class="n">accident_probability</span><span class="p">,</span> <span class="n">traffic_probability</span><span class="p">):</span>
     <span class="n">P_traffic_1_accident_1</span> <span class="o">=</span> \
         <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">president_probability</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">accident_probability</span><span class="p">)</span><span class="o">*</span><span class="n">traffic_probability</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span> <span class="o">+</span>\
         <span class="p">(</span><span class="n">president_probability</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">accident_probability</span><span class="p">)</span><span class="o">*</span><span class="n">traffic_probability</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
@@ -5294,7 +5405,7 @@ P(T = 1)
 <div class="prompt input_prompt">In [21]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">P_accident_1_given_traffic_1_point_estimate</span> <span class="o">=</span> \
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">P_accident_1_given_traffic_1_point_estimate</span> <span class="o">=</span> \
     <span class="n">compute_P_accident_1_given_traffic_1</span><span class="p">(</span><span class="n">PRESIDENT_PROBABILITY</span><span class="p">,</span><span class="n">ACCIDENT_PROBABILITY</span><span class="p">,</span><span class="n">TRAFFIC_PROBABILITY</span><span class="p">)</span>
     
 <span class="n">P_accident_1_given_traffic_1_with_uncertainty</span> <span class="o">=</span> \
@@ -5309,7 +5420,7 @@ P(T = 1)
 <div class="prompt input_prompt">In [22]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">P_accident_1_given_traffic_1_with_uncertainty</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
@@ -5324,13 +5435,15 @@ P(T = 1)
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[22]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.legend.legend 0x1194a6a20="" at=""></matplotlib.legend.legend></pre>
+<pre>&lt;matplotlib.legend.Legend at 0x1194a6a20&gt;</pre>
 </div>
 </div>
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtoAAAH0CAYAAAADoIroAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XtY1GX+//HXMIgi4Kno8LW0DMEjHlPLU+oqZWbqGpoK
 blububYlmadM89SqadZmmVmuplZmWm2ttvXTUsvM1hOZhwzKA26mKSYgcRju3x8usyIIqNwzjPN8
@@ -5641,10 +5754,8 @@ TkSuQmCC
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$">$P(\text{Accident = 1}\ |\ \text{Traffic = 1}, \text{President = 1})$<a class="anchor-link" href="#$P(\text{Accident-=-1}\-|\-\text{Traffic-=-1},-\text{President-=-1})$">¶</a></h2><p>$\begin{align*}
 P(A = 1\ |\ T = 1, P = 1)
@@ -5670,7 +5781,7 @@ P(T = 1, P = 1)
 <div class="prompt input_prompt">In [23]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">compute_P_accident_1_given_traffic_1_president_1</span><span class="p">(</span><span class="n">president_probability</span><span class="p">,</span> <span class="n">accident_probability</span><span class="p">,</span> <span class="n">traffic_probability</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">compute_P_accident_1_given_traffic_1_president_1</span><span class="p">(</span><span class="n">president_probability</span><span class="p">,</span> <span class="n">accident_probability</span><span class="p">,</span> <span class="n">traffic_probability</span><span class="p">):</span>
     <span class="n">P_accident_1_traffic_1_president_1</span> <span class="o">=</span> \
         <span class="n">traffic_probability</span><span class="p">[</span><span class="n">JointInput</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">*</span><span class="n">accident_probability</span><span class="o">*</span><span class="n">president_probability</span>
         
@@ -5691,7 +5802,7 @@ P(T = 1, P = 1)
 <div class="prompt input_prompt">In [24]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">P_accident_1_given_traffic_1_president_1_point_estimate</span> <span class="o">=</span> \
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">P_accident_1_given_traffic_1_president_1_point_estimate</span> <span class="o">=</span> \
     <span class="n">compute_P_accident_1_given_traffic_1_president_1</span><span class="p">(</span><span class="n">PRESIDENT_PROBABILITY</span><span class="p">,</span><span class="n">ACCIDENT_PROBABILITY</span><span class="p">,</span><span class="n">TRAFFIC_PROBABILITY</span><span class="p">)</span>
     
 <span class="n">P_accident_1_given_traffic_1_president_1_with_uncertainty</span> <span class="o">=</span> \
@@ -5706,7 +5817,7 @@ P(T = 1, P = 1)
 <div class="prompt input_prompt">In [25]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">P_accident_1_given_traffic_1_president_1_with_uncertainty</span><span class="p">,</span> 
          <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Posterior Distribution of P(Accident = 1 | Traffic = 1, President = 1)'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -5720,13 +5831,15 @@ P(T = 1, P = 1)
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[25]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.legend.legend 0x119715f60="" at=""></matplotlib.legend.legend></pre>
+<pre>&lt;matplotlib.legend.Legend at 0x119715f60&gt;</pre>
 </div>
 </div>
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtsAAAH0CAYAAADsYuHWAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XtY1GX+//HXMIAi4CkpN1ssQzzjMdE0Da3QNDMzUwyt
 zTLXDlp5KsXjrtnB2iwyD2t5KGM12/ppW5vlITXKs6lkYB6wLFJMQOQw3r8//DIrchT4OMP4fFyX
@@ -6066,10 +6179,8 @@ D2skSxiUJ7AvAAAAAElFTkSuQmCC
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="But-didn't-this-all-depend-on-how-the-dice-were-rolled?">But didn't this all depend on how the dice were rolled?<a class="anchor-link" href="#But-didn't-this-all-depend-on-how-the-dice-were-rolled?">¶</a></h1><p>To conclude, I'd like to give some basic context on the stochasticity of the generative process itself. We said above that the probability of observing an accident is <code>ACCIDENT_PROBABILITY = .12</code>. We then simulated 200 trials and observed a discrete count. While the expectation of this count is $200 * .12 = 24$ accidents observed, we could have in reality observed 23, or 31, or even (but implausibly) 0. Next, we used this data to infer a posterior distribution for the true value of <code>ACCIDENT_PROBABILITY</code>, and later plugged it in to the expressions corresponding to the original questions at hand. How much did the stochasticity of these trials impact the final result?</p>
 <p>The following data cover 199 more trials. In each, we "flip the coin" 99 times, instead of 1 time as was done above. In each trial, we plot the inferred posterior distribution for the true probability of <code>accident</code>. The distribution of given the median observed count is overlaid in bold.</p>
@@ -6090,7 +6201,7 @@ D2skSxiUJ7AvAAAAAElFTkSuQmCC
 <div class="prompt input_prompt">In [26]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">99</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">99</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1002</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">accident_trials</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">ACCIDENT_PROBABILITY</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">TRIALS</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
@@ -6119,13 +6230,15 @@ D2skSxiUJ7AvAAAAAElFTkSuQmCC
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[26]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><matplotlib.text.text 0x1197e7ef0="" at=""></matplotlib.text.text></pre>
+<pre>&lt;matplotlib.text.Text at 0x1197e7ef0&gt;</pre>
 </div>
 </div>
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAuIAAAH0CAYAAAB4hEgkAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XlYVPX+B/D3sDkI6CiMEK6kgZkgetWuhZp7mpmZ5oql
 adl6s0xzLbVEy7IbrZpZmeVWqTeXyuWilFlqLoWAuaGRrI4O4Mj6+4Pfd+7MMMs5MwcYhvfreXie
@@ -7090,10 +7203,8 @@ gCV3PQ3SewAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Thanks for reading.</p>
 </div>
@@ -7103,7 +7214,7 @@ gCV3PQ3SewAAAABJRU5ErkJggg==
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
@@ -7148,21 +7259,51 @@ gCV3PQ3SewAAAABJRU5ErkJggg==
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -7170,7 +7311,7 @@ gCV3PQ3SewAAAABJRU5ErkJggg==
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -102,7 +99,7 @@
 <p>In this instance, given a Dirichlet Process <span class="math">\(DP(G_0, \alpha)\)</span> — where <span class="math">\(G_0\)</span> is the base distribution (from which the cells and fibers decide what type of week we'll have) and <span class="math">\(\alpha\)</span> is some prior — we first draw a week-type distribution from the base, then draw our week-level probability vector from the result. As a bonus, a DP is able to infer an <em>infinite</em> number of week-type distributions from our data (as compared to K-Means, for example, in which we would have to specify this value <em>a priori</em>) which fits nicely with the problem at hand: <em>à la base</em>, how many distinct week-types do we truly have? How would we ever know?</p>
 <p>Dirichlet Processes are best understood through one of several simple generative statistical processes, namely the Chinese Restaurant Process, Polya Urn Model or Stick-Breaking Process. Edwin Chen has an <em>excellent</em> <a href="http://blog.echen.me/2012/03/20/infinite-mixture-models-with-nonparametric-bayes-and-the-dirichlet-process/">post</a> dissecting each and its relation to the DP itself.</p>
 <h3>Dirichlet Inference via Conjugacy</h3>
-<p>Given that a Dirichlet distribution is an exponential model, "all members of the exponential family have conjugate priors"<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> and our data can be intuitively viewed as Dirichlet draws, it would be fortuitous if there existed some nice algebraic conjugacy to make inference a breeze. We know how to use <em>Beta-Binomial</em> and <em>Dirichlet-Multinomial</em>, but unfortunately there doesn't seem to be much in the way of <em>X-Dirichlet</em><sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup>. As such, this approach unfortunately dead-ends here.</p>
+<p>Given that a Dirichlet distribution is an exponential model, "all members of the exponential family have conjugate priors"<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> and our data can be intuitively viewed as Dirichlet draws, it would be fortuitous if there existed some nice algebraic conjugacy to make inference a breeze. We know how to use <em>Beta-Binomial</em> and <em>Dirichlet-Multinomial</em>, but unfortunately there doesn't seem to be much in the way of <em>X-Dirichlet</em><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>. As such, this approach unfortunately dead-ends here.</p>
 <h3>The "Poor-Man's Dirichlet" via Linear Models</h3>
 <p>A final approach has us modeling the mean of each productivity-level proportion <span class="math">\(\mu_i\)</span> as:</p>
 <div class="math">$$
@@ -118,14 +115,14 @@ $$</div>
 <p>I've chosen the likelihood as the normal distribution with respective means <span class="math">\(\mu_i\)</span> and a <em>shared</em> standard deviation <span class="math">\(\sigma\)</span>. First, I note that I hope this is the correct approach, i.e. "do it like you would with a typical linear model." Second, I chose a shared standard deviation (and, frankly, prayed it would be small) as my aim was to omit it from analysis/posterior prediction entirely: while simulating <span class="math">\(\mu_i\)</span> seems perfectly sound, making a draw from the likelihood function, i.e. the normal distribution with mean <span class="math">\(\mu_i\)</span> and standard deviation <span class="math">\(\sigma\)</span>, would cause our simulated productivity-level proportions to no longer add up to 1! This seems like the worst of all evils. While the spread of the respective distributions <em>does</em> seem to vary — thus suggesting we would be wise to infer a separate <span class="math">\(\sigma_i\)</span> for each — I chose to brush this fact aside because: one, the <span class="math">\(p_i\)</span>'s are not independent, i.e. as one goes up another must necessarily go down, which I hoped might be in some way "captured" by the single parameter, and two, I didn't intend to use the <span class="math">\(\sigma\)</span> posterior in the analysis for the reason mentioned above, checking only to see that it converged.</p>
 </li>
 </ol>
-<p>In the end, I chose Option 3 for a few simple reasons. First, I have no reason to believe that the data were generated by a variety of distinct "week-type" distributions; a week is a rather large unit of time. In addition, the spread of the empirical distributions don't appear, by no particularly rigorous measure, that erratic. Conversely, if this were instead day-level data, this argument would be much more plausible and the data would likely corroborate this point. Second, Gelman suggests this approach in response to a similar question, adding "I’ve personally never had much success with Dirichlets."<sup id="fnref2-2"><a class="footnote-ref" href="#fn-2">2</a></sup></p>
+<p>In the end, I chose Option 3 for a few simple reasons. First, I have no reason to believe that the data were generated by a variety of distinct "week-type" distributions; a week is a rather large unit of time. In addition, the spread of the empirical distributions don't appear, by no particularly rigorous measure, that erratic. Conversely, if this were instead day-level data, this argument would be much more plausible and the data would likely corroborate this point. Second, Gelman suggests this approach in response to a similar question, adding "I’ve personally never had much success with Dirichlets."<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
 <p>To build this model, I elect to use Stan in R, defining it as follows:</p>
 <div class="highlight"><pre><span></span><span class="n">data</span> <span class="p">{</span>
  <span class="n">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="m">1</span><span class="o">&gt;</span> <span class="n">N</span><span class="p">;</span>
- <span class="n">real</span> <span class="n">very_distracting[N]</span><span class="p">;</span>
- <span class="n">real</span> <span class="n">distracting[N]</span><span class="p">;</span>
- <span class="n">real</span> <span class="n">neutral[N]</span><span class="p">;</span>
- <span class="n">real</span> <span class="n">productive[N]</span><span class="p">;</span>
+ <span class="n">real</span> <span class="n">very_distracting</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+ <span class="n">real</span> <span class="n">distracting</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+ <span class="n">real</span> <span class="n">neutral</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+ <span class="n">real</span> <span class="n">productive</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
 <span class="p">}</span>
 
 <span class="n">parameters</span> <span class="p">{</span>
@@ -163,7 +160,7 @@ $$</div>
 </pre></div>
 <p>Here (with <em>a, b, c, d, e</em> corresponding respectively to "Very Distracting Time," "Distracting Time," "Neutral," "Productive Time," "Very Productive Time") I model the likelihoods of all but <em>e</em>, as this can be computed deterministically from the posterior samples of <em>a, b, c</em> and <em>d</em> as <span class="math">\(e = 1 - a - b - c - d\)</span>. For priors, I place <span class="math">\(\text{Normal}(0, 1)\)</span> priors on <span class="math">\(\phi_j\)</span>, the magnitude of which should be practically irrelevant as stated previously. Finally, I give <span class="math">\(\sigma\)</span> a <span class="math">\(\text{Uniform}(0, 1)\)</span> prior, which seemed like a logical magnitude for mapping a vector of values that sum to 1 to another vector of values that sum (to something close to) to 1.</p>
 <p>Instinctually, this modeling framework seems like it might have a few leaks in the theoretical ceiling — especially with respect to my choices surrounding the shared <span class="math">\(\sigma\)</span> parameter. Should you have some feedback on this approach, please do drop a line in the comments below.</p>
-<p>To fit the model, I use the standard Stan NUTS engine to build 4 MCMC chains, following Richard McElreath's "four short chains to check, one long chain for inference!"<sup id="fnref-3"><a class="footnote-ref" href="#fn-3">3</a></sup>. The results — fortunately, quite smooth — are as follows:</p>
+<p>To fit the model, I use the standard Stan NUTS engine to build 4 MCMC chains, following Richard McElreath's "four short chains to check, one long chain for inference!"<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>. The results — fortunately, quite smooth — are as follows:</p>
 <p><img alt="traceplot" class="img-responsive" src="https://cavaunpeu.github.io/figures/poor_mans_dirichlet_traceplot.png"/></p>
 <p>The gray area of the plot pertains to the warmup period, while the white gives the valid samples. All four chains appear highly-stationary, well-mixing and roughly identical. Finally, let's examine the convergence diagnostics themselves:</p>
 <div class="highlight"><pre><span></span><span class="n">Inference</span> <span class="n">for</span> <span class="n">Stan</span> <span class="n">model</span><span class="o">:</span> <span class="n">model.</span>
@@ -177,7 +174,7 @@ $$</div>
 <span class="n">mu_d</span>  <span class="m">0.12</span>       <span class="m">0</span> <span class="m">0.01</span> <span class="m">0.10</span>  <span class="m">0.14</span>  <span class="m">4000</span>    <span class="m">1</span>
 <span class="n">sigma</span> <span class="m">0.07</span>       <span class="m">0</span> <span class="m">0.00</span> <span class="m">0.06</span>  <span class="m">0.07</span>  <span class="m">1792</span>    <span class="m">1</span>
 </pre></div>
-<p>Both <code>Rhat</code> — a value which we hope to equal 1, would be "suspicious at 1.01 and catastrophic at 1.10"<sup id="fnref2-3"><a class="footnote-ref" href="#fn-3">3</a></sup> — and <code>n_eff</code> — which expresses the "effective" number of samples, i.e. the samples not discarded due to high autocorrelation in the NUTS process — are right where we want them to be. Furthermore, <span class="math">\(\sigma\)</span> ends up being rather small, and with a rather-tight 97% prediction interval to boot.</p>
+<p>Both <code>Rhat</code> — a value which we hope to equal 1, would be "suspicious at 1.01 and catastrophic at 1.10"<sup id="fnref2:3"><a class="footnote-ref" href="#fn:3">3</a></sup> — and <code>n_eff</code> — which expresses the "effective" number of samples, i.e. the samples not discarded due to high autocorrelation in the NUTS process — are right where we want them to be. Furthermore, <span class="math">\(\sigma\)</span> ends up being rather small, and with a rather-tight 97% prediction interval to boot.</p>
 <p>Next, let's draw 2000 samples from the joint posterior and plot the respective distributions of <span class="math">\(\mu_i\)</span> against one another:</p>
 <p><img alt="posterior plot" class="img-responsive" src="https://cavaunpeu.github.io/figures/poor_mans_dirichlet_posteriors.png"/></p>
 <p>Remember, the above posterior distributions are for the <em>expected values</em> (mean) of each productivity-level proportion. In our model, we then insert this mean into a normal distribution (the likelihood function) with standard deviation <span class="math">\(\sigma\)</span> and draw our final value.</p>
@@ -197,16 +194,16 @@ $$</div>
 <div class="footnote">
 <hr/>
 <ol>
-<li id="fn-1">
-<p><a href="https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-gelman_et_al-3">Conjugate Prior - Wikipedia</a> <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
+<li id="fn:1">
+<p><a href="https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-gelman_et_al-3">Conjugate Prior - Wikipedia</a> <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
-<li id="fn-2">
+<li id="fn:2">
 <p><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">Conjugate prior to
-Dirichlets?</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a><a class="footnote-backref" href="#fnref2-2" title="Jump back to footnote 2 in the text">↩</a></p>
+Dirichlets?</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a><a class="footnote-backref" href="#fnref2:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
-<li id="fn-3">
+<li id="fn:3">
 <p>McElreath, Richard. Statistical Rethinking. Chapman and
-Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a><a class="footnote-backref" href="#fnref2-3" title="Jump back to footnote 3 in the text">↩</a></p>
+Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">↩</a><a class="footnote-backref" href="#fnref2:3" title="Jump back to footnote 3 in the text">↩</a></p>
 </li>
 </ol>
 </div>
@@ -222,15 +219,16 @@ Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref-3"
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -244,6 +242,8 @@ Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref-3"
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -264,6 +264,8 @@ Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref-3"
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -288,21 +290,51 @@ Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref-3"
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -310,7 +342,7 @@ Hall/CRC, 20151222. VitalBook file. <a class="footnote-backref" href="#fnref-3"
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

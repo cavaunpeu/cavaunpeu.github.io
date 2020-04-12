@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -123,7 +120,7 @@
 </ul>
 <h2>Probability distribution</h2>
 <p>A probability distribution is a lookup table for the likelihood of observing each unique value of a random variable. Assuming a given variable can take on values in <span class="math">\(\{\text{rain, snow, sleet, hail}\}\)</span>, the following is a valid probability distribution:</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
 </pre></div>
 <p>Trivially, these values must sum to 1.</p>
 <ul>
@@ -170,7 +167,7 @@ $$</div>
 </ul>
 <p>Entropy is the <em>weighted-average log probability</em> over possible events — this much reads directly from the equation — which measures the <em>uncertainty inherent in their probability distribution.</em> The higher the entropy, the less certain we are about the value we're going to get.</p>
 <p>Let's calculate the entropy of our distribution above.</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">entropy</span><span class="p">(</span><span class="n">prob_dist</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span><span class="nb">sum</span><span class="p">([</span> <span class="n">p</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prob_dist</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">])</span>
@@ -179,9 +176,9 @@ $$</div>
 <span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mf">1.1055291211185652</span>
 </pre></div>
 <p>For comparison, let's assume two more distributions and calculate their respective entropies.</p>
-<div class="highlight"><pre><span></span><span class="n">p_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">59</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">p_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">59</span><span class="p">}</span>
 
-<span class="n">p_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">95</span><span class="p">}</span>
+<span class="n">p_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">95</span><span class="p">}</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p_2</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="mf">0.8304250977453105</span>
@@ -211,7 +208,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." <em>Can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (-\infty, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table table-striped table-hover">
+<table class="table-striped table table-hover">
 <thead>
 <tr>
 <th>uber</th>
@@ -323,9 +320,9 @@ $$</div>
 <ul>
 <li><span class="math">\(\eta\)</span> is the <em>canonical parameter</em> of the distribution. (We will hereby work with the single-canonical-parameter exponential family form.)</li>
 <li><span class="math">\(T(y)\)</span> is the <em>sufficient statistic</em>. It is often the case that <span class="math">\(T(y) = y\)</span>.</li>
-<li><span class="math">\(a(\eta)\)</span> is the <em>log partition function</em>, which normalizes the distribution. (A more in-depth discussion of this normalizing constant can be found in a previous post of mine: <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">Deriving the Softmax from First Principles</a>.)</li>
+<li><span class="math">\(a(\eta)\)</span> is the <em>log partition function</em>, which normalizes the distribution. (A more in-depth discussion of this normalizing constant can be found in a previous post of mine: <a href="https://cavaunpeu.github.io/machine-learning/deriving-the-softmax-from-first-principles.md">Deriving the Softmax from First Principles</a>.)</li>
 </ul>
-<p>"A fixed choice of <span class="math">\(T\)</span>, <span class="math">\(a\)</span> and <span class="math">\(b\)</span> defines a family (or set) of distributions that is parameterized by <span class="math">\(\eta\)</span>; as we vary <span class="math">\(\eta\)</span>, we then get different distributions within this family."<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> This simply means that a coin with <span class="math">\(\Pr(\text{heads}) = .6\)</span> gives a different distribution over outcomes than one with <span class="math">\(\Pr(\text{heads}) = .7\)</span>. Easy.</p>
+<p>"A fixed choice of <span class="math">\(T\)</span>, <span class="math">\(a\)</span> and <span class="math">\(b\)</span> defines a family (or set) of distributions that is parameterized by <span class="math">\(\eta\)</span>; as we vary <span class="math">\(\eta\)</span>, we then get different distributions within this family."<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> This simply means that a coin with <span class="math">\(\Pr(\text{heads}) = .6\)</span> gives a different distribution over outcomes than one with <span class="math">\(\Pr(\text{heads}) = .7\)</span>. Easy.</p>
 <h3>Gaussian distribution</h3>
 <p>Since we're working with the single-parameter form, we'll assume that <span class="math">\(\sigma^2\)</span> is known and equals <span class="math">\(1\)</span>.</p>
 <div class="math">$$
@@ -390,7 +387,7 @@ $$</div>
 P(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
 $$</div>
 <p>This is almost pedantic: it says that <span class="math">\(\Pr(y=k)\)</span> equals the probability of observing class <span class="math">\(k\)</span>. For example, given</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
 </pre></div>
 <p>we would compute:</p>
 <div class="math">$$
@@ -444,7 +441,7 @@ $$</div>
   &amp;= \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}
 \end{align*}
 $$</div>
-<p>This you will recognize as the softmax function. (For a probabilistically-motivated derivation, please see a previous <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">post</a>.)</p>
+<p>This you will recognize as the softmax function. (For a probabilistically-motivated derivation, please see a previous <a href="https://cavaunpeu.github.io/machine-learning/deriving-the-softmax-from-first-principles.md">post</a>.)</p>
 <p>Finally:</p>
 <div class="math">$$
 \begin{align*}
@@ -502,14 +499,14 @@ $$</div>
 <p>As you'll remember we did this above: <span class="math">\(\phi_i = \frac{1}{1 + e^{-\eta}}\)</span>.</p>
 <p><em><strong>&gt; The sigmoid function gives us the probability that the response variable takes on the positive class. This probability is required by the binomial distribution, which dictates the outcomes of the binary target <span class="math">\(y\)</span>.</strong></em></p>
 <p>It does this in the same way that our weather distribution dictates tomorrow's forecast.</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mo">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
 </pre></div>
 <h3>Softmax regression</h3>
 <p><span class="math">\(\eta = \theta^Tx = \log\bigg(\frac{\pi_k}{\pi_K}\bigg)\)</span>. To solve for <span class="math">\(\pi_i\)</span>, i.e. the full vector of probabilities for observation <span class="math">\(i\)</span>, we solve for each individual probability <span class="math">\(\pi_{k, i}\)</span> then put them in a list.</p>
 <p>We did this above as well: <span class="math">\(\pi_{k, i} = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)</span>. This is the softmax function.</p>
 <p><em><strong>&gt; The softmax function gives us the probability that the response variable takes on each of the possible classes. This probability mass function is required by the multinomial distribution, which dictates the outcomes of the multi-class target <span class="math">\(y\)</span>.</strong></em></p>
 <p>Finally, why a linear model, i.e. why <span class="math">\(\eta = \theta^Tx\)</span>?</p>
-<p>Andrew Ng calls it a "design choice."<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">softmax post</a>. mathematicalmonk<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
+<p>Andrew Ng calls it a "design choice."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/machine-learning/deriving-the-softmax-from-first-principles.md">softmax post</a>. mathematicalmonk<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
 <ul>
 <li>A linear combination is perhaps the simplest way to consider the impact of each feature on the canonical parameter.</li>
 <li>A linear combination commands that either <span class="math">\(x\)</span>, or a <em>function of <span class="math">\(x\)</span></em>, vary linearly with <span class="math">\(\eta\)</span>. As such, we could write our model as <span class="math">\(\eta = \theta^T\Phi(x)\)</span>, where <span class="math">\(\Phi\)</span> applies some complex transformation to our features. This makes the "simplicity" of the linear combination less simple.</li>
@@ -700,11 +697,11 @@ $$</div>
 <div class="footnote">
 <hr/>
 <ol>
-<li id="fn-1">
-<p><a href="http://cs229.stanford.edu/materials.html">CS229 Machine Learning Course Materials, Lecture Notes 1</a> <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2-1" title="Jump back to footnote 1 in the text">↩</a></p>
+<li id="fn:1">
+<p><a href="http://cs229.stanford.edu/materials.html">CS229 Machine Learning Course Materials, Lecture Notes 1</a> <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
-<li id="fn-2">
-<p><a href="https://www.youtube.com/playlist?list=PLD0F06AA0D2E8FFBA">mathematical monk - Machine Learning</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+<li id="fn:2">
+<p><a href="https://www.youtube.com/playlist?list=PLD0F06AA0D2E8FFBA">mathematical monk - Machine Learning</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
 </ol>
 </div>
@@ -720,15 +717,16 @@ $$</div>
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -742,6 +740,8 @@ $$</div>
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -762,6 +762,8 @@ $$</div>
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -786,21 +788,51 @@ $$</div>
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -808,7 +840,7 @@ $$</div>
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

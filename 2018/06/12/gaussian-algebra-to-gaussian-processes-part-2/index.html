@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -152,15 +149,15 @@ $$</div>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
 
 <span class="c1"># Params of prior distribution over function evals</span>
-<span class="n">mu_y</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w</span>
+<span class="n">mu_y</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mu_w</span>
      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
-<span class="n">cov_y</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
+<span class="n">cov_y</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span>
 
 <span class="c1"># Params of posterior distribution over weights</span>
-<span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">-</span> <span class="n">mu_y</span><span class="p">)</span>
-          <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
-<span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
-           <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
+<span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">-</span> <span class="n">mu_y</span><span class="p">)</span>
+          <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="n">y_train</span>
+<span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span>
+           <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span>
 </pre></div>
 <h3><span class="math">\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)</span></h3>
 <p>Here, <span class="math">\(X_*\)</span> is a set of test points, e.g. <code>np.linspace(-10, 10, 200)</code>.</p>
@@ -172,26 +169,26 @@ $$</div>
 <span class="n">phi_x_test</span> <span class="o">=</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
 
 <span class="c1"># The following two equations were defined above</span>
-<span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
-<span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
+<span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">y_train</span>
+<span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span>
 
 <span class="c1"># The mean of the posterior distribution over function evaluations</span>
-<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w_post</span>
-               <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
+<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mu_w_post</span>
+               <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">y_train</span>
 
 <span class="c1"># The covariance of the posterior distribution over function evaluations</span>
-<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w_post</span> <span class="err">@</span> <span class="n">phi_x_test</span>
-                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
-                  <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> \
-                  <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w_post</span> <span class="o">@</span> <span class="n">phi_x_test</span>
+                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
+                  <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> \
+                  <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
 </pre></div>
 <h2>Never alone</h2>
 <p>Squinting at the equations for <code>mu_y_test_post</code> and <code>cov_y_test_post</code>, we see that <code>phi_x</code> and <code>phi_x_test</code> appear <strong>only in the presence of another <code>phi_x</code>, or <code>phi_x_test</code>.</strong></p>
 <p>These four distinct such terms are:</p>
-<div class="highlight"><pre><span></span><span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
-<span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
-<span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
-<span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+<div class="highlight"><pre><span></span><span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
+<span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span>
+<span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span>
+<span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
 </pre></div>
 <p>In mathematical notation, they are (respectively):</p>
 <ul>
@@ -243,7 +240,7 @@ $$</div>
         text-align: right;
     }
 </style>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -275,7 +272,7 @@ $$</div>
 <div class="math">$$
 K(X, X') = \varphi(X) \cdot \varphi (X')
 $$</div>
-<p>where <span class="math">\(\varphi\)</span> is some function that creates <span class="math">\(d\)</span> features out of <span class="math">\(X\)</span> (in the same vein as <code>phi_func</code> from above).<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup></p>
+<p>where <span class="math">\(\varphi\)</span> is some function that creates <span class="math">\(d\)</span> features out of <span class="math">\(X\)</span> (in the same vein as <code>phi_func</code> from above).<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
 <h3>Example</h3>
 <p>To illustrate, I'll borrow an example from <a href="https://stats.stackexchange.com/questions/152897/how-to-intuitively-explain-what-a-kernel-is">CrossValidated</a>:</p>
 <p>"For example, consider a simple polynomial kernel <span class="math">\(K(\mathbf x, \mathbf y) = (1 + \mathbf x^T \mathbf y)^2\)</span> with <span class="math">\(\mathbf x, \mathbf y \in \mathbb R^2\)</span>. This doesn't seem to correspond to any mapping function <span class="math">\(\varphi\)</span>, it's just a function that returns a real number. Assuming that <span class="math">\(\mathbf x = (x_1, x_2)\)</span> and <span class="math">\(\mathbf y = (y_1, y_2)\)</span>, let's expand this expression:</p>
@@ -335,21 +332,21 @@ $$</div>
 <h2>Rewriting our equations</h2>
 <p>With all of the above in mind, let's rewrite the equations for the parameters of our posterior distribution over function evaluations.</p>
 <div class="highlight"><pre><span></span><span class="c1"># The mean of the posterior distribution over function evaluations</span>
-<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w_post</span>
-               <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> <span class="n">y_train</span>
+<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mu_w_post</span>
+               <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">y_train</span>
 
                <span class="c1"># Now, substituting in our kernels</span>
-               <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="err">@</span> <span class="n">y_train</span>
+               <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="o">@</span> <span class="n">y_train</span>
 
 <span class="c1"># The covariance of the posterior distribution over function evaluations</span>
-<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w_post</span> <span class="err">@</span> <span class="n">phi_x_test</span>
-                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
-                  <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="err">@</span> \
-                  <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x_test</span>
+<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w_post</span> <span class="o">@</span> <span class="n">phi_x_test</span>
+                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
+                  <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> \
+                  <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
 
                 <span class="c1"># Now, substituting in our kernels</span>
                 <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> \
-                  <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="err">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+                  <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="o">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 <h2>Defining the kernel in code</h2>
 <p>Mathematically, the RBF kernel is defined as follows:</p>
@@ -374,10 +371,10 @@ $$</div>
 
 <span class="c1"># The following quantity is used in both `mu_y_test_post` and `cov_y_test_post`;</span>
 <span class="c1"># we extract it into a separate variable for readability</span>
-<span class="n">A</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span>
 
-<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">A</span> <span class="err">@</span> <span class="n">y_train</span>            
-<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="err">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+<span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">y_train</span>            
+<span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="o">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 <h2>Visualizing results</h2>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
@@ -392,12 +389,12 @@ $$</div>
 <div class="footnote">
 <hr/>
 <ol>
-<li id="fn-1">
+<li id="fn:1">
 <p><a href="http://gaussianprocess.org/gpml/?">Gaussian Processes for Machine Learning</a>. Carl Edward Rasmussen and Christopher K. I. Williams
-The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
+The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
-<li id="fn-2">
-<p><a href="https://www.quora.com/What-is-an-intuitive-explanation-of-Mercers-Theorem">What is an intuitive explanation of Mercer's Theorem?</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+<li id="fn:2">
+<p><a href="https://www.quora.com/What-is-an-intuitive-explanation-of-Mercers-Theorem">What is an intuitive explanation of Mercer's Theorem?</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
 </ol>
 </div>
@@ -413,15 +410,16 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -435,6 +433,8 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -455,6 +455,8 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -479,21 +481,51 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -501,7 +533,7 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

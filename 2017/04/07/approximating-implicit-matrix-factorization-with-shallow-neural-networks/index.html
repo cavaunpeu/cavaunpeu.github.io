@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -83,9 +80,124 @@
 * IPython notebook
 *
 */
-/* CSS font colors for translated ANSI colors. */
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
 .ansibold {
   font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
 }
 /* use dark versions for foreground, to improve visibility */
 .ansiblack {
@@ -164,12 +276,20 @@ div.cell {
   /* This acts as a spacer between cells, that is outside the border */
   margin: 0px;
   outline: none;
-  border-left-width: 1px;
-  padding-left: 5px;
-  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
 }
 div.cell.jupyter-soft-selected {
-  border-left-color: #90CAF9;
   border-left-color: #E3F2FD;
   border-left-width: 1px;
   padding-left: 5px;
@@ -182,27 +302,39 @@ div.cell.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected {
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
   border-color: #ababab;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
 }
 @media print {
-  div.cell.selected {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected.jupyter-soft-selected {
-  border-left-width: 0;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
-}
 .edit_mode div.cell.selected {
   border-color: #66BB6A;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
 }
 @media print {
   .edit_mode div.cell.selected {
@@ -235,6 +367,7 @@ div.cell.selected.jupyter-soft-selected {
   }
 }
 div.inner_cell {
+  min-width: 0;
   /* Old browsers */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -255,11 +388,6 @@ div.inner_cell {
   box-flex: 1;
   /* Modern browsers */
   flex: 1;
-}
-@-moz-document url-prefix() {
-  div.inner_cell {
-    overflow-x: hidden;
-  }
 }
 /* input_area and input_prompt must match in top border and margin for alignment */
 div.input_area {
@@ -402,7 +530,9 @@ div.input_area > div.highlight > pre {
 .CodeMirror-lines {
   /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
   /* we have set a different line-height and want this to scale with that. */
-  padding: 0.4em;
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
 }
 .CodeMirror-linenumber {
   padding: 0 8px 0 4px;
@@ -412,11 +542,24 @@ div.input_area > div.highlight > pre {
   border-top-left-radius: 2px;
 }
 .CodeMirror pre {
-  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
-  /* .CodeMirror-lines */
-  padding: 0;
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
   border: 0;
   border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
 }
 /*
 
@@ -664,6 +807,9 @@ div.output_area img.unconfined,
 div.output_area svg.unconfined {
   max-width: none;
 }
+div.output_area .mglyph > img {
+  max-width: none;
+}
 /* This is needed to protect the pre formating from global settings such
    as that of bootstrap */
 .output {
@@ -702,7 +848,7 @@ div.output_area svg.unconfined {
 }
 div.output_area pre {
   margin: 0;
-  padding: 0;
+  padding: 1px 0 1px 0;
   border: 0;
   vertical-align: baseline;
   color: black;
@@ -824,6 +970,10 @@ div.output_unrecognized a:hover {
 .rendered_html h6:first-child {
   margin-top: 1em;
 }
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
 
 
 
@@ -840,16 +990,24 @@ div.output_unrecognized a:hover {
 }
 
 
+
+
+
 .rendered_html pre,
+
 
 
 
 .rendered_html tr,
 .rendered_html th,
 
-.rendered_html td,
 
-
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 .rendered_html * + table {
   margin-top: 1em;
 }
@@ -865,6 +1023,11 @@ div.output_unrecognized a:hover {
 
 .rendered_html img.unconfined,
 
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
 div.text_cell {
   /* Old browsers */
   display: -webkit-box;
@@ -915,8 +1078,15 @@ h6:hover .anchor-link {
   display: none;
 }
 .text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
 .text_cell.unrendered .text_cell_render {
   display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
 }
 .cm-header-1,
 .cm-header-2,
@@ -1016,57 +1186,15 @@ h6:hover .anchor-link {
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
-.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
-<style type="text/css">
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-</style>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style><div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Abstract">Abstract<a class="anchor-link" href="#Abstract">¶</a></h1>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Implicit-Matrix-Factorization">Implicit Matrix Factorization<a class="anchor-link" href="#Implicit-Matrix-Factorization">¶</a></h2><p>The Implicit Matrix Factorization (IMF) algorithm as presented by <a href="http://yifanhu.net/PUB/cf.pdf">Hu, Koren and Volinksy</a> is a widely popular, effective method for recommending items to users. This approach was born from necessity: while explicit feedback as to our users' tastes - a questionnaire completed at user signup, for example - makes building a recommendation engine straightforward, we often have nothing more than <em>implicit feedback</em> data - view count, click count, time spent on page, for example - which serve instead as a proxy for these preferences. Crucially, the latter feedback is asymmetric: while a high view count might indicate positive preference for a given item, a low view count cannot be said to do the opposite. Perhaps, the user simply didn't know the item was there.</p>
 <p>IMF begins with a ratings matrix $R$, where $R_{u, i}$ gives the implicit feedback value observed for user $u$ and item $i$. Next, it constructs two other matrices defined as follows:</p>
@@ -1110,10 +1238,8 @@ $$<p>To approximate this function, I turn to our favorite <a href="http://neural
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">¶</a></h1><p>To construct our ratings matrix, I take the sum of total streams for each $\text{(country, song)}$ pair. The data are limited to a given number of "top songs," defined as a song that appeared on Spotify Charts <em>on a given date</em>.</p>
 <p>Because the values exist on wildly different orders of magnitude, I scale the results as follows:</p>
@@ -1126,7 +1252,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="prompt input_prompt">In [143]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e3</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e3</span><span class="p">)</span>
 <span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1134,10 +1260,11 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[143]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[143]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th>song_id</th>
@@ -1318,10 +1445,8 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Next, let's get an idea of the sparsity of our data and how many songs each country has streamed.</p>
 </div>
@@ -1332,7 +1457,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="prompt input_prompt">In [144]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sparsity</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">sparsity</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="n">non_zero_entries_percent</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Our ratings matrix has </span><span class="si">{}</span><span class="s1">% non-zero entries.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">non_zero_entries_percent</span><span class="p">))</span>
@@ -1342,7 +1467,8 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Our ratings matrix has 7.3999999999999995% non-zero entries.
 </pre>
@@ -1356,14 +1482,15 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="prompt input_prompt">In [145]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Our ratings matrix contains </span><span class="si">{}</span><span class="s1"> countries and </span><span class="si">{}</span><span class="s1"> unique songs.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Our ratings matrix contains </span><span class="si">{}</span><span class="s1"> countries and </span><span class="si">{}</span><span class="s1"> unique songs.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Our ratings matrix contains 55 countries and 2110 unique songs.
 </pre>
@@ -1377,7 +1504,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 <div class="prompt input_prompt">In [146]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
 <span class="n">songs_rated_by_country</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">songs_rated_by_country</span><span class="p">)</span>
@@ -1390,8 +1517,9 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>To star
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlwAAAGDCAYAAAD+nM7XAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3Xd0FNX/xvFnU5CS8AUVRUUiAgkSWpBelWIQCB1CF0Gk
 KYKIQKT3KmCQYkRQICIlRBQEFEUMTQSJ9N4SkV4SQNLu7w8O+yOkos6GhPfrHM7JzszO/czcLQ93
@@ -1670,10 +1798,8 @@ RU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Construct-training,-validation-sets">Construct training, validation sets<a class="anchor-link" href="#Construct-training,-validation-sets">¶</a></h2><p>In reviewing literature on recommender engine evaluation, it seems common to create training and validation sets as follows:</p>
 <ol>
@@ -1690,7 +1816,7 @@ RU5ErkJggg==
 <div class="prompt input_prompt">In [147]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'The 15th percentile of songs rated by country is </span><span class="si">{}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'The 15th percentile of songs rated by country is </span><span class="si">{}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">songs_rated_by_country</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
 <span class="p">))</span>
 </pre></div>
@@ -1699,7 +1825,8 @@ RU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The 15th percentile of songs rated by country is 54.5.
 </pre>
@@ -1708,10 +1835,8 @@ RU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's choose 50 songs as our cutoff, and move 20% of the songs in qualifying rows to a validation set.</p>
 <p>NB: The actual ratings matrix is located at <code>RatingsMatrix.R_ui</code>. This reflects an API choice I made when first starting this project.</p>
@@ -1723,7 +1848,7 @@ RU5ErkJggg==
 <div class="prompt input_prompt">In [12]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">split_ratings_matrix_into_training_and_validation</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="p">,</span> <span class="n">eligibility_mask</span><span class="p">,</span> <span class="n">fraction_to_drop</span><span class="o">=.</span><span class="mi">2</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">split_ratings_matrix_into_training_and_validation</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="p">,</span> <span class="n">eligibility_mask</span><span class="p">,</span> <span class="n">fraction_to_drop</span><span class="o">=.</span><span class="mi">2</span><span class="p">):</span>
     <span class="n">training_matrix</span> <span class="o">=</span> <span class="n">ratings_matrix</span>
     <span class="n">validation_matrix</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">training_matrix</span><span class="p">)</span>
     <span class="n">validation_matrix</span><span class="o">.</span><span class="n">R_ui</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">training_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">training_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
@@ -1749,7 +1874,7 @@ RU5ErkJggg==
 <div class="prompt input_prompt">In [152]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">more_than_50_ratings_mask</span> <span class="o">=</span> <span class="n">songs_rated_by_country</span> <span class="o">&gt;</span> <span class="mi">50</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">more_than_50_ratings_mask</span> <span class="o">=</span> <span class="n">songs_rated_by_country</span> <span class="o">&gt;</span> <span class="mi">50</span>
 
 <span class="n">training_matrix</span><span class="p">,</span> <span class="n">validation_matrix</span> <span class="o">=</span> <span class="n">split_ratings_matrix_into_training_and_validation</span><span class="p">(</span>
     <span class="n">ratings_matrix</span><span class="o">=</span><span class="n">ratings_matrix</span><span class="p">,</span> 
@@ -1760,10 +1885,8 @@ RU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Evaluation">Evaluation<a class="anchor-link" href="#Evaluation">¶</a></h1><p>Evaluating recommender systems is an inexact science because there is no "right" answer. In production, this evaluation is often done via the A/B test of a proxy metric important to the business - revenue, for example. In training, the process is less clear. To this end, the authors of the IMF paper offer the following:</p>
 <blockquote><p>Evaluation of implicit-feedback recommender requires appropriate measures. In the traditional setting where a user is specifying a numeric score, there are clear metrics such as mean squared error to measure success in prediction. However with implicit models we have to take into account availability of the item, competition for the item with other items, and repeat feedback. For example, if we gather data on television viewing, it is unclear how to evaluate a show that has been watched more than once, or how to compare two shows that are on at the same time, and hence cannot both be watched by the user.</p>
@@ -1784,9 +1907,9 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 <div class="prompt input_prompt">In [6]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ExpectedPercentileRankingsEvaluator</span><span class="p">:</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ExpectedPercentileRankingsEvaluator</span><span class="p">:</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_matrix</span><span class="p">,</span> <span class="n">validation_matrix</span><span class="p">,</span> <span class="n">eligibility_mask</span><span class="p">,</span> <span class="n">predicted_preferences</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_matrix</span><span class="p">,</span> <span class="n">validation_matrix</span><span class="p">,</span> <span class="n">eligibility_mask</span><span class="p">,</span> <span class="n">predicted_preferences</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">training_matrix</span> <span class="o">=</span> <span class="n">training_matrix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validation_matrix</span> <span class="o">=</span> <span class="n">validation_matrix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eligibility_mask</span> <span class="o">=</span> <span class="n">eligibility_mask</span>
@@ -1831,10 +1954,8 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Grid-search">Grid search<a class="anchor-link" href="#Grid-search">¶</a></h2><p>Next, we perform a basic grid search to find reasonable values for $\alpha$ and $\lambda$.</p>
 </div>
@@ -1845,7 +1966,7 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 <div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="mi">30</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">grid_search_results</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">'Result'</span><span class="p">,</span> <span class="s1">'alpha lmbda'</span><span class="p">)</span>
 <span class="n">alpha_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">]</span>
@@ -1874,10 +1995,8 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's visualize the results for clarity. I plot the opposite of the validation score such that the parameters corresponding to the <em>darkest</em> square are most favorable.</p>
 </div>
@@ -1888,7 +2007,7 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 <div class="prompt input_prompt">In [159]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid_search_items</span> <span class="o">=</span> <span class="p">[(</span><span class="n">params</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span> <span class="k">for</span> <span class="n">params</span><span class="p">,</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">grid_search_results</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">grid_search_items</span> <span class="o">=</span> <span class="p">[(</span><span class="n">params</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span> <span class="k">for</span> <span class="n">params</span><span class="p">,</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">grid_search_results</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
 <span class="n">grid_search_items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">tup</span><span class="p">:</span> <span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
 
 <span class="n">params</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">grid_search_items</span><span class="p">)</span>
@@ -1919,8 +2038,9 @@ $$<p>Here, $\text{rank}_{u, i}$ gives the percentile-ranking of the predicted pr
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyQAAAJSCAYAAAAyBgFsAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xl8jNf+B/DPzGQy2SaLJLIv9sRaDZHYqq1Lq/jpomhR
 NMRSlFK7NmppLKW0rlL7RVuqtJdyVYtaQkltSSxF9n2RfTLJTH5/jA6RmSQTyTwT/bxfr3m9OPuM
@@ -2562,7 +2682,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [58]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">best_params</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">grid_search_results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">grid_search_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)[</span><span class="s1">'validation'</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">best_params</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">grid_search_results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">grid_search_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)[</span><span class="s1">'validation'</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'The best parameters were found to be: </span><span class="si">{}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">best_params</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -2570,7 +2690,8 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The best parameters were found to be: Result(alpha=0.1, lmbda=10.0).
 </pre>
@@ -2579,10 +2700,8 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Train-a-final-model">Train a final model<a class="anchor-link" href="#Train-a-final-model">¶</a></h1><p>Using these parameters, let's train a final implicit matrix factorization model using 1,000,000 top songs. Additionally, we'll choose $\epsilon = 1,000$ which seemed to work best in simple experimentation. This experimentation is not shown here.</p>
 </div>
@@ -2593,7 +2712,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [7]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e3</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ratings_matrix</span> <span class="o">=</span> <span class="n">RatingsMatrix</span><span class="p">(</span><span class="n">n_top_songs</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2604,14 +2723,15 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [163]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Our ratings matrix contains </span><span class="si">{}</span><span class="s1"> countries and </span><span class="si">{}</span><span class="s1"> unique songs.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Our ratings matrix contains </span><span class="si">{}</span><span class="s1"> countries and </span><span class="si">{}</span><span class="s1"> unique songs.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Our ratings matrix contains 55 countries and 8663 unique songs.
 </pre>
@@ -2625,17 +2745,15 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">implicit_mf</span> <span class="o">=</span> <span class="n">ImplicitMF</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">=</span><span class="n">ratings_matrix</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">F</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">best_params</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="n">best_params</span><span class="o">.</span><span class="n">lmbda</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">implicit_mf</span> <span class="o">=</span> <span class="n">ImplicitMF</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">=</span><span class="n">ratings_matrix</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">F</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">best_params</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="n">best_params</span><span class="o">.</span><span class="n">lmbda</span><span class="p">)</span>
 <span class="n">implicit_mf</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Visualize">Visualize<a class="anchor-link" href="#Visualize">¶</a></h1><p>Let's plot the cosine similarities between all pairs of countries to confirm that things make sense. Intuitively, I'd think that countries in the following groups should be similar:</p>
 <ul>
@@ -2646,10 +2764,8 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>First let's replace the index of our vectors such that it contains the country names.</p>
 </div>
@@ -2660,7 +2776,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [165]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vectors_df</span> <span class="o">=</span> <span class="n">implicit_mf</span><span class="o">.</span><span class="n">country_vectors</span><span class="o">.</span><span class="n">vectors</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vectors_df</span> <span class="o">=</span> <span class="n">implicit_mf</span><span class="o">.</span><span class="n">country_vectors</span><span class="o">.</span><span class="n">vectors</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
 <span class="n">country_id_to_name</span> <span class="o">=</span> <span class="p">{</span><span class="n">countries_lookup</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">countries_lookup</span><span class="p">}</span>
 <span class="n">country_ids</span> <span class="o">=</span> <span class="n">country_vectors_df</span><span class="o">.</span><span class="n">index</span>
@@ -2674,10 +2790,11 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[165]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[165]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -2858,10 +2975,8 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Then, we'll plot the cosine similarities.</p>
 </div>
@@ -2872,7 +2987,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [166]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">"white"</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">"white"</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">plot_cosine_similarities</span><span class="p">(</span><span class="n">country_vectors_df</span><span class="p">):</span>
 
@@ -2911,15 +3026,16 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [167]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_cosine_similarities</span><span class="p">(</span><span class="n">country_vectors_df</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">plot_cosine_similarities</span><span class="p">(</span><span class="n">country_vectors_df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABJEAAAQ6CAYAAAD0leyfAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XlU1dX6x/EPo6CgiGOas0Ka14GboqkoWmROlSYieiy9
 DdrFvGA3MRwwh5wnHHIqE40Uta7mkFNmWKLZzbyOhVNqAhdEAZHx+/ujn6cI9MgRpGvv11qsxdnf
@@ -4656,10 +4772,8 @@ dwfdM93TubkAAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I first turn to my favorite country - Colombia - to inspect its similarity with other Latin American countries. The numbers are high for: Peru, Paraguay, Panama, Nicaragua, Gautemala, Ecuador, Dominican Republic and Costa Rica.</p>
 <p>Next, I turn to the United Kingdom: it is most similar with Switzerland, New Zealand, Ireland, Hungary, Belgium and Australia.</p>
@@ -4668,10 +4782,8 @@ dwfdM93TubkAAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Visualize-with-TSNE">Visualize with TSNE<a class="anchor-link" href="#Visualize-with-TSNE">¶</a></h1><p>To further inspect similarities between countries, let's explore the 2-dimensional TSNE space.</p>
 </div>
@@ -4682,7 +4794,7 @@ dwfdM93TubkAAAAASUVORK5CYII=
 <div class="prompt input_prompt">In [205]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">'pca'</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">'pca'</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
 
 <span class="n">country_embeddings</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
     <span class="n">data</span><span class="o">=</span><span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">country_vectors_df</span><span class="p">),</span>
@@ -4699,7 +4811,7 @@ dwfdM93TubkAAAAASUVORK5CYII=
 <div class="prompt input_prompt">In [206]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_tsne_embeddings</span><span class="p">(</span><span class="n">country_embeddings</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_tsne_embeddings</span><span class="p">(</span><span class="n">country_embeddings</span><span class="p">):</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 
@@ -4721,15 +4833,16 @@ dwfdM93TubkAAAAASUVORK5CYII=
 <div class="prompt input_prompt">In [207]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_tsne_embeddings</span><span class="p">(</span><span class="n">country_embeddings</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">plot_tsne_embeddings</span><span class="p">(</span><span class="n">country_embeddings</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA34AAANtCAYAAADPa6khAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xl8TGf///H3ZBOREFF7WkvtIogsRYSKu7GlQaOW1lLU
 VnvrlmoJSlFqqS1asbTau7RSarlV76hdYyl6h2rdlDZ2jewikczvD9/MzxBES1Inr+fjkUc7c51z
@@ -5951,19 +6064,15 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This is not particularly useful. Furthermore, and perhaps most importantly, the plot varies immensely when changing the random seed. This is a worthwhile step nonetheless.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Inspect-predicted-preferences">Inspect predicted preferences<a class="anchor-link" href="#Inspect-predicted-preferences">¶</a></h1><p>Crucially, we'll now inspect predicted preferences for select countries and confirm that they make sense. I first normalize each of the country and song vectors, then compute predicted preferences via the dot product.</p>
 </div>
@@ -5974,7 +6083,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SONG_METADATA_QUERY</span> <span class="o">=</span> <span class="s2">"""</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">SONG_METADATA_QUERY</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">    SELECT </span>
 <span class="s2">        songs.title as song_title, </span>
 <span class="s2">        songs.artist as song_artist,</span>
@@ -5996,7 +6105,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [209]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">song_vectors_df_norm</span> <span class="o">=</span> <span class="n">song_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">vec</span><span class="p">:</span> <span class="n">vec</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">song_vectors_df_norm</span> <span class="o">=</span> <span class="n">song_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">vec</span><span class="p">:</span> <span class="n">vec</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">country_vectors_df_norm</span> <span class="o">=</span> <span class="n">country_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">vec</span><span class="p">:</span> <span class="n">vec</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">assert</span> <span class="n">song_vectors_df_norm</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">==</span> <span class="mf">1.</span>
@@ -6006,10 +6115,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="United-States">United States<a class="anchor-link" href="#United-States">¶</a></h2>
 </div>
@@ -6020,7 +6127,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [210]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">'display.max_colwidth'</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">'display.max_colwidth'</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -6031,7 +6138,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [211]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'United States'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'United States'</span><span class="p">]</span>
 <span class="n">song_vectors_df_norm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6039,10 +6146,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[211]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[211]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6120,10 +6228,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Colombia">Colombia<a class="anchor-link" href="#Colombia">¶</a></h2>
 </div>
@@ -6134,7 +6240,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [212]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Colombia'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Colombia'</span><span class="p">]</span>
 <span class="n">song_vectors_df_norm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6142,10 +6248,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[212]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[212]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6223,10 +6330,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Turkey">Turkey<a class="anchor-link" href="#Turkey">¶</a></h2>
 </div>
@@ -6237,7 +6342,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [213]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Turkey'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Turkey'</span><span class="p">]</span>
 <span class="n">song_vectors_df_norm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6245,10 +6350,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[213]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[213]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6326,10 +6432,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Germany">Germany<a class="anchor-link" href="#Germany">¶</a></h2>
 </div>
@@ -6340,7 +6444,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [214]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Germany'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Germany'</span><span class="p">]</span>
 <span class="n">song_vectors_df_norm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6348,10 +6452,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[214]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[214]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6429,10 +6534,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Taiwan">Taiwan<a class="anchor-link" href="#Taiwan">¶</a></h2>
 </div>
@@ -6443,7 +6546,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [215]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Taiwan'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Taiwan'</span><span class="p">]</span>
 <span class="n">song_vectors_df_norm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6451,10 +6554,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[215]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[215]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6532,10 +6636,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>These look great.</p>
 <p>One interesting thing to note is the significance of the length of the vectors. To this point, <a href="https://arxiv.org/abs/1508.02297">Schakel and Wilson</a> offer the following:</p>
@@ -6552,17 +6654,18 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [216]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">song_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">song_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[216]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[216]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6645,17 +6748,18 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [217]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vectors_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[217]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[217]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6722,10 +6826,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>To reference Taiwan and Colombia, let's inspect predictions using unnormalized vectors.</p>
 </div>
@@ -6736,7 +6838,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [218]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Taiwan'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Taiwan'</span><span class="p">]</span>
 <span class="n">song_vectors_df</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6744,10 +6846,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[218]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[218]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6830,7 +6933,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [219]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Colombia'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Colombia'</span><span class="p">]</span>
 <span class="n">song_vectors_df</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -6838,10 +6941,11 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[219]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[219]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -6919,10 +7023,8 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Respectively, there is not a song with Chinese nor Spanish letters in each set of recommendations. Additionally, it seems like the world is fond of Ed Sheeran. It is clear that the global popularity of songs dominates our recommendations when computing the dot product with unnormalized vectors.</p>
 <p>When we do normalize, our predicted preferences can be defined thus:</p>
@@ -6945,7 +7047,7 @@ $$<p>Let's briefly see what this looks like.</p>
 <div class="prompt input_prompt">In [220]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="o">.</span><span class="mi">2</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="o">.</span><span class="mi">2</span>
 
 <span class="n">country_vec</span> <span class="o">=</span> <span class="n">country_vectors_df_norm</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="s1">'Taiwan'</span><span class="p">]</span>
 <span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">song_vectors_df</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">country_vec</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -6955,10 +7057,11 @@ $$<p>Let's briefly see what this looks like.</p>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[220]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[220]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7036,19 +7139,15 @@ $$<p>Let's briefly see what this looks like.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>About the same. Nevertheless, the length of our vectors can likely offer some value when balancing local recommendations with globally popular songs. I leave this to the reader to explore further for now.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Approximating-IMF-with-neural-networks">Approximating IMF with neural networks<a class="anchor-link" href="#Approximating-IMF-with-neural-networks">¶</a></h1><p>Again, IMF gives a function $f: u, i \rightarrow \hat{p}_{u, i}$ and the following objective function to minimize:</p>
 $$
@@ -7062,17 +7161,17 @@ $$<p>Let's try to do this with neural networks. I'll use the $\alpha$ and $\lamb
 <div class="prompt input_prompt">In [32]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 
-<span class="kn">from</span> <span class="nn">keras</span> <span class="k">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
-<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="k">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Lambda</span><span class="p">,</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">BatchNormalization</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">LSTM</span>
-<span class="kn">from</span> <span class="nn">keras.layers.merge</span> <span class="k">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">concatenate</span>
-<span class="kn">from</span> <span class="nn">keras.models</span> <span class="k">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="k">import</span> <span class="n">Adam</span>
-<span class="kn">from</span> <span class="nn">keras.preprocessing.sequence</span> <span class="k">import</span> <span class="n">pad_sequences</span>
-<span class="kn">from</span> <span class="nn">keras.preprocessing.text</span> <span class="k">import</span> <span class="n">Tokenizer</span>
-<span class="kn">from</span> <span class="nn">keras.regularizers</span> <span class="k">import</span> <span class="n">l2</span>
-<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="k">import</span> <span class="n">plot_model</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Lambda</span><span class="p">,</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">BatchNormalization</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">LSTM</span>
+<span class="kn">from</span> <span class="nn">keras.layers.merge</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">concatenate</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing.text</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+<span class="kn">from</span> <span class="nn">keras.regularizers</span> <span class="kn">import</span> <span class="n">l2</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">plot_model</span>
 </pre></div>
 </div>
 </div>
@@ -7083,7 +7182,7 @@ $$<p>Let's try to do this with neural networks. I'll use the $\alpha$ and $\lamb
 <div class="prompt input_prompt">In [9]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">songs_rated_by_country</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">songs_rated_by_country</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">songs_rated_by_country</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Distribution of # of Unique Songs Streamed per Country'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -7095,8 +7194,9 @@ $$<p>Let's try to do this with neural networks. I'll use the $\alpha$ and $\lamb
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAe4AAAFoCAYAAACR/hiTAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3XdUFNffBvAHWBAVDGhQf9FIbIuKqNixoajBhgW7ghqN
 sUWjYu8FG6KoGBsWDIoGEbGXJMaCPRZiwYKKCrECIihK2fv+QZjXBZbFhIUMPJ9zOIedmZ37nTuz
@@ -7365,7 +7465,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [10]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'The 15th percentile of songs rated by country is </span><span class="si">{}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'The 15th percentile of songs rated by country is </span><span class="si">{}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">songs_rated_by_country</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
 <span class="p">))</span>
 </pre></div>
@@ -7374,7 +7474,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The 15th percentile of songs rated by country is 218.20000000000002.
 </pre>
@@ -7383,10 +7484,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's set our eligibility cutoff at 200 songs and create training and validation matrices.</p>
 </div>
@@ -7397,7 +7496,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [13]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">more_than_200_ratings_mask</span> <span class="o">=</span> <span class="n">songs_rated_by_country</span> <span class="o">&gt;</span> <span class="mi">20</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">more_than_200_ratings_mask</span> <span class="o">=</span> <span class="n">songs_rated_by_country</span> <span class="o">&gt;</span> <span class="mi">20</span>
 
 <span class="n">training_matrix</span><span class="p">,</span> <span class="n">validation_matrix</span> <span class="o">=</span> <span class="n">split_ratings_matrix_into_training_and_validation</span><span class="p">(</span>
     <span class="n">ratings_matrix</span><span class="o">=</span><span class="n">ratings_matrix</span><span class="p">,</span>
@@ -7408,10 +7507,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Arrange-our-data">Arrange our data<a class="anchor-link" href="#Arrange-our-data">¶</a></h2><p>To interact with Keras, we'll need to change our data from wide format to long. Additionally, so as to create our embeddings, we'll need to give each country and song a unique, contiguous index. Finally, I'll do the same with the song artist, as well as tokenize the song title, for later use.</p>
 </div>
@@ -7422,7 +7519,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [16]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">song_metadata_df</span> <span class="o">=</span> <span class="n">song_metadata_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">song_metadata_df</span> <span class="o">=</span> <span class="n">song_metadata_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
 <span class="n">song_metadata_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -7430,10 +7527,11 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[16]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7485,7 +7583,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [17]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_id_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">c_id</span><span class="p">:</span> <span class="n">index</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">c_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">index</span><span class="p">)}</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_id_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">c_id</span><span class="p">:</span> <span class="n">index</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">c_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">index</span><span class="p">)}</span>
 <span class="n">song_id_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">s_id</span><span class="p">:</span> <span class="n">index</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">s_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">columns</span><span class="p">)}</span>
 <span class="n">song_artist_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">artist</span><span class="p">:</span> <span class="n">index</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">artist</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">song_metadata_df</span><span class="p">[</span><span class="s1">'song_artist'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())}</span>
 
@@ -7498,10 +7596,11 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[17]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -7562,10 +7661,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Tokenize-song-title">Tokenize song title<a class="anchor-link" href="#Tokenize-song-title">¶</a></h3>
 </div>
@@ -7576,7 +7673,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [18]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">NUM_WORDS</span> <span class="o">=</span> <span class="mi">5000</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">NUM_WORDS</span> <span class="o">=</span> <span class="mi">5000</span>
 
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span><span class="o">=</span><span class="n">NUM_WORDS</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
 <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">song_metadata_df</span><span class="p">[</span><span class="s1">'song_title'</span><span class="p">])</span>
@@ -7586,10 +7683,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Convert-ratings-to-long-format">Convert ratings to long format<a class="anchor-link" href="#Convert-ratings-to-long-format">¶</a></h3>
 </div>
@@ -7600,7 +7695,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [19]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">input_tuples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">product</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">input_tuples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">product</span><span class="p">(</span><span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">ratings_matrix</span><span class="o">.</span><span class="n">R_ui</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="p">)</span>
 <span class="n">country_ids</span><span class="p">,</span> <span class="n">song_ids</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">input_tuples</span><span class="p">)</span>
 
 <span class="n">ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -7617,10 +7712,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Define-network-parameters">Define network parameters<a class="anchor-link" href="#Define-network-parameters">¶</a></h2>
 </div>
@@ -7631,7 +7724,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [22]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n_countries</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">n_countries</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 <span class="n">n_songs</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 <span class="n">n_artists</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_artist_index'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 
@@ -7644,10 +7737,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Define-a-loss-function">Define a loss function<a class="anchor-link" href="#Define-a-loss-function">¶</a></h2><p>This is simply the IMF objective we'd like to minimize.</p>
 </div>
@@ -7658,7 +7749,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [23]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">implicit_cf_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">implicit_cf_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">):</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="n">C</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="n">y_true</span>
     <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span> <span class="n">C</span><span class="o">*</span><span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
@@ -7667,10 +7758,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Define-functions-to-generate,-evaluate-and-visualize-predictions">Define functions to generate, evaluate and visualize predictions<a class="anchor-link" href="#Define-functions-to-generate,-evaluate-and-visualize-predictions">¶</a></h2>
 </div>
@@ -7681,7 +7770,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [24]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ratings_df</span><span class="o">=</span><span class="n">ratings_df</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ratings_df</span><span class="o">=</span><span class="n">ratings_df</span><span class="p">):</span>
     <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
         <span class="s1">'prediction'</span><span class="p">:</span> <span class="n">predictions</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
@@ -7698,7 +7787,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [25]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">eligibility_mask</span><span class="o">=</span><span class="n">more_than_200_ratings_mask</span><span class="p">,</span> 
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">eligibility_mask</span><span class="o">=</span><span class="n">more_than_200_ratings_mask</span><span class="p">,</span> 
                          <span class="n">training_matrix</span><span class="o">=</span><span class="n">training_matrix</span><span class="p">,</span> <span class="n">validation_matrix</span><span class="o">=</span><span class="n">validation_matrix</span><span class="p">):</span>
     <span class="n">evaluator</span> <span class="o">=</span> <span class="n">ExpectedPercentileRankingsEvaluator</span><span class="p">(</span>
         <span class="n">training_matrix</span><span class="o">=</span><span class="n">training_matrix</span><span class="p">,</span>
@@ -7719,7 +7808,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [74]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">visualize_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">visualize_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
@@ -7731,10 +7820,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><a id="network_1"></a></p>
 <h1 id="Network-#1">Network #1<a class="anchor-link" href="#Network-#1">¶</a></h1><p>A trivially "Siamese" network which first embeds each country and song index into $\mathbb{R}^f$ in parallel then computes a dot-product of the embeddings. This is roughly equivalent to what is being done by IMF.</p>
@@ -7746,7 +7833,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [162]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
 <span class="n">song_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'song'</span><span class="p">)</span>
 
 <span class="n">country_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_countries</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="n">F</span><span class="p">,</span> <span class="n">embeddings_regularizer</span><span class="o">=</span><span class="n">l2</span><span class="p">(</span><span class="n">lmbda</span><span class="p">))(</span><span class="n">country_input</span><span class="p">)</span>
@@ -7764,7 +7851,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [163]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">implicit_cf_loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">))</span>
 
 <span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">to_file</span><span class="o">=</span><span class="s1">'figures/network_1.png'</span><span class="p">)</span>
@@ -7773,10 +7860,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img alt="network 1" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_implicit_mf_network_1.png"/></p>
 </div>
@@ -7787,7 +7872,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [164]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
 
 <span class="n">network_1</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
@@ -7802,7 +7887,8 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train on 476465 samples, validate on 476465 samples
 Epoch 1/5
@@ -7826,7 +7912,7 @@ Epoch 5/5
 <div class="prompt input_prompt">In [165]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 <span class="n">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -7834,7 +7920,8 @@ Epoch 5/5
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train: 0.5053388101677021
 Validation: 0.49071882278215817
@@ -7844,10 +7931,8 @@ Validation: 0.49071882278215817
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>For reference, let's recall the results we computed when validation our model with <code>best_params</code>.</p>
 </div>
@@ -7858,14 +7943,15 @@ Validation: 0.49071882278215817
 <div class="prompt input_prompt">In [166]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid_search_results</span><span class="p">[</span><span class="n">best_params</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">grid_search_results</span><span class="p">[</span><span class="n">best_params</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[166]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[166]:</div>
 <div class="output_text output_subarea output_execute_result">
 <pre>{'train': 0.04479720392806505, 'validation': 0.18543168148626762}</pre>
 </div>
@@ -7873,10 +7959,8 @@ Validation: 0.49071882278215817
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Additionally, a <em>random</em> model should return an expected percentile ranking of ~50%, as noted in <a href="http://yifanhu.net/PUB/cf.pdf">Hu, Koren and Volinksy</a>. So, this is really bad. Let's visualize the distribution of predictions before moving on to another model.</p>
 </div>
@@ -7887,15 +7971,16 @@ Validation: 0.49071882278215817
 <div class="prompt input_prompt">In [167]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">visualize_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">visualize_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnIAAAGDCAYAAACvCP20AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3Xt8z/X///H7ewfENkNLXHxawuTYaEmMUmmRYxYziZRU
 lEkMOdOGIqfooFRCOaWPb+ryReKDogPlLHMY8Vm0sYPY4f38/dHP+2uZWba3t6fdrpeLy8Ver+f7
@@ -8114,10 +8199,8 @@ I1yu2QjYhF4AAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><a id="network_2"></a></p>
 <h1 id="Network-#2">Network #2<a class="anchor-link" href="#Network-#2">¶</a></h1><p>Same as previous, but with a bias embedding for each set, in $\mathbb{R}$, added to the dot-product.</p>
@@ -8129,7 +8212,7 @@ I1yu2QjYhF4AAAAASUVORK5CYII=
 <div class="prompt input_prompt">In [168]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_bias</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_countries</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country_bias'</span><span class="p">,</span> <span class="n">input_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">country_input</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_bias</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_countries</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country_bias'</span><span class="p">,</span> <span class="n">input_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">country_input</span><span class="p">)</span>
 <span class="n">song_bias</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_songs</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'song_bias'</span><span class="p">,</span> <span class="n">input_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">song_input</span><span class="p">)</span>
 
 <span class="n">predicted_preference</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">predicted_preference</span><span class="p">,</span> <span class="n">song_bias</span><span class="p">,</span> <span class="n">country_bias</span><span class="p">])</span>
@@ -8144,7 +8227,7 @@ I1yu2QjYhF4AAAAASUVORK5CYII=
 <div class="prompt input_prompt">In [169]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">implicit_cf_loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">))</span>
 
 <span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">to_file</span><span class="o">=</span><span class="s1">'figures/network_2.png'</span><span class="p">)</span>
@@ -8153,10 +8236,8 @@ I1yu2QjYhF4AAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img alt="network 2" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_implicit_mf_network_2.png"/></p>
 </div>
@@ -8167,7 +8248,7 @@ I1yu2QjYhF4AAAAASUVORK5CYII=
 <div class="prompt input_prompt">In [170]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
 
 <span class="n">network_2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
@@ -8182,7 +8263,8 @@ I1yu2QjYhF4AAAAASUVORK5CYII=
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train on 476465 samples, validate on 476465 samples
 Epoch 1/5
@@ -8206,7 +8288,7 @@ Epoch 5/5
 <div class="prompt input_prompt">In [171]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 <span class="n">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -8214,7 +8296,8 @@ Epoch 5/5
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train: 0.10900494586591782
 Validation: 0.1906236846450195
@@ -8224,10 +8307,8 @@ Validation: 0.1906236846450195
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This looks a lot better. Now let's visualize our ground-truth and predictions side-by-side.</p>
 </div>
@@ -8238,7 +8319,7 @@ Validation: 0.1906236846450195
 <div class="prompt input_prompt">In [172]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s1">'predictions'</span><span class="p">:</span> <span class="n">predictions</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
     <span class="s1">'ratings'</span><span class="p">:</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'train_rating'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="p">})</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -8248,8 +8329,9 @@ Validation: 0.1906236846450195
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA7MAAAFyCAYAAAAnNY1XAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3X2Y1XWZP/D3YUZUmKGRpF2xdCF1k9JVmsWrFujBiLaN
 qyyUhy62wjYz0ygziAQyVCBt1pTQ1Nx2TVJZTam82qsoI8ALzFLX8aHdtkiFCoNyZjQe5pzfH3s1
@@ -8458,10 +8540,8 @@ KRMqaLIAAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This model approximates the training distribution much better than the others. Key to this task is delineating between items with 0 ratings, and those with high ratings. Remember, we first down-scaled our ratings with the following transformation to shrink the domain:</p>
 $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Furthermore, the model scores worse on the training distribution, yet similarly on the validation set. The bias term was clearly helpful.</p>
@@ -8469,10 +8549,8 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Further
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><a id="network_3"></a></p>
 <h1 id="Network-#3">Network #3<a class="anchor-link" href="#Network-#3">¶</a></h1><p>Same as <a href="#network_1">#1</a>, but concatenate the latent vectors instead. Then, stack 3 fully-connected layers with ReLU activations, batch normalization after each, and dropout after the first. Finally, add a 1-unit dense layer on the end, and add bias embeddings to the result. (NB: I wanted to add the bias embeddings to the respective $\mathbb{R}^f$ embeddings at the outset, but couldn't figure out how to do this in Keras.)</p>
@@ -8484,7 +8562,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Further
 <div class="prompt input_prompt">In [185]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
 <span class="n">song_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'song'</span><span class="p">)</span>
 
 <span class="n">country_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_countries</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="n">F</span><span class="p">,</span> <span class="n">embeddings_regularizer</span><span class="o">=</span><span class="n">l2</span><span class="p">(</span><span class="n">lmbda</span><span class="p">))(</span><span class="n">country_input</span><span class="p">)</span>
@@ -8518,7 +8596,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Further
 <div class="prompt input_prompt">In [190]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">implicit_cf_loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">))</span>
 
 <span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">to_file</span><span class="o">=</span><span class="s1">'figures/network_3.png'</span><span class="p">)</span>
@@ -8527,10 +8605,8 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Further
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img alt="network 3" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_implicit_mf_network_3.png"/></p>
 </div>
@@ -8541,7 +8617,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Further
 <div class="prompt input_prompt">In [191]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
 
 <span class="n">network_3</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
@@ -8556,7 +8632,8 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$<p>Further
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train on 476465 samples, validate on 476465 samples
 Epoch 1/5
@@ -8580,7 +8657,7 @@ Epoch 5/5
 <div class="prompt input_prompt">In [192]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 <span class="n">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -8588,7 +8665,8 @@ Epoch 5/5
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train: 0.11102242413459021
 Validation: 0.1899202531334214
@@ -8598,20 +8676,16 @@ Validation: 0.1899202531334214
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>These results are roughly identical to the previous. Choosing between the models, we'd certainly go with the simpler of the two.</p>
 <p>Now, let's try some architectures that benefit from other data sources altogether: the song title, and the song artist.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><a id="network_4"></a></p>
 <h1 id="Network-#4">Network #4<a class="anchor-link" href="#Network-#4">¶</a></h1><p>Same as <a href="#network_2">#2</a>, except feed in the song title text as well. This text is first tokenized, then padded to a maximum sequence length, then embedded into a fixed-length vector by an LSTM, then reduced to a single value by a dense layer with a ReLU activation. Finally, this scalar is concatenated to the scalar output that <a href="#network_2">#2</a> would produce, and the result is fed into a final dense layer with a linear activation - i.e. a linear combination of the two.</p>
@@ -8623,7 +8697,7 @@ Validation: 0.1899202531334214
 <div class="prompt input_prompt">In [194]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">MAX_SEQUENCE_LENGTH</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'title_sequence'</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">MAX_SEQUENCE_LENGTH</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'title_sequence'</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
 <span class="n">padded_title_sequences</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="o">=</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'title_sequence'</span><span class="p">],</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">MAX_SEQUENCE_LENGTH</span><span class="p">)</span>
 </pre></div>
@@ -8636,7 +8710,7 @@ Validation: 0.1899202531334214
 <div class="prompt input_prompt">In [205]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
 <span class="n">song_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'song'</span><span class="p">)</span>
 <span class="n">title_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">MAX_SEQUENCE_LENGTH</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int32'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'song_title_sequence'</span><span class="p">)</span>
 
@@ -8666,7 +8740,7 @@ Validation: 0.1899202531334214
 <div class="prompt input_prompt">In [206]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">,</span> <span class="n">title_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">final_output</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">,</span> <span class="n">title_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">final_output</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">implicit_cf_loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">))</span>
 
 <span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">to_file</span><span class="o">=</span><span class="s1">'figures/network_4.png'</span><span class="p">)</span>
@@ -8675,10 +8749,8 @@ Validation: 0.1899202531334214
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img alt="network 4" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_implicit_mf_network_4.png"/></p>
 </div>
@@ -8689,7 +8761,7 @@ Validation: 0.1899202531334214
 <div class="prompt input_prompt">In [207]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">],</span> <span class="n">padded_title_sequences</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">],</span> <span class="n">padded_title_sequences</span><span class="p">]</span>
 
 <span class="n">network_4</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
@@ -8704,7 +8776,8 @@ Validation: 0.1899202531334214
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train on 476465 samples, validate on 476465 samples
 Epoch 1/5
@@ -8728,7 +8801,7 @@ Epoch 5/5
 <div class="prompt input_prompt">In [208]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 <span class="n">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -8736,7 +8809,8 @@ Epoch 5/5
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train: 0.11471700578472085
 Validation: 0.18885209182480478
@@ -8746,10 +8820,8 @@ Validation: 0.18885209182480478
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We seem to get a pinch of lift from the song title, though we're still underfitting our training set. Perhaps we could make our model bigger, or run it for more epochs.</p>
 <p>Let's plot our ground-truth vs. prediction distributions side-by-side just to make sure we're still on the right track.</p>
@@ -8761,7 +8833,7 @@ Validation: 0.18885209182480478
 <div class="prompt input_prompt">In [210]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s1">'predictions'</span><span class="p">:</span> <span class="n">predictions</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
     <span class="s1">'ratings'</span><span class="p">:</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'train_rating'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="p">})</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -8771,8 +8843,9 @@ Validation: 0.18885209182480478
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
-<div class="output_png output_subarea ">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
 <img class="img-responsive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA7MAAAFyCAYAAAAnNY1XAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3X2YlXWdP/D3YUZUmCGkqJXKFiq3KF2jWbraH2BPRlty
 lQrx0MVW2GZlEmUGkUAEiVbOlhKatm57qVSS5UN51RZmBBSYpa6j1tYWpbCFgTkzGiNz7t8fXsyK
@@ -8982,19 +9055,15 @@ AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Finally, let's add the artist.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><a id="network_5"></a></p>
 <h1 id="Network-#5">Network #5<a class="anchor-link" href="#Network-#5">¶</a></h1><p>Same as <a href="#network_4">#4</a>, except feed in the song artist index as well. This index is first embedded into a vector, then reduced to a scalar by a dense layer with a ReLU activation. Finally, this scalar is concatenated with the two scalars produced in the second-to-last layer of <a href="#network_4">#4</a>, then fed into a final dense layer with a linear activation. Like the previous, this is a linear combination of the three inputs.</p>
@@ -9006,7 +9075,7 @@ AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [217]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">artist_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'artist'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">artist_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'artist'</span><span class="p">)</span>
 <span class="n">artist_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_artists</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="n">F</span><span class="p">,</span> <span class="n">embeddings_regularizer</span><span class="o">=</span><span class="n">l2</span><span class="p">(</span><span class="n">lmbda</span><span class="p">))(</span><span class="n">artist_input</span><span class="p">)</span>
 <span class="n">dense_artist_embedding</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">)(</span><span class="n">artist_embedding</span><span class="p">)</span>
 <span class="n">dense_artist_embedding</span> <span class="o">=</span> <span class="n">Flatten</span><span class="p">()(</span><span class="n">dense_artist_embedding</span><span class="p">)</span>
@@ -9023,7 +9092,7 @@ AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [218]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">,</span> <span class="n">title_input</span><span class="p">,</span> <span class="n">artist_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">final_output</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">,</span> <span class="n">title_input</span><span class="p">,</span> <span class="n">artist_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">final_output</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">implicit_cf_loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">))</span>
 
 <span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">to_file</span><span class="o">=</span><span class="s1">'figures/network_5.png'</span><span class="p">)</span>
@@ -9032,10 +9101,8 @@ AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img alt="network 5" class="img-responsive" src="https://cavaunpeu.github.io/figures/neural_implicit_mf_network_5.png"/></p>
 </div>
@@ -9046,7 +9113,7 @@ AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [219]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> 
     <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">],</span> 
     <span class="n">padded_title_sequences</span><span class="p">,</span> 
@@ -9066,7 +9133,8 @@ AACgdIRZAAAASkeYBQAAoHSEWQAAAEpHmAUAAKB0/j+WeLUMWlEqWAAAAABJRU5ErkJggg==
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train on 476465 samples, validate on 476465 samples
 Epoch 1/5
@@ -9082,9 +9150,10 @@ Epoch 5/5
 </pre>
 </div>
 </div>
-<div class="output_area"><div class="prompt output_prompt">Out[219]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[219]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre><keras.callbacks.history 0x12ee912b0="" at=""></keras.callbacks.history></pre>
+<pre>&lt;keras.callbacks.History at 0x12ee912b0&gt;</pre>
 </div>
 </div>
 </div>
@@ -9095,7 +9164,7 @@ Epoch 5/5
 <div class="prompt input_prompt">In [220]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 <span class="n">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -9103,7 +9172,8 @@ Epoch 5/5
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train: 0.11092262775206822
 Validation: 0.19037930919362725
@@ -9113,19 +9183,15 @@ Validation: 0.19037930919362725
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This seems a bit worse than the last, though similar all the same. I'm a bit surprised we didn't get more lift from artists. Nevertheless, we're still underfitting. Bigger model, more epochs, etc.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="What-went-wrong?">What went wrong?<a class="anchor-link" href="#What-went-wrong?">¶</a></h1><p>Our best neural network in terms of performance and complexity is network <a href="#network_2">#2</a>. Let's refit this model and inspect a few predictions.</p>
 </div>
@@ -9136,7 +9202,7 @@ Validation: 0.19037930919362725
 <div class="prompt input_prompt">In [409]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">country_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'country'</span><span class="p">)</span>
 <span class="n">song_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'song'</span><span class="p">)</span>
 
 <span class="n">country_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">n_countries</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="n">F</span><span class="p">,</span> <span class="n">embeddings_regularizer</span><span class="o">=</span><span class="n">l2</span><span class="p">(</span><span class="n">lmbda</span><span class="p">))(</span><span class="n">country_input</span><span class="p">)</span>
@@ -9160,7 +9226,7 @@ Validation: 0.19037930919362725
 <div class="prompt input_prompt">In [410]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">country_input</span><span class="p">,</span> <span class="n">song_input</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">predicted_preference</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">implicit_cf_loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -9172,7 +9238,7 @@ Validation: 0.19037930919362725
 <div class="prompt input_prompt">In [411]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">'country_index'</span><span class="p">],</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">'song_index'</span><span class="p">]]</span>
 
 <span class="n">network_2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
@@ -9187,7 +9253,8 @@ Validation: 0.19037930919362725
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train on 476465 samples, validate on 476465 samples
 Epoch 1/5
@@ -9211,7 +9278,7 @@ Epoch 5/5
 <div class="prompt input_prompt">In [412]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">generate_predictions</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 <span class="n">evaluate_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -9219,7 +9286,8 @@ Epoch 5/5
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Train: 0.10905118689288228
 Validation: 0.19050085125816704
@@ -9234,7 +9302,7 @@ Validation: 0.19050085125816704
 <div class="prompt input_prompt">In [441]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span> <span class="o">=</span> <span class="n">predictions</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span> <span class="o">=</span> <span class="n">predictions</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
 
 <span class="n">predictions_unstack</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s1">'song_title'</span><span class="p">:</span> <span class="n">song_metadata_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="s1">'song_id'</span><span class="p">)][</span><span class="s1">'song_title'</span><span class="p">],</span>
@@ -9247,10 +9315,8 @@ Validation: 0.19050085125816704
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Colombia">Colombia<a class="anchor-link" href="#Colombia">¶</a></h2>
 </div>
@@ -9261,17 +9327,18 @@ Validation: 0.19050085125816704
 <div class="prompt input_prompt">In [443]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Colombia'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Colombia'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[443]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[443]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9367,10 +9434,8 @@ Validation: 0.19050085125816704
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="United-States">United States<a class="anchor-link" href="#United-States">¶</a></h2>
 </div>
@@ -9381,17 +9446,18 @@ Validation: 0.19050085125816704
 <div class="prompt input_prompt">In [444]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'United States'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'United States'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[444]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[444]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9487,10 +9553,8 @@ Validation: 0.19050085125816704
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Turkey">Turkey<a class="anchor-link" href="#Turkey">¶</a></h2>
 </div>
@@ -9501,17 +9565,18 @@ Validation: 0.19050085125816704
 <div class="prompt input_prompt">In [445]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Turkey'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Turkey'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[445]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[445]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9607,10 +9672,8 @@ Validation: 0.19050085125816704
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Taiwan">Taiwan<a class="anchor-link" href="#Taiwan">¶</a></h2>
 </div>
@@ -9621,17 +9684,18 @@ Validation: 0.19050085125816704
 <div class="prompt input_prompt">In [446]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Taiwan'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">predictions_unstack</span><span class="p">[</span><span class="n">predictions_unstack</span><span class="p">[</span><span class="s1">'country'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Taiwan'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[446]:</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[446]:</div>
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<table border="1" class="table table-striped table-hover dataframe">
+<table border="1" class="table-striped dataframe table table-hover">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -9727,19 +9791,15 @@ Validation: 0.19050085125816704
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>As is abundantly clear, the model is simply converging to a popularity baseline. I tried extracting the vectors outright, normalizing as before then computing dot products, but the results made little sense.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Future-work">Future work<a class="anchor-link" href="#Future-work">¶</a></h1><p>At this stage, Implicit Matrix Factorization is the clear winner. The algorithm is popular for several good reasons - it's simple, relatively scalable, intuitive (especially given the significance of the interplay between $C$ and $P$, which I did not expressedly discuss) and effective. Herein, I did not produce a neural network approximating this algorithm with superior results.</p>
 <p>My intuition tells me I'm missing something simple; why shouldn't a non-linear function approximator be able to approximate $f(u, i)$ better than a linear matrix decomposition? At this stage, I'm not sure. My best guess is that we should seek to optimize a different loss function. Here, we've mirrored that of IMF; why not optimize a <em>ranking</em> loss function instead, since that's what's ultimately important? The IMF objective makes the actual optimization process easy for ratings matrices with billions of items; in our case, with far fewer items, we're simply using stochastic gradient descent. To this effect, I did experiment with some composite loss functions; on one side, <code>implicit_mf_loss</code>, and on the other, a <code>cutoff_loss</code>, which seeks to enforce that songs which received a rating $\tilde{r}_{u, i}$ above a certain cutoff should be indeed predicted at above that cutoff. It's a crude, binary absolute error. This was unsuccessful.</p>
@@ -9752,7 +9812,7 @@ Validation: 0.19050085125816704
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
@@ -9797,21 +9857,51 @@ Validation: 0.19050085125816704
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -9819,7 +9909,7 @@ Validation: 0.19050085125816704
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

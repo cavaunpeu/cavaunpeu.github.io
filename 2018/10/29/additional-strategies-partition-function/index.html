@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -115,11 +112,11 @@ $$</div>
 <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">previous_samples</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 </pre></div>
 <h2>Implications</h2>
-<p>Per the expression for the full log-likelihood gradient, e.g. <span class="math">\(\nabla_{w_{i, j}}\log{\mathcal{L}} = \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j] - \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, the negative phase works to "reduce the probability of the points in which the model strongly, yet wrongly, believes".<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> Since we approximate this term at each parameter update with samples <em>roughly from</em> the current model's true distribution, <strong>we do not encroach on this foundational task.</strong></p>
+<p>Per the expression for the full log-likelihood gradient, e.g. <span class="math">\(\nabla_{w_{i, j}}\log{\mathcal{L}} = \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j] - \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, the negative phase works to "reduce the probability of the points in which the model strongly, yet wrongly, believes".<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Since we approximate this term at each parameter update with samples <em>roughly from</em> the current model's true distribution, <strong>we do not encroach on this foundational task.</strong></p>
 <h2>Contrastive divergence</h2>
 <p>Alternatively, in the contrastive divergence algorithm, we initialize the chain at each gradient step with a sample from the data distribution.</p>
 <h2>Implications</h2>
-<p>With no guarantee that the data distribution resembles the model distribution, we may systematically fail to sample, and thereafter "suppress," points that are incorrectly likely under the latter (as they do not appear in the former!). <strong>This incurs the growth of "spurious modes"</strong> in our model, aptly named.<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
+<p>With no guarantee that the data distribution resembles the model distribution, we may systematically fail to sample, and thereafter "suppress," points that are incorrectly likely under the latter (as they do not appear in the former!). <strong>This incurs the growth of "spurious modes"</strong> in our model, aptly named.<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <p>In code, this might look like:</p>
 <div class="highlight"><pre><span></span><span class="c1"># Vanilla Gibbs sampling</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">)]</span>
@@ -234,7 +231,7 @@ $$</div>
 <h2>Extensions</h2>
 <p>We briefly alluded to the fact that our noise distribution is non-parametric. However, there is nothing stopping us from evolving this distribution and giving it trainable parameters, then updating these parameters such that it generates increasingly "optimal" samples.</p>
 <p>Of course, we would have to design what "optimal" means. One interesting approach is called <a href="https://arxiv.org/abs/1805.03642">Adversarial Contrastive Estimation
-</a>, wherein the authors adapt the noise distribution to generate increasingly "harder negative examples, which forces the main model to learn a better representation of the data."<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup></p>
+</a>, wherein the authors adapt the noise distribution to generate increasingly "harder negative examples, which forces the main model to learn a better representation of the data."<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
 <h2>Negative sampling</h2>
 <p>Negative sampling is the same as NCE except:</p>
 <ol>
@@ -272,13 +269,13 @@ $$</div>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_units</span><span class="p">,</span> <span class="n">n_units</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_units</span><span class="p">,</span> <span class="n">n_units</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diagonal_mask</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_units</span><span class="p">)</span><span class="o">.</span><span class="n">byte</span><span class="p">())</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span> <span class="o">=</span> <span class="n">n_units</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_unnormalized_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -288,7 +285,7 @@ $$</div>
         <span class="n">H</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diagonal_mask</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ger</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">H</span> <span class="o">/</span> <span class="mi">1000</span>
 
-    <span class="k">def</span> <span class="nf">_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        :param x: a vector of shape (n_units,) or (n, n_units),</span>
 <span class="sd">            where the latter is a matrix of multiple data points</span>
@@ -311,7 +308,7 @@ $$</div>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">lik</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">init_sample</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">init_sample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">burn_in</span> <span class="o">&gt;</span> <span class="n">n_samples</span><span class="p">:</span>
             <span class="n">n_samples</span> <span class="o">+=</span> <span class="n">burn_in</span>
@@ -340,17 +337,17 @@ $$</div>
 
 <span class="c1"># define classifier. we add a multiplicative constant to make training more stable.</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">classifier</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">noise</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">noise</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
 
 <span class="c1"># define noise generator</span>
 <span class="n">noise_sample</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">noise</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_shape</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="n">BATCH_SIZE</span> <span class="o">*</span> <span class="n">k</span><span class="p">]))</span>
 <span class="n">noiseloader</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">noise_sample</span><span class="p">(),</span> <span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainloader</span><span class="p">))</span> <span class="p">)</span>
 
 <span class="c1"># define optimizer, loss</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=.</span><span class="mo">01</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=.</span><span class="mi">01</span><span class="p">)</span>
 <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">()</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">noiseloader</span><span class="p">,</span> <span class="n">n_batches</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">noiseloader</span><span class="p">,</span> <span class="n">n_batches</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">trainloader</span><span class="p">,</span> <span class="n">noiseloader</span><span class="p">)):</span>
 
@@ -378,14 +375,14 @@ $$</div>
             <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Batch: {i} | Loss: {loss.data.item():.3}'</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> | Loss: </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'weights.mean(): {model.params.weight.mean():.3}'</span><span class="p">)</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'bias.mean(): {model.params.bias.mean():.3}'</span><span class="p">)</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'c: {model.c.data.item():.3}'</span><span class="p">)</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'weights.grad.mean(): {model.params.weight.grad.mean():.3}'</span><span class="p">)</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'bias.grad.mean(): {model.params.bias.grad.mean():.3}'</span><span class="p">)</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'c.grad: {model.c.grad.data.item():.3}'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'weights.mean(): </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'bias.mean(): </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'c: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'weights.grad.mean(): </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'bias.grad.mean(): </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'c.grad: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 <h2>Train model</h2>
 <div class="highlight"><pre><span></span><span class="n">train_model</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">noiseloader</span><span class="p">,</span> <span class="n">n_batches</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -403,8 +400,8 @@ $$</div>
 </pre></div>
 <h2>Negative sampling</h2>
 <p>Next, we'll try negative sampling using some actual images as negative samples</p>
-<div class="highlight"><pre><span></span><span class="n">noiseset</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span> <span class="o">=</span> <span class="s1">'data/mnist'</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
-<span class="n">noiseloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">noiseset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">noiseset</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span> <span class="o">=</span> <span class="s1">'data/mnist'</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+<span class="n">noiseloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">noiseset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># get some random training images</span>
 <span class="n">dataiter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">noiseloader</span><span class="p">)</span>
@@ -420,7 +417,7 @@ $$</div>
 
 <span class="c1"># define classifier</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">classifier</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">-</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">-</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># i had to change this learning rate to get this to train</span>
 
@@ -449,8 +446,8 @@ $$</div>
 
 <span class="n">samples</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="k">user</span> <span class="mi">4</span><span class="k">min</span> <span class="mi">10</span><span class="n">s</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mi">4</span><span class="p">.</span><span class="mi">09</span> <span class="n">s</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mi">4</span><span class="k">min</span> <span class="mi">14</span><span class="n">s</span>
-<span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mi">4</span><span class="k">min</span> <span class="mi">17</span><span class="n">s</span>
+<div class="highlight"><pre><span></span><span class="err">CPU times: user 4min 10s, sys: 4.09 s, total: 4min 14s</span>
+<span class="err">Wall time: 4min 17s</span>
 </pre></div>
 <p>Takes forever!</p>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/additional-strategies-partition-function/output_18_0.png"/></p>
@@ -466,17 +463,17 @@ $$</div>
 <div class="footnote">
 <hr/>
 <ol>
-<li id="fn-1">
+<li id="fn:1">
 <p>@book{Goodfellow-et-al-2016,
 title={Deep Learning},
 author={Ian Goodfellow and Yoshua Bengio and Aaron Courville},
 publisher={MIT Press},
 note={\url{http://www.deeplearningbook.org}},
 year={2016}
-} <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2-1" title="Jump back to footnote 1 in the text">↩</a></p>
+} <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
-<li id="fn-2">
-<p><a href="https://arxiv.org/abs/1805.03642">Adversarial Contrastive Estimation</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+<li id="fn:2">
+<p><a href="https://arxiv.org/abs/1805.03642">Adversarial Contrastive Estimation</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
 </ol>
 </div>
@@ -492,15 +489,16 @@ year={2016}
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -514,6 +512,8 @@ year={2016}
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -534,6 +534,8 @@ year={2016}
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -558,21 +560,51 @@ year={2016}
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -580,7 +612,7 @@ year={2016}
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

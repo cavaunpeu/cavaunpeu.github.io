@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -146,10 +143,10 @@ $$</div>
     <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_combinations</span><span class="p">:</span>
         <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-    <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="err">@</span> <span class="n">x</span>
+    <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">@</span> <span class="n">x</span>
     <span class="k">return</span> <span class="n">h</span>
 
-<span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    :param x: a vector of shape (n_units,) or (n, n_units),</span>
 <span class="sd">        where the latter is a matrix of multiple data points</span>
@@ -172,7 +169,7 @@ $$</div>
     <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lik</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
 </pre></div>
 <p>This code block is longer than you might expect because it includes a few supplementary behaviors, namely:</p>
 <ul>
@@ -286,7 +283,7 @@ $$</div>
 <h2>Train model, visualize model distribution</h2>
 <p>Finally, we're ready to train. Using the true negative phase, let's train our model for 100 epochs with <span class="math">\(d=3\)</span> then visualize results.</p>
 <div class="highlight"><pre><span></span><span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mo">01</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mi">01</span>
 
 
 <span class="k">def</span> <span class="nf">reset_data_and_parameters</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_obs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">]):</span>
@@ -346,10 +343,10 @@ $$</div>
         <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_combinations</span><span class="p">:</span>
             <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-        <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="err">@</span> <span class="n">x</span>
+        <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">@</span> <span class="n">x</span>
         <span class="k">return</span> <span class="n">h</span>
 
-    <span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        :param x: a vector of shape (n_units,) or (n, n_units),</span>
 <span class="sd">            where the latter is a matrix of multiple data points</span>
@@ -372,9 +369,9 @@ $$</div>
         <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lik</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">init_sample</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">init_sample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">every_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
@@ -431,9 +428,9 @@ $$</div>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span> <span class="o">=</span> <span class="n">update_parameters_with_true_negative_phase</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">lik</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">lik</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Epoch: {i:2} | Likelihood: {lik}'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Epoch: </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s1">2</span><span class="si">}</span><span class="s1"> | Likelihood: </span><span class="si">{</span><span class="n">lik</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="n">Epoch</span><span class="o">:</span>  <span class="mi">0</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">209.63758306786653</span>
 <span class="n">Epoch</span><span class="o">:</span> <span class="mi">10</span> <span class="o">|</span> <span class="n">Likelihood</span><span class="o">:</span> <span class="o">-</span><span class="mf">162.04280784271083</span>
@@ -457,9 +454,9 @@ $$</div>
     <span class="n">samples</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
 
-    <span class="n">x</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mo">05</span>
-    <span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mo">05</span>
-    <span class="n">z</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mo">05</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mi">05</span>
+    <span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mi">05</span>
+    <span class="n">z</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="o">*</span> <span class="o">.</span><span class="mi">05</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Node 0'</span><span class="p">)</span>
@@ -469,7 +466,7 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">1000</span>
 
 <span class="n">plot_n_samples</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">f</span><span class="s1">'{n_samples} Samples from Model'</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">n_samples</span><span class="si">}</span><span class="s1"> Samples from Model'</span><span class="p">)</span>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_7_0.png"/></p>
 <p>The plot roughly matches the data-generating distribution: most points assume values of either <span class="math">\([1, 0, 1]\)</span>, or <span class="math">\([1, 0, 0]\)</span> (given <span class="math">\(p=[.8, .1, .5]\)</span>).</p>
@@ -506,16 +503,16 @@ $$</div>
 <span class="k">assert</span> <span class="nb">sum</span><span class="p">([</span><span class="n">likelihood</span> <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
 
 <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{list(config)}: {likelihood:.4}'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">likelihood</span><span class="si">:</span><span class="s1">.4</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">07327</span>
-<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09227</span>
-<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01366</span>
-<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01938</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3351</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3622</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">04693</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05715</span>
+<div class="highlight"><pre><span></span><span class="err">[0, 0, 0]: 0.07327</span>
+<span class="err">[0, 0, 1]: 0.09227</span>
+<span class="err">[0, 1, 0]: 0.01366</span>
+<span class="err">[0, 1, 1]: 0.01938</span>
+<span class="err">[1, 0, 0]: 0.3351</span>
+<span class="err">[1, 0, 1]: 0.3622</span>
+<span class="err">[1, 1, 0]: 0.04693</span>
+<span class="err">[1, 1, 1]: 0.05715</span>
 </pre></div>
 <h2>Empirical probability distribution, via Gibbs</h2>
 <div class="highlight"><pre><span></span><span class="n">empirical_dist</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -528,16 +525,16 @@ $$</div>
 
 <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">likelihood</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">:</span>
     <span class="n">empirical_probability</span> <span class="o">=</span> <span class="n">empirical_dist</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">config</span><span class="p">)]</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'{list(config)}: {likelihood:.4} (true), {empirical_probability:.4} (empirical)'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">likelihood</span><span class="si">:</span><span class="s1">.4</span><span class="si">}</span><span class="s1"> (true), </span><span class="si">{</span><span class="n">empirical_probability</span><span class="si">:</span><span class="s1">.4</span><span class="si">}</span><span class="s1"> (empirical)'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">07327</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05102</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09227</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09184</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01366</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0102</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01938</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">02041</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3351</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3673</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3622</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">398</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">04693</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">03061</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05715</span> <span class="p">(</span><span class="k">true</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">03061</span> <span class="p">(</span><span class="n">empirical</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">[0, 0, 0]: 0.07327 (true), 0.05102 (empirical)</span>
+<span class="err">[0, 0, 1]: 0.09227 (true), 0.09184 (empirical)</span>
+<span class="err">[0, 1, 0]: 0.01366 (true), 0.0102 (empirical)</span>
+<span class="err">[0, 1, 1]: 0.01938 (true), 0.02041 (empirical)</span>
+<span class="err">[1, 0, 0]: 0.3351 (true), 0.3673 (empirical)</span>
+<span class="err">[1, 0, 1]: 0.3622 (true), 0.398 (empirical)</span>
+<span class="err">[1, 1, 0]: 0.04693 (true), 0.03061 (empirical)</span>
+<span class="err">[1, 1, 1]: 0.05715 (true), 0.03061 (empirical)</span>
 </pre></div>
 <p>Close, ish enough.</p>
 <h2>Scaling up, and hitting the bottleneck</h2>
@@ -604,7 +601,7 @@ $$</div>
             <span class="n">update_parameters_with_gibbs_sampling</span><span class="p">,</span>
             <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
             <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
             <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">p</span><span class="o">=</span><span class="n">p</span>
@@ -617,7 +614,7 @@ $$</div>
             <span class="n">update_parameters_with_true_negative_phase</span><span class="p">,</span>
             <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
             <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
             <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">p</span><span class="o">=</span><span class="n">p</span>
@@ -648,7 +645,7 @@ $$</div>
             <span class="n">update_parameters_with_gibbs_sampling</span><span class="p">,</span>
             <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
             <span class="n">n_seconds</span><span class="o">=</span><span class="n">n_seconds</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
             <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">p</span><span class="o">=</span><span class="n">p</span>
@@ -661,7 +658,7 @@ $$</div>
             <span class="n">update_parameters_with_true_negative_phase</span><span class="p">,</span>
             <span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">,</span>
             <span class="n">n_seconds</span><span class="o">=</span><span class="n">n_seconds</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
             <span class="n">run_num</span><span class="o">=</span><span class="n">run</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">p</span><span class="o">=</span><span class="n">p</span>
@@ -684,14 +681,14 @@ $$</div>
 <div class="footnote">
 <hr/>
 <ol>
-<li id="fn-1">
-<p><a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec19.pdf">CSC321 Lecture 19: Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a></p>
+<li id="fn:1">
+<p><a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec19.pdf">CSC321 Lecture 19: Boltzmann Machines</a> <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
-<li id="fn-2">
-<p><a href="https://theclevermachine.wordpress.com/2014/09/23/derivation-maximum-likelihood-for-boltzmann-machines/">Derivation: Maximum Likelihood for Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+<li id="fn:2">
+<p><a href="https://theclevermachine.wordpress.com/2014/09/23/derivation-maximum-likelihood-for-boltzmann-machines/">Derivation: Maximum Likelihood for Boltzmann Machines</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
-<li id="fn-3">
-<p><a href="https://www.cs.toronto.edu/~hinton/csc321/readings/boltz321.pdf">Boltzmann Machines</a> <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a></p>
+<li id="fn:3">
+<p><a href="https://www.cs.toronto.edu/~hinton/csc321/readings/boltz321.pdf">Boltzmann Machines</a> <a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">↩</a></p>
 </li>
 </ol>
 </div>
@@ -707,15 +704,16 @@ $$</div>
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -729,6 +727,8 @@ $$</div>
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -749,6 +749,8 @@ $$</div>
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -773,21 +775,51 @@ $$</div>
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -795,7 +827,7 @@ $$</div>
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

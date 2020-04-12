@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="cosas de machine learning">
+	<meta name="description" content="escritura sobre machine learning, la geopolítica, y la vida">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/es/">will wolf</a></h1>
-          <h4 id="site-subtitle">cosas de machine learning</h4>
+            <h4 id="site-subtitle-with-links">escritura sobre <a id="sitesubtitle-machine-learning" href="/es/machine-learning">machine learning</a>, la geopolítica, y la vida</h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io/es" title=Español id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>ES<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/" title=English>EN</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -87,7 +84,7 @@
 <p>The technology of tired humans sorting pieces of paper into four stacks is, at best, crude. As a large research literature has made clear, we can reasonably assume that even well-rested people would have made mistakes with between 0.5% and 1% of the ballots. On this estimate, about 65,000-130,000 votes would have been unintentionally misclassified. It means the number of innocent counting errors could easily be substantially larger than the 53,894 yes-no difference.</p>
 </blockquote>
 <p>¿Sería posible que la mayoría quería el "Sí" y sin embargo perdió igual?</p>
-<p><img alt="plebiscite vote" class="img-responsive" src="https://cavaunpeu.github.io/es/../images/colombian_plebiscite_vote.jpg"/></p>
+<p><img alt="plebiscite vote" class="img-responsive" src="https://cavaunpeu.github.io/es/images/colombian_plebiscite_vote.jpg"/></p>
 <p>Para investigarlo, podemos formular el proceso del voto como un sencillo proceso estadístico y preguntarse: "Si repitiéramos el plebiscito muchas más veces, ¿con qué frecuencia ganaría el 'Sí' de verdad?"</p>
 <p>Si queremos, podemos analizar el problema desde un lado analítico, que es decir resolverlo a mano con un lápiz y papel. Esto se pone complicado rápido. Más bien, nos negamos de hacerle tanto caso a la teoría y corremos una simulación básica en su lugar; <a href="https://speakerdeck.com/jakevdp/statistics-for-hackers">"si sabes escribir un for-loop, puedes tú hacer los estadísticos."</a></p>
 <p>Formulemos el problem así:</p>
@@ -104,8 +101,8 @@
 <span class="n">NULL_BALLOTS</span> <span class="o">=</span> <span class="mi">170946</span>
 
 <span class="n">TOTAL_VOTES</span> <span class="o">=</span> <span class="n">YES_BALLOTS</span> <span class="o">+</span> <span class="n">NO_BALLOTS</span> <span class="o">+</span> <span class="n">UNMARKED_BALLOTS</span> <span class="o">+</span> <span class="n">NULL_BALLOTS</span>
-<span class="n">P_INVALID</span> <span class="o">=</span> <span class="o">.</span><span class="mo">02</span>
-<span class="n">P_MISCLASSIFICATION</span> <span class="o">=</span> <span class="o">.</span><span class="mo">01</span>
+<span class="n">P_INVALID</span> <span class="o">=</span> <span class="o">.</span><span class="mi">02</span>
+<span class="n">P_MISCLASSIFICATION</span> <span class="o">=</span> <span class="o">.</span><span class="mi">01</span>
 <span class="n">N_TRIALS</span> <span class="o">=</span> <span class="mi">100000</span>
 </pre></div>
 <p>En cada prueba, asumimos una proporción verdadera y subyacente <span class="math">\(p_{\text{yes}}\%\)</span> de gente que vota por el "Sí." Por ejemplo, si le damos .48 al <span class="math">\(p_{\text{yes}}\)</span>, tendremos <span class="math">\(V_t * p_{\text{yes}}\)</span> individuos con la intención de votar por el "Sí," y los demás <span class="math">\(V_t * (1-p_{\text{yes}})\)</span> por el "No." Asumimos que estos valores son estáticos: no son generados por un proceso random.</p>
@@ -149,8 +146,8 @@
     <span class="n">percentage_of_tallied_votes_that_were_yes</span> <span class="o">=</span> <span class="n">simulate_vote</span><span class="p">(</span><span class="n">probability_yes</span><span class="p">)</span>
     <span class="n">proportion_of_trials_won_by_no</span> <span class="o">=</span> <span class="p">(</span><span class="n">percentage_of_tallied_votes_that_were_yes</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-    <span class="n">results</span> <span class="o">=</span> <span class="s2">"p_yes: {:1.6f}% | no_win_percentage: {:1.3f}%"</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">probability_yes</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">proportion_of_trials_won_by_no</span><span class="p">))</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="s2">"p_yes: </span><span class="si">{:1.6f}</span><span class="s2">% | no_win_percentage: </span><span class="si">{:1.3f}</span><span class="s2">%"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">probability_yes</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">proportion_of_trials_won_by_no</span><span class="p">))</span>
 
 <span class="n">p_yes</span><span class="p">:</span> <span class="mf">60.000000</span><span class="o">%</span> <span class="o">|</span> <span class="n">no_win_percentage</span><span class="p">:</span> <span class="mf">0.000</span><span class="o">%</span>
 <span class="n">p_yes</span><span class="p">:</span> <span class="mf">51.000000</span><span class="o">%</span> <span class="o">|</span> <span class="n">no_win_percentage</span><span class="p">:</span> <span class="mf">0.000</span><span class="o">%</span>
@@ -187,15 +184,16 @@
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -209,6 +207,8 @@
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -229,6 +229,8 @@
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -253,21 +255,49 @@
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/es/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -275,7 +305,7 @@
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>

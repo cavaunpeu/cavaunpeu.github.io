@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/es/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/es/</id><updated>2017-03-22T19:56:00-04:00</updated><entry><title>Docker y Kaggle con Enrique y Beto</title><link href="https://cavaunpeu.github.io/es/2017/03/22/docker-y-kaggle-con-enrique-y-beto/" rel="alternate"></link><published>2017-03-22T19:56:00-04:00</published><updated>2017-03-22T19:56:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-03-22:/es/2017/03/22/docker-y-kaggle-con-enrique-y-beto/</id><summary type="html">&lt;p&gt;Este post tiene como objetivo familiarizarlos con lo que es Docker, por qué y cómo usarlo para Kaggle.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Este post tiene como objetivo familiarizarlos con lo que es Docker, por qué y cómo usarlo para Kaggle. Para hacer las cosas más simples, hablaremos principalmente de Plaza Sésamo y pasteles en lugar de computadoras y datos.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf</title><link href="https://cavaunpeu.github.io/es/" rel="alternate"></link><link href="https://cavaunpeu.github.io/feeds/all.atom.xml" rel="self"></link><id>https://cavaunpeu.github.io/es/</id><updated>2017-03-22T19:56:00-04:00</updated><subtitle>escritura sobre machine learning, la geopolítica, y la vida</subtitle><entry><title>Docker y Kaggle con Enrique y Beto</title><link href="https://cavaunpeu.github.io/es/2017/03/22/docker-y-kaggle-con-enrique-y-beto/" rel="alternate"></link><published>2017-03-22T19:56:00-04:00</published><updated>2017-03-22T19:56:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-03-22:/es/2017/03/22/docker-y-kaggle-con-enrique-y-beto/</id><summary type="html">&lt;p&gt;Este post tiene como objetivo familiarizarlos con lo que es Docker, por qué y cómo usarlo para Kaggle.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Este post tiene como objetivo familiarizarlos con lo que es Docker, por qué y cómo usarlo para Kaggle. Para hacer las cosas más simples, hablaremos principalmente de Plaza Sésamo y pasteles en lugar de computadoras y datos.&lt;/p&gt;
 &lt;p&gt;Una mañana de lunes, Enrique sale de debajo de su cobija rayada, pone los dos pies en el piso y abre la ventana de su cuarto. Echa un vistazo hacia la metrópoli llena de galletas y muñecos de peluche, endereza el cuello de su suéter color banana, suelta un fuerte bostezo matutino y exclama: "Hoy, voy a preparar pasteles para mi querido compañero Beto."&lt;/p&gt;
-&lt;p&gt;&lt;img alt="ernie and bert" class="img-responsive" src="https://cavaunpeu.github.io/es/../images/ernie_and_bert.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="ernie and bert" class="img-responsive" src="https://cavaunpeu.github.io/es/images/ernie_and_bert.png"/&gt;&lt;/p&gt;
 &lt;p&gt;Por mala suerte, Enrique nunca ha hecho pasteles antes. ¡Pero no importa! Se precipita con prisa hacia la cocina, toma un libro de cocina, organiza los ingredientes y prende su hornito Easy-Bake. "Lo pongo a prueba igual. Prepararé el mejor pastel jamás hecho por todos los muñecos de peluche. Y una vez que el resultado me complazca, haré 50 más," grita.&lt;/p&gt;
 &lt;p&gt;Horas después, su trabajo termina: su pastel - tres pisos de "mini-pasteles" sabor arándano, fresa y tocino - es simplemente la mejor cosa que haya probado alguna vez en su vida. "¡Mucho mejor que cualquier cosa que ese fraude Cookie Monster haya probado jamás!" dice. Emocionado, Enrique toma una pausa en su cocina ya demasiada sucia para admirar el resultado. Piensa en Beto y se pregunta qué tan rápido se puede entregar el regalo. "Ya que he horneado el pastel perfecto, solo me toca hacer 50 más. ¿Debe ser fácil, verdad?"&lt;/p&gt;
 &lt;p&gt;Enrique se da vuelta para mirar su Easy-Bake. "Pues, esa vaina solo cocina un pastel a la vez. ¡Tardaría días en hacer 50 a ese ritmo!" Aún de buen humor, corre a la panadería del pueblo para pedir prestado su horno - ese más grande que el suyo. Se lo dan en seguida y Enrique se pone a cocinar.&lt;/p&gt;
@@ -30,16 +30,16 @@
 &lt;/ol&gt;
 &lt;p&gt;Trayendo el contenedor a la panadería es igual a un sencillo &lt;code&gt;docker run&lt;/code&gt; con el servidor remoto como el &lt;code&gt;docker-machine&lt;/code&gt;. Trayendo los ingredientes a la panadería, esto es colocando datos en el sistema de archivo local del servidor remoto, es mucho menos "sexy." En el sentido más simple, es igual a usar &lt;code&gt;scp&lt;/code&gt; or &lt;code&gt;rsync&lt;/code&gt; para transferir un archivo del entorno local al servidor remoto hasta usar &lt;code&gt;curl&lt;/code&gt; para descargar un archivo directamente en el servidor remoto mismo.&lt;/p&gt;
 &lt;p&gt;En la práctica, esto se ve generalmente así:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;docker&lt;/span&gt;
-    &lt;span class="c1"&gt;--tlsverify&lt;/span&gt;
-    &lt;span class="c1"&gt;--tlscacert="$HOME/.docker/machine/certs/ca.pem"&lt;/span&gt;
-    &lt;span class="c1"&gt;--tlscert="$HOME/.docker/machine/certs/cert.pem"&lt;/span&gt;
-    &lt;span class="c1"&gt;--tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78&lt;/span&gt;
-&lt;span class="n"&gt;run&lt;/span&gt;
-    &lt;span class="c1"&gt;--rm&lt;/span&gt;
-    &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;
-    &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;
-    &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;data&lt;/span&gt; &lt;span class="n"&gt;kaggle&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;contest&lt;/span&gt; &lt;span class="n"&gt;build_model&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;docker&lt;/span&gt;
+&lt;span class="err"&gt;    --tlsverify&lt;/span&gt;
+&lt;span class="err"&gt;    --tlscacert="$HOME/.docker/machine/certs/ca.pem"&lt;/span&gt;
+&lt;span class="err"&gt;    --tlscert="$HOME/.docker/machine/certs/cert.pem"&lt;/span&gt;
+&lt;span class="err"&gt;    --tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78&lt;/span&gt;
+&lt;span class="err"&gt;run&lt;/span&gt;
+&lt;span class="err"&gt;    --rm&lt;/span&gt;
+&lt;span class="err"&gt;    -i&lt;/span&gt;
+&lt;span class="err"&gt;    -v&lt;/span&gt;
+&lt;span class="err"&gt;    /data:/data kaggle-contest build_model.sh&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h2&gt;Utensilios de cocina que no se compran en la tienda&lt;/h2&gt;
 &lt;p&gt;Para hacer su pastel, Enrique usó una tabla de cortar única en el mundo que Beto hizo a mano para él. ¿Cómo puede usarla en la panadería? En términos de Kaggle: ¿cómo puedo usar una librería en mi proyecto que no está disponible en un repositorio de paquetes público (una que construí yo mismo)?&lt;/p&gt;
@@ -58,7 +58,7 @@ sobre Docker para Kaggle:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="https://speakerdeck.com/smly/workflow-serialization-and-docker-for-kaggle"&gt;Workflow, Serialization &amp;amp; Docker for Kaggle&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://blog.kaggle.com/2016/02/05/how-to-get-started-with-data-science-in-containers/"&gt;How to get started with data science in containers&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content></entry><entry><title>Gradientes de Recurrent Neural Networks y Lo Que Aprendí Derivándolos</title><link href="https://cavaunpeu.github.io/es/2016/10/18/gradientes-de-recurrent-neural-networks-y-lo-que-aprendi-derivandolos/" rel="alternate"></link><published>2016-10-18T14:00:00-04:00</published><updated>2016-10-18T14:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2016-10-18:/es/2016/10/18/gradientes-de-recurrent-neural-networks-y-lo-que-aprendi-derivandolos/</id><summary type="html">&lt;p&gt;Gradientes de recurrent neural networks a mano.&lt;/p&gt;</summary><content type="html">&lt;p&gt;He pasado la mayoría de la última semana construyendo recurrent neural networks a mano. Estoy tomando el curso de &lt;a href="https://www.udacity.com/course/deep-learning--ud730"&gt;Udacity Deep Learning&lt;/a&gt;, y, llegando al contenido sobre RNN's y LSTM's, decidí construir algunos de ellos desde cero yo mismo.&lt;/p&gt;
+&lt;/ol&gt;</content><category term="machine-learning"></category></entry><entry><title>Gradientes de Recurrent Neural Networks y Lo Que Aprendí Derivándolos</title><link href="https://cavaunpeu.github.io/es/2016/10/18/gradientes-de-recurrent-neural-networks-y-lo-que-aprendi-derivandolos/" rel="alternate"></link><published>2016-10-18T14:00:00-04:00</published><updated>2016-10-18T14:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2016-10-18:/es/2016/10/18/gradientes-de-recurrent-neural-networks-y-lo-que-aprendi-derivandolos/</id><summary type="html">&lt;p&gt;Gradientes de recurrent neural networks a mano.&lt;/p&gt;</summary><content type="html">&lt;p&gt;He pasado la mayoría de la última semana construyendo recurrent neural networks a mano. Estoy tomando el curso de &lt;a href="https://www.udacity.com/course/deep-learning--ud730"&gt;Udacity Deep Learning&lt;/a&gt;, y, llegando al contenido sobre RNN's y LSTM's, decidí construir algunos de ellos desde cero yo mismo.&lt;/p&gt;
 &lt;h3&gt;¿Qué es un RNN?&lt;/h3&gt;
 &lt;p&gt;Por afuera, las recurrent neural networks se diferencian del feedforward neural network típico por el hecho de que pueden ingerir &lt;em&gt;una secuencia&lt;/em&gt; de input en lugar de un sólo input de largo fijo. Concretamente, imagínense que estamos entrenando un modelo de clasificación con un puñado de tuits. Para codificar dichos tuits en el espacio vectorial, creamos un modelo de bag-of-words con un vocabulario de 3 palabras distintas. En el neural network clásico, esto implica un "input layer" con un tamaño de 3; un input podría ser &lt;span class="math"&gt;\([4, 9, 3]\)&lt;/span&gt;, o &lt;span class="math"&gt;\([1, 0, 5]\)&lt;/span&gt;, o &lt;span class="math"&gt;\([0, 0, 6]\)&lt;/span&gt;, por ejemplo. En el caso del recurrent neural network, nuestro input layer tiene el mismo tamaño de 3, pero en lugar de un sólo input, le podemos alimentar una secuencia de inputs de tamaño 3 de cualquier largo. Como ejemplo, un input podría ser &lt;span class="math"&gt;\([[1, 8, 5], [2, 2, 4]]\)&lt;/span&gt;, o &lt;span class="math"&gt;\([[6, 7, 3], [6, 2, 4], [9, 17, 5]]\)&lt;/span&gt;, o &lt;span class="math"&gt;\([[2, 3, 0], [1, 1, 7], [5, 5, 3], [8, 18, 4]]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;En su interior, las recurrent neural networks tienen un mecanismo feedforward diferente del neural network típico. Además, cada input en nuestra secuencia se procesa individual y cronológicamente: el primer input es procesado, luego el segundo, hasta procesar el último. Por fin, después de procesar todos los inputs, computamos algunos gradientes y actualizamos los parámetros (weights) de la red. Tal como en los feedforward networks, lo hacemos con backpropagation. Al contrario, ya nos toca propagarles los errores a cada parámetro en cada etapa del tiempo. Dicho de otra manera, nos toca calcular gradientes con respecto a: el estado del mundo al procesar nuestro primer input, el estado del mundo al procesar nuestro segundo input, hasta el en el que procesamos nuestro último input. Este algoritmo se llama &lt;a href="https://en.wikipedia.org/wiki/Backpropagation_through_time"&gt;Backpropagation Through Time&lt;/a&gt;.&lt;/p&gt;
@@ -315,15 +315,16 @@ $$&lt;/div&gt;
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -337,6 +338,8 @@ $$&lt;/div&gt;
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -357,9 +360,11 @@ $$&lt;/div&gt;
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content></entry><entry><title>Simulación Estadística del Plebiscito Colombiano: ¿Realmente Ganaron Los del "No?"</title><link href="https://cavaunpeu.github.io/es/2016/10/12/simulating-the-colombian-peace-vote-did-the-no-really-win-2/" rel="alternate"></link><published>2016-10-12T11:53:00-04:00</published><updated>2016-10-12T11:53:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2016-10-12:/es/2016/10/12/simulating-the-colombian-peace-vote-did-the-no-really-win-2/</id><summary type="html">&lt;p&gt;Una simulación estadística del &lt;a href="https://en.wikipedia.org/wiki/Colombian_peace_agreement_referendum,_2016"&gt;plebiscito colombiano de 2016&lt;/a&gt;.&lt;/p&gt;</summary><content type="html">&lt;p&gt;El 2 de octubre del 2016, observé con terror como los colombianos votaron por el "No" en su plebiscito nacional para decretar el recién firmado acuerdo de paz. En la siguiente semana, medité sobre el resultado y las cosas que hubieran sucedido: la gran campaña de desinformación, las payasadas de Uribe y lo súper bueno que realmente parecía el &lt;a href="https://www.youtube.com/playlist?list=PLa28R7QEiMblKeZ_OlZ_XfjjxjfeIhpuL"&gt;acuerdo&lt;/a&gt; mismo. Hace dos días, me topé por casualidad con este &lt;a href="https://theconversation.com/colombia-did-not-vote-no-in-its-peace-referendum-what-the-statistics-reveal-66471"&gt;post&lt;/a&gt;, que nos pide recordar que el margen escaso con el que ganó el "No" - 6,431,376 vs. 6,377,482 - no es particularmente convincente, ni, en realidad, tan decisivo frente al error humano.&lt;/p&gt;
+&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>Simulación Estadística del Plebiscito Colombiano: ¿Realmente Ganaron Los del "No?"</title><link href="https://cavaunpeu.github.io/es/2016/10/12/simulating-the-colombian-peace-vote-did-the-no-really-win-2/" rel="alternate"></link><published>2016-10-12T11:53:00-04:00</published><updated>2016-10-12T11:53:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2016-10-12:/es/2016/10/12/simulating-the-colombian-peace-vote-did-the-no-really-win-2/</id><summary type="html">&lt;p&gt;Una simulación estadística del &lt;a href="https://en.wikipedia.org/wiki/Colombian_peace_agreement_referendum,_2016"&gt;plebiscito colombiano de 2016&lt;/a&gt;.&lt;/p&gt;</summary><content type="html">&lt;p&gt;El 2 de octubre del 2016, observé con terror como los colombianos votaron por el "No" en su plebiscito nacional para decretar el recién firmado acuerdo de paz. En la siguiente semana, medité sobre el resultado y las cosas que hubieran sucedido: la gran campaña de desinformación, las payasadas de Uribe y lo súper bueno que realmente parecía el &lt;a href="https://www.youtube.com/playlist?list=PLa28R7QEiMblKeZ_OlZ_XfjjxjfeIhpuL"&gt;acuerdo&lt;/a&gt; mismo. Hace dos días, me topé por casualidad con este &lt;a href="https://theconversation.com/colombia-did-not-vote-no-in-its-peace-referendum-what-the-statistics-reveal-66471"&gt;post&lt;/a&gt;, que nos pide recordar que el margen escaso con el que ganó el "No" - 6,431,376 vs. 6,377,482 - no es particularmente convincente, ni, en realidad, tan decisivo frente al error humano.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;And as with all manual voting systems, one cannot rule out at least some degree of misclassification of papers on some scale, no matter how small. We know of no evidence of cheating, and Colombia is to be lauded for the seriousness of its referendum process, but the distinction between intentional and unintentional misclassification by individual counters can occasionally become blurred in practice.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -368,7 +373,7 @@ $$&lt;/div&gt;
 &lt;p&gt;The technology of tired humans sorting pieces of paper into four stacks is, at best, crude. As a large research literature has made clear, we can reasonably assume that even well-rested people would have made mistakes with between 0.5% and 1% of the ballots. On this estimate, about 65,000-130,000 votes would have been unintentionally misclassified. It means the number of innocent counting errors could easily be substantially larger than the 53,894 yes-no difference.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;¿Sería posible que la mayoría quería el "Sí" y sin embargo perdió igual?&lt;/p&gt;
-&lt;p&gt;&lt;img alt="plebiscite vote" class="img-responsive" src="https://cavaunpeu.github.io/es/../images/colombian_plebiscite_vote.jpg"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="plebiscite vote" class="img-responsive" src="https://cavaunpeu.github.io/es/images/colombian_plebiscite_vote.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;Para investigarlo, podemos formular el proceso del voto como un sencillo proceso estadístico y preguntarse: "Si repitiéramos el plebiscito muchas más veces, ¿con qué frecuencia ganaría el 'Sí' de verdad?"&lt;/p&gt;
 &lt;p&gt;Si queremos, podemos analizar el problema desde un lado analítico, que es decir resolverlo a mano con un lápiz y papel. Esto se pone complicado rápido. Más bien, nos negamos de hacerle tanto caso a la teoría y corremos una simulación básica en su lugar; &lt;a href="https://speakerdeck.com/jakevdp/statistics-for-hackers"&gt;"si sabes escribir un for-loop, puedes tú hacer los estadísticos."&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Formulemos el problem así:&lt;/p&gt;
@@ -385,8 +390,8 @@ $$&lt;/div&gt;
 &lt;span class="n"&gt;NULL_BALLOTS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;170946&lt;/span&gt;
 
 &lt;span class="n"&gt;TOTAL_VOTES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;YES_BALLOTS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;NO_BALLOTS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;UNMARKED_BALLOTS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;NULL_BALLOTS&lt;/span&gt;
-&lt;span class="n"&gt;P_INVALID&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mo"&gt;02&lt;/span&gt;
-&lt;span class="n"&gt;P_MISCLASSIFICATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mo"&gt;01&lt;/span&gt;
+&lt;span class="n"&gt;P_INVALID&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;
+&lt;span class="n"&gt;P_MISCLASSIFICATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;
 &lt;span class="n"&gt;N_TRIALS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;100000&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;En cada prueba, asumimos una proporción verdadera y subyacente &lt;span class="math"&gt;\(p_{\text{yes}}\%\)&lt;/span&gt; de gente que vota por el "Sí." Por ejemplo, si le damos .48 al &lt;span class="math"&gt;\(p_{\text{yes}}\)&lt;/span&gt;, tendremos &lt;span class="math"&gt;\(V_t * p_{\text{yes}}\)&lt;/span&gt; individuos con la intención de votar por el "Sí," y los demás &lt;span class="math"&gt;\(V_t * (1-p_{\text{yes}})\)&lt;/span&gt; por el "No." Asumimos que estos valores son estáticos: no son generados por un proceso random.&lt;/p&gt;
@@ -430,8 +435,8 @@ $$&lt;/div&gt;
     &lt;span class="n"&gt;percentage_of_tallied_votes_that_were_yes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;simulate_vote&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;probability_yes&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="n"&gt;proportion_of_trials_won_by_no&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;percentage_of_tallied_votes_that_were_yes&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-    &lt;span class="n"&gt;results&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"p_yes: {:1.6f}% | no_win_percentage: {:1.3f}%"&lt;/span&gt;
-    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;probability_yes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;proportion_of_trials_won_by_no&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;results&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"p_yes: &lt;/span&gt;&lt;span class="si"&gt;{:1.6f}&lt;/span&gt;&lt;span class="s2"&gt;% | no_win_percentage: &lt;/span&gt;&lt;span class="si"&gt;{:1.3f}&lt;/span&gt;&lt;span class="s2"&gt;%"&lt;/span&gt;
+    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;probability_yes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;proportion_of_trials_won_by_no&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 
 &lt;span class="n"&gt;p_yes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;60.000000&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="n"&gt;no_win_percentage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.000&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;
 &lt;span class="n"&gt;p_yes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;51.000000&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="n"&gt;no_win_percentage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.000&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;
@@ -468,15 +473,16 @@ $$&lt;/div&gt;
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -490,6 +496,8 @@ $$&lt;/div&gt;
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -510,6 +518,8 @@ $$&lt;/div&gt;
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content></entry></feed>
+&lt;/script&gt;</content><category term="machine-learning"></category></entry></feed>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="machine learning things and thoughts on the world">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -28,6 +28,7 @@
 	<!-- CSS -->
 	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
@@ -45,22 +46,18 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
-          <h4 id="site-subtitle">machine learning things and thoughts on the world</h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
               <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
               <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
-              <li><a href="https://cavaunpeu.github.io/archive/" title="Archive"><span class="glyphicon glyphicon-th-list"></span> Archive</a></li>
+              <li><a href="https://cavaunpeu.github.io/cv/" title="CV"><span class="glyphicon glyphicon-folder-open"></span> CV</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
                   <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
-                </li>
-                <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/geopolitics/" title=English>GEOPOLITICS</a>
                 </li>
             </ul>
           </li>
@@ -167,7 +164,7 @@
 
 <span class="c1"># Plot</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of 500 samples from `Gaussian(mu=.123, var=.456)`'</span><span class="p">)</span>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/></p>
@@ -251,7 +248,7 @@
 <span class="p">)</span>
 
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Draws from 2D-Gaussians with Varying (mu, cov)'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_17_1.png"/></p>
 <h2>Gaussians are closed under linear maps</h2>
@@ -297,8 +294,8 @@ $$</div>
 <span class="n">cov_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 
 <span class="c1"># Params of distribution over linear map (lm)</span>
-<span class="n">mu_lm</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu_w</span>
-<span class="n">cov_lm</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span>
+<span class="n">mu_lm</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mu_w</span>
+<span class="n">cov_lm</span> <span class="o">=</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -320,7 +317,7 @@ $$</div>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_23_0.png"/></p>
-<p>"The features we choose give a 'language' with which we can express a relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>."<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup> Some features are more expressive than others; some restrict us entirely from expressing certain relationships.</p>
+<p>"The features we choose give a 'language' with which we can express a relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>."<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Some features are more expressive than others; some restrict us entirely from expressing certain relationships.</p>
 <p>For further illustration, let's employ step functions as features and see what happens.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Make features, as before</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
@@ -354,7 +351,7 @@ $$</div>
         <span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of y-values, when x &gt; 1'</span><span class="p">)</span>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_28_0.png"/></p>
@@ -377,7 +374,7 @@ $$</div>
    &amp;= \mathcal{N}(\mu_x, \Sigma_x)
 \end{align*}
 $$</div>
-<p><strong>Marginalizing a &gt; 1D Gaussian over one of its elements yields another Gaussian</strong>: you just "pluck out" the elements you'd like to examine. <strong>In other words, Gaussians are closed under marginalization.</strong> "It's almost too easy to warrant a formula."<sup id="fnref2-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
+<p><strong>Marginalizing a &gt; 1D Gaussian over one of its elements yields another Gaussian</strong>: you just "pluck out" the elements you'd like to examine. <strong>In other words, Gaussians are closed under marginalization.</strong> "It's almost too easy to warrant a formula."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <p>As an example, imagine we had the following Gaussian <span class="math">\(P(a, b, c)\)</span>, and wanted to compute the marginal over the first 2 elements, i.e. <span class="math">\(P(a, b) = \int P(a, b, c)dc\)</span>:</p>
 <div class="highlight"><pre><span></span><span class="c1"># P(a, b, c)</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
@@ -471,8 +468,8 @@ $$</div>
 
 <span class="c1"># A function that computes the parameters of the linear map distribution</span>
 <span class="k">def</span> <span class="nf">compute_linear_map_params</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">map_matrix</span><span class="p">):</span>
-    <span class="n">mu_lm</span> <span class="o">=</span> <span class="n">map_matrix</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">mu</span>
-    <span class="n">cov_lm</span> <span class="o">=</span> <span class="n">map_matrix</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov</span> <span class="err">@</span> <span class="n">map_matrix</span>
+    <span class="n">mu_lm</span> <span class="o">=</span> <span class="n">map_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mu</span>
+    <span class="n">cov_lm</span> <span class="o">=</span> <span class="n">map_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov</span> <span class="o">@</span> <span class="n">map_matrix</span>
     <span class="k">return</span> <span class="n">mu_lm</span><span class="p">,</span> <span class="n">cov_lm</span>
 
 
@@ -488,8 +485,8 @@ $$</div>
     <span class="n">mu_y</span><span class="p">,</span> <span class="n">cov_y</span> <span class="o">=</span> <span class="n">compute_linear_map_params</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_x</span><span class="p">)</span>
 
     <span class="c1"># Params of posterior distribution over weights</span>
-    <span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">-</span> <span class="n">mu_y</span><span class="p">)</span>
-    <span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="err">@</span> <span class="n">phi_x</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="err">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">cov_w</span>
+    <span class="n">mu_w_post</span> <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">-</span> <span class="n">mu_y</span><span class="p">)</span>
+    <span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span>
 
     <span class="k">return</span> <span class="n">mu_w_post</span><span class="p">,</span> <span class="n">cov_w_post</span>
 
@@ -651,20 +648,20 @@ $$</div>
 <div class="footnote">
 <hr/>
 <ol>
-<li id="fn-1">
+<li id="fn:1">
 <p><a href="https://www.youtube.com/watch?v=50Vgw11qn0o">Gaussian Processes 1 - Philipp Hennig - MLSS 2013 Tübingen
-</a> (from which this post takes heavy inspiration) <a class="footnote-backref" href="#fnref-1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2-1" title="Jump back to footnote 1 in the text">↩</a></p>
+</a> (from which this post takes heavy inspiration) <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
-<li id="fn-2">
+<li id="fn:2">
 <p><a href="http://gaussianprocess.org/gpml/?">Gaussian Processes for Machine Learning</a>. Carl Edward Rasmussen and Christopher K. I. Williams
-The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnref-2" title="Jump back to footnote 2 in the text">↩</a></p>
+The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
-<li id="fn-3">
-<p><a href="https://blog.dominodatalab.com/fitting-gaussian-process-models-python/">Fitting Gaussian Process Models in Python</a> <a class="footnote-backref" href="#fnref-3" title="Jump back to footnote 3 in the text">↩</a></p>
+<li id="fn:3">
+<p><a href="https://blog.dominodatalab.com/fitting-gaussian-process-models-python/">Fitting Gaussian Process Models in Python</a> <a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">↩</a></p>
 </li>
-<li id="fn-4">
+<li id="fn:4">
 <p><a href="http://sashagusev.github.io/2016-01/GP.html">Gaussian process regression
-</a> <a class="footnote-backref" href="#fnref-4" title="Jump back to footnote 4 in the text">↩</a></p>
+</a> <a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">↩</a></p>
 </li>
 </ol>
 </div>
@@ -680,15 +677,16 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -702,6 +700,8 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
         "        preview: 'TeX'," +
         "    }, " +
         "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
         "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
         "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
         "    }, " +
@@ -722,6 +722,8 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
                 "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
             "});" +
         "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script></div>
@@ -746,21 +748,51 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
 <footer class="aw-footer bg-danger">
 	<div class="container"> <!-- footer -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1" id="footer-wrapper">
-				<div id="social-links">
-					<h4>
-						Social:
-						<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-						<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
-						<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-						<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-					</h4>
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Social:
+							<a href="http://twitter.com/willwolf_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+							<a href="http://github.com/cavaunpeu"><i class="fa fa-github" aria-hidden="true"></i></a>
+							<a href="http://linkedin.com/in/williamabrwolf"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+							<a href="mailto:williamabrwolf@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+						</h4>
+					</div>
 				</div>
-				<div id="travel-blog">
-					<h4>
-						Links:
-						<a href="http://willtravellife.com">Travel Blog</a>, <a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a>
-					</h4>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
+				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -768,7 +800,7 @@ The MIT Press, 2006. ISBN 0-262-18253-X. <a class="footnote-backref" href="#fnr
 </footer><div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Will Wolf 2017</p>
+			<p>&copy; Will Wolf 2020</p>
 			<p>Powered by Pelican</p>
 		</div>
 	</div>
