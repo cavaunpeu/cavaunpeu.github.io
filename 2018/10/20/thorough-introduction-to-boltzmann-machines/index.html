@@ -99,7 +99,7 @@ $$</div>
 <p>Often, we work with <em>conditional</em> models, such as <span class="math">\(y \sim p(y\vert x)\)</span>, in classification and regression tasks. The same two implicit methods apply.</p>
 <h2>Boltzmann machines</h2>
 <p>A Boltzmann machine is one of the simplest mechanisms for modeling <span class="math">\(p(x)\)</span>. It is an undirected graphical model where every dimension <span class="math">\(x_i\)</span> of a given observation <span class="math">\(x\)</span> influences every other dimension. <strong>As such, we might use it to model data which we believe to exhibit this property, e.g. an image.</strong> For <span class="math">\(x \in R^3\)</span>, our model would look as follows:</p>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/boltzmann-machine.svg"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/boltzmann-machine.svg"/></p>
 <p>For <span class="math">\(x \in R^n\)</span>, a given node <span class="math">\(x_i\)</span> would have <span class="math">\(n - 1\)</span> outgoing connections in total—one to each of the other nodes <span class="math">\(x_j\)</span> for <span class="math">\(j \neq i\)</span>.</p>
 <p>Finally, a Boltzmann machine strictly operates on <em>binary</em> data. This keeps things simple.</p>
 <h2>Computing the likelihood</h2>
@@ -468,7 +468,7 @@ $$</div>
 <span class="n">plot_n_samples</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">n_samples</span><span class="si">}</span><span class="s1"> Samples from Model'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_7_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_7_0.png"/></p>
 <p>The plot roughly matches the data-generating distribution: most points assume values of either <span class="math">\([1, 0, 1]\)</span>, or <span class="math">\([1, 0, 0]\)</span> (given <span class="math">\(p=[.8, .1, .5]\)</span>).</p>
 <h2>Sampling, via Gibbs</h2>
 <p>The second, final method we need to implement is <code>sample</code>. In a Boltzmann machine, we typically do this via <a href="http://www.mit.edu/~ilkery/papers/GibbsSampling.pdf">Gibbs sampling</a>.</p>
@@ -539,7 +539,7 @@ $$</div>
 <p>Close, ish enough.</p>
 <h2>Scaling up, and hitting the bottleneck</h2>
 <p>With data of vary dimensionality <code>n_units</code>, the following plot gives the time in seconds that it takes to train this model for 10 epochs.</p>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_15_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_15_1.png"/></p>
 <p>To reduce computational burden, and/or to fit a Boltzmann machine to data of non-trivial dimensionality (e.g. a 28x28 grey-scale image, which implies a random variable with 28x28=784 dimensions), we need to compute the positive and/or negative phase of our gradient faster than we currently are.</p>
 <p>To compute the former more quickly, we could employ mini-batches as in canonical stochastic gradient descent.</p>
 <p>In this post, we'll instead focus on ways to speed up the latter. Revisiting its expression, <span class="math">\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, we readily see that we can create an unbiased estimator for this value by drawing Monte Carlo samples from our model, i.e.</p>
@@ -622,7 +622,7 @@ $$</div>
         <span class="n">all_updates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_units</span><span class="o">=</span><span class="n">n_units</span><span class="p">))</span>
 </pre></div>
 <h2>Plot</h2>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_23_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_23_1.png"/></p>
 <p><strong>When we let each algorithm run for 100 epochs, the true negative phase gives a model which assigns higher likelihood to the observed data in all of the above training runs.</strong></p>
 <p>Notwithstanding, the central point is that 100 epochs of the true negative phase takes a long time to run.</p>
 <p>As such, let’s run each for an equal amount of time, and plot results. Below, we define a function to train models for <span class="math">\(n\)</span> seconds (or 1 epoch—whichever comes first).</p>
@@ -667,10 +667,10 @@ $$</div>
 </pre></div>
 <h2>How many epochs do we actually get through?</h2>
 <p>Before plotting results, let’s examine how many epochs each algorithm completes in its allotted time. In fact, for some values of <code>n_units</code>, we couldn’t even complete a single epoch (when computing the true negative phase) in <span class="math">\(\leq 1\)</span> second.</p>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_28_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_28_1.png"/></p>
 <p>Finally, we look at performance. With <code>n_units &lt;= 7</code>, we see that 1 second of training with the true negative phase yields a better model. Conversely, <strong>using 7 or more units, the added performance given by using the true negative phase is overshadowed by the amount of time it takes the model to train.</strong></p>
 <h2>Plot</h2>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_31_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/output_31_1.png"/></p>
 <p>Of course, we re-stress that the exact ablation results are conditional (amongst other things) on <strong>the number of Gibbs samples we chose to draw. Changing this will change the results, but not that about which we care the most: the overall trend.</strong></p>
 <h2>Summary</h2>
 <p>Throughout this post, we've given a thorough introduction to a Boltzmann machine: what it does, how it trains, and some of the computational burdens and considerations inherent.</p>

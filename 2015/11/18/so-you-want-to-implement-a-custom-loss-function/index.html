@@ -127,8 +127,8 @@
     <span class="k">return</span> <span class="n">custom_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
 </pre></div>
 <p>Let's see what this function looks like, for each of <span class="math">\(y = 1\)</span> and <span class="math">\(y = 0\)</span>, and varying values of y_hat.</p>
-<p><img alt="y_equals_1" class="img-fluid" src="https://cavaunpeu.github.io/figures/y_equals_1.png"/></p>
-<p><img alt="y_equals_0" class="img-fluid" src="https://cavaunpeu.github.io/figures/y_equals_0.png"/></p>
+<p><img alt="y_equals_1" class="img-responsive" src="https://cavaunpeu.github.io/figures/y_equals_1.png"/></p>
+<p><img alt="y_equals_0" class="img-responsive" src="https://cavaunpeu.github.io/figures/y_equals_0.png"/></p>
 <p>When <span class="math">\(y = 1\)</span>, our cost is that of the typical logarithmic loss. At worst, our cost is <span class="math">\(\approx 5\)</span>. However, when <span class="math">\(y = 0\)</span>, the dynamic is different: if we guess <span class="math">\(0.2\)</span>, it's not so bad; if we guess <span class="math">\(0.6\)</span> it's not so bad; if we guess <span class="math">\(&gt; 0.8\)</span>, it's really, really bad. <span class="math">\(\approx 25\)</span> bad. Finally, we compute our gradient. As easy as:</p>
 <div class="highlight"><pre><span></span><span class="n">gradient</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span><span class="n">custom_loss_given_weights</span><span class="p">)</span>
 </pre></div>

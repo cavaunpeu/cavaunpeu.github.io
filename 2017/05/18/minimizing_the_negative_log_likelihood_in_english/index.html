@@ -86,7 +86,7 @@
 </ol>
 <p>The goal of this post is to take three models we know, love, and know how to use and explain what's really going on underneath the hood. I will assume the reader is familiar with concepts in both machine learning and statistics, and comes in search of a deeper understanding of the connections therein. There will be math — but only as much as necessary. Most of the derivations can be skipped without consequence.</p>
 <p>When deploying a predictive model in a production setting, it is generally in our best interest to <code>import sklearn</code>, i.e. use a model that someone else has built. This is something we already know how to do. As such, this post will start and end here: your head is currently above water; we're going to dive into the pool, touch the bottom, then work our way back to the surface. Lemmas will be written in <em><strong>bold</strong></em>.</p>
-<p><img alt="bottom of pool" class="img-fluid" src="http://img2.hungertv.com/wp-content/uploads/2014/09/SP_Kanawaza-616x957.jpg"/></p>
+<p><img alt="bottom of pool" class="img-responsive" src="http://img2.hungertv.com/wp-content/uploads/2014/09/SP_Kanawaza-616x957.jpg"/></p>
 <p>First, let's meet our three protagonists. We'll define them in <a href="https://keras.io/">Keras</a> for the illustrative purpose of a unified and idiomatic API.</p>
 <h2><a href="http://ufldl.stanford.edu/tutorial/supervised/LinearRegression/">Linear regression</a> with mean squared error</h2>
 <div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
@@ -191,7 +191,7 @@ $$</div>
 <p>Now, let's dive into the pool. We'll start at the bottom and work our way back to the top.</p>
 <h1>Response variable</h1>
 <p>Roughly speaking, each model looks as follows. It is a diamond that receives an input and produces an output.</p>
-<p><img alt="simple input/output model" class="img-fluid" src="https://cavaunpeu.github.io/images/simple_input_output_model.png"/></p>
+<p><img alt="simple input/output model" class="img-responsive" src="https://cavaunpeu.github.io/images/simple_input_output_model.png"/></p>
 <p>The models differ in the type of response variable they predict, i.e. the <span class="math">\(y\)</span>.</p>
 <ul>
 <li>Linear regression predicts a continuous-valued real number. Let's call it <code>temperature</code>.</li>
@@ -208,7 +208,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." <em>Can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (-\infty, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table table-striped">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th>uber</th>
@@ -259,8 +259,8 @@ $$</div>
 </tbody>
 </table>
 <p>Plotting, we get:</p>
-<p><img alt="temperature random variable" class="img-fluid" src="https://cavaunpeu.github.io/figures/temperature_random_variable.png"/>
-<img alt="uber random variable" class="img-fluid" src="https://cavaunpeu.github.io/figures/uber_random_variable.png"/></p>
+<p><img alt="temperature random variable" class="img-responsive" src="https://cavaunpeu.github.io/figures/temperature_random_variable.png"/>
+<img alt="uber random variable" class="img-responsive" src="https://cavaunpeu.github.io/figures/uber_random_variable.png"/></p>
 <p>We are not given the true underlying probability distribution associated with each random variable — not its general "shape," nor the parameters that control this shape. We will <em>never</em> be given these things, in fact: the point of statistics is to infer what they are.</p>
 <p>To make an initial choice we keep two things in mind:</p>
 <ul>
@@ -304,7 +304,7 @@ $$</div>
 <li>Show how this common functional form allows us to naturally derive the output functions for our three protagonist models.</li>
 </ul>
 <p>Graphically, this looks as follows, with three distributions going in and three output functions coming out.</p>
-<p><img alt="bottleneck" class="img-fluid" src="https://electric-cloud.com/wp-content/uploads/use-case-graphic_bottleneck.png"/></p>
+<p><img alt="bottleneck" class="img-responsive" src="https://electric-cloud.com/wp-content/uploads/use-case-graphic_bottleneck.png"/></p>
 <p>The conceptual bottleneck is the <a href="https://en.wikipedia.org/wiki/Exponential_family">"exponential family"</a> of probability distributions.</p>
 <h2>Exponential family distributions</h2>
 <blockquote>
@@ -320,7 +320,7 @@ $$</div>
 <ul>
 <li><span class="math">\(\eta\)</span> is the <em>canonical parameter</em> of the distribution. (We will hereby work with the single-canonical-parameter exponential family form.)</li>
 <li><span class="math">\(T(y)\)</span> is the <em>sufficient statistic</em>. It is often the case that <span class="math">\(T(y) = y\)</span>.</li>
-<li><span class="math">\(a(\eta)\)</span> is the <em>log partition function</em>, which normalizes the distribution. (A more in-depth discussion of this normalizing constant can be found in a previous post of mine: <a href="https://cavaunpeu.github.io/machine-learning/deriving-the-softmax-from-first-principles.md">Deriving the Softmax from First Principles</a>.)</li>
+<li><span class="math">\(a(\eta)\)</span> is the <em>log partition function</em>, which normalizes the distribution. (A more in-depth discussion of this normalizing constant can be found in a previous post of mine: <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">Deriving the Softmax from First Principles</a>.)</li>
 </ul>
 <p>"A fixed choice of <span class="math">\(T\)</span>, <span class="math">\(a\)</span> and <span class="math">\(b\)</span> defines a family (or set) of distributions that is parameterized by <span class="math">\(\eta\)</span>; as we vary <span class="math">\(\eta\)</span>, we then get different distributions within this family."<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> This simply means that a coin with <span class="math">\(\Pr(\text{heads}) = .6\)</span> gives a different distribution over outcomes than one with <span class="math">\(\Pr(\text{heads}) = .7\)</span>. Easy.</p>
 <h3>Gaussian distribution</h3>
@@ -441,7 +441,7 @@ $$</div>
   &amp;= \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}
 \end{align*}
 $$</div>
-<p>This you will recognize as the softmax function. (For a probabilistically-motivated derivation, please see a previous <a href="https://cavaunpeu.github.io/machine-learning/deriving-the-softmax-from-first-principles.md">post</a>.)</p>
+<p>This you will recognize as the softmax function. (For a probabilistically-motivated derivation, please see a previous <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">post</a>.)</p>
 <p>Finally:</p>
 <div class="math">$$
 \begin{align*}
@@ -506,7 +506,7 @@ $$</div>
 <p>We did this above as well: <span class="math">\(\pi_{k, i} = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)</span>. This is the softmax function.</p>
 <p><em><strong>&gt; The softmax function gives us the probability that the response variable takes on each of the possible classes. This probability mass function is required by the multinomial distribution, which dictates the outcomes of the multi-class target <span class="math">\(y\)</span>.</strong></em></p>
 <p>Finally, why a linear model, i.e. why <span class="math">\(\eta = \theta^Tx\)</span>?</p>
-<p>Andrew Ng calls it a "design choice."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/machine-learning/deriving-the-softmax-from-first-principles.md">softmax post</a>. mathematicalmonk<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
+<p>Andrew Ng calls it a "design choice."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">softmax post</a>. mathematicalmonk<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
 <ul>
 <li>A linear combination is perhaps the simplest way to consider the impact of each feature on the canonical parameter.</li>
 <li>A linear combination commands that either <span class="math">\(x\)</span>, or a <em>function of <span class="math">\(x\)</span></em>, vary linearly with <span class="math">\(\eta\)</span>. As such, we could write our model as <span class="math">\(\eta = \theta^T\Phi(x)\)</span>, where <span class="math">\(\Phi\)</span> applies some complex transformation to our features. This makes the "simplicity" of the linear combination less simple.</li>
@@ -683,11 +683,11 @@ $$</div>
 </ul>
 <p><em><strong>&gt; Instead of a point estimate for <span class="math">\(\theta\)</span>, and a point estimate for <span class="math">\(y\)</span> given a new observation <span class="math">\(x\)</span> (which makes use of <span class="math">\(\theta\)</span>), we have distributions for each</strong></em>.</p>
 <p>Unfortunately, in complex systems with a non-trivial functional form and number of weights, this computation becomes intractably large. As such, in fully Bayesian modeling, we approximate these distributions. In classic machine learning, we assign them a single value (point estimate). It's a bit lazy, really.</p>
-<p><img alt="@betanalpha bayesian tweet" class="img-fluid" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/></p>
+<p><img alt="@betanalpha bayesian tweet" class="img-responsive" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/></p>
 <h1>Summary</h1>
 <p>I hope this post serves as useful context for the machine learning models we know and love. A deeper understanding of these algorithms offers humility — the knowledge that none of these concepts are particularly new — as well as a vision for how to extend these algorithms in the direction of robustness and increased expressivity.</p>
 <p>Thanks so much for reading this far. Now, climb out of the pool, grab a towel and <code>import sklearn</code>.</p>
-<p><img alt="drink and towel" class="img-fluid" src="https://www.washingtonian.com/wp-content/uploads/2015/05/Pool520-994x664.jpg"/></p>
+<p><img alt="drink and towel" class="img-responsive" src="https://www.washingtonian.com/wp-content/uploads/2015/05/Pool520-994x664.jpg"/></p>
 <h2>Resources</h2>
 <p>I recently gave a talk on this topic at <a href="https://www.facebook.com/groups/265793323822652">Facebook Developer Circle: Casablanca</a>. Voilà the:</p>
 <ul>
