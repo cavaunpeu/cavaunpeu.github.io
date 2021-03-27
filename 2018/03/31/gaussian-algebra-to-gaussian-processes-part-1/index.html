@@ -75,27 +75,26 @@
 		</span>
 		<time datetime="2018-03-31T19:00:00-04:00" itemprop="datePublished">March 31, 2018</time>
 	</div>
-	<div itemprop="articleBody" class="article-body"><p>Most <strong>introductory tutorials</strong> on Gaussian processes start with a nose-punch of <strong>fancy statements</strong>, like:</p>
+	<div itemprop="articleBody" class="article-body"><p>Most <strong>introductory tutorials</strong> on Gaussian processes start with a nose-punch of statements, like:</p>
 <ul>
 <li>A Gaussian process (GP) defines a distribution over functions.</li>
 <li>A Gaussian process is non-parametric, i.e. it has an infinite number of parameters (duh?).</li>
 <li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian.</li>
 <li>Conditioning a subset of the elements of a Gaussian on another subset of its elements gives another Gaussian.</li>
 </ul>
-<p>They continue with <strong>fancy terms</strong>, like:</p>
+<p>They continue with terms, like:</p>
 <ul>
 <li>Kernels</li>
 <li>Posterior over functions</li>
 <li>Squared-exponentials</li>
 <li>Covariances</li>
 </ul>
-<p><strong>Is this really supposed to make sense to the GP beginner?</strong></p>
-<p>The following is the introductory tutorial on GPs that I wish I'd had myself. The goal is pedagogy — not the waving of <strong>fancy words</strong>.</p>
+<p>Alas, this is often confusing to the GP beginner; the following is the introductory tutorial on GPs that I wish I'd had myself.</p>
 <p>By the end of this tutorial, you should understand:</p>
 <ul>
-<li><strong>What a Gaussian process is and how to build one in NumPy</strong> — including those cool, swirly error blobs.</li>
+<li><strong>What a Gaussian process is and how to build one in NumPy.</strong></li>
 <li><strong>The motivations behind their functional form</strong>, i.e. how the GP comes to be.</li>
-<li>The <strong>fancy statements</strong> and <strong>fancy terms</strong> above.</li>
+<li>The statements and terms above.</li>
 </ul>
 <p>Let's get started.</p>
 <h2>Playing with Gaussians</h2>
@@ -113,15 +112,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stddev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>  <span class="c1"># the standard deviation is the square-root of the variance</span>
 
     <span class="k">def</span> <span class="nf">density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        NB: Understanding the two bullet points above is more important than understanding the following line.</span>
-
-<span class="sd">        That said, it's just the second bullet in code, via SciPy.</span>
-<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stddev</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
-<p>So, how do we make those cool bell-shaped plots? <strong>A 2D plot is just a list of tuples — each with an <code>x</code>, and a corresponding <code>y</code> — shown visually.</strong></p>
-<p>As such, we lay out our <code>x</code>-axis, then compute the corresponding <code>y</code> — the <code>density</code> — for each. We'll choose an arbitrary <code>mu</code> and <code>variance</code>.</p>
+<p>So, how do we make those cool bell-shaped plots? A 2D plot is just a list of tuples— each with an <code>x</code>, and a corresponding <code>y</code>—shown visually.</p>
+<p>As such, we lay out our <code>x</code>-axis, then compute the corresponding <code>y</code>—the <code>density</code>—for each. We'll choose an arbitrary <code>mu</code> and <code>variance</code>.</p>
 <div class="highlight"><pre><span></span><span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=.</span><span class="mi">123</span><span class="p">,</span> <span class="n">var</span><span class="o">=.</span><span class="mi">456</span><span class="p">)</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -168,7 +162,7 @@
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of 500 samples from `Gaussian(mu=.123, var=.456)`'</span><span class="p">)</span>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/></p>
-<p>This looks similar to the true <code>Gaussian(mu=.123, var=.456)</code> density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate (look similar to) the true density.</p>
+<p>This looks similar to the true <code>Gaussian(mu=.123, var=.456)</code> density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate the true density.</p>
 <p>Now, we'll start to move a bit faster.</p>
 <h2>2D Gaussians</h2>
 <p>We just drew samples from a 1-dimensional Gaussian, i.e. the <code>sample</code> itself was a single float. The parameter <code>mu</code> dictated the most-likely value for the <code>sample</code> to assume, and the variance <code>var</code> dictated how much these sample-values vary (hence the name variance).</p>
@@ -179,7 +173,7 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">gaussian</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 <span class="mf">1.050830033400354</span>
 </pre></div>
-<p>In 2D, each sample will be a list of two numbers. <code>mu</code> will dictate the most-likely pair of values for the <code>sample</code> to assume, and the second parameter (yet unnamed) will dictate:</p>
+<p>In 2D, each sample will be a list of two numbers. <code>mu</code> will dictate the most-likely pair of values for the <code>sample</code> to assume, and a second parameter (yet unnamed) will dictate:</p>
 <ol>
 <li>How much the values for the first element of the pair vary</li>
 <li>How much the values for the second element of the pair vary</li>
@@ -198,10 +192,13 @@
 
 
 <span class="sd">"""</span>
-<span class="sd">The purple dots should center around `(x, y) = (0, 0)`. `np.diag([1, 1])` gives the covariance matrix `[[1, 0], [0, 1]]`:</span>
-<span class="sd">`x`-values have a variance of `var=1`; `y`-values have `var=1`; these values do not covary with one another</span>
-<span class="sd">(e.g. if `x` is larger than its mean, the corresponding `y` has 0 tendency to "follow suit," i.e. trend larger than its</span>
-<span class="sd">mean as well).</span>
+<span class="sd">The purple dots should center around `(x, y) = (0, 0)`.</span>
+
+<span class="sd">`np.diag([1, 1])` gives the covariance matrix `[[1, 0], [0, 1]]`:</span>
+
+<span class="sd">`x`-values have a variance of `var=1`;</span>
+<span class="sd">`y`-values have `var=1`;</span>
+<span class="sd">these values do not covary with one another.</span>
 <span class="sd">"""</span>
 <span class="n">plot_2d_draws</span><span class="p">(</span>
     <span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
@@ -219,8 +216,11 @@
 <span class="p">)</span>
 
 <span class="sd">"""</span>
-<span class="sd">Here, the values along the diagonal of the covariance matrix are much larger: the cloud of green point should be much more</span>
-<span class="sd">disperse. There is no off-diagonal covariance (`x` and `y` values do not vary — above or below their respective means — *together*).</span>
+<span class="sd">Here, the values along the diagonal of the covariance matrix are much larger:</span>
+
+<span class="sd">the cloud of green points should be much more disperse.</span>
+
+<span class="sd">There is no off-diagonal covariance.</span>
 <span class="sd">"""</span>
 <span class="n">plot_2d_draws</span><span class="p">(</span>
     <span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span>
@@ -229,7 +229,9 @@
 <span class="p">)</span>
 
 <span class="sd">"""</span>
-<span class="sd">The covariance matrix has off-diagonal values of -2. This means that if `x` trends above its mean, `y` will tend to vary *twice as much, below its mean.*</span>
+<span class="sd">The covariance matrix has off-diagonal values of -2.</span>
+
+<span class="sd">This means that if `x` trends above its mean, `y` will tend to vary *twice as much, below its mean.*</span>
 <span class="sd">"""</span>
 <span class="n">plot_2d_draws</span><span class="p">(</span>
     <span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]),</span>
@@ -275,7 +277,12 @@ $$</div>
 <p>Finally, we'll take draws from this <span class="math">\(\text{Normal}(A\mu_w,\ A\Sigma_w A^T)\)</span>. This will give us tuples of the form <code>(x, Aw)</code>. For simplicity, we'll hereafter refer to this tuple as <code>(x, y)</code>.</p>
 <ul>
 <li><code>x</code> is the original <code>x</code>-value</li>
-<li><code>y</code> is the value obtained after: making features out of <span class="math">\(X\)</span> and taking the transpose, giving <span class="math">\(A\)</span>; taking the linear combination of <span class="math">\(A\)</span> with the mean-vector of weights; taking a draw from the multivariate-Gaussian we just defined, then plucking out the sample-element corresponding to <code>x</code>.</li>
+<li><code>y</code> is the value obtained after:<ul>
+<li>Making features out of <span class="math">\(X\)</span> and taking the transpose, giving <span class="math">\(A\)</span></li>
+<li>Taking the linear combination of <span class="math">\(A\)</span> with the mean-vector of weights</li>
+<li>Taking a draw from the multivariate-Gaussian we just defined, then plucking out the sample-element corresponding to <code>x</code></li>
+</ul>
+</li>
 </ul>
 <p><strong>Each draw from our Gaussian will yield 200 <code>y</code>-values, each corresponding to its original <code>x</code>. In other words, it will yield 200 <code>(x, y)</code> tuples — which we can plot.</strong></p>
 <p>To make it clear that <span class="math">\(A\)</span> was computed as a function of <span class="math">\(X\)</span>, let's rename it to <span class="math">\(A = \phi(X)^T\)</span>, and rewrite our distribution as follows:</p>
@@ -324,10 +331,11 @@ $$</div>
 </pre></div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_25_0.png"/></p>
 <h2>Gaussians are closed under conditioning and marginalization</h2>
-<p>Let's revisit the 2D Gaussians plotted above. They took the form (where <span class="math">\(\mathcal{N}\)</span> denotes the Normal, i.e. Gaussian distribution):</p>
+<p>Let's revisit the 2D Gaussians plotted above. They took the form</p>
 <div class="math">$$
 (x, y) \sim \mathcal{N}(\mu, \Sigma)
 $$</div>
+<p>where <span class="math">\(\mathcal{N}\)</span> denotes the Normal, i.e. Gaussian distribution.</p>
 <p>Said differently:</p>
 <div class="math">$$
 P(x, y) = \mathcal{N}(\mu, \Sigma)
@@ -393,7 +401,7 @@ $$</div>
 
 <span class="c1"># That's it.</span>
 </pre></div>
-<p>Finally, we compute the conditional Gaussian of interest — a result well-documented by mathematicians long ago:</p>
+<p>Finally, we compute the conditional Gaussian of interest—a result well-documented by mathematicians long ago:</p>
 <div class="math">$$
 \begin{align*}
 P(y\vert x)
@@ -419,7 +427,7 @@ $$</div>
 y = \phi(X)^Tw \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
 $$</div>
 <p>Given some ground-truth samples from this distribution <span class="math">\(y = \phi(X)^Tw\)</span>, i.e. ground-truth "function evaluations," we'd like to infer the weights <span class="math">\(w\)</span> most consistent with <span class="math">\(y\)</span>.</p>
-<p><em>In machine learning, we equivalently say that given a model and some observed data <code>(X_train, y_train)</code>, we'd like to compute/train/optimize the weights of said model (often via backpropagation).</em></p>
+<p><em>In machine learning, we equivalently say that given a model and some observed data <code>(X_train, y_train)</code>, we'd like to compute/train/optimize the weights of said model.</em></p>
 <p>Most precisely, our goal is to infer <span class="math">\(P(w\vert y)\)</span> (where <span class="math">\(y\)</span> are our observed function evaluations). To do this, we simply posit a joint distribution over both quantities:</p>
 <div class="math">$$
 P(w, y) =
@@ -628,20 +636,19 @@ $$</div>
 <p>In this tutorial, we've arrived at the mechanical notion of a Gaussian process via simple Gaussian algebra.</p>
 <p><strong>Thus far, we've elucidated the following ideas:</strong></p>
 <ul>
-<li>A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations). √</li>
-<li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest). √</li>
-<li>Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula). √</li>
-<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X_{*})^T\)</span>) √</li>
-<li>Covariances (the second thing we need in order to specify a multivariate Gaussian) √</li>
+<li>A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations) ✅</li>
+<li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest) ✅</li>
+<li>Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula) ✅</li>
+<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X_{*})^T\)</span>) ✅</li>
+<li>Covariances (the second thing we need in order to specify a multivariate Gaussian) ✅</li>
 </ul>
 <p><strong>Conversely, we did not yet cover (directly):</strong></p>
 <ul>
 <li>Kernels</li>
 <li>Squared-exponentials</li>
-<li>A Gaussian process is non-parametric, i.e. it has an infinite number of parameters (duh?).</li>
+<li>"A Gaussian process is non-parametric, i.e. it has an infinite number of parameters"</li>
 </ul>
-<p>These will be the subject of the following post.</p>
-<p>Thanks for reading, and <strong>don't let arcane pedagogy discourage you:</strong> there's almost always a clearer explanation (or at least its attempt) at bay.</p>
+<p>These will be the subject of the following post. Thanks for reading.</p>
 <h2>Code</h2>
 <p>The <a href="https://github.com/cavaunpeu/gaussian-processes">repository</a> and <a href="https://nbviewer.jupyter.org/github/cavaunpeu/gaussian-processes/blob/master/gaussian-processes-part-1.ipynb">rendered notebook</a> for this project can be found at their respective links.</p>
 <h2>References</h2>

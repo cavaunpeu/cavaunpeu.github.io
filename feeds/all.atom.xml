@@ -295,7 +295,7 @@
 q(\mathbf{Z}) = \prod\limits_i^{M} q_i(\mathbf{Z}_i)
 $$&lt;/div&gt;
 &lt;p&gt;for all latent variables &lt;span class="math"&gt;\(\mathbf{Z}_i\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;Briefly, factorized distributions are cheap to compute: if each &lt;span class="math"&gt;\(q_i(\mathbf{Z}_i)\)&lt;/span&gt; is Gaussian, &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt; requires optimization of &lt;span class="math"&gt;\(2M\)&lt;/span&gt; parameters (a mean and a variance for each factor); conversely, a non-factorized &lt;span class="math"&gt;\(q(\mathbf{Z}) = \text{Normal}(\mu, \Sigma)\)&lt;/span&gt; would require optimization of &lt;span class="math"&gt;\(M + \frac{M^2 + M}{2}\)&lt;/span&gt; parameters for the mean and covariance respectively. Following intuition, this gain in computational efficiency comes at the cost of decreased accuracy in approximating the true posterior over latent variables.&lt;/p&gt;
+&lt;p&gt;Briefly, factorized distributions are cheap to compute: if each &lt;span class="math"&gt;\(q_i(\mathbf{Z}_i)\)&lt;/span&gt; is Gaussian, &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt; requires optimization of &lt;span class="math"&gt;\(2M\)&lt;/span&gt; parameters (a mean and a variance for each factor); conversely, a non-factorized &lt;span class="math"&gt;\(q(\mathbf{Z}) = \text{Normal}(\mu, \Sigma)\)&lt;/span&gt; would require optimization of &lt;span class="math"&gt;\(M\)&lt;/span&gt; parameters for the mean and &lt;span class="math"&gt;\(\frac{M^2 + M}{2}\)&lt;/span&gt; parameters for the covariance. Following intuition, this gain in computational efficiency comes at the cost of decreased accuracy in approximating the true posterior over latent variables.&lt;/p&gt;
 &lt;h2&gt;So, what is it?&lt;/h2&gt;
 &lt;p&gt;Mean-field Variational Bayes is an iterative maximization of the ELBO. More precisely, it is an iterative M-step with respect to the variational factors &lt;span class="math"&gt;\(q_i(\mathbf{Z}_i)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;In the simplest case, we posit a variational factor over every latent variable, &lt;em&gt;as well as every parameter&lt;/em&gt;. In other words, as compared to the log-marginal decomposition in EM, &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is absorbed into &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;.&lt;/p&gt;
@@ -333,7 +333,7 @@ A
 &amp;amp;= \int{q_j(\mathbf{Z}_j){ \mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}] }d\mathbf{Z}_j}\\
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;Following Bishop&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;'s derivation, we introduce the notation:&lt;/p&gt;
+&lt;p&gt;Following Bishop&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;'s derivation, we've introduced the notation:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \int{\prod\limits_{i \neq j}q_i(\mathbf{Z}_{i})\log{p(\mathbf{X, Z})}}d\mathbf{Z}_i = \mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]
 $$&lt;/div&gt;
@@ -344,10 +344,10 @@ $$&lt;/div&gt;
 &lt;li&gt;&lt;strong&gt;As such, &lt;span class="math"&gt;\(\mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]\)&lt;/span&gt; gives a function of the value of &lt;span class="math"&gt;\(\mathbf{Z}_j\)&lt;/span&gt;&lt;/strong&gt; which itself maps to the aforementioned real number.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;To further illustrate, let's employ some toy Python code:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Suppose `Z = [Z_1, Z_2, Z_3]`, with corresponding variational distributions `q_1`, `q_2`, `q_3`&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Suppose `Z = [Z_0, Z_1, Z_2]`, with corresponding (discrete) variational distributions `q_0`, `q_1`, `q_2`&lt;/span&gt;
 
 &lt;span class="n"&gt;q_0&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;  &lt;span class="c1"&gt;# q_0(1) = .2&lt;/span&gt;
     &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
     &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="p"&gt;]&lt;/span&gt;
@@ -520,11 +520,7 @@ $$&lt;/div&gt;
 \log{q_j(\mathbf{Z}_j)} = \mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]
 $$&lt;/div&gt;
 &lt;p&gt;Then, attempt to rearrange this expression such that:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Once exponentiated, giving &lt;span class="math"&gt;\(\exp{\big(\log{q_j(\mathbf{Z}_j)}\big)} = q_j(\mathbf{Z}_j)\)&lt;/span&gt;,&lt;/li&gt;
-&lt;li&gt;We are left with something that, once normalized (by inspection),&lt;/li&gt;
-&lt;li&gt;Resembles a known density function (e.g. a Gaussian, a Gamma, etc.)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Once exponentiated, giving &lt;span class="math"&gt;\(\exp{\big(\log{q_j(\mathbf{Z}_j)}\big)} = q_j(\mathbf{Z}_j)\)&lt;/span&gt;, we are left with something that, once normalized (by inspection), resembles a known density function (e.g. a Gaussian, a Gamma, etc.).&lt;/p&gt;
 &lt;p&gt;NB: This may require significant computation.&lt;/p&gt;
 &lt;h1&gt;Approximating a Gaussian&lt;/h1&gt;
 &lt;p&gt;Here, we'll approximate a 2D multivariate Gaussian with a factorized mean-field approximation.&lt;/p&gt;
@@ -534,7 +530,7 @@ $$&lt;/div&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/mean-field-variational-bayes/mv-gaussian-approx-4.png"/&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/mean-field-variational-bayes/mv-gaussian-approx-5.png"/&gt;&lt;/p&gt;
 &lt;h1&gt;Summing up&lt;/h1&gt;
-&lt;p&gt;Mean-Field Variational Bayes is an iterative optimization algorithm for maximizing a lower-bound of the marginal likelihood of some data &lt;span class="math"&gt;\(\mathbf{X}\)&lt;/span&gt; under a given model with latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;. It accomplishes task by positing a factorized variational distribution over all latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt; and parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, then computes, &lt;em&gt;analytically&lt;/em&gt;, the algebraic forms and parameters of each factor which maximize this bound.&lt;/p&gt;
+&lt;p&gt;Mean-Field Variational Bayes is an iterative optimization algorithm for maximizing a lower-bound of the marginal likelihood of some data &lt;span class="math"&gt;\(\mathbf{X}\)&lt;/span&gt; under a given model with latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;. It accomplishes this task by positing a factorized variational distribution over all latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt; and parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, then computes, &lt;em&gt;analytically&lt;/em&gt;, the algebraic forms and parameters of each factor which maximize this bound.&lt;/p&gt;
 &lt;p&gt;In practice, this process can be cumbersome and labor-intensive. As such, in recent years, "black-box variational inference" techniques were born, which &lt;em&gt;fix&lt;/em&gt; the forms of each factor &lt;span class="math"&gt;\(q_j(\mathbf{Z}_j)\)&lt;/span&gt;, then optimize its parameters via gradient descent.&lt;/p&gt;
 &lt;h2&gt;References&lt;/h2&gt;
 &lt;div class="footnote"&gt;
@@ -618,14 +614,14 @@ $$&lt;/div&gt;
 $$&lt;/div&gt;
 &lt;p&gt;An example of a latent variable model is the Latent Dirichlet Allocation&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; (LDA) model for uncovering latent topics in documents of text. Once finished deriving the general EM equations, we'll (begin to) apply them to this model.&lt;/p&gt;
 &lt;h2&gt;Why not maximum likelihood estimation?&lt;/h2&gt;
-&lt;p&gt;As the adage goes, computing the MLE with respect to this marginal is "hard." I loosely understand why. In any case, Bishop&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; states:&lt;/p&gt;
+&lt;p&gt;As the adage goes, computing the MLE with respect to this marginal is "hard." For one, it requires summing over an (implicitly) humongous number of configurations of latent variables &lt;span class="math"&gt;\(z\)&lt;/span&gt;. Further, as Bishop&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; states:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;A key observation is that the summation over the latent variables appears inside the logarithm. Even if the joint distribution &lt;span class="math"&gt;\(p(\mathbf{X, Z}\vert\theta)\)&lt;/span&gt; belongs to the exponential family, the marginal distribution &lt;span class="math"&gt;\(p(\mathbf{X}\vert\theta)\)&lt;/span&gt; typically does not as a result of this summation. The presence of the sum prevents the logarithm from acting directly on the joint distribution, resulting in complicated expressions for the maximum likelihood solution.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;We'll want something else to maximize instead.&lt;/strong&gt;&lt;/p&gt;
 &lt;h2&gt;A lower bound&lt;/h2&gt;
 &lt;p&gt;Instead of maximizing the log-marginal &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; (with respect to model parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;), let's maximize a lower-bound with a less-problematic form.&lt;/p&gt;
-&lt;p&gt;One candidate for this form is &lt;span class="math"&gt;\(\log{p(\mathbf{X}, \mathbf{Z}\vert \theta)}\)&lt;/span&gt; which, almost tautologically, removes the summation over latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Perhaps, we'd work with &lt;span class="math"&gt;\(\log{p(\mathbf{X}, \mathbf{Z}\vert \theta)}\)&lt;/span&gt; which, almost tautologically, removes the summation over latent variables &lt;span class="math"&gt;\(\mathbf{Z}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;As such, let's derive a lower-bound which features this term. As &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; is often called the log-"evidence," we'll call our expression the "evidence lower-bound," or ELBO.&lt;/p&gt;
 &lt;h2&gt;Jensen's inequality&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Jensen%27s_inequality"&gt;Jensen's inequality&lt;/a&gt;&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3"&gt;3&lt;/a&gt;&lt;/sup&gt; generalizes the statement that the line secant to a &lt;strong&gt;concave function&lt;/strong&gt; lies below this function. An example is illustrative:&lt;/p&gt;
@@ -633,7 +629,7 @@ $$&lt;/div&gt;
 &lt;p&gt;First, we note that the red line is below the blue for all points for which it is defined.&lt;/p&gt;
 &lt;p&gt;Second, working through the example, and assuming:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(y = f(x) = \exp(-(x - 2)^2)\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(f(x) = \exp(-(x - 2)^2)\)&lt;/span&gt;&lt;/li&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(v_1 = 1; v_2 = 2.5; \alpha = .3\)&lt;/span&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="math"&gt;$$
@@ -675,33 +671,19 @@ $$&lt;/div&gt;
 &amp;amp;= \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg] + R
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;&lt;em&gt;Et voilà&lt;/em&gt;, we see that this term contains &lt;span class="math"&gt;\(\log{p(\mathbf{X, Z}\vert\theta)}\)&lt;/span&gt;; the ELBO should be easy to optimize with respect to our parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Et voilà&lt;/em&gt;, we see that this term contains &lt;span class="math"&gt;\(\log{p(\mathbf{X, Z}\vert\theta)}\)&lt;/span&gt;; the ELBO should now be easier to optimize with respect to our parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h1&gt;So, what's &lt;span class="math"&gt;\(R\)&lt;/span&gt;?&lt;/h1&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
 R
 &amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\bigg]\\
-&amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}
-\end{align*}
-$$&lt;/div&gt;
-&lt;p&gt;Before expanding further, let's briefly restate basic results of Bayes' theorem as applied to our model:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(p(\mathbf{Z}\vert\mathbf{X}, \theta) = \frac{p(\mathbf{X}, \mathbf{Z}\vert\theta)}{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(\log{p(\mathbf{X}, \mathbf{Z}\vert\theta)} = \log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Additionally, we note that as &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; does not depend on &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;, &lt;span class="math"&gt;\(\mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X}\vert\theta)}\bigg] = \log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Continuing:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="math"&gt;$$
-\begin{align*}
-R
-&amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{p(\mathbf{X, Z}\vert\theta)}{q(\mathbf{Z})}}\\
-&amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{X, Z}\vert\theta) - \log{q(\mathbf{Z})}}\bigg)\\
-&amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\bigg)\\
-&amp;amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})\log{p(\mathbf{X}\vert\theta)} -  \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\bigg)\\
-&amp;amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{X}\vert\theta)} -  \big(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\big)\bigg)\\
-&amp;amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})-  \big(\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} - \log{q(\mathbf{Z})}\big)\\
+&amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X, Z}\vert\theta) - \log{q(\mathbf{Z})}}\bigg]\\
+&amp;amp;= \log{p(\mathbf{X}\vert\theta)} -  \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\bigg]\\
+&amp;amp;= \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X}\vert\theta)}\bigg] -  \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{p(\mathbf{X}\vert\theta)} - \log{q(\mathbf{Z})}\bigg]\\
+&amp;amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg(\log{p(\mathbf{X}\vert\theta)} - \log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} - \log{p(\mathbf{X}\vert\theta)} + \log{q(\mathbf{Z})}\bigg)\\
+&amp;amp;= \sum_{\mathbf{Z}}q(\mathbf{Z})\bigg( - \log{p(\mathbf{Z}\vert\mathbf{X}, \theta)} + \log{q(\mathbf{Z})}\bigg)\\
 &amp;amp;=
--\sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{p(\mathbf{Z}\vert\mathbf{X}, \theta)}{q(\mathbf{Z})}}\\
+\sum_{\mathbf{Z}}q(\mathbf{Z})\log{\frac{q(\mathbf{Z})}{p(\mathbf{Z}\vert\mathbf{X}, \theta)}}\\
 &amp;amp;= \text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\\
 \end{align*}
 $$&lt;/div&gt;
@@ -712,25 +694,28 @@ $$&lt;/div&gt;
 &lt;h2&gt;The EM algorithm&lt;/h2&gt;
 &lt;p&gt;The algorithm can be described by a few simple observations.&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; is a divergence metric which is strictly non-negative.&lt;/li&gt;
-&lt;li&gt;As &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; does not depend on &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;—if we decrease &lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; &lt;em&gt;by changing &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;&lt;/em&gt;, the ELBO must increase to compensate.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;(For intuition, imagine we're able to decrease &lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; to 0, which occurs when setting &lt;span class="math"&gt;\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)&lt;/span&gt;.)&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;If we increase the ELBO &lt;em&gt;by changing &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;&lt;/em&gt;, &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; will increase as well. &lt;em&gt;In addition, as &lt;span class="math"&gt;\(p(\mathbf{Z}\vert\mathbf{X}, \theta)\)&lt;/span&gt; now (likely) diverges from &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt; in non-zero amount, &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; will increase even more.&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; is a divergence metric which is strictly non-negative.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;As &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; does not depend on &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;—if we decrease &lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; by changing &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;, the ELBO must increase to compensate.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If we increase the ELBO by changing &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; will increase as well. In addition, as &lt;span class="math"&gt;\(p(\mathbf{Z}\vert\mathbf{X}, \theta)\)&lt;/span&gt; now (likely) diverges from &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt; in non-zero amount, &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; will increase even more.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;strong&gt;The EM algorithm is a repeated alternation between Step 2 (E-step) and Step 3 (M-step).&lt;/strong&gt; After each M-Step, &lt;span class="math"&gt;\(\log{p(\mathbf{X}\vert\theta)}\)&lt;/span&gt; is guaranteed to increase (unless it is already at a maximum)&lt;sup id="fnref2:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-&lt;p&gt;A graphic&lt;sup id="fnref3:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; (&lt;em&gt;Pattern Recognition and Machine Learning, Chapter 9&lt;/em&gt;) is further illustrative.&lt;/p&gt;
+&lt;p&gt;A graphic&lt;sup id="fnref3:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; is further illustrative.&lt;/p&gt;
 &lt;h3&gt;Initial decomposition&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/initial_decomp.png"/&gt;&lt;/p&gt;
 &lt;p&gt;Here, the ELBO is written as &lt;span class="math"&gt;\(\mathcal{L}(q, \theta)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h3&gt;E-step&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/e_step.png"/&gt;&lt;/p&gt;
-&lt;p&gt;Holding the parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; constant, minimize &lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; with respect to &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;. Remember, as &lt;span class="math"&gt;\(q\)&lt;/span&gt; is a distribution with a fixed functional form, this amounts to updating its parameters &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;The caption implies that we can always compute &lt;span class="math"&gt;\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)&lt;/span&gt;. We will below that this is not the case for LDA, nor for many interesting models.&lt;/p&gt;
+&lt;p&gt;In other words, holding the parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; constant, minimize &lt;span class="math"&gt;\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)&lt;/span&gt; with respect to &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;. Remember, as &lt;span class="math"&gt;\(q\)&lt;/span&gt; is a distribution with a fixed functional form, this amounts to updating its parameters &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;The caption implies that we can always compute &lt;span class="math"&gt;\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)&lt;/span&gt;. We will show below that this is not the case for LDA, nor for many interesting models.&lt;/p&gt;
 &lt;h3&gt;M-step&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/m_step.png"/&gt;&lt;/p&gt;
-&lt;p&gt;In the M-step, maximize the ELBO with respect to the model parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;In other words, in the M-step, maximize the ELBO with respect to the model parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Expanding the ELBO:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
@@ -739,14 +724,13 @@ $$&lt;/div&gt;
 &amp;amp;= \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{p(\mathbf{X, Z}\vert\theta)}\bigg] + \mathbf{H}[q(\mathbf{Z})]
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;we see that it decomposes into an expectation of the joint distribution over data and latent variables with respect to the variational distribution &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;, plus the entropy of &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;Maximizing this expression with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, we treat the latter as a constant.&lt;/p&gt;
+&lt;p&gt;we see that it decomposes into an expectation of the joint distribution over data and latent variables given parameters &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; with respect to the variational distribution &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;, plus the entropy of &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;As our task is to maximize this expression with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, we can treat the latter term as a constant.&lt;/p&gt;
 &lt;h2&gt;EM for LDA&lt;/h2&gt;
-&lt;p&gt;In the next few posts, we'll use the Latent Dirichlet Allocation (LDA) model as a running example.&lt;/p&gt;
-&lt;p&gt;Since the original paper&lt;sup id="fnref2:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; is beautiful, I'll default to citing its passages as much as possible.&lt;/p&gt;
+&lt;p&gt;To give an example of the above, we'll examine the classic Latent Dirichlet Allocation&lt;sup id="fnref2:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; paper.&lt;/p&gt;
 &lt;h3&gt;Model&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/lda_formulation.png"/&gt;&lt;/p&gt;
-&lt;p&gt;"Given the parameters &lt;span class="math"&gt;\(\alpha\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta\)&lt;/span&gt;, the joint distribution of a topic mixture &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, a set of of &lt;span class="math"&gt;\(N\)&lt;/span&gt; topics &lt;span class="math"&gt;\(\mathbf{z}\)&lt;/span&gt;, and a set of &lt;span class="math"&gt;\(N\)&lt;/span&gt; words &lt;span class="math"&gt;\(\mathbf{w}\)&lt;/span&gt; is given by:"&lt;sup id="fnref3:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;"Given the parameters &lt;span class="math"&gt;\(\alpha\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta\)&lt;/span&gt;, the joint distribution of a topic mixture &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, a set of &lt;span class="math"&gt;\(N\)&lt;/span&gt; topics &lt;span class="math"&gt;\(\mathbf{z}\)&lt;/span&gt;, and a set of &lt;span class="math"&gt;\(N\)&lt;/span&gt; words &lt;span class="math"&gt;\(\mathbf{w}\)&lt;/span&gt; is given by:"&lt;sup id="fnref3:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;div class="math"&gt;$$
 p(\theta, \mathbf{z}, \mathbf{w}\vert \alpha, \beta) = p(\theta\vert \alpha)\prod\limits_{n=1}^{N}p(z_n\vert \theta)p(w_n\vert z_n, \beta)
 $$&lt;/div&gt;
@@ -755,7 +739,7 @@ $$&lt;/div&gt;
 &lt;div class="math"&gt;$$
 \log{p(\mathbf{w}\vert \alpha, \beta)} = \log{\int p(\theta\vert \alpha)\prod\limits_{n=1}^{N}\sum\limits_{z_n} p(z_n\vert \theta)p(w_n\vert z_n, \beta)d\theta}
 $$&lt;/div&gt;
-&lt;p&gt;NB: The parameters of our model are &lt;span class="math"&gt;\(\alpha\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta\)&lt;/span&gt;, and &lt;span class="math"&gt;\(\{\theta, \mathbf{z}\}\)&lt;/span&gt; are our &lt;em&gt;latent variables.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;NB: The parameters of our model are &lt;span class="math"&gt;\(\{\alpha,  \beta\}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\{\theta, \mathbf{z}\}\)&lt;/span&gt; are our latent variables.&lt;/p&gt;
 &lt;h3&gt;ELBO&lt;/h3&gt;
 &lt;div class="math"&gt;$$
 \mathop{\mathbb{E}}_{q(\mathbf{Z})}\bigg[\log{\bigg(\frac{p(\theta\vert \alpha)}{q(\mathbf{Z})}}\prod\limits_{n=1}^{N}p(z_n\vert \theta)p(w_n\vert z_n, \beta)\bigg)\bigg]
@@ -765,10 +749,10 @@ $$&lt;/div&gt;
 &lt;div class="math"&gt;$$
 \text{KL}\big(q(\mathbf{Z})\Vert \frac{p(\theta, \mathbf{z}, \mathbf{w}\vert \alpha, \beta)}{p(\mathbf{w}\vert \alpha, \beta)}\big)
 $$&lt;/div&gt;
-&lt;p&gt;Peering at the denominator, we see that the expression under the integral is exponential in the number of words &lt;span class="math"&gt;\(N\)&lt;/span&gt;; for any non-trivial &lt;span class="math"&gt;\(N\)&lt;/span&gt; and number of topics, it is intractable to compute. As such, the "ideal" E-step solution &lt;span class="math"&gt;\(q(\mathbf{Z}) = p(\theta, \mathbf{z}\vert \mathbf{w}, \alpha, \beta)\)&lt;/span&gt; admits no analytical form.&lt;/p&gt;
+&lt;p&gt;Peering at the denominator, we see that it includes an integration over all values &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, which we assume is intractable to compute. As such, the "ideal" E-step solution &lt;span class="math"&gt;\(q(\mathbf{Z}) = p(\theta, \mathbf{z}\vert \mathbf{w}, \alpha, \beta)\)&lt;/span&gt; will elude us as well.&lt;/p&gt;
 &lt;p&gt;In the next post, we'll cover how to minimize this KL term with respect to &lt;span class="math"&gt;\(q(\mathbf{Z})\)&lt;/span&gt; in detail. This effort will begin with the derivation of the mean-field algorithm.&lt;/p&gt;
 &lt;h2&gt;Summary&lt;/h2&gt;
-&lt;p&gt;In this post, we motivated the expectation-maximization algorithm then derived its general form. We then, briefly, applied it to the LDA model.&lt;/p&gt;
+&lt;p&gt;In this post, we motivated the expectation-maximization algorithm then derived its general form. We then applied this framework to the LDA model.&lt;/p&gt;
 &lt;p&gt;In the next post, we'll expand this logic into mean-field variational Bayes, and eventually, variational inference more broadly.&lt;/p&gt;
 &lt;p&gt;Thanks for reading.&lt;/p&gt;
 &lt;h2&gt;References&lt;/h2&gt;
@@ -848,8 +832,8 @@ page 229. Springer-Verlag New York, 2006. &lt;a class="footnote-backref" href="
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>Additional Strategies for Confronting the Partition Function</title><link href="https://cavaunpeu.github.io/2018/10/29/additional-strategies-partition-function/" rel="alternate"></link><published>2018-10-29T22:00:00-04:00</published><updated>2018-10-29T22:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-10-29:/2018/10/29/additional-strategies-partition-function/</id><summary type="html">&lt;p&gt;Stochastic maximum likelihood, contrastive divergence, negative contrastive estimation and negative sampling for improving or avoiding the computation of the gradient of the log-partition function. (Oof, that's a mouthful.)&lt;/p&gt;</summary><content type="html">&lt;p&gt;In the &lt;a href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/"&gt;previous post&lt;/a&gt; we introduced Boltzmann machines and the infeasibility of computing the gradient of its log-partition function &lt;span class="math"&gt;\(\nabla_{\theta}\log{Z}\)&lt;/span&gt;. To this end, we explored one strategy for its approximation: Gibbs sampling. Gibbs sampling is a viable alternative because the expression for this gradient simplifies to an expectation over the model distribution, which can be approximated with Monte Carlo samples.&lt;/p&gt;
-&lt;p&gt;In this post, we'll highlight the imperfections of even this approach, then present more preferable alternatives.&lt;/p&gt;
+&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>Additional Strategies for Confronting the Partition Function</title><link href="https://cavaunpeu.github.io/2018/10/29/additional-strategies-partition-function/" rel="alternate"></link><published>2018-10-29T22:00:00-04:00</published><updated>2018-10-29T22:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-10-29:/2018/10/29/additional-strategies-partition-function/</id><summary type="html">&lt;p&gt;Stochastic maximum likelihood, contrastive divergence, negative contrastive estimation and negative sampling for improving or avoiding the computation of the gradient of the log-partition function. (Oof, that's a mouthful.)&lt;/p&gt;</summary><content type="html">&lt;p&gt;In the &lt;a href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/"&gt;previous post&lt;/a&gt; we introduced Boltzmann machines and the infeasibility of computing the gradient of its log-partition function &lt;span class="math"&gt;\(\nabla\log{Z}\)&lt;/span&gt;. To this end, we explored one strategy for its approximation: Gibbs sampling. Gibbs sampling is a viable alternative because the expression for our gradient simplifies to an expectation over the model distribution, which can be approximated with Monte Carlo samples.&lt;/p&gt;
+&lt;p&gt;In this post, we'll highlight the imperfections of this approximate approach itself, then present more preferable alternatives.&lt;/p&gt;
 &lt;h1&gt;Pitfalls of Gibbs sampling&lt;/h1&gt;
 &lt;p&gt;To refresh, the two gradients we seek to compute in a reasonable amount of time are:&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -858,7 +842,7 @@ page 229. Springer-Verlag New York, 2006. &lt;a class="footnote-backref" href="
 $$&lt;/div&gt;
 &lt;p&gt;Via Gibbs sampling, we approximate each by:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Burning in a Markov chain w.r.t. our model, then selecting &lt;span class="math"&gt;\(n\)&lt;/span&gt; samples from this chain&lt;/li&gt;
+&lt;li&gt;Burning in a Markov chain with respect to our model, then selecting &lt;span class="math"&gt;\(n\)&lt;/span&gt; samples from this chain&lt;/li&gt;
 &lt;li&gt;Evaluating both functions (&lt;span class="math"&gt;\(x_i  x_j\)&lt;/span&gt;, and &lt;span class="math"&gt;\(x_i\)&lt;/span&gt;) at these samples&lt;/li&gt;
 &lt;li&gt;Taking the average of each&lt;/li&gt;
 &lt;/ol&gt;
@@ -869,38 +853,20 @@ $$&lt;/div&gt;
 $$&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;We perform this sampling process at each gradient step.&lt;/strong&gt;&lt;/p&gt;
 &lt;h2&gt;The cost of burning in each chain&lt;/h2&gt;
-&lt;p&gt;Initializing a Markov chain at a random sample incurs a "burn-in" process which comes at non-trivial cost. If paying this cost at each gradient step, it begins to add up. How can we do better?&lt;/p&gt;
+&lt;p&gt;Initializing a Markov chain at a random sample incurs a non-trivial "burn-in" cost. If paying this cost at each gradient step, it begins to add up. How can we do better?&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;In the remainder of the post, we'll explore two new directives for approximating the negative phase more cheaply, and the algorithms they birth.&lt;/strong&gt;&lt;/p&gt;
 &lt;h1&gt;Directive #1: Cheapen the burn-in process&lt;/h1&gt;
 &lt;h2&gt;Stochastic maximum likelihood&lt;/h2&gt;
-&lt;p&gt;SML assumes the premise: let's initialize our chain at a point already close to the model's true distribution—reducing or perhaps eliminating the cost of burn-in altogether.  &lt;strong&gt;This given, at what sample do we initialize the chain?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;SML assumes the premise: let's initialize our chain at a point already close to the model's true distribution—reducing or perhaps eliminating the cost of burn-in altogether.  &lt;strong&gt;In this vein, at what sample do we initialize the chain?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;In SML, we simply initialize at the terminal value of the previous chain (i.e. the one we manufactured to compute the gradients of the previous mini-batch). &lt;strong&gt;As long as the model has not changed significantly since, i.e. as long as the previous parameter update (gradient step) was not too large, this sample should exist in a region of high probability under the current model.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;In code, this might look like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;n_obs&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dim&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;  &lt;span class="c1"&gt;# X holds all of our observations&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Vanilla Gibbs sampling&lt;/span&gt;
-&lt;span class="n"&gt;samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dim&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
-
-&lt;span class="c1"&gt;# SML&lt;/span&gt;
-&lt;span class="n"&gt;samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;previous_samples&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;Implications&lt;/h2&gt;
+&lt;h3&gt;Implications&lt;/h3&gt;
 &lt;p&gt;Per the expression for the full log-likelihood gradient, e.g. &lt;span class="math"&gt;\(\nabla_{w_{i, j}}\log{\mathcal{L}} = \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j] - \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)&lt;/span&gt;, the negative phase works to "reduce the probability of the points in which the model strongly, yet wrongly, believes".&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; Since we approximate this term at each parameter update with samples &lt;em&gt;roughly from&lt;/em&gt; the current model's true distribution, &lt;strong&gt;we do not encroach on this foundational task.&lt;/strong&gt;&lt;/p&gt;
 &lt;h2&gt;Contrastive divergence&lt;/h2&gt;
-&lt;p&gt;Alternatively, in the contrastive divergence algorithm, we initialize the chain at each gradient step with a sample from the data distribution.&lt;/p&gt;
-&lt;h2&gt;Implications&lt;/h2&gt;
+&lt;p&gt;Alternatively, in the contrastive divergence algorithm, we initialize the chain at each gradient step with a &lt;em&gt;random sample&lt;/em&gt; from the data distribution.&lt;/p&gt;
+&lt;h3&gt;Implications&lt;/h3&gt;
 &lt;p&gt;With no guarantee that the data distribution resembles the model distribution, we may systematically fail to sample, and thereafter "suppress," points that are incorrectly likely under the latter (as they do not appear in the former!). &lt;strong&gt;This incurs the growth of "spurious modes"&lt;/strong&gt; in our model, aptly named.&lt;sup id="fnref2:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;In code, this might look like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Vanilla Gibbs sampling&lt;/span&gt;
-&lt;span class="n"&gt;samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dim&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
-
-&lt;span class="c1"&gt;# SML&lt;/span&gt;
-&lt;span class="n"&gt;samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;previous_samples&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Contrastive divergence&lt;/span&gt;
-&lt;span class="n"&gt;samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_obs&lt;/span&gt;&lt;span class="p"&gt;)]]&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Cheapening the burn-in phase indeed gives us a more efficient training routine. Moving forward, what are some even more aggressive strategies we can explore?&lt;/p&gt;
+&lt;h2&gt;In summary&lt;/h2&gt;
+&lt;p&gt;Cheapening the burn-in phase indeed gives us a more efficient training routine. Moving forward, what are some even more aggressive strategies we might explore?&lt;/p&gt;
 &lt;h1&gt;Directive #2: Skip the computation of &lt;span class="math"&gt;\(Z\)&lt;/span&gt; altogether&lt;/h1&gt;
 &lt;p&gt;Canonically, we write the log-likelihood of our Boltzmann machine as follows:&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -920,13 +886,13 @@ $$&lt;/div&gt;
 \log{p_{\text{model}}(x)} = \log{\tilde{p}_{\text{model}}(x; \theta)} - c
 $$&lt;/div&gt;
 &lt;p&gt;and estimated &lt;span class="math"&gt;\(c\)&lt;/span&gt; as a parameter?&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Immediately, we remark that if we optimize this model with maximum likelihood, our algorithm will, trivially, make &lt;span class="math"&gt;\(c\)&lt;/span&gt; arbitrarily negative.&lt;/strong&gt; In other words, the quickest way to increase the thing on the left is to decrease &lt;span class="math"&gt;\(c\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Immediately, we remark that if we optimize this model with maximum likelihood, our algorithm will, trivially, make &lt;span class="math"&gt;\(c\)&lt;/span&gt; arbitrarily negative.&lt;/strong&gt; In other words, the easiest way to increase &lt;span class="math"&gt;\(\log{p_{\text{model}}(x)}\)&lt;/span&gt; is to decrease &lt;span class="math"&gt;\(c\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;How might we better phrase this problem?&lt;/p&gt;
 &lt;h2&gt;Noise contrastive estimation&lt;/h2&gt;
 &lt;p&gt;Ingeniously, NCE proposes an alternative:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Posit two distributions: the model, and a noise distribution&lt;/li&gt;
-&lt;li&gt;Given a data point, predict from which distribution this point was generated&lt;/li&gt;
+&lt;li&gt;Given a data point, predict the distribution (i.e. binary classification) from which this point was generated&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Let's unpack this a bit.&lt;/p&gt;
 &lt;p&gt;Under an (erroneous) MLE formulation, we would optimize the following objective:&lt;/p&gt;
@@ -1000,7 +966,7 @@ $$&lt;/div&gt;
 &lt;h2&gt;Implications&lt;/h2&gt;
 &lt;p&gt;For our training data, &lt;strong&gt;we require the ability to sample from our noise distribution.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;For our target, &lt;strong&gt;we require the ability to compute the likelihood of some data under our noise distribution.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Therefore, these criterion do place practical restrictions on the types of noise distributions that we're able to consider.&lt;/p&gt;
+&lt;p&gt;Therefore, these criteria do place practical restrictions on the types of noise distributions that we're able to consider.&lt;/p&gt;
 &lt;h2&gt;Extensions&lt;/h2&gt;
 &lt;p&gt;We briefly alluded to the fact that our noise distribution is non-parametric. However, there is nothing stopping us from evolving this distribution and giving it trainable parameters, then updating these parameters such that it generates increasingly "optimal" samples.&lt;/p&gt;
 &lt;p&gt;Of course, we would have to design what "optimal" means. One interesting approach is called &lt;a href="https://arxiv.org/abs/1805.03642"&gt;Adversarial Contrastive Estimation
@@ -1017,7 +983,8 @@ $$&lt;/div&gt;
 p_{\text{joint}}(y = 0\vert x)
 &amp;amp;= \frac{1}{1 + \frac{p_{\text{model}}(x)}{p_{\text{noise}}(x)\cdot k}}\\
 &amp;amp;= \frac{1}{1 + \frac{p_{\text{model}}(x)}{ k}}\\
-&amp;amp;=\sigma(-\frac{p_{\text{model}}(x)}{ k})\\
+&amp;amp;= \frac{1}{1 + \exp\big(\log\frac{p_{\text{model}}(x)}{ k}\big)}\\
+&amp;amp;=\sigma(-\log\frac{p_{\text{model}}(x)}{ k})\\
 &amp;amp;=\sigma(\log{k} - \log{p_{\text{model}}(x)})\\
 p_{\text{joint}}(y = 1\vert x)
 &amp;amp;= 1 - \sigma(\log{k} - \log{p_{\text{model}}(x)})
@@ -1211,7 +1178,7 @@ $$&lt;/div&gt;
 &lt;h1&gt;Sampling&lt;/h1&gt;
 &lt;p&gt;Once more, the (ideal) goal of this model is to fit a function &lt;span class="math"&gt;\(p(x)\)&lt;/span&gt; to some data, such that we can:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Evaluate its likelihood (wherein it actually tells us that data to which the model was fit is more likely than data to which it was not)&lt;/li&gt;
+&lt;li&gt;Evaluate its likelihood (wherein it actually tells us that data on which the model was fit is more likely than data on which it was not)&lt;/li&gt;
 &lt;li&gt;Draw realistic samples&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;From a Boltzmann machine, our primary strategy for drawing samples is via Gibbs sampling. It's slow, and I do not believe it's meant to work particularly well. Let's draw 5 samples and see how we do.&lt;/p&gt;
@@ -1227,7 +1194,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Nothing great. These samples are highly correlated, if perfectly identical, as expected.&lt;/p&gt;
 &lt;p&gt;To generate better images, we'll have to let this run for a lot longer and "thin" the chain (taking every &lt;code&gt;every_n&lt;/code&gt; samples, where &lt;code&gt;every_n&lt;/code&gt; is on the order of 1, 10, or 100, roughly).&lt;/p&gt;
 &lt;h1&gt;Summary&lt;/h1&gt;
-&lt;p&gt;In this post, we discussed four additional strategies for both speeding up, as well as outright avoiding, the computation of the gradient of the log-partition function &lt;span class="math"&gt;\(\nabla_{\theta}\log{Z}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, we discussed four additional strategies for both speeding up, as well as outright avoiding, the computation of the gradient of the log-partition function &lt;span class="math"&gt;\(\nabla\log{Z}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;While we only presented toy models here, these strategies see successful application in larger undirected graphical models, as well as directed conditional models for &lt;span class="math"&gt;\(p(y\vert x)\)&lt;/span&gt;. One key example of the latter is a language model; though the partition function is a sum over distinct values of &lt;span class="math"&gt;\(y\)&lt;/span&gt; (labels) instead of configurations of &lt;span class="math"&gt;\(x\)&lt;/span&gt; (inputs), it can still be intractable to compute! This is because there are as many distinct values of &lt;span class="math"&gt;\(y\)&lt;/span&gt; as there are tokens in the given language's vocabulary, which is typically on the order of millions.&lt;/p&gt;
 &lt;p&gt;Thanks for reading.&lt;/p&gt;
 &lt;h2&gt;Code&lt;/h2&gt;
@@ -1311,7 +1278,7 @@ year={2016}
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>A Thorough Introduction to Boltzmann Machines</title><link href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/" rel="alternate"></link><published>2018-10-20T14:00:00-04:00</published><updated>2018-10-20T14:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-10-20:/2018/10/20/thorough-introduction-to-boltzmann-machines/</id><summary type="html">&lt;p&gt;A pedantic walk through Boltzmann machines, with focus on the computational thorn-in-side of the partition function.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The principal task of machine learning is to fit a model to some data. Thinking on the level of APIs, a model is an object with two methods:&lt;/p&gt;
+&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>A Thorough Introduction to Boltzmann Machines</title><link href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/" rel="alternate"></link><published>2018-10-20T14:00:00-04:00</published><updated>2018-10-20T14:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-10-20:/2018/10/20/thorough-introduction-to-boltzmann-machines/</id><summary type="html">&lt;p&gt;A pedantic walk through Boltzmann machines, with focus on the computational thorn-in-side of the partition function.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The principal task of machine learning is to fit a model to some data. In programming terms, this model is an object with two methods:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;likelihood&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -1321,25 +1288,24 @@ year={2016}
         &lt;span class="k"&gt;pass&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h2&gt;Likelihood&lt;/h2&gt;
-&lt;p&gt;How likely is the query point(s) &lt;span class="math"&gt;\(x\)&lt;/span&gt; under our model? In other words, how likely was it that our model produced &lt;span class="math"&gt;\(x\)&lt;/span&gt;?&lt;/p&gt;
-&lt;p&gt;The likelihood gives a value proportional to a valid probability, but is not necessarily a valid probability itself.&lt;/p&gt;
-&lt;p&gt;(Finally, the likelihood is often used as an umbrella term for, or interchangeably with, the probability density. The mainstream machine learning community would do well to agree to the use of one of these terms, and to sunset the other; while their definitions may differ slightly, the confusion brought about by their dual used in almost identical contexts simply does not warrant by the pedagogical purity we maintain by keeping them distinct.&lt;/p&gt;
+&lt;p&gt;How likely is the query point &lt;span class="math"&gt;\(x\)&lt;/span&gt; under our model? In other words, how likely was it that our model produced &lt;span class="math"&gt;\(x\)&lt;/span&gt;?&lt;/p&gt;
+&lt;p&gt;Note: The likelihood gives a value proportional to a valid probability, but is not necessarily a valid probability itself.&lt;/p&gt;
 &lt;h2&gt;Sample&lt;/h2&gt;
-&lt;p&gt;Draw samples from the model.&lt;/p&gt;
-&lt;h2&gt;Denotation&lt;/h2&gt;
+&lt;p&gt;Draw a sample datum &lt;span class="math"&gt;\(x\)&lt;/span&gt; from the model.&lt;/p&gt;
+&lt;h2&gt;Notation&lt;/h2&gt;
 &lt;p&gt;Canonically, we denote an instance of our &lt;code&gt;Model&lt;/code&gt; in mathematical syntax as follows:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 x \sim p(x)
 $$&lt;/div&gt;
-&lt;p&gt;Again, this simple denotation implies two methods: that we can evaluate the likelihood of having observed &lt;span class="math"&gt;\(x\)&lt;/span&gt; under our model &lt;span class="math"&gt;\(p\)&lt;/span&gt;, and that we can sample a new value &lt;span class="math"&gt;\(x\)&lt;/span&gt; from our model &lt;span class="math"&gt;\(p\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;Often, we work with &lt;em&gt;conditional&lt;/em&gt; models, such as &lt;span class="math"&gt;\(y \sim p(y\vert x)\)&lt;/span&gt;, in classification and regression tasks. The same two implicit methods apply.&lt;/p&gt;
+&lt;p&gt;Again, this simple notation implies two powerful methods: that we can evaluate the &lt;code&gt;likelihood&lt;/code&gt; of having observed &lt;span class="math"&gt;\(x\)&lt;/span&gt; under our model &lt;span class="math"&gt;\(p\)&lt;/span&gt;, and that we can &lt;code&gt;sample&lt;/code&gt; a new value &lt;span class="math"&gt;\(x\)&lt;/span&gt; from our model &lt;span class="math"&gt;\(p\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Often, we work instead with &lt;em&gt;conditional&lt;/em&gt; models, e.g. &lt;span class="math"&gt;\(y \sim p(y\vert x)\)&lt;/span&gt;, in classification and regression tasks. The &lt;code&gt;likelihood&lt;/code&gt; and &lt;code&gt;sample&lt;/code&gt; methods apply all the same.&lt;/p&gt;
 &lt;h2&gt;Boltzmann machines&lt;/h2&gt;
-&lt;p&gt;A Boltzmann machine is one of the simplest mechanisms for modeling &lt;span class="math"&gt;\(p(x)\)&lt;/span&gt;. It is an undirected graphical model where every dimension &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; of a given observation &lt;span class="math"&gt;\(x\)&lt;/span&gt; influences every other dimension. &lt;strong&gt;As such, we might use it to model data which we believe to exhibit this property, e.g. an image.&lt;/strong&gt; For &lt;span class="math"&gt;\(x \in R^3\)&lt;/span&gt;, our model would look as follows:&lt;/p&gt;
+&lt;p&gt;A Boltzmann machine is one of the simplest mechanisms for modeling &lt;span class="math"&gt;\(p(x)\)&lt;/span&gt;. It is an undirected graphical model where every dimension &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; of a given observation &lt;span class="math"&gt;\(x\)&lt;/span&gt; influences every other dimension. As such, we might use it to model data which we believe to exhibit this property, e.g. an image (where intuitively, pixel values influence neighboring pixel values). For &lt;span class="math"&gt;\(x \in R^3\)&lt;/span&gt;, our model would look as follows:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/boltzmann-machine.svg"/&gt;&lt;/p&gt;
-&lt;p&gt;For &lt;span class="math"&gt;\(x \in R^n\)&lt;/span&gt;, a given node &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; would have &lt;span class="math"&gt;\(n - 1\)&lt;/span&gt; outgoing connections in total—one to each of the other nodes &lt;span class="math"&gt;\(x_j\)&lt;/span&gt; for &lt;span class="math"&gt;\(j \neq i\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;For &lt;span class="math"&gt;\(x \in R^n\)&lt;/span&gt;, a given node &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; would have &lt;span class="math"&gt;\(n - 1\)&lt;/span&gt; outgoing connections in total—one to every other node &lt;span class="math"&gt;\(x_j\ \forall\ j \neq i\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Finally, a Boltzmann machine strictly operates on &lt;em&gt;binary&lt;/em&gt; data. This keeps things simple.&lt;/p&gt;
 &lt;h2&gt;Computing the likelihood&lt;/h2&gt;
-&lt;p&gt;A Boltzmann machines admits the following formula for computing the likelihood of data points &lt;span class="math"&gt;\(x^{(1)}, ..., x^{(n)}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;A Boltzmann machines admits the following formula for computing the &lt;code&gt;likelihood&lt;/code&gt; of data points &lt;span class="math"&gt;\(x^{(1)}, ..., x^{(n)}\)&lt;/span&gt;:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 H(x) = \sum\limits_{i \neq j} w_{i, j} x_i x_j + \sum\limits_i b_i x_i
 $$&lt;/div&gt;
@@ -1351,27 +1317,19 @@ $$&lt;/div&gt;
 $$&lt;/div&gt;
 &lt;p&gt;Note:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Since our weights can be negative, &lt;span class="math"&gt;\(H(x)\)&lt;/span&gt; can be negative. As a likelihood gives an optionally-normalized probability, it must be non-negative.&lt;/li&gt;
+&lt;li&gt;Since our weights can be negative, &lt;span class="math"&gt;\(H(x)\)&lt;/span&gt; can be negative. Since our likelihood is proportional to a valid probability, we'd prefer it to be non-negative.&lt;/li&gt;
 &lt;li&gt;To enforce this constraint, we exponentiate &lt;span class="math"&gt;\(H(x)\)&lt;/span&gt; in the second equation.&lt;/li&gt;
 &lt;li&gt;To normalize, we divide by the normalization constant &lt;span class="math"&gt;\(Z\)&lt;/span&gt;, i.e. the sum of the likelihoods of all possible values of &lt;span class="math"&gt;\(x^{(1)}, ..., x^{(n)}\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Computing the partition function, with examples&lt;/h2&gt;
-&lt;p&gt;In the case of 2-dimensional binary &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the only possible "configurations" of &lt;span class="math"&gt;\(x\)&lt;/span&gt; are: &lt;span class="math"&gt;\([0, 0], [0, 1], [1, 0], [1, 1]\)&lt;/span&gt;, i.e. 4 distinct values. This means that in evaluating the likelihood of one datum &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the normalization constant &lt;span class="math"&gt;\(Z\)&lt;/span&gt; would be a sum of 4 terms.&lt;/p&gt;
-&lt;p&gt;Now, with two data points &lt;span class="math"&gt;\(x^{(1)}\)&lt;/span&gt; and &lt;span class="math"&gt;\(x^{(2)}\)&lt;/span&gt;, there are 16 possible "configurations":&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(x^{(1)} = [0, 0]\)&lt;/span&gt;, &lt;span class="math"&gt;\(x^{(2)} = [0, 0]\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(x^{(1)} = [0, 0]\)&lt;/span&gt;, &lt;span class="math"&gt;\(x^{(2)} = [0, 1]\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(x^{(1)} = [0, 0]\)&lt;/span&gt;, &lt;span class="math"&gt;\(x^{(2)} = [1, 0]\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(x^{(1)} = [0, 0]\)&lt;/span&gt;, &lt;span class="math"&gt;\(x^{(2)} = [1, 1]\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(x^{(1)} = [0, 1]\)&lt;/span&gt;, &lt;span class="math"&gt;\(x^{(2)} = [0, 0]\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="math"&gt;\(x^{(1)} = [0, 1]\)&lt;/span&gt;, &lt;span class="math"&gt;\(x^{(2)} = [0, 1]\)&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;Etc.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;This means that in evaluating the likelihood of &lt;span class="math"&gt;\(\mathcal{L}(x^{(1)}, x^{(2)})\)&lt;/span&gt;, the normalization constant &lt;span class="math"&gt;\(Z\)&lt;/span&gt; would be a sum of 16 terms.&lt;/p&gt;
-&lt;p&gt;More generally, given &lt;span class="math"&gt;\(d\)&lt;/span&gt;-dimensional &lt;span class="math"&gt;\(x\)&lt;/span&gt;, where each &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; can assume one of &lt;span class="math"&gt;\(v\)&lt;/span&gt; distinct values, and &lt;span class="math"&gt;\(n\)&lt;/span&gt; data points &lt;span class="math"&gt;\(x^{(1)}, ..., x^{(n)}\)&lt;/span&gt;—in evaluating the likelihood of &lt;span class="math"&gt;\(\mathcal{L}(x^{(1)}, ..., x^{(n)})\)&lt;/span&gt; the normalization constant &lt;span class="math"&gt;\(Z\)&lt;/span&gt; would be a sum of &lt;span class="math"&gt;\((v^d)^n\)&lt;/span&gt; terms. &lt;strong&gt;With a non-trivially large &lt;span class="math"&gt;\(v\)&lt;/span&gt; or &lt;span class="math"&gt;\(d\)&lt;/span&gt; (in the discrete case), or a non-trivially large &lt;span class="math"&gt;\(k\)&lt;/span&gt; in the continuous case, this becomes intractable to compute.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;In the case of a Boltzmann machine, &lt;span class="math"&gt;\(v = 2\)&lt;/span&gt;, which is not large. Below, we will vary &lt;span class="math"&gt;\(d\)&lt;/span&gt; and examine its impact on the tractability (in terms of, "can we actually compute &lt;span class="math"&gt;\(Z\)&lt;/span&gt; before the end of the universe?") of inference.&lt;/p&gt;
+&lt;h2&gt;Computing the partition function by hand&lt;/h2&gt;
+&lt;p&gt;In the case of 2-dimensional binary datum &lt;span class="math"&gt;\(x\)&lt;/span&gt;, there are 4 possible "configurations": &lt;span class="math"&gt;\([0, 0], [0, 1], [1, 0], [1, 1]\)&lt;/span&gt;. As such, to compute the likelihood of one of these configurations, e.g.&lt;/p&gt;
+&lt;div class="math"&gt;$$
+p([1, 0]) = \frac{\exp{(H([1, 0]))}}{\exp{(H([0, 0]))} + \exp{(H([0, 1]))} + \exp{(H([1, 0]))} + \exp{(H([1, 1]))}}
+$$&lt;/div&gt;
+&lt;p&gt;we see that the normalization constant &lt;span class="math"&gt;\(Z\)&lt;/span&gt; is a sum of 4 terms.&lt;/p&gt;
+&lt;p&gt;More generally, given &lt;span class="math"&gt;\(d\)&lt;/span&gt;-dimensional &lt;span class="math"&gt;\(x\)&lt;/span&gt;, where each &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; can assume one of &lt;span class="math"&gt;\(v\)&lt;/span&gt; distinct values, computing &lt;span class="math"&gt;\(p(x)\)&lt;/span&gt; implies a summation over &lt;span class="math"&gt;\(v^d\)&lt;/span&gt; terms. &lt;strong&gt;With a non-trivially large &lt;span class="math"&gt;\(v\)&lt;/span&gt; or &lt;span class="math"&gt;\(d\)&lt;/span&gt; this becomes intractable to compute.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Below, we'll demonstrate how "tractability," i.e. "can we actually compute &lt;span class="math"&gt;\(Z\)&lt;/span&gt; before the end of the universe?" changes with varying &lt;span class="math"&gt;\(d\)&lt;/span&gt; for our Boltzmann machine (of &lt;span class="math"&gt;\(v = 2\)&lt;/span&gt;).&lt;/p&gt;
 &lt;h2&gt;The likelihood function in code&lt;/h2&gt;
-&lt;p&gt;In code, the likelihood function looks as follows:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_unnormalized_likelihood&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;exp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_H&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 
@@ -1389,7 +1347,7 @@ $$&lt;/div&gt;
 &lt;span class="sd"&gt;        for which to compute the joint likelihood.&lt;/span&gt;
 &lt;span class="sd"&gt;    """&lt;/span&gt;
     &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;n_units&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;n_units&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
         &lt;span class="k"&gt;raise&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Please pass 1 or more points of `n_units` dimensions'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
     &lt;span class="c1"&gt;# compute unnormalized likelihoods&lt;/span&gt;
@@ -1407,13 +1365,13 @@ $$&lt;/div&gt;
     &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;reduce&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;multiply&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;lik&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;Z&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;lik&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;likelihood&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;NB: In mathematical Python code, for-loops are bad; we should prefer &lt;code&gt;numpy&lt;/code&gt; instead. Nevertheless, I've used for-loops here because they are easier to read.&lt;/p&gt;
 &lt;p&gt;This code block is longer than you might expect because it includes a few supplementary behaviors, namely:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Computing the likelihood of one or more points&lt;/li&gt;
 &lt;li&gt;Avoiding redundant computation of &lt;code&gt;Z&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Optionally computing the log-likelihood&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Above all, note that: the likelihood is a function of the model's parameters, i.e. &lt;code&gt;self.weights&lt;/code&gt; and &lt;code&gt;self.biases&lt;/code&gt;, which we can vary, and the data &lt;code&gt;x&lt;/code&gt;, which we can't.&lt;/p&gt;
 &lt;h2&gt;Training the model&lt;/h2&gt;
 &lt;p&gt;At the outset, the parameters &lt;code&gt;self.weights&lt;/code&gt; and &lt;code&gt;self.biases&lt;/code&gt; of our model are initialized at random. Trivially, such that the values returned by &lt;code&gt;likelihood&lt;/code&gt; and &lt;code&gt;sample&lt;/code&gt; are useful, we must first update these parameters by fitting this model to observed data.&lt;/p&gt;
 &lt;p&gt;To do so, we will employ the principal of maximum likelihood: compute the parameters that make the observed data maximally likely under the model, via gradient ascent.&lt;/p&gt;
@@ -1437,11 +1395,11 @@ $$&lt;/div&gt;
 \begin{align*}
 \mathop{\mathbb{E}}_{x \sim p_{\text{data}}}\big[ \mathcal{L}(x) \big]
 &amp;amp;= \sum\limits_{k=1}^N p_{\text{data}}(x = x^{(k)}) \mathcal{L(x^{(k)})}\\
-&amp;amp;= \sum\limits_{k=1}^N \frac{1}{N} \mathcal{L(x^{(k)})}\\
+&amp;amp;\approx \sum\limits_{k=1}^N \frac{1}{N} \mathcal{L(x^{(k)})}\\
 &amp;amp;= \frac{1}{N} \sum\limits_{k=1}^N  \mathcal{L(x^{(k)})}\\
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;In other words, the average. We will continue to denote this as &lt;span class="math"&gt;\(\mathcal{L}\)&lt;/span&gt;, i.e. &lt;span class="math"&gt;\(\mathcal{L} = \frac{1}{N} \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;In other words, we wish to maximize the average likelihood of our data under the model. Henceforth, we will refer to this quantity as &lt;span class="math"&gt;\(\mathcal{L}\)&lt;/span&gt;, i.e. &lt;span class="math"&gt;\(\mathcal{L} = \frac{1}{N} \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Now, deriving the gradient with respect to our weights:&lt;/p&gt;
 &lt;h3&gt;&lt;span class="math"&gt;\(\nabla_{w_{i, j}}\log{\mathcal{L}}\)&lt;/span&gt;:&lt;/h3&gt;
 &lt;div class="math"&gt;$$
@@ -1454,23 +1412,23 @@ $$&lt;/div&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
 \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}}  H(x^{(k)})
-&amp;amp;= \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}} \sum\limits_{i \neq j} w_{i, j} x_i^{(k)} x_j^{(k)} + \sum\limits_i b_i x_i^{(k)}\\
+&amp;amp;= \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}} \bigg[ \sum\limits_{i \neq j} w_{i, j} x_i^{(k)} x_j^{(k)} + \sum\limits_i b_i x_i^{(k)} \bigg]\\
 &amp;amp;= \frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\\
-&amp;amp;= \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j]
+&amp;amp;\approx \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j]
 \end{align*}
 $$&lt;/div&gt;
 &lt;h3&gt;Second term:&lt;/h3&gt;
-&lt;p&gt;NB: &lt;span class="math"&gt;\(\sum\limits_{\mathcal{x}}\)&lt;/span&gt; implies a summation over all &lt;span class="math"&gt;\((v^d)^n\)&lt;/span&gt; possible configurations of values that &lt;span class="math"&gt;\(x^{(1)}, ..., x^{(n)}\)&lt;/span&gt; can assume.&lt;/p&gt;
+&lt;p&gt;NB: &lt;span class="math"&gt;\(\sum\limits_{\mathcal{x}}\)&lt;/span&gt; implies a summation over all &lt;span class="math"&gt;\(v^d\)&lt;/span&gt; possible configurations of &lt;span class="math"&gt;\(x\)&lt;/span&gt;.&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
 \nabla_{w_{i, j}} \log{Z}
 &amp;amp;= \nabla_{w_{i, j}} \log{\sum\limits_{\mathcal{x}}} \exp{(H(x))}\\
 &amp;amp;= \frac{1}{\sum\limits_{\mathcal{x}} \exp{(H(x))}} \nabla_{w_{i, j}} \sum\limits_{\mathcal{x}} \exp{(H(x))}\\
-&amp;amp;= \frac{1}{Z} \nabla_{w_{i, j}} \sum\limits_{\mathcal{x}} \exp{(H(x))}\\
+&amp;amp;= \frac{1}{Z} \sum\limits_{\mathcal{x}} \nabla_{w_{i, j}} \exp{(H(x))}\\
 &amp;amp;= \frac{1}{Z} \sum\limits_{\mathcal{x}} \exp{(H(x))} \nabla_{w_{i, j}} H(x)\\
 &amp;amp;= \sum\limits_{\mathcal{x}} \frac{\exp{(H(x))}}{Z} \nabla_{w_{i, j}} H(x)\\
-&amp;amp;= \sum\limits_{\mathcal{x}} P(x) \nabla_{w_{i, j}} H(x)\\
-&amp;amp;= \sum\limits_{\mathcal{x}} P(x) [x_i  x_j]\\
+&amp;amp;= \sum\limits_{\mathcal{x}} p(x) \nabla_{w_{i, j}} H(x)\\
+&amp;amp;= \sum\limits_{\mathcal{x}} p(x) [x_i  x_j]\\
 &amp;amp;= \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]
 \end{align*}
 $$&lt;/div&gt;
@@ -1485,10 +1443,10 @@ $$&lt;/div&gt;
 $$&lt;/div&gt;
 &lt;p&gt;The first and second terms of each gradient are called, respectively, &lt;strong&gt;the positive and negative phases.&lt;/strong&gt;&lt;/p&gt;
 &lt;h2&gt;Computing the positive phase&lt;/h2&gt;
-&lt;p&gt;In the following toy example, our data are small: we can compute the positive phase using all of the training data, i.e. &lt;span class="math"&gt;\(\frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\)&lt;/span&gt;. Were our data bigger, we could approximate this expectation with a mini-batch of training data and we do in SGD.&lt;/p&gt;
+&lt;p&gt;In the following toy example, our data are small: we can compute the positive phase using all of the training data, i.e. &lt;span class="math"&gt;\(\frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\)&lt;/span&gt;. Were our data bigger, we could approximate this expectation with a mini-batch of training data (much like SGD).&lt;/p&gt;
 &lt;h2&gt;Computing the negative phase&lt;/h2&gt;
-&lt;p&gt;Again, this term asks us to compute then sum the log-likelihood over every possible data configuration in the support of our model, which is &lt;span class="math"&gt;\(O(nv^d)\)&lt;/span&gt;. &lt;strong&gt;With non-trivially large &lt;span class="math"&gt;\(v\)&lt;/span&gt; or &lt;span class="math"&gt;\(d\)&lt;/span&gt;, this becomes intractable to compute.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Below, we'll begin our toy example computing the true negative-phase, &lt;span class="math"&gt;\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)&lt;/span&gt;, with varying data dimensionalities &lt;span class="math"&gt;\(d\)&lt;/span&gt;. Then, once this computation becomes slow, we'll look to approximate this expectation later on.&lt;/p&gt;
+&lt;p&gt;Again, this term asks us to compute then sum the log-likelihood over every possible data configuration in the support of our model, which is &lt;span class="math"&gt;\(O(v^d)\)&lt;/span&gt;. &lt;strong&gt;With non-trivially large &lt;span class="math"&gt;\(v\)&lt;/span&gt; or &lt;span class="math"&gt;\(d\)&lt;/span&gt;, this becomes intractable to compute.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Below, we'll begin our toy example by computing the true negative-phase, &lt;span class="math"&gt;\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)&lt;/span&gt;, with varying data dimensionalities &lt;span class="math"&gt;\(d\)&lt;/span&gt;. Then, once this computation becomes slow, we'll look to approximate this expectation later on.&lt;/p&gt;
 &lt;h2&gt;Parameter updates in code&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;update_parameters_with_true_negative_phase&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;weights&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;biases&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;var_combinations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;all_configs&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;weights&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;biases&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;var_combinations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;all_configs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -1534,7 +1492,7 @@ $$&lt;/div&gt;
 &lt;span class="sd"&gt;    however, there are only 3 distinct weights in this matrix that we'll actually&lt;/span&gt;
 &lt;span class="sd"&gt;    want to update: those connecting Node 0 --&amp;gt; Node 1, Node 1 --&amp;gt; Node 2, and&lt;/span&gt;
 &lt;span class="sd"&gt;    Node 0 --&amp;gt; Node 2. This function returns a list containing these tuples&lt;/span&gt;
-&lt;span class="sd"&gt;    named `var_combinations.&lt;/span&gt;
+&lt;span class="sd"&gt;    named `var_combinations`.&lt;/span&gt;
 
 &lt;span class="sd"&gt;    :param n_units: the dimensionality of our data `d`&lt;/span&gt;
 &lt;span class="sd"&gt;    :param n_obs: the number of observations in our training set&lt;/span&gt;
@@ -1589,7 +1547,7 @@ $$&lt;/div&gt;
 &lt;span class="sd"&gt;            for which to compute the joint likelihood.&lt;/span&gt;
 &lt;span class="sd"&gt;        """&lt;/span&gt;
         &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;n_units&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;n_units&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="k"&gt;raise&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Please pass 1 or more points of `n_units` dimensions'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
         &lt;span class="c1"&gt;# compute unnormalized likelihoods&lt;/span&gt;
@@ -1817,7 +1775,7 @@ $$&lt;/div&gt;
 &lt;p&gt;When training with the approximate negative phase, we’ll:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Derive model samples from a &lt;strong&gt;1000-sample Gibbs chain. Of course, this is a parameter we can tune, which will affect both model accuracy and training runtime. However, we don’t explore that in this post;&lt;/strong&gt; instead, we just pick something reasonable and hold this value constant throughout our experiments.&lt;/li&gt;
-&lt;li&gt;Train several models for a given &lt;code&gt;n_units&lt;/code&gt;; Seaborn will average results for us then plot a single line (I think).&lt;/li&gt;
+&lt;li&gt;Train several models for a given &lt;code&gt;n_units&lt;/code&gt;; Seaborn will average results for us then plot a single line.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;all_updates&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
 &lt;span class="n"&gt;alpha&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
@@ -1991,13 +1949,13 @@ $$&lt;/div&gt;
 }
 &lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>From Gaussian Algebra to Gaussian Processes, Part 2</title><link href="https://cavaunpeu.github.io/2018/06/12/gaussian-algebra-to-gaussian-processes-part-2/" rel="alternate"></link><published>2018-06-12T08:00:00-04:00</published><updated>2018-06-12T08:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-06-12:/2018/06/12/gaussian-algebra-to-gaussian-processes-part-2/</id><summary type="html">&lt;p&gt;Introducing the RBF kernel, and motivating its ubiquitous use in Gaussian processes.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In the previous post, we covered the following topics:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations). √&lt;/li&gt;
-&lt;li&gt;Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest). √&lt;/li&gt;
-&lt;li&gt;Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula). √&lt;/li&gt;
-&lt;li&gt;Posterior over functions (the linear map of the posterior over weights onto some matrix &lt;span class="math"&gt;\(A = \phi(X_{*})^T\)&lt;/span&gt;) √&lt;/li&gt;
-&lt;li&gt;Covariances (the second thing we need in order to specify a multivariate Gaussian) √&lt;/li&gt;
+&lt;li&gt;A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations)&lt;/li&gt;
+&lt;li&gt;Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest)&lt;/li&gt;
+&lt;li&gt;Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula)&lt;/li&gt;
+&lt;li&gt;Posterior over functions (the linear map of the posterior over weights onto some matrix &lt;span class="math"&gt;\(A = \phi(X_{*})^T\)&lt;/span&gt;)&lt;/li&gt;
+&lt;li&gt;Covariances (the second thing we need in order to specify a multivariate Gaussian)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;If any of the above is still not clear, please look no further, and re-visit the &lt;a href=""&gt;previous post&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If any of the above is still not clear, please look no further, and re-visit the &lt;a href="https://cavaunpeu.github.io/2018/03/31/gaussian-algebra-to-gaussian-processes-part-1/"&gt;previous post&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Conversely, we did not directly cover:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Kernels&lt;/li&gt;
@@ -2033,9 +1991,9 @@ $$&lt;/div&gt;
 &lt;h2&gt;How are these things used?&lt;/h2&gt;
 &lt;p&gt;Let's bring back our GP equations, and prepare ourselves to &lt;em&gt;squint&lt;/em&gt;! In the previous post, we outlined the following modeling process:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Define prior distribution over weights and function evaluations, &lt;span class="math"&gt;\(P(w, y)\)&lt;/span&gt;.&lt;/li&gt;
-&lt;li&gt;Marginalizing &lt;span class="math"&gt;\(P(w, y)\)&lt;/span&gt; over &lt;span class="math"&gt;\(y\)&lt;/span&gt;, i.e. &lt;span class="math"&gt;\(\int P(w, y)dy\)&lt;/span&gt;, and given some observed function evaluations &lt;span class="math"&gt;\(y\)&lt;/span&gt;, compute the posterior distribution over weights, &lt;span class="math"&gt;\(P(w\vert y)\)&lt;/span&gt;.&lt;/li&gt;
-&lt;li&gt;Linear-mapping &lt;span class="math"&gt;\(P(w\vert y)\)&lt;/span&gt; onto some new, transformed test input &lt;span class="math"&gt;\(\phi(X_*)^T\)&lt;/span&gt;, compute the posterior distribution over function evaluations, &lt;span class="math"&gt;\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Define prior distribution over weights and function evaluations, &lt;span class="math"&gt;\(P(w, y)\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Marginalizing &lt;span class="math"&gt;\(P(w, y)\)&lt;/span&gt; over &lt;span class="math"&gt;\(y\)&lt;/span&gt;, i.e. &lt;span class="math"&gt;\(\int P(w, y)dy\)&lt;/span&gt;, and given some observed function evaluations &lt;span class="math"&gt;\(y\)&lt;/span&gt;, compute the posterior distribution over weights, &lt;span class="math"&gt;\(P(w\vert y)\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;After linear-mapping &lt;span class="math"&gt;\(P(w\vert y)\)&lt;/span&gt; onto some new, transformed test input &lt;span class="math"&gt;\(\phi(X_*)^T\)&lt;/span&gt;, compute the posterior distribution over function evaluations, &lt;span class="math"&gt;\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Now, let's unpack #2 and #3.&lt;/p&gt;
 &lt;h3&gt;&lt;span class="math"&gt;\(P(w\vert y)\)&lt;/span&gt;&lt;/h3&gt;
@@ -2136,7 +2094,7 @@ $$&lt;/div&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(\phi(X)^T\Sigma_w \phi(X_*) = \varphi(X) \cdot \varphi(X_*)\)&lt;/span&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;In other words, these terms can be equivalently written as dot-products in some space &lt;span class="math"&gt;\(\varphi\)&lt;/span&gt;.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;We have &lt;strong&gt;not&lt;/strong&gt; explicitly chosen what this &lt;span class="math"&gt;\(\varphi\)&lt;/span&gt; function is.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;NB: we have &lt;strong&gt;not&lt;/strong&gt; explicitly chosen what this &lt;span class="math"&gt;\(\varphi\)&lt;/span&gt; function is.&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Kernels&lt;/h2&gt;
 &lt;p&gt;A "kernel" is a function which gives the similarity between individual elements in two sets, i.e. a Gram matrix.&lt;/p&gt;
 &lt;p&gt;For instance, imagine we have two sets of countries, &lt;span class="math"&gt;\(\{\text{France}, \text{Germany}, \text{Iceland}\}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\{\text{Morocco}, \text{Denmark}\}\)&lt;/span&gt;, and that similarity is given by an integer value in &lt;span class="math"&gt;\([1, 5]\)&lt;/span&gt;, where 1 is the least similar, and 5 is the most. Applying a kernel to these sets might give a Gram matrix such as:&lt;/p&gt;
@@ -2154,7 +2112,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-hover table-striped table dataframe"&gt;
+&lt;table border="1" class="table dataframe table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -2179,7 +2137,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;When you hear the term "kernel" in the context of machine learning, think "similarity between things in lists." That's it.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;When you hear the term "kernel" in the context of machine learning, think "similarity between things in lists."&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;NB: A "list" could be a list of vectors, i.e. a matrix. A vector, or a matrix, are the canonical inputs to a kernel.&lt;/p&gt;
 &lt;h2&gt;Mercer's Theorem&lt;/h2&gt;
 &lt;p&gt;Mercer's Theorem has as a key result that any kernel function can be expressed as a dot product, i.e.&lt;/p&gt;
@@ -2212,7 +2170,7 @@ $$&lt;/div&gt;
 &lt;/ul&gt;
 &lt;h4&gt;Top Path&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;A valid kernel computes similarity between inputs. The function it employs might be extremely simple, e.g. &lt;span class="math"&gt;\((X - Y)^{123}\)&lt;/span&gt;; &lt;strong&gt;the computation is extremely cheap.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;A valid kernel computes similarity between inputs. The function it employs might be extremely simple, e.g. &lt;span class="math"&gt;\((X - Y)^{2}\)&lt;/span&gt;; &lt;strong&gt;the computation is extremely cheap.&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4&gt;Mercer!&lt;/h4&gt;
 &lt;ul&gt;
@@ -2373,27 +2331,26 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>From Gaussian Algebra to Gaussian Processes, Part 1</title><link href="https://cavaunpeu.github.io/2018/03/31/gaussian-algebra-to-gaussian-processes-part-1/" rel="alternate"></link><published>2018-03-31T19:00:00-04:00</published><updated>2018-03-31T19:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-03-31:/2018/03/31/gaussian-algebra-to-gaussian-processes-part-1/</id><summary type="html">&lt;p&gt;A thorough, straightforward, un-intimidating introduction to Gaussian processes in NumPy.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Most &lt;strong&gt;introductory tutorials&lt;/strong&gt; on Gaussian processes start with a nose-punch of &lt;strong&gt;fancy statements&lt;/strong&gt;, like:&lt;/p&gt;
+&lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>From Gaussian Algebra to Gaussian Processes, Part 1</title><link href="https://cavaunpeu.github.io/2018/03/31/gaussian-algebra-to-gaussian-processes-part-1/" rel="alternate"></link><published>2018-03-31T19:00:00-04:00</published><updated>2018-03-31T19:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2018-03-31:/2018/03/31/gaussian-algebra-to-gaussian-processes-part-1/</id><summary type="html">&lt;p&gt;A thorough, straightforward, un-intimidating introduction to Gaussian processes in NumPy.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Most &lt;strong&gt;introductory tutorials&lt;/strong&gt; on Gaussian processes start with a nose-punch of statements, like:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;A Gaussian process (GP) defines a distribution over functions.&lt;/li&gt;
 &lt;li&gt;A Gaussian process is non-parametric, i.e. it has an infinite number of parameters (duh?).&lt;/li&gt;
 &lt;li&gt;Marginalizing a Gaussian over a subset of its elements gives another Gaussian.&lt;/li&gt;
 &lt;li&gt;Conditioning a subset of the elements of a Gaussian on another subset of its elements gives another Gaussian.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;They continue with &lt;strong&gt;fancy terms&lt;/strong&gt;, like:&lt;/p&gt;
+&lt;p&gt;They continue with terms, like:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Kernels&lt;/li&gt;
 &lt;li&gt;Posterior over functions&lt;/li&gt;
 &lt;li&gt;Squared-exponentials&lt;/li&gt;
 &lt;li&gt;Covariances&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Is this really supposed to make sense to the GP beginner?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The following is the introductory tutorial on GPs that I wish I'd had myself. The goal is pedagogy — not the waving of &lt;strong&gt;fancy words&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Alas, this is often confusing to the GP beginner; the following is the introductory tutorial on GPs that I wish I'd had myself.&lt;/p&gt;
 &lt;p&gt;By the end of this tutorial, you should understand:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;What a Gaussian process is and how to build one in NumPy&lt;/strong&gt; — including those cool, swirly error blobs.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What a Gaussian process is and how to build one in NumPy.&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;The motivations behind their functional form&lt;/strong&gt;, i.e. how the GP comes to be.&lt;/li&gt;
-&lt;li&gt;The &lt;strong&gt;fancy statements&lt;/strong&gt; and &lt;strong&gt;fancy terms&lt;/strong&gt; above.&lt;/li&gt;
+&lt;li&gt;The statements and terms above.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Let's get started.&lt;/p&gt;
 &lt;h2&gt;Playing with Gaussians&lt;/h2&gt;
@@ -2411,15 +2368,10 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
         &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stddev&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;# the standard deviation is the square-root of the variance&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;density&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="sd"&gt;"""&lt;/span&gt;
-&lt;span class="sd"&gt;        NB: Understanding the two bullet points above is more important than understanding the following line.&lt;/span&gt;
-
-&lt;span class="sd"&gt;        That said, it's just the second bullet in code, via SciPy.&lt;/span&gt;
-&lt;span class="sd"&gt;        """&lt;/span&gt;
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;norm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mu&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scale&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stddev&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pdf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;So, how do we make those cool bell-shaped plots? &lt;strong&gt;A 2D plot is just a list of tuples — each with an &lt;code&gt;x&lt;/code&gt;, and a corresponding &lt;code&gt;y&lt;/code&gt; — shown visually.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;As such, we lay out our &lt;code&gt;x&lt;/code&gt;-axis, then compute the corresponding &lt;code&gt;y&lt;/code&gt; — the &lt;code&gt;density&lt;/code&gt; — for each. We'll choose an arbitrary &lt;code&gt;mu&lt;/code&gt; and &lt;code&gt;variance&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So, how do we make those cool bell-shaped plots? A 2D plot is just a list of tuples— each with an &lt;code&gt;x&lt;/code&gt;, and a corresponding &lt;code&gt;y&lt;/code&gt;—shown visually.&lt;/p&gt;
+&lt;p&gt;As such, we lay out our &lt;code&gt;x&lt;/code&gt;-axis, then compute the corresponding &lt;code&gt;y&lt;/code&gt;—the &lt;code&gt;density&lt;/code&gt;—for each. We'll choose an arbitrary &lt;code&gt;mu&lt;/code&gt; and &lt;code&gt;variance&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;gaussian&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Gaussian&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mu&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mi"&gt;123&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mi"&gt;456&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -2466,7 +2418,7 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
 &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Histogram of 500 samples from `Gaussian(mu=.123, var=.456)`'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/&gt;&lt;/p&gt;
-&lt;p&gt;This looks similar to the true &lt;code&gt;Gaussian(mu=.123, var=.456)&lt;/code&gt; density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate (look similar to) the true density.&lt;/p&gt;
+&lt;p&gt;This looks similar to the true &lt;code&gt;Gaussian(mu=.123, var=.456)&lt;/code&gt; density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate the true density.&lt;/p&gt;
 &lt;p&gt;Now, we'll start to move a bit faster.&lt;/p&gt;
 &lt;h2&gt;2D Gaussians&lt;/h2&gt;
 &lt;p&gt;We just drew samples from a 1-dimensional Gaussian, i.e. the &lt;code&gt;sample&lt;/code&gt; itself was a single float. The parameter &lt;code&gt;mu&lt;/code&gt; dictated the most-likely value for the &lt;code&gt;sample&lt;/code&gt; to assume, and the variance &lt;code&gt;var&lt;/code&gt; dictated how much these sample-values vary (hence the name variance).&lt;/p&gt;
@@ -2477,7 +2429,7 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
 &lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;gaussian&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sample&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="mf"&gt;1.050830033400354&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;In 2D, each sample will be a list of two numbers. &lt;code&gt;mu&lt;/code&gt; will dictate the most-likely pair of values for the &lt;code&gt;sample&lt;/code&gt; to assume, and the second parameter (yet unnamed) will dictate:&lt;/p&gt;
+&lt;p&gt;In 2D, each sample will be a list of two numbers. &lt;code&gt;mu&lt;/code&gt; will dictate the most-likely pair of values for the &lt;code&gt;sample&lt;/code&gt; to assume, and a second parameter (yet unnamed) will dictate:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;How much the values for the first element of the pair vary&lt;/li&gt;
 &lt;li&gt;How much the values for the second element of the pair vary&lt;/li&gt;
@@ -2496,10 +2448,13 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
 
 
 &lt;span class="sd"&gt;"""&lt;/span&gt;
-&lt;span class="sd"&gt;The purple dots should center around `(x, y) = (0, 0)`. `np.diag([1, 1])` gives the covariance matrix `[[1, 0], [0, 1]]`:&lt;/span&gt;
-&lt;span class="sd"&gt;`x`-values have a variance of `var=1`; `y`-values have `var=1`; these values do not covary with one another&lt;/span&gt;
-&lt;span class="sd"&gt;(e.g. if `x` is larger than its mean, the corresponding `y` has 0 tendency to "follow suit," i.e. trend larger than its&lt;/span&gt;
-&lt;span class="sd"&gt;mean as well).&lt;/span&gt;
+&lt;span class="sd"&gt;The purple dots should center around `(x, y) = (0, 0)`.&lt;/span&gt;
+
+&lt;span class="sd"&gt;`np.diag([1, 1])` gives the covariance matrix `[[1, 0], [0, 1]]`:&lt;/span&gt;
+
+&lt;span class="sd"&gt;`x`-values have a variance of `var=1`;&lt;/span&gt;
+&lt;span class="sd"&gt;`y`-values have `var=1`;&lt;/span&gt;
+&lt;span class="sd"&gt;these values do not covary with one another.&lt;/span&gt;
 &lt;span class="sd"&gt;"""&lt;/span&gt;
 &lt;span class="n"&gt;plot_2d_draws&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
     &lt;span class="n"&gt;mu&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]),&lt;/span&gt;
@@ -2517,8 +2472,11 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
 &lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="sd"&gt;"""&lt;/span&gt;
-&lt;span class="sd"&gt;Here, the values along the diagonal of the covariance matrix are much larger: the cloud of green point should be much more&lt;/span&gt;
-&lt;span class="sd"&gt;disperse. There is no off-diagonal covariance (`x` and `y` values do not vary — above or below their respective means — *together*).&lt;/span&gt;
+&lt;span class="sd"&gt;Here, the values along the diagonal of the covariance matrix are much larger:&lt;/span&gt;
+
+&lt;span class="sd"&gt;the cloud of green points should be much more disperse.&lt;/span&gt;
+
+&lt;span class="sd"&gt;There is no off-diagonal covariance.&lt;/span&gt;
 &lt;span class="sd"&gt;"""&lt;/span&gt;
 &lt;span class="n"&gt;plot_2d_draws&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
     &lt;span class="n"&gt;mu&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;]),&lt;/span&gt;
@@ -2527,7 +2485,9 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
 &lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="sd"&gt;"""&lt;/span&gt;
-&lt;span class="sd"&gt;The covariance matrix has off-diagonal values of -2. This means that if `x` trends above its mean, `y` will tend to vary *twice as much, below its mean.*&lt;/span&gt;
+&lt;span class="sd"&gt;The covariance matrix has off-diagonal values of -2.&lt;/span&gt;
+
+&lt;span class="sd"&gt;This means that if `x` trends above its mean, `y` will tend to vary *twice as much, below its mean.*&lt;/span&gt;
 &lt;span class="sd"&gt;"""&lt;/span&gt;
 &lt;span class="n"&gt;plot_2d_draws&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
     &lt;span class="n"&gt;mu&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]),&lt;/span&gt;
@@ -2573,7 +2533,12 @@ $$&lt;/div&gt;
 &lt;p&gt;Finally, we'll take draws from this &lt;span class="math"&gt;\(\text{Normal}(A\mu_w,\ A\Sigma_w A^T)\)&lt;/span&gt;. This will give us tuples of the form &lt;code&gt;(x, Aw)&lt;/code&gt;. For simplicity, we'll hereafter refer to this tuple as &lt;code&gt;(x, y)&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;x&lt;/code&gt; is the original &lt;code&gt;x&lt;/code&gt;-value&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;y&lt;/code&gt; is the value obtained after: making features out of &lt;span class="math"&gt;\(X\)&lt;/span&gt; and taking the transpose, giving &lt;span class="math"&gt;\(A\)&lt;/span&gt;; taking the linear combination of &lt;span class="math"&gt;\(A\)&lt;/span&gt; with the mean-vector of weights; taking a draw from the multivariate-Gaussian we just defined, then plucking out the sample-element corresponding to &lt;code&gt;x&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;y&lt;/code&gt; is the value obtained after:&lt;ul&gt;
+&lt;li&gt;Making features out of &lt;span class="math"&gt;\(X\)&lt;/span&gt; and taking the transpose, giving &lt;span class="math"&gt;\(A\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Taking the linear combination of &lt;span class="math"&gt;\(A\)&lt;/span&gt; with the mean-vector of weights&lt;/li&gt;
+&lt;li&gt;Taking a draw from the multivariate-Gaussian we just defined, then plucking out the sample-element corresponding to &lt;code&gt;x&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Each draw from our Gaussian will yield 200 &lt;code&gt;y&lt;/code&gt;-values, each corresponding to its original &lt;code&gt;x&lt;/code&gt;. In other words, it will yield 200 &lt;code&gt;(x, y)&lt;/code&gt; tuples — which we can plot.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;To make it clear that &lt;span class="math"&gt;\(A\)&lt;/span&gt; was computed as a function of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, let's rename it to &lt;span class="math"&gt;\(A = \phi(X)^T\)&lt;/span&gt;, and rewrite our distribution as follows:&lt;/p&gt;
@@ -2622,10 +2587,11 @@ $$&lt;/div&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_25_0.png"/&gt;&lt;/p&gt;
 &lt;h2&gt;Gaussians are closed under conditioning and marginalization&lt;/h2&gt;
-&lt;p&gt;Let's revisit the 2D Gaussians plotted above. They took the form (where &lt;span class="math"&gt;\(\mathcal{N}\)&lt;/span&gt; denotes the Normal, i.e. Gaussian distribution):&lt;/p&gt;
+&lt;p&gt;Let's revisit the 2D Gaussians plotted above. They took the form&lt;/p&gt;
 &lt;div class="math"&gt;$$
 (x, y) \sim \mathcal{N}(\mu, \Sigma)
 $$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(\mathcal{N}\)&lt;/span&gt; denotes the Normal, i.e. Gaussian distribution.&lt;/p&gt;
 &lt;p&gt;Said differently:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 P(x, y) = \mathcal{N}(\mu, \Sigma)
@@ -2691,7 +2657,7 @@ $$&lt;/div&gt;
 
 &lt;span class="c1"&gt;# That's it.&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Finally, we compute the conditional Gaussian of interest — a result well-documented by mathematicians long ago:&lt;/p&gt;
+&lt;p&gt;Finally, we compute the conditional Gaussian of interest—a result well-documented by mathematicians long ago:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
 P(y\vert x)
@@ -2717,7 +2683,7 @@ $$&lt;/div&gt;
 y = \phi(X)^Tw \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
 $$&lt;/div&gt;
 &lt;p&gt;Given some ground-truth samples from this distribution &lt;span class="math"&gt;\(y = \phi(X)^Tw\)&lt;/span&gt;, i.e. ground-truth "function evaluations," we'd like to infer the weights &lt;span class="math"&gt;\(w\)&lt;/span&gt; most consistent with &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;In machine learning, we equivalently say that given a model and some observed data &lt;code&gt;(X_train, y_train)&lt;/code&gt;, we'd like to compute/train/optimize the weights of said model (often via backpropagation).&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;In machine learning, we equivalently say that given a model and some observed data &lt;code&gt;(X_train, y_train)&lt;/code&gt;, we'd like to compute/train/optimize the weights of said model.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Most precisely, our goal is to infer &lt;span class="math"&gt;\(P(w\vert y)\)&lt;/span&gt; (where &lt;span class="math"&gt;\(y\)&lt;/span&gt; are our observed function evaluations). To do this, we simply posit a joint distribution over both quantities:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 P(w, y) =
@@ -2926,20 +2892,19 @@ $$&lt;/div&gt;
 &lt;p&gt;In this tutorial, we've arrived at the mechanical notion of a Gaussian process via simple Gaussian algebra.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Thus far, we've elucidated the following ideas:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations). √&lt;/li&gt;
-&lt;li&gt;Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest). √&lt;/li&gt;
-&lt;li&gt;Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula). √&lt;/li&gt;
-&lt;li&gt;Posterior over functions (the linear map of the posterior over weights onto some matrix &lt;span class="math"&gt;\(A = \phi(X_{*})^T\)&lt;/span&gt;) √&lt;/li&gt;
-&lt;li&gt;Covariances (the second thing we need in order to specify a multivariate Gaussian) √&lt;/li&gt;
+&lt;li&gt;A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations) ✅&lt;/li&gt;
+&lt;li&gt;Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest) ✅&lt;/li&gt;
+&lt;li&gt;Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula) ✅&lt;/li&gt;
+&lt;li&gt;Posterior over functions (the linear map of the posterior over weights onto some matrix &lt;span class="math"&gt;\(A = \phi(X_{*})^T\)&lt;/span&gt;) ✅&lt;/li&gt;
+&lt;li&gt;Covariances (the second thing we need in order to specify a multivariate Gaussian) ✅&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Conversely, we did not yet cover (directly):&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Kernels&lt;/li&gt;
 &lt;li&gt;Squared-exponentials&lt;/li&gt;
-&lt;li&gt;A Gaussian process is non-parametric, i.e. it has an infinite number of parameters (duh?).&lt;/li&gt;
+&lt;li&gt;"A Gaussian process is non-parametric, i.e. it has an infinite number of parameters"&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;These will be the subject of the following post.&lt;/p&gt;
-&lt;p&gt;Thanks for reading, and &lt;strong&gt;don't let arcane pedagogy discourage you:&lt;/strong&gt; there's almost always a clearer explanation (or at least its attempt) at bay.&lt;/p&gt;
+&lt;p&gt;These will be the subject of the following post. Thanks for reading.&lt;/p&gt;
 &lt;h2&gt;Code&lt;/h2&gt;
 &lt;p&gt;The &lt;a href="https://github.com/cavaunpeu/gaussian-processes"&gt;repository&lt;/a&gt; and &lt;a href="https://nbviewer.jupyter.org/github/cavaunpeu/gaussian-processes/blob/master/gaussian-processes-part-1.ipynb"&gt;rendered notebook&lt;/a&gt; for this project can be found at their respective links.&lt;/p&gt;
 &lt;h2&gt;References&lt;/h2&gt;
@@ -3549,7 +3514,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-hover table-striped table dataframe"&gt;
+&lt;table border="1" class="table dataframe table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -4326,7 +4291,7 @@ $$&lt;/div&gt;
 &lt;p&gt;As such, we can &lt;em&gt;marginalize &lt;span class="math"&gt;\(y\)&lt;/span&gt; out of the numerator&lt;/em&gt; so as to obtain the denominator we require. This denominator is often called the "evidence."&lt;/p&gt;
 &lt;h3&gt;Marginalization example&lt;/h3&gt;
 &lt;p&gt;Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize &lt;span class="math"&gt;\(A\)&lt;/span&gt;.&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(A\)&lt;/span&gt;&lt;/th&gt;
@@ -4373,7 +4338,7 @@ $$&lt;/div&gt;
 &lt;li&gt;"Collapse" the remaining columns — in this case, &lt;span class="math"&gt;\(B\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Step 1 gives:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -4408,7 +4373,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;Step 2 gives:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(B\)&lt;/span&gt;&lt;/th&gt;
@@ -4429,7 +4394,7 @@ $$&lt;/div&gt;
 &lt;h3&gt;The denominator&lt;/h3&gt;
 &lt;p&gt;In the context of our generative model with a given input &lt;span class="math"&gt;\(x\)&lt;/span&gt;, the result of this marginalization is a &lt;em&gt;scalar&lt;/em&gt; — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(P(x, y)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(y\)&lt;/span&gt;&lt;/th&gt;
@@ -4456,7 +4421,7 @@ $$&lt;/div&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\int P(x, y)dy = P(x)\)&lt;/span&gt;:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;span class="math"&gt;\(X\)&lt;/span&gt;&lt;/th&gt;
@@ -4733,17 +4698,17 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>Minimizing the Negative Log-Likelihood, in English</title><link href="https://cavaunpeu.github.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/" rel="alternate"></link><published>2017-05-18T12:24:00-04:00</published><updated>2017-05-18T12:24:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-18:/2017/05/18/minimizing_the_negative_log_likelihood_in_english/</id><summary type="html">&lt;p&gt;Statistical underpinnings of the machine learning models we know and love. A walk through random variables, entropy, exponential family distributions, generalized linear models, maximum likelihood estimation, cross entropy, KL-divergence, maximum a posteriori estimation and going "fully Bayesian."&lt;/p&gt;</summary><content type="html">&lt;p&gt;Roughly speaking, my machine learning journey began on &lt;a href="http://kaggle.com"&gt;Kaggle&lt;/a&gt;. "There's data, a model (i.e. estimator) and a loss function to optimize," I learned. "Regression models predict continuous-valued real numbers; classification models predict 'red,' 'green,' 'blue.' Typically, the former employs the mean squared error or mean absolute error; the latter, the cross-entropy loss. Stochastic gradient descent updates the model's parameters to drive these losses down." Furthermore, to fit these models, just &lt;code&gt;import sklearn&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;A dexterity with the above is often sufficient for — at least from a technical stance — both employment and impact as a data scientist. In industry, commonplace prediction and inference problems — binary churn, credit scoring, product recommendation and A/B testing, for example — are easily matched with an off-the-shelf algorithm plus proficient data scientist for a measurable boost to the company's bottom line. In a vacuum I think this is fine: the winning driver does not &lt;em&gt;need&lt;/em&gt; to know how to build the car. Surely, I've been this person before.&lt;/p&gt;
-&lt;p&gt;Once fluid with "scikit-learn fit and predict," I turned to statistics. I was always aware that the two were related, yet figured them ultimately parallel sub-fields of my job. With the former, I build classification models; with the latter, I infer signup counts with the Poisson distribution and MCMC — right?&lt;/p&gt;
-&lt;p&gt;Before long, I dove deeper into machine learning — reading textbooks, papers and source code and writing this blog. Therein, I began to come across &lt;em&gt;terms I didn't understand used to describe the things that I did.&lt;/em&gt; "I understand what the categorical cross-entropy loss is, what it does and how it's defined," for example: &lt;em&gt;&lt;strong&gt;"why are you calling it the negative log-likelihood?"&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;A dexterity with the above is often sufficient for—at least from a technical stance—both employment and impact as a data scientist. In industry, commonplace prediction and inference problems—binary churn, credit scoring, product recommendation and A/B testing, for example—are easily matched with an off-the-shelf algorithm plus proficient data scientist for a measurable boost to the company's bottom line. In a vacuum I think this is fine: the winning driver does not &lt;em&gt;need&lt;/em&gt; to know how to build the car. Surely, I've been this person before.&lt;/p&gt;
+&lt;p&gt;Once fluid with "scikit-learn fit and predict," I turned to statistics. I was always aware that the two were related, yet figured them ultimately parallel sub-fields of my job. With the former, I build classification models; with the latter, I infer signup counts with the Poisson distribution and MCMC—right?&lt;/p&gt;
+&lt;p&gt;Before long, I dove deeper into machine learning—reading textbooks, papers and source code and writing this blog. Therein, I began to come across &lt;em&gt;terms I didn't understand used to describe the things that I did.&lt;/em&gt; "I understand what the categorical cross-entropy loss is, what it does and how it's defined," for example: &lt;em&gt;&lt;strong&gt;"why are you calling it the negative log-likelihood?"&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Marginally wiser, I now know two truths about the above:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Techniques we anoint as "machine learning" — classification and regression models, notably — have their underpinnings almost entirely in statistics. For this reason, terminology often flows between the two.&lt;/li&gt;
+&lt;li&gt;Techniques we anoint as "machine learning"—classification and regression models, notably—have their underpinnings almost entirely in statistics. For this reason, terminology often flows between the two.&lt;/li&gt;
 &lt;li&gt;None of this stuff is new.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;The goal of this post is to take three models we know, love, and know how to use and explain what's really going on underneath the hood. I will assume the reader is familiar with concepts in both machine learning and statistics, and comes in search of a deeper understanding of the connections therein. There will be math — but only as much as necessary. Most of the derivations can be skipped without consequence.&lt;/p&gt;
+&lt;p&gt;The goal of this post is to take three models we know, love, and know how to use and explain what's really going on underneath the hood. I will assume the reader is familiar with concepts in both machine learning and statistics, and comes in search of a deeper understanding of the connections therein. There will be math—but only as much as necessary. Most of the derivations can be skipped without consequence.&lt;/p&gt;
 &lt;p&gt;When deploying a predictive model in a production setting, it is generally in our best interest to &lt;code&gt;import sklearn&lt;/code&gt;, i.e. use a model that someone else has built. This is something we already know how to do. As such, this post will start and end here: your head is currently above water; we're going to dive into the pool, touch the bottom, then work our way back to the surface. Lemmas will be written in &lt;em&gt;&lt;strong&gt;bold&lt;/strong&gt;&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="bottom of pool" class="img-responsive" src="http://img2.hungertv.com/wp-content/uploads/2014/09/SP_Kanawaza-616x957.jpg"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="bottom of pool" class="img-responsive" src="https://previews.123rf.com/images/cookelma/cookelma1603/cookelma160300003/53105871-man-sitting-on-the-bottom-of-the-swimming-pool-under-water.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;First, let's meet our three protagonists. We'll define them in &lt;a href="https://keras.io/"&gt;Keras&lt;/a&gt; for the illustrative purpose of a unified and idiomatic API.&lt;/p&gt;
 &lt;h2&gt;&lt;a href="http://ufldl.stanford.edu/tutorial/supervised/LinearRegression/"&gt;Linear regression&lt;/a&gt; with mean squared error&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;input&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,))&lt;/span&gt;
@@ -4766,7 +4731,7 @@ $$&lt;/div&gt;
 &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;optimizer&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;loss&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'categorical_crossentropy'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Next, we'll select four components key to each: its response variable, functional form, loss function and loss function plus regularization term. For each model, we'll describe the statistical underpinnings of each component — the steps on the ladder towards the surface of the pool.&lt;/p&gt;
+&lt;p&gt;Next, we'll select four components key to each: its response variable, functional form, loss function and loss function plus regularization term. For each model, we'll describe the statistical underpinnings of each component—the steps on the ladder towards the surface of the pool.&lt;/p&gt;
 &lt;p&gt;Before diving in, we'll need to define a few important concepts.&lt;/p&gt;
 &lt;h2&gt;Random variable&lt;/h2&gt;
 &lt;p&gt;I define a random variable as "a thing that can take on a bunch of different values."&lt;/p&gt;
@@ -4822,7 +4787,7 @@ $$&lt;/div&gt;
 &lt;li&gt;There are &lt;span class="math"&gt;\(n\)&lt;/span&gt; distinct events.&lt;/li&gt;
 &lt;li&gt;Each event &lt;span class="math"&gt;\(i\)&lt;/span&gt; has probability &lt;span class="math"&gt;\(p_i\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Entropy is the &lt;em&gt;weighted-average log probability&lt;/em&gt; over possible events — this much reads directly from the equation — which measures the &lt;em&gt;uncertainty inherent in their probability distribution.&lt;/em&gt; The higher the entropy, the less certain we are about the value we're going to get.&lt;/p&gt;
+&lt;p&gt;Entropy is the &lt;em&gt;weighted-average log probability&lt;/em&gt; over possible events—this much reads directly from the equation—which measures the &lt;em&gt;uncertainty inherent in their probability distribution.&lt;/em&gt; The higher the entropy, the less certain we are about the value we're going to get.&lt;/p&gt;
 &lt;p&gt;Let's calculate the entropy of our distribution above.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'rain'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'snow'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;37&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'sleet'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;03&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'hail'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 
@@ -4852,7 +4817,7 @@ $$&lt;/div&gt;
 &lt;p&gt;The models differ in the type of response variable they predict, i.e. the &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Linear regression predicts a continuous-valued real number. Let's call it &lt;code&gt;temperature&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Logistic regression predicts a binary label. Let's call it &lt;code&gt;cat or dog&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Logistic regression predicts a binary label. Let's call it &lt;code&gt;cat or dog&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;Softmax regression predicts a multi-class label. Let's call it &lt;code&gt;red or green or blue&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In each model, the response variable can take on a bunch of different values. In other words, they are &lt;em&gt;random variables.&lt;/em&gt; What probability distribution is associated with each?&lt;/p&gt;
@@ -4862,10 +4827,10 @@ $$&lt;/div&gt;
 &lt;li&gt;&lt;code&gt;cat or dog&lt;/code&gt; takes on the value &lt;code&gt;cat&lt;/code&gt; or &lt;code&gt;dog&lt;/code&gt;. The likelihood of observing each outcome does not change over time, in the same way that &lt;span class="math"&gt;\(\Pr(\text{heads})\)&lt;/span&gt; for a fair coin is always &lt;span class="math"&gt;\(0.5\)&lt;/span&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;red or green or blue&lt;/code&gt; takes on the value &lt;code&gt;red&lt;/code&gt; or &lt;code&gt;green&lt;/code&gt; or &lt;code&gt;blue&lt;/code&gt;. The likelihood of observing each outcome does not change over time, in the same way that the probability of rolling a given number on a fair die is always &lt;span class="math"&gt;\(\frac{1}{6}\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;For clarity, each one of these assumptions is utterly banal — "so lacking in originality as to be obvious and boring." &lt;em&gt;Can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;For clarity, each one of these assumptions is utterly banal. Nonetheless, &lt;em&gt;can we use them nonetheless to select probability distributions for our random variables?&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Maximum entropy distributions&lt;/h2&gt;
-&lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (-\infty, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;p&gt;Consider another continuous-valued random variable: "Uber's yearly profit." Like &lt;code&gt;temperature&lt;/code&gt;, it also has an underlying true mean &lt;span class="math"&gt;\(\mu \in (-\infty, \infty)\)&lt;/span&gt; and variance &lt;span class="math"&gt;\(\sigma^2 \in (0, \infty)\)&lt;/span&gt;. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:&lt;/p&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;uber&lt;/th&gt;
@@ -4918,7 +4883,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Plotting, we get:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="temperature random variable" class="img-responsive" src="https://cavaunpeu.github.io/figures/temperature_random_variable.png"/&gt;
 &lt;img alt="uber random variable" class="img-responsive" src="https://cavaunpeu.github.io/figures/uber_random_variable.png"/&gt;&lt;/p&gt;
-&lt;p&gt;We are not given the true underlying probability distribution associated with each random variable — not its general "shape," nor the parameters that control this shape. We will &lt;em&gt;never&lt;/em&gt; be given these things, in fact: the point of statistics is to infer what they are.&lt;/p&gt;
+&lt;p&gt;We are not given the true underlying probability distribution associated with each random variable—not its general "shape," nor the parameters that control this shape. We will &lt;em&gt;never&lt;/em&gt; be given these things, in fact: the point of statistics is to infer what they are.&lt;/p&gt;
 &lt;p&gt;To make an initial choice we keep two things in mind:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;em&gt;We'd like to be conservative&lt;/em&gt;. We've only seen ten values of "Uber's yearly profit;" we don't want to discount the fact that the next twenty could fall into &lt;span class="math"&gt;\([-60, -50]\)&lt;/span&gt; just because they haven't yet been observed.&lt;/li&gt;
@@ -4948,7 +4913,7 @@ P(\text{outcome}) =
 \end{cases}
 $$&lt;/div&gt;
 &lt;p&gt;While it may seem like we've "waved our hands" over the connection between the stated equality constraints for the response variable of each model and the respective distributions we've selected, it is &lt;a href="https://en.wikipedia.org/wiki/Lagrange_multiplier"&gt;Lagrange multipliers&lt;/a&gt; that succinctly and algebraically bridge this gap. This &lt;a href="https://www.dsprelated.com/freebooks/sasp/Maximum_Entropy_Property_Gaussian.html"&gt;post&lt;/a&gt; gives a terrific example of this derivation. I've chosen to omit it as I did not feel it would contribute to the clarity nor direction of this post.&lt;/p&gt;
-&lt;p&gt;Finally, while we do assume that a Gaussian dictates the true distribution of values of both "Uber's yearly profit" and &lt;code&gt;temperature&lt;/code&gt;, it is, trivially, a different Gaussian for each. This is because each random variable has its own true underlying mean and variance. These values make the respective Gaussians taller or wider — shifted left or shifted right.&lt;/p&gt;
+&lt;p&gt;Finally, while we do assume that a Gaussian dictates the true distribution of values of both "Uber's yearly profit" and &lt;code&gt;temperature&lt;/code&gt;, it is, trivially, a different Gaussian for each. This is because each random variable has its own true underlying mean and variance. These values make the respective Gaussians taller or wider—shifted left or shifted right.&lt;/p&gt;
 &lt;h1&gt;Functional form&lt;/h1&gt;
 &lt;p&gt;Our three protagonists generate predictions via distinct functions: the &lt;a href="https://en.wikipedia.org/wiki/Identity_function"&gt;identity function&lt;/a&gt; (i.e. a no-op), the &lt;a href="https://en.wikipedia.org/wiki/Sigmoid_function"&gt;sigmoid function&lt;/a&gt; and the &lt;a href="https://en.wikipedia.org/wiki/Softmax_function"&gt;softmax function&lt;/a&gt;, respectively. The Keras output layers make this clear:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Dense&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)(&lt;/span&gt;&lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -4960,15 +4925,12 @@ $$&lt;/div&gt;
 &lt;li&gt;Show how each of the Gaussian, binomial and multinomial distributions can be reduced to the same functional form.&lt;/li&gt;
 &lt;li&gt;Show how this common functional form allows us to naturally derive the output functions for our three protagonist models.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Graphically, this looks as follows, with three distributions going in and three output functions coming out.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="bottleneck" class="img-responsive" src="https://electric-cloud.com/wp-content/uploads/use-case-graphic_bottleneck.png"/&gt;&lt;/p&gt;
-&lt;p&gt;The conceptual bottleneck is the &lt;a href="https://en.wikipedia.org/wiki/Exponential_family"&gt;"exponential family"&lt;/a&gt; of probability distributions.&lt;/p&gt;
 &lt;h2&gt;Exponential family distributions&lt;/h2&gt;
 &lt;blockquote&gt;
-&lt;p&gt;In probability and statistics, an exponential family is a set of probability distributions of a certain form, specified below. This special form is chosen for mathematical convenience, on account of some useful algebraic properties, as well as for generality, as exponential families are in a sense very natural sets of distributions to consider.&lt;/p&gt;
+&lt;p&gt;In probability and statistics, an &lt;a href="https://en.wikipedia.org/wiki/Exponential_family"&gt;"exponential family"&lt;/a&gt; is a set of probability distributions of a certain form, specified below. This special form is chosen for mathematical convenience, on account of some useful algebraic properties, as well as for generality, as exponential families are in a sense very natural sets of distributions to consider.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;— Wikipedia&lt;/p&gt;
-&lt;p&gt;I don't relish quoting this paragraph — and especially one so deliriously ambiguous. This said, the reality is that exponential functions provide, at a minimum, a unifying framework for deriving the canonical activation and loss functions we've come to know and love. To move forward, we simply have to cede that the "mathematical conveniences, on account of some useful algebraic properties, etc." that motivate this "certain form" are not totally heinous nor misguided.&lt;/p&gt;
+&lt;p&gt;I don't relish quoting this paragraph—and especially one so deliriously ambiguous. This said, the reality is that exponential functions provide, at a minimum, a unifying framework for deriving the canonical activation and loss functions we've come to know and love. To move forward, we simply have to cede that the "mathematical conveniences, on account of some useful algebraic properties, etc." that motivate this "certain form" are not totally heinous nor misguided.&lt;/p&gt;
 &lt;p&gt;A distribution belongs to the exponential family if it can be written in the following form:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 P(y; \eta) = b(y)\exp(\eta^T T(y) - a(\eta))
@@ -5037,7 +4999,7 @@ a(\eta)
 &amp;amp;= \log(1 + e^{\eta})\\
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;You will recognize our expression for &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; — the probability of observing the true class — as the sigmoid function.&lt;/p&gt;
+&lt;p&gt;You will recognize our expression for &lt;span class="math"&gt;\(\phi\)&lt;/span&gt;—the probability of observing the true class—as the sigmoid function.&lt;/p&gt;
 &lt;h3&gt;Multinomial distribution&lt;/h3&gt;
 &lt;p&gt;Like the binomial distribution, we'll first rewrite the multinomial (for a single observation) in a more compact form. &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; gives a vector of class probabilities for the &lt;span class="math"&gt;\(K\)&lt;/span&gt; classes; &lt;span class="math"&gt;\(k\)&lt;/span&gt; denotes one of these classes.&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -5136,14 +5098,14 @@ P(\text{outcome}) =
 \phi &amp;amp; \text{outcome = dog}\\
 \end{cases}
 $$&lt;/div&gt;
-&lt;p&gt;Trivially, the &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; value must be different in each case. In the former, &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; should be small, such that we output "cat" with probability &lt;span class="math"&gt;\(1 - \phi \approx 1\)&lt;/span&gt;. In the latter, &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; should be large, such that we output "dog" with probability &lt;span class="math"&gt;\(\phi \approx 1\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Trivially, &lt;em&gt;the &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; value must be different in each case.&lt;/em&gt; In the former, &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; should be small, such that we output "cat" with probability &lt;span class="math"&gt;\(1 - \phi \approx 1\)&lt;/span&gt;. In the latter, &lt;span class="math"&gt;\(\phi\)&lt;/span&gt; should be large, such that we output "dog" with probability &lt;span class="math"&gt;\(\phi \approx 1\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;So, what dictates the following?&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(\mu_i\)&lt;/span&gt; in the case of linear regression, in which &lt;span class="math"&gt;\(y_i \sim \mathcal{N}(\mu_i, \sigma^2)\)&lt;/span&gt;&lt;/li&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(\phi_i\)&lt;/span&gt; in the case of logistic regression, in which &lt;span class="math"&gt;\(y_i \sim \text{Binomial}(\phi_i, 1)\)&lt;/span&gt;&lt;/li&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(\pi_i\)&lt;/span&gt; in the case of softmax regression, in which &lt;span class="math"&gt;\(y_i \sim \text{Multinomial}(\pi_i, 1)\)&lt;/span&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Here, I've introduced the subscript &lt;span class="math"&gt;\(i\)&lt;/span&gt;. This makes explicit the &lt;code&gt;cat or dog&lt;/code&gt; dynamic from above: each input to a given model will result in its &lt;em&gt;own&lt;/em&gt; canonical parameter being passed to the distribution on the response variable. That logistic regression better make &lt;span class="math"&gt;\(\phi_i \approx 0\)&lt;/span&gt; when looking at a picture of a cat.&lt;/p&gt;
+&lt;p&gt;Here, I've introduced the subscript &lt;span class="math"&gt;\(i\)&lt;/span&gt;. This makes explicit the &lt;code&gt;cat or dog&lt;/code&gt; dynamic from above: each input to a given model will result in its &lt;em&gt;own&lt;/em&gt; canonical parameter being passed to the distribution on the response variable. (That logistic regression better make &lt;span class="math"&gt;\(\phi_i \approx 0\)&lt;/span&gt; when looking at a picture of a cat!)&lt;/p&gt;
 &lt;p&gt;Finally, how do we go from a 10-feature input &lt;span class="math"&gt;\(x\)&lt;/span&gt; to this canonical parameter? We take a linear combination:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \eta = \theta^Tx
@@ -5155,9 +5117,6 @@ $$&lt;/div&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\eta = \theta^Tx = \log\bigg(\frac{\phi_i}{1-\phi_i}\bigg)\)&lt;/span&gt;. To solve for &lt;span class="math"&gt;\(\phi_i\)&lt;/span&gt;, we solve for &lt;span class="math"&gt;\(\phi_i\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;As you'll remember we did this above: &lt;span class="math"&gt;\(\phi_i = \frac{1}{1 + e^{-\eta}}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; The sigmoid function gives us the probability that the response variable takes on the positive class. This probability is required by the binomial distribution, which dictates the outcomes of the binary target &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;It does this in the same way that our weather distribution dictates tomorrow's forecast.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'rain'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'snow'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;37&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'sleet'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;03&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'hail'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Softmax regression&lt;/h3&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\eta = \theta^Tx = \log\bigg(\frac{\pi_k}{\pi_K}\bigg)\)&lt;/span&gt;. To solve for &lt;span class="math"&gt;\(\pi_i\)&lt;/span&gt;, i.e. the full vector of probabilities for observation &lt;span class="math"&gt;\(i\)&lt;/span&gt;, we solve for each individual probability &lt;span class="math"&gt;\(\pi_{k, i}\)&lt;/span&gt; then put them in a list.&lt;/p&gt;
 &lt;p&gt;We did this above as well: &lt;span class="math"&gt;\(\pi_{k, i} = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)&lt;/span&gt;. This is the softmax function.&lt;/p&gt;
@@ -5180,7 +5139,7 @@ P(\text{outcome}) =
 $$&lt;/div&gt;
 &lt;p&gt;A perfect computation gives &lt;span class="math"&gt;\(\phi = 0\)&lt;/span&gt;. The loss function quantifies how close we got.&lt;/p&gt;
 &lt;h2&gt;Maximum likelihood estimation&lt;/h2&gt;
-&lt;p&gt;Each of our three distributions receives a parameter — &lt;span class="math"&gt;\(\mu, \phi\)&lt;/span&gt; and &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; respectively. We then pass in a &lt;span class="math"&gt;\(y\)&lt;/span&gt; and the distribution tells us the probability of observing that value. (In the case of continuous-valued random variables, i.e. our distribution is a probability density function, it tells us a value &lt;em&gt;proportional&lt;/em&gt; to this probability.)&lt;/p&gt;
+&lt;p&gt;Each of our three random variables receives a parameter—&lt;span class="math"&gt;\(\mu, \phi\)&lt;/span&gt; and &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; respectively. We then pass in a &lt;span class="math"&gt;\(y\)&lt;/span&gt;: for discrete-valued random variables, the associated probability mass function tells us the probability of observing this value; for continuous-valued random variables, the associated probability density function tells us the density of the probability space around this value (a number proportional to the probability).&lt;/p&gt;
 &lt;p&gt;If we instead &lt;em&gt;fix&lt;/em&gt; &lt;span class="math"&gt;\(y\)&lt;/span&gt; and pass in varying &lt;em&gt;parameter values&lt;/em&gt;, this same function becomes a &lt;em&gt;likelihood function&lt;/em&gt;. It will tell us the likelihood of a given parameter having produced the now-fixed &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;If this is not clear, consider the following example:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -5188,19 +5147,19 @@ $$&lt;/div&gt;
 &lt;ol&gt;
 &lt;li&gt;At home, reading a book.&lt;/li&gt;
 &lt;li&gt;Training for a bicycle race.&lt;/li&gt;
-&lt;li&gt;At the soccer game drinking beers with his friends — all of whom are MMA fighters that despise the other team.&lt;/li&gt;
+&lt;li&gt;At the soccer game drinking beers with his friends—all of whom are MMA fighters that despise the other team.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;We'd like to pick the parameter that most likely gave rise to our data. This is the &lt;em&gt;maximum likelihood estimate&lt;/em&gt;. Mathematically, we define it as:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \underset{\text{parameter}}{\arg\max}\ P(y\vert \text{parameter})
 $$&lt;/div&gt;
-&lt;p&gt;As we've now seen (ad nauseum), &lt;span class="math"&gt;\(y\)&lt;/span&gt; depends on the parameter its distribution receives. Additionally, this parameter — &lt;span class="math"&gt;\(\mu, \phi\)&lt;/span&gt; or &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; — is defined in terms of &lt;span class="math"&gt;\(\eta\)&lt;/span&gt;. Further, &lt;span class="math"&gt;\(\eta = \theta^T x\)&lt;/span&gt;. As such, &lt;span class="math"&gt;\(y\)&lt;/span&gt; is a function of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; and the observed data &lt;span class="math"&gt;\(x\)&lt;/span&gt;. This is perhaps &lt;em&gt;the&lt;/em&gt; elementary truism of machine learning — you've known this since Day 1.&lt;/p&gt;
+&lt;p&gt;As we've now seen (ad nauseum), &lt;span class="math"&gt;\(y\)&lt;/span&gt; depends on the parameter its generating random variable receives. Additionally, this parameter—&lt;span class="math"&gt;\(\mu, \phi\)&lt;/span&gt; or &lt;span class="math"&gt;\(\pi\)&lt;/span&gt;—is defined in terms of &lt;span class="math"&gt;\(\eta\)&lt;/span&gt;. Further, &lt;span class="math"&gt;\(\eta = \theta^T x\)&lt;/span&gt;. As such, &lt;span class="math"&gt;\(y\)&lt;/span&gt; is a function of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; and the observed data &lt;span class="math"&gt;\(x\)&lt;/span&gt;. This is perhaps &lt;em&gt;the&lt;/em&gt; elementary truism of machine learning—you've known this since Day 1.&lt;/p&gt;
 &lt;p&gt;Since our observed data are fixed, &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is the only thing that we can vary. Let's rewrite our argmax in these terms:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \underset{\theta}{\arg\max}\ P(y\vert x; \theta)
 $$&lt;/div&gt;
-&lt;p&gt;Finally, this expression gives the argmax over a single data point, i.e. training observation, &lt;span class="math"&gt;\((x^{(i)}, y^{(i)})\)&lt;/span&gt;. To give the likelihood over all observations (assuming they are independent of one another, i.e. the outcome of the first observation should not be expected to impact that of the third), we take the product.&lt;/p&gt;
+&lt;p&gt;Finally, this expression gives the argmax over a single data point, i.e. training observation, &lt;span class="math"&gt;\((x^{(i)}, y^{(i)})\)&lt;/span&gt;. To give the likelihood over all observations (assuming they are independent of one another, i.e. the outcome of the first observation does not impact that of the third), we take the product.&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \underset{\theta}{\arg\max} \prod\limits_{i=1}^{m}P(y^{(i)}\vert x^{(i)}; \theta)
 $$&lt;/div&gt;
@@ -5243,24 +5202,9 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the categorical cross-entropy (i.e. multi-class log loss) between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction of the probability distribution thereof.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h4&gt;&lt;a href="https://en.wikipedia.org/wiki/Cross_entropy"&gt;Cross entropy&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;We previously defined entropy as a way to quantify the uncertainty inherent in a probability distribution. Next, we'll use this same notion to quantify the uncertainty inherent in using the probabilities &lt;em&gt;in one distribution to predict the events of another.&lt;/em&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'red'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;25&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'green'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;45&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'blue'&lt;/span&gt;&lt;span class="p"&gt;:,&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;span class="n"&gt;q&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'red'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;35&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'green'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'blue'&lt;/span&gt;&lt;span class="p"&gt;:,&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;25&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;div class="math"&gt;$$
-H(p, q) = -\sum_i p_i\log(q_i)
-$$&lt;/div&gt;
-&lt;p&gt;This is the definition of cross entropy.&lt;/p&gt;
-&lt;h4&gt;&lt;a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence"&gt;KL-Divergence&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;Similarly, the Kullback-Leibler Divergence quantifies the &lt;em&gt;additional uncertainty in &lt;span class="math"&gt;\(p\)&lt;/span&gt;&lt;/em&gt; introduced by using &lt;span class="math"&gt;\(q\)&lt;/span&gt; to approximate &lt;span class="math"&gt;\(p\)&lt;/span&gt;. It is given, almost trivially, as:&lt;/p&gt;
-&lt;div class="math"&gt;$$
-D_{KL}(p, q) = H(p, q) - H(p)
-$$&lt;/div&gt;
-&lt;p&gt;Why don't we use this in machine learning models instead of the cross entropy? The KL-Divergence between distributions requires us to know the true, underlying probabilities of both the actual distribution &lt;span class="math"&gt;\(p\)&lt;/span&gt; and our prediction thereof. Unfortunately, we never have the former: that's why we build the model.&lt;/p&gt;
 &lt;h1&gt;Maximum a posteriori estimation&lt;/h1&gt;
-&lt;p&gt;When estimating &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; via the MLE, we put no constraints on the permissible values thereof. More explicitly, we allow &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; to be &lt;em&gt;equally likely to assume any real number&lt;/em&gt; — be it &lt;span class="math"&gt;\(0\)&lt;/span&gt;, or &lt;span class="math"&gt;\(10\)&lt;/span&gt;, or &lt;span class="math"&gt;\(-20\)&lt;/span&gt;, or &lt;span class="math"&gt;\(2.37 \times 10^{36}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;In practice, this assumption is both unrealistic and superfluous: typically, we do wish to constrain &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; (our weights) to a non-infinite range of values. We do this by putting a &lt;em&gt;prior&lt;/em&gt; on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. Whereas the MLE computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)\)&lt;/span&gt;, the maximum a posteriori estimate, or MAP, computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)P(\theta)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;When estimating &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; via the MLE, we put no constraints on the permissible values thereof. More explicitly, we allow &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; to be &lt;em&gt;equally likely to assume any real number&lt;/em&gt;—be it &lt;span class="math"&gt;\(0\)&lt;/span&gt;, or &lt;span class="math"&gt;\(10\)&lt;/span&gt;, or &lt;span class="math"&gt;\(-20\)&lt;/span&gt;, or &lt;span class="math"&gt;\(2.37 \times 10^{36}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;In practice, this assumption is both unrealistic and impractical: typically, we do wish to constrain &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; (our weights) to a non-infinite range of values. We do this by putting a &lt;em&gt;prior&lt;/em&gt; on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. Whereas the MLE computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)\)&lt;/span&gt;, the maximum a posteriori estimate, or MAP, computes &lt;span class="math"&gt;\(\underset{\theta}{\arg\max}\ P(y\vert x; \theta)P(\theta)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;As before, we start by taking the log. Our joint likelihood with prior now reads:&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
@@ -5282,7 +5226,7 @@ $$&lt;/div&gt;
 &amp;amp;= \log{C_1} - C_2\theta^2\\
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;Our goal is to maximize this term plus the log-likelihood — or equivalently, minimize their opposite — with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. For a final step, let's discard the parts that don't include &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/p&gt;
+&lt;p&gt;Our goal is to maximize this term plus the log-likelihood—or equivalently, minimize their opposite—with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. For a final step, let's discard the parts that don't include &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/p&gt;
 &lt;div class="math"&gt;$$
 \begin{align*}
 \log{C_1} - C_2\theta^2
@@ -5290,24 +5234,24 @@ $$&lt;/div&gt;
 &amp;amp;\propto C\Vert \theta\Vert_{2}^{2}\\
 \end{align*}
 $$&lt;/div&gt;
-&lt;p&gt;This is L2 regularization. Furthermore, placing different prior distributions on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; yields different regularization terms; most notably, a &lt;a href="https://en.wikipedia.org/wiki/Laplace_distribution"&gt;Laplace prior&lt;/a&gt; gives the L1.&lt;/p&gt;
+&lt;p&gt;This is L2 regularization. Furthermore, placing different prior distributions on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; yields different regularization terms; notably, a &lt;a href="https://en.wikipedia.org/wiki/Laplace_distribution"&gt;Laplace prior&lt;/a&gt; gives the L1.&lt;/p&gt;
 &lt;h2&gt;Linear regression&lt;/h2&gt;
 &lt;div class="math"&gt;$$
 \underset{\theta}{\arg\min} \sum\limits_{i=1}^{m}(y^{(i)} - \theta^Tx^{(i)})^2 + C\Vert \theta\Vert_{2}^{2}
 $$&lt;/div&gt;
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given a Gaussian prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the mean squared error between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction thereof, plus the squared sum of (the elements of) &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given a Gaussian prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the mean squared error between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction thereof, plus the sum of the squares of the elements of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Logistic regression&lt;/h2&gt;
 &lt;div class="math"&gt;$$
 \underset{\theta}{\arg\min}
 -\sum\limits_{i = 1}^my^{(i)}\log{(\phi^{(i)})} + (1 - y^{(i)})\log{(1 - \phi^{(i)})} + C\Vert \theta\Vert_{2}^{2}
 $$&lt;/div&gt;
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given a Gaussian prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the binary cross-entropy (i.e. binary log loss) between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction of the probability thereof, plus the squared sum of (the elements of) &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given a Gaussian prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the binary cross-entropy (i.e. binary log loss) between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction of the probability thereof, plus the sum of the squares of the elements of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Softmax regression&lt;/h2&gt;
 &lt;div class="math"&gt;$$
 -\sum\limits_{i=1}^{m}\sum\limits_{k=1}^{K}y_k\log\pi_k + C\Vert \theta\Vert_{2}^{2}
 $$&lt;/div&gt;
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given a Gaussian prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the categorical cross-entropy (i.e. multi-class log loss) between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction of the probability distribution thereof, plus the squared sum of (the elements of) &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Finally, in machine learning, we say that regularizing our weights ensures that "no weight becomes too large," i.e. too "influential" in predicting &lt;span class="math"&gt;\(y\)&lt;/span&gt;. In statistical terms, we can equivalently say that this term &lt;em&gt;restricts the permissible values of these weights to a given interval. Furthermore, this interval is dictated by the scaling constant &lt;span class="math"&gt;\(C\)&lt;/span&gt;, which intrinsically parameterizes the prior distribution itself.&lt;/em&gt; In L2 regularization, this scaling constant gives the variance of the Gaussian.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;&amp;gt; Minimizing the negative log-likelihood of our data with respect to &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; given a Gaussian prior on &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; is equivalent to minimizing the categorical cross-entropy (i.e. multi-class log loss) between the observed &lt;span class="math"&gt;\(y\)&lt;/span&gt; and our prediction of the probability distribution thereof, plus the sum of the squares of the elements of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt; itself.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Finally, in machine learning, we say that regularizing our weights ensures that "no weight becomes too large," i.e. too "influential" in predicting &lt;span class="math"&gt;\(y\)&lt;/span&gt;. In statistical terms, we can equivalently say that this term &lt;em&gt;restricts the permissible values of these weights to a given interval.&lt;/em&gt; (Furthermore, this interval is dictated by the scaling constant &lt;span class="math"&gt;\(C\)&lt;/span&gt;, which intrinsically parameterizes the prior distribution itself.* In L2 regularization, this scaling constant gives the variance of the Gaussian.)&lt;/p&gt;
 &lt;h1&gt;Going fully Bayesian&lt;/h1&gt;
 &lt;p&gt;The key goal of a predictive model is to compute the following distribution:&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -5316,7 +5260,7 @@ $$&lt;/div&gt;
 &lt;p&gt;By term, this reads:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(P(y\vert x, D)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D = ((x^{(i)}, y^{(i)}), ..., (x^{(m)}, y^{(m)}))\)&lt;/span&gt;, i.e. some training data, and a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt;, compute the distribution of the possible values of the response &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;ul&gt;
-&lt;li&gt;In machine learning, we typically select the &lt;em&gt;expected&lt;/em&gt; value of that distribution, i.e. a single value, or point estimate.&lt;/li&gt;
+&lt;li&gt;In machine learning, we typically select a &lt;em&gt;single value&lt;/em&gt; from this distribution, i.e. point estimate.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;span class="math"&gt;\(P(y\vert x, D, \theta)\)&lt;/span&gt;: given historical data &lt;span class="math"&gt;\(D\)&lt;/span&gt;, a new observation &lt;span class="math"&gt;\(x\)&lt;/span&gt; and &lt;em&gt;any plausible value of &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;&lt;/em&gt;, i.e. perhaps not the optimal value, compute &lt;span class="math"&gt;\(y\)&lt;/span&gt;.&lt;ul&gt;
@@ -5342,7 +5286,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Unfortunately, in complex systems with a non-trivial functional form and number of weights, this computation becomes intractably large. As such, in fully Bayesian modeling, we approximate these distributions. In classic machine learning, we assign them a single value (point estimate). It's a bit lazy, really.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="@betanalpha bayesian tweet" class="img-responsive" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/&gt;&lt;/p&gt;
 &lt;h1&gt;Summary&lt;/h1&gt;
-&lt;p&gt;I hope this post serves as useful context for the machine learning models we know and love. A deeper understanding of these algorithms offers humility — the knowledge that none of these concepts are particularly new — as well as a vision for how to extend these algorithms in the direction of robustness and increased expressivity.&lt;/p&gt;
+&lt;p&gt;I hope this post serves as useful context for the machine learning models we know and love. A deeper understanding of these algorithms offers humility—the knowledge that none of these concepts are particularly new—as well as a vision for how to extend these algorithms in the direction of robustness and increased expressivity.&lt;/p&gt;
 &lt;p&gt;Thanks so much for reading this far. Now, climb out of the pool, grab a towel and &lt;code&gt;import sklearn&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="drink and towel" class="img-responsive" src="https://www.washingtonian.com/wp-content/uploads/2015/05/Pool520-994x664.jpg"/&gt;&lt;/p&gt;
 &lt;h2&gt;Resources&lt;/h2&gt;
@@ -5424,7 +5368,7 @@ $$&lt;/div&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;</content><category term="machine-learning"></category></entry><entry><title>Transfer Learning for Flight Delay Prediction via Variational Autoencoders</title><link href="https://cavaunpeu.github.io/2017/05/08/transfer-learning-flight-delay-prediction/" rel="alternate"></link><published>2017-05-08T12:45:00-04:00</published><updated>2017-05-08T12:45:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-05-08:/2017/05/08/transfer-learning-flight-delay-prediction/</id><summary type="html">&lt;p&gt;Autoencoding airports via variational autoencoders to improve flight delay prediction. Additionally, a principled look at variational inference itself and its connections to machine learning.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;user_id&lt;/th&gt;
@@ -6080,7 +6024,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Of course, a probability is but a real number that lies on the closed interval &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;How does the input affect the output?&lt;/h2&gt;
 &lt;p&gt;Our input is a list of 4 numbers; each one affects &lt;em&gt;each possible output&lt;/em&gt; to a &lt;em&gt;different extent&lt;/em&gt;. We'll call this effect a "weight." 4 inputs times 3 outputs equals 12 distinct weights. They might look like this:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -6275,7 +6219,7 @@ $$&lt;/div&gt;
 &lt;li&gt;Returns a value for every unique combination of values that the random variables can take, i.e. for every entry in the cross-product space of its scope.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;For example, a factor with scope &lt;span class="math"&gt;\(\{\mathbf{A, B}\}\)&lt;/span&gt; might look like:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -6346,7 +6290,7 @@ P_{\Phi}(\mathbf{X_1, ..., X_n})
 $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(\mathbf{Z}_{\Phi}\)&lt;/span&gt; is the partition function.&lt;/p&gt;
 &lt;p&gt;To compute this function, we simply add up all the values in the unnormalized table. Given &lt;span class="math"&gt;\(\tilde{P}_{\Phi}(\mathbf{X_1, ..., X_n})\)&lt;/span&gt; as:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;
@@ -6385,7 +6329,7 @@ $$&lt;/div&gt;
 \end{align*}
 $$&lt;/div&gt;
 &lt;p&gt;Our valid probability distribution then becomes:&lt;/p&gt;
-&lt;table class="table-hover table-striped table"&gt;
+&lt;table class="table table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;A&lt;/th&gt;

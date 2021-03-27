@@ -77,13 +77,13 @@
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In the previous post, we covered the following topics:</p>
 <ul>
-<li>A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations). √</li>
-<li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest). √</li>
-<li>Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula). √</li>
-<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X_{*})^T\)</span>) √</li>
-<li>Covariances (the second thing we need in order to specify a multivariate Gaussian) √</li>
+<li>A Gaussian process (GP) defines a distribution over functions (i.e. function evaluations)</li>
+<li>Marginalizing a Gaussian over a subset of its elements gives another Gaussian (just pluck out the pieces of interest)</li>
+<li>Conditioning a subset of the elements of a Gaussian on another subset gives another Gaussian (a simple algebraic formula)</li>
+<li>Posterior over functions (the linear map of the posterior over weights onto some matrix <span class="math">\(A = \phi(X_{*})^T\)</span>)</li>
+<li>Covariances (the second thing we need in order to specify a multivariate Gaussian)</li>
 </ul>
-<p><strong>If any of the above is still not clear, please look no further, and re-visit the <a href="">previous post</a>.</strong></p>
+<p><strong>If any of the above is still not clear, please look no further, and re-visit the <a href="https://cavaunpeu.github.io/2018/03/31/gaussian-algebra-to-gaussian-processes-part-1/">previous post</a>.</strong></p>
 <p>Conversely, we did not directly cover:</p>
 <ul>
 <li>Kernels</li>
@@ -119,9 +119,9 @@
 <h2>How are these things used?</h2>
 <p>Let's bring back our GP equations, and prepare ourselves to <em>squint</em>! In the previous post, we outlined the following modeling process:</p>
 <ol>
-<li>Define prior distribution over weights and function evaluations, <span class="math">\(P(w, y)\)</span>.</li>
-<li>Marginalizing <span class="math">\(P(w, y)\)</span> over <span class="math">\(y\)</span>, i.e. <span class="math">\(\int P(w, y)dy\)</span>, and given some observed function evaluations <span class="math">\(y\)</span>, compute the posterior distribution over weights, <span class="math">\(P(w\vert y)\)</span>.</li>
-<li>Linear-mapping <span class="math">\(P(w\vert y)\)</span> onto some new, transformed test input <span class="math">\(\phi(X_*)^T\)</span>, compute the posterior distribution over function evaluations, <span class="math">\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)</span>.</li>
+<li>Define prior distribution over weights and function evaluations, <span class="math">\(P(w, y)\)</span></li>
+<li>Marginalizing <span class="math">\(P(w, y)\)</span> over <span class="math">\(y\)</span>, i.e. <span class="math">\(\int P(w, y)dy\)</span>, and given some observed function evaluations <span class="math">\(y\)</span>, compute the posterior distribution over weights, <span class="math">\(P(w\vert y)\)</span></li>
+<li>After linear-mapping <span class="math">\(P(w\vert y)\)</span> onto some new, transformed test input <span class="math">\(\phi(X_*)^T\)</span>, compute the posterior distribution over function evaluations, <span class="math">\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)</span></li>
 </ol>
 <p>Now, let's unpack #2 and #3.</p>
 <h3><span class="math">\(P(w\vert y)\)</span></h3>
@@ -222,7 +222,7 @@ $$</div>
 <li><span class="math">\(\phi(X)^T\Sigma_w \phi(X_*) = \varphi(X) \cdot \varphi(X_*)\)</span></li>
 </ul>
 <p><strong>In other words, these terms can be equivalently written as dot-products in some space <span class="math">\(\varphi\)</span>.</strong></p>
-<p><em>We have <strong>not</strong> explicitly chosen what this <span class="math">\(\varphi\)</span> function is.</em></p>
+<p><em>NB: we have <strong>not</strong> explicitly chosen what this <span class="math">\(\varphi\)</span> function is.</em></p>
 <h2>Kernels</h2>
 <p>A "kernel" is a function which gives the similarity between individual elements in two sets, i.e. a Gram matrix.</p>
 <p>For instance, imagine we have two sets of countries, <span class="math">\(\{\text{France}, \text{Germany}, \text{Iceland}\}\)</span> and <span class="math">\(\{\text{Morocco}, \text{Denmark}\}\)</span>, and that similarity is given by an integer value in <span class="math">\([1, 5]\)</span>, where 1 is the least similar, and 5 is the most. Applying a kernel to these sets might give a Gram matrix such as:</p>
@@ -240,7 +240,7 @@ $$</div>
         text-align: right;
     }
 </style>
-<table border="1" class="table-hover table-striped table dataframe">
+<table border="1" class="table dataframe table-hover table-striped">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -265,7 +265,7 @@ $$</div>
 </tbody>
 </table>
 </div>
-<p><strong>When you hear the term "kernel" in the context of machine learning, think "similarity between things in lists." That's it.</strong></p>
+<p><strong>When you hear the term "kernel" in the context of machine learning, think "similarity between things in lists."</strong></p>
 <p>NB: A "list" could be a list of vectors, i.e. a matrix. A vector, or a matrix, are the canonical inputs to a kernel.</p>
 <h2>Mercer's Theorem</h2>
 <p>Mercer's Theorem has as a key result that any kernel function can be expressed as a dot product, i.e.</p>
@@ -298,7 +298,7 @@ $$</div>
 </ul>
 <h4>Top Path</h4>
 <ul>
-<li>A valid kernel computes similarity between inputs. The function it employs might be extremely simple, e.g. <span class="math">\((X - Y)^{123}\)</span>; <strong>the computation is extremely cheap.</strong></li>
+<li>A valid kernel computes similarity between inputs. The function it employs might be extremely simple, e.g. <span class="math">\((X - Y)^{2}\)</span>; <strong>the computation is extremely cheap.</strong></li>
 </ul>
 <h4>Mercer!</h4>
 <ul>

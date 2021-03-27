@@ -84,7 +84,7 @@
 q(\mathbf{Z}) = \prod\limits_i^{M} q_i(\mathbf{Z}_i)
 $$</div>
 <p>for all latent variables <span class="math">\(\mathbf{Z}_i\)</span>.</p>
-<p>Briefly, factorized distributions are cheap to compute: if each <span class="math">\(q_i(\mathbf{Z}_i)\)</span> is Gaussian, <span class="math">\(q(\mathbf{Z})\)</span> requires optimization of <span class="math">\(2M\)</span> parameters (a mean and a variance for each factor); conversely, a non-factorized <span class="math">\(q(\mathbf{Z}) = \text{Normal}(\mu, \Sigma)\)</span> would require optimization of <span class="math">\(M + \frac{M^2 + M}{2}\)</span> parameters for the mean and covariance respectively. Following intuition, this gain in computational efficiency comes at the cost of decreased accuracy in approximating the true posterior over latent variables.</p>
+<p>Briefly, factorized distributions are cheap to compute: if each <span class="math">\(q_i(\mathbf{Z}_i)\)</span> is Gaussian, <span class="math">\(q(\mathbf{Z})\)</span> requires optimization of <span class="math">\(2M\)</span> parameters (a mean and a variance for each factor); conversely, a non-factorized <span class="math">\(q(\mathbf{Z}) = \text{Normal}(\mu, \Sigma)\)</span> would require optimization of <span class="math">\(M\)</span> parameters for the mean and <span class="math">\(\frac{M^2 + M}{2}\)</span> parameters for the covariance. Following intuition, this gain in computational efficiency comes at the cost of decreased accuracy in approximating the true posterior over latent variables.</p>
 <h2>So, what is it?</h2>
 <p>Mean-field Variational Bayes is an iterative maximization of the ELBO. More precisely, it is an iterative M-step with respect to the variational factors <span class="math">\(q_i(\mathbf{Z}_i)\)</span>.</p>
 <p>In the simplest case, we posit a variational factor over every latent variable, <em>as well as every parameter</em>. In other words, as compared to the log-marginal decomposition in EM, <span class="math">\(\theta\)</span> is absorbed into <span class="math">\(\mathbf{Z}\)</span>.</p>
@@ -122,7 +122,7 @@ A
 &amp;= \int{q_j(\mathbf{Z}_j){ \mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}] }d\mathbf{Z}_j}\\
 \end{align*}
 $$</div>
-<p>Following Bishop<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>'s derivation, we introduce the notation:</p>
+<p>Following Bishop<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>'s derivation, we've introduced the notation:</p>
 <div class="math">$$
 \int{\prod\limits_{i \neq j}q_i(\mathbf{Z}_{i})\log{p(\mathbf{X, Z})}}d\mathbf{Z}_i = \mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]
 $$</div>
@@ -133,10 +133,10 @@ $$</div>
 <li><strong>As such, <span class="math">\(\mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]\)</span> gives a function of the value of <span class="math">\(\mathbf{Z}_j\)</span></strong> which itself maps to the aforementioned real number.</li>
 </ul>
 <p>To further illustrate, let's employ some toy Python code:</p>
-<div class="highlight"><pre><span></span><span class="c1"># Suppose `Z = [Z_1, Z_2, Z_3]`, with corresponding variational distributions `q_1`, `q_2`, `q_3`</span>
+<div class="highlight"><pre><span></span><span class="c1"># Suppose `Z = [Z_0, Z_1, Z_2]`, with corresponding (discrete) variational distributions `q_0`, `q_1`, `q_2`</span>
 
 <span class="n">q_0</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">),</span>  <span class="c1"># q_0(1) = .2</span>
     <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">),</span>
     <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span>
 <span class="p">]</span>
@@ -309,11 +309,7 @@ $$</div>
 \log{q_j(\mathbf{Z}_j)} = \mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]
 $$</div>
 <p>Then, attempt to rearrange this expression such that:</p>
-<ul>
-<li>Once exponentiated, giving <span class="math">\(\exp{\big(\log{q_j(\mathbf{Z}_j)}\big)} = q_j(\mathbf{Z}_j)\)</span>,</li>
-<li>We are left with something that, once normalized (by inspection),</li>
-<li>Resembles a known density function (e.g. a Gaussian, a Gamma, etc.)</li>
-</ul>
+<p>Once exponentiated, giving <span class="math">\(\exp{\big(\log{q_j(\mathbf{Z}_j)}\big)} = q_j(\mathbf{Z}_j)\)</span>, we are left with something that, once normalized (by inspection), resembles a known density function (e.g. a Gaussian, a Gamma, etc.).</p>
 <p>NB: This may require significant computation.</p>
 <h1>Approximating a Gaussian</h1>
 <p>Here, we'll approximate a 2D multivariate Gaussian with a factorized mean-field approximation.</p>
@@ -323,7 +319,7 @@ $$</div>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/mean-field-variational-bayes/mv-gaussian-approx-4.png"/></p>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/mean-field-variational-bayes/mv-gaussian-approx-5.png"/></p>
 <h1>Summing up</h1>
-<p>Mean-Field Variational Bayes is an iterative optimization algorithm for maximizing a lower-bound of the marginal likelihood of some data <span class="math">\(\mathbf{X}\)</span> under a given model with latent variables <span class="math">\(\mathbf{Z}\)</span>. It accomplishes task by positing a factorized variational distribution over all latent variables <span class="math">\(\mathbf{Z}\)</span> and parameters <span class="math">\(\theta\)</span>, then computes, <em>analytically</em>, the algebraic forms and parameters of each factor which maximize this bound.</p>
+<p>Mean-Field Variational Bayes is an iterative optimization algorithm for maximizing a lower-bound of the marginal likelihood of some data <span class="math">\(\mathbf{X}\)</span> under a given model with latent variables <span class="math">\(\mathbf{Z}\)</span>. It accomplishes this task by positing a factorized variational distribution over all latent variables <span class="math">\(\mathbf{Z}\)</span> and parameters <span class="math">\(\theta\)</span>, then computes, <em>analytically</em>, the algebraic forms and parameters of each factor which maximize this bound.</p>
 <p>In practice, this process can be cumbersome and labor-intensive. As such, in recent years, "black-box variational inference" techniques were born, which <em>fix</em> the forms of each factor <span class="math">\(q_j(\mathbf{Z}_j)\)</span>, then optimize its parameters via gradient descent.</p>
 <h2>References</h2>
 <div class="footnote">

@@ -75,8 +75,8 @@
 		</span>
 		<time datetime="2018-10-29T22:00:00-04:00" itemprop="datePublished">October 29, 2018</time>
 	</div>
-	<div itemprop="articleBody" class="article-body"><p>In the <a href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/">previous post</a> we introduced Boltzmann machines and the infeasibility of computing the gradient of its log-partition function <span class="math">\(\nabla_{\theta}\log{Z}\)</span>. To this end, we explored one strategy for its approximation: Gibbs sampling. Gibbs sampling is a viable alternative because the expression for this gradient simplifies to an expectation over the model distribution, which can be approximated with Monte Carlo samples.</p>
-<p>In this post, we'll highlight the imperfections of even this approach, then present more preferable alternatives.</p>
+	<div itemprop="articleBody" class="article-body"><p>In the <a href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/">previous post</a> we introduced Boltzmann machines and the infeasibility of computing the gradient of its log-partition function <span class="math">\(\nabla\log{Z}\)</span>. To this end, we explored one strategy for its approximation: Gibbs sampling. Gibbs sampling is a viable alternative because the expression for our gradient simplifies to an expectation over the model distribution, which can be approximated with Monte Carlo samples.</p>
+<p>In this post, we'll highlight the imperfections of this approximate approach itself, then present more preferable alternatives.</p>
 <h1>Pitfalls of Gibbs sampling</h1>
 <p>To refresh, the two gradients we seek to compute in a reasonable amount of time are:</p>
 <div class="math">$$
@@ -85,7 +85,7 @@
 $$</div>
 <p>Via Gibbs sampling, we approximate each by:</p>
 <ol>
-<li>Burning in a Markov chain w.r.t. our model, then selecting <span class="math">\(n\)</span> samples from this chain</li>
+<li>Burning in a Markov chain with respect to our model, then selecting <span class="math">\(n\)</span> samples from this chain</li>
 <li>Evaluating both functions (<span class="math">\(x_i  x_j\)</span>, and <span class="math">\(x_i\)</span>) at these samples</li>
 <li>Taking the average of each</li>
 </ol>
@@ -96,38 +96,20 @@ $$</div>
 $$</div>
 <p><strong>We perform this sampling process at each gradient step.</strong></p>
 <h2>The cost of burning in each chain</h2>
-<p>Initializing a Markov chain at a random sample incurs a "burn-in" process which comes at non-trivial cost. If paying this cost at each gradient step, it begins to add up. How can we do better?</p>
+<p>Initializing a Markov chain at a random sample incurs a non-trivial "burn-in" cost. If paying this cost at each gradient step, it begins to add up. How can we do better?</p>
 <p><strong>In the remainder of the post, we'll explore two new directives for approximating the negative phase more cheaply, and the algorithms they birth.</strong></p>
 <h1>Directive #1: Cheapen the burn-in process</h1>
 <h2>Stochastic maximum likelihood</h2>
-<p>SML assumes the premise: let's initialize our chain at a point already close to the model's true distribution—reducing or perhaps eliminating the cost of burn-in altogether.  <strong>This given, at what sample do we initialize the chain?</strong></p>
+<p>SML assumes the premise: let's initialize our chain at a point already close to the model's true distribution—reducing or perhaps eliminating the cost of burn-in altogether.  <strong>In this vein, at what sample do we initialize the chain?</strong></p>
 <p>In SML, we simply initialize at the terminal value of the previous chain (i.e. the one we manufactured to compute the gradients of the previous mini-batch). <strong>As long as the model has not changed significantly since, i.e. as long as the previous parameter update (gradient step) was not too large, this sample should exist in a region of high probability under the current model.</strong></p>
-<p>In code, this might look like:</p>
-<div class="highlight"><pre><span></span><span class="n">n_obs</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># X holds all of our observations</span>
-
-<span class="c1"># Vanilla Gibbs sampling</span>
-<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">)]</span>
-
-<span class="c1"># SML</span>
-<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">previous_samples</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-</pre></div>
-<h2>Implications</h2>
+<h3>Implications</h3>
 <p>Per the expression for the full log-likelihood gradient, e.g. <span class="math">\(\nabla_{w_{i, j}}\log{\mathcal{L}} = \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j] - \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, the negative phase works to "reduce the probability of the points in which the model strongly, yet wrongly, believes".<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Since we approximate this term at each parameter update with samples <em>roughly from</em> the current model's true distribution, <strong>we do not encroach on this foundational task.</strong></p>
 <h2>Contrastive divergence</h2>
-<p>Alternatively, in the contrastive divergence algorithm, we initialize the chain at each gradient step with a sample from the data distribution.</p>
-<h2>Implications</h2>
+<p>Alternatively, in the contrastive divergence algorithm, we initialize the chain at each gradient step with a <em>random sample</em> from the data distribution.</p>
+<h3>Implications</h3>
 <p>With no guarantee that the data distribution resembles the model distribution, we may systematically fail to sample, and thereafter "suppress," points that are incorrectly likely under the latter (as they do not appear in the former!). <strong>This incurs the growth of "spurious modes"</strong> in our model, aptly named.<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>In code, this might look like:</p>
-<div class="highlight"><pre><span></span><span class="c1"># Vanilla Gibbs sampling</span>
-<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">)]</span>
-
-<span class="c1"># SML</span>
-<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">previous_samples</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-
-<span class="c1"># Contrastive divergence</span>
-<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_obs</span><span class="p">)]]</span>
-</pre></div>
-<p>Cheapening the burn-in phase indeed gives us a more efficient training routine. Moving forward, what are some even more aggressive strategies we can explore?</p>
+<h2>In summary</h2>
+<p>Cheapening the burn-in phase indeed gives us a more efficient training routine. Moving forward, what are some even more aggressive strategies we might explore?</p>
 <h1>Directive #2: Skip the computation of <span class="math">\(Z\)</span> altogether</h1>
 <p>Canonically, we write the log-likelihood of our Boltzmann machine as follows:</p>
 <div class="math">$$
@@ -147,13 +129,13 @@ $$</div>
 \log{p_{\text{model}}(x)} = \log{\tilde{p}_{\text{model}}(x; \theta)} - c
 $$</div>
 <p>and estimated <span class="math">\(c\)</span> as a parameter?</p>
-<p><strong>Immediately, we remark that if we optimize this model with maximum likelihood, our algorithm will, trivially, make <span class="math">\(c\)</span> arbitrarily negative.</strong> In other words, the quickest way to increase the thing on the left is to decrease <span class="math">\(c\)</span>.</p>
+<p><strong>Immediately, we remark that if we optimize this model with maximum likelihood, our algorithm will, trivially, make <span class="math">\(c\)</span> arbitrarily negative.</strong> In other words, the easiest way to increase <span class="math">\(\log{p_{\text{model}}(x)}\)</span> is to decrease <span class="math">\(c\)</span>.</p>
 <p>How might we better phrase this problem?</p>
 <h2>Noise contrastive estimation</h2>
 <p>Ingeniously, NCE proposes an alternative:</p>
 <ol>
 <li>Posit two distributions: the model, and a noise distribution</li>
-<li>Given a data point, predict from which distribution this point was generated</li>
+<li>Given a data point, predict the distribution (i.e. binary classification) from which this point was generated</li>
 </ol>
 <p>Let's unpack this a bit.</p>
 <p>Under an (erroneous) MLE formulation, we would optimize the following objective:</p>
@@ -227,7 +209,7 @@ $$</div>
 <h2>Implications</h2>
 <p>For our training data, <strong>we require the ability to sample from our noise distribution.</strong></p>
 <p>For our target, <strong>we require the ability to compute the likelihood of some data under our noise distribution.</strong></p>
-<p>Therefore, these criterion do place practical restrictions on the types of noise distributions that we're able to consider.</p>
+<p>Therefore, these criteria do place practical restrictions on the types of noise distributions that we're able to consider.</p>
 <h2>Extensions</h2>
 <p>We briefly alluded to the fact that our noise distribution is non-parametric. However, there is nothing stopping us from evolving this distribution and giving it trainable parameters, then updating these parameters such that it generates increasingly "optimal" samples.</p>
 <p>Of course, we would have to design what "optimal" means. One interesting approach is called <a href="https://arxiv.org/abs/1805.03642">Adversarial Contrastive Estimation
@@ -244,7 +226,8 @@ $$</div>
 p_{\text{joint}}(y = 0\vert x)
 &amp;= \frac{1}{1 + \frac{p_{\text{model}}(x)}{p_{\text{noise}}(x)\cdot k}}\\
 &amp;= \frac{1}{1 + \frac{p_{\text{model}}(x)}{ k}}\\
-&amp;=\sigma(-\frac{p_{\text{model}}(x)}{ k})\\
+&amp;= \frac{1}{1 + \exp\big(\log\frac{p_{\text{model}}(x)}{ k}\big)}\\
+&amp;=\sigma(-\log\frac{p_{\text{model}}(x)}{ k})\\
 &amp;=\sigma(\log{k} - \log{p_{\text{model}}(x)})\\
 p_{\text{joint}}(y = 1\vert x)
 &amp;= 1 - \sigma(\log{k} - \log{p_{\text{model}}(x)})
@@ -438,7 +421,7 @@ $$</div>
 <h1>Sampling</h1>
 <p>Once more, the (ideal) goal of this model is to fit a function <span class="math">\(p(x)\)</span> to some data, such that we can:</p>
 <ol>
-<li>Evaluate its likelihood (wherein it actually tells us that data to which the model was fit is more likely than data to which it was not)</li>
+<li>Evaluate its likelihood (wherein it actually tells us that data on which the model was fit is more likely than data on which it was not)</li>
 <li>Draw realistic samples</li>
 </ol>
 <p>From a Boltzmann machine, our primary strategy for drawing samples is via Gibbs sampling. It's slow, and I do not believe it's meant to work particularly well. Let's draw 5 samples and see how we do.</p>
@@ -454,7 +437,7 @@ $$</div>
 <p>Nothing great. These samples are highly correlated, if perfectly identical, as expected.</p>
 <p>To generate better images, we'll have to let this run for a lot longer and "thin" the chain (taking every <code>every_n</code> samples, where <code>every_n</code> is on the order of 1, 10, or 100, roughly).</p>
 <h1>Summary</h1>
-<p>In this post, we discussed four additional strategies for both speeding up, as well as outright avoiding, the computation of the gradient of the log-partition function <span class="math">\(\nabla_{\theta}\log{Z}\)</span>.</p>
+<p>In this post, we discussed four additional strategies for both speeding up, as well as outright avoiding, the computation of the gradient of the log-partition function <span class="math">\(\nabla\log{Z}\)</span>.</p>
 <p>While we only presented toy models here, these strategies see successful application in larger undirected graphical models, as well as directed conditional models for <span class="math">\(p(y\vert x)\)</span>. One key example of the latter is a language model; though the partition function is a sum over distinct values of <span class="math">\(y\)</span> (labels) instead of configurations of <span class="math">\(x\)</span> (inputs), it can still be intractable to compute! This is because there are as many distinct values of <span class="math">\(y\)</span> as there are tokens in the given language's vocabulary, which is typically on the order of millions.</p>
 <p>Thanks for reading.</p>
 <h2>Code</h2>

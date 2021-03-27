@@ -75,7 +75,7 @@
 		</span>
 		<time datetime="2018-10-20T14:00:00-04:00" itemprop="datePublished">October 20, 2018</time>
 	</div>
-	<div itemprop="articleBody" class="article-body"><p>The principal task of machine learning is to fit a model to some data. Thinking on the level of APIs, a model is an object with two methods:</p>
+	<div itemprop="articleBody" class="article-body"><p>The principal task of machine learning is to fit a model to some data. In programming terms, this model is an object with two methods:</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -85,25 +85,24 @@
         <span class="k">pass</span>
 </pre></div>
 <h2>Likelihood</h2>
-<p>How likely is the query point(s) <span class="math">\(x\)</span> under our model? In other words, how likely was it that our model produced <span class="math">\(x\)</span>?</p>
-<p>The likelihood gives a value proportional to a valid probability, but is not necessarily a valid probability itself.</p>
-<p>(Finally, the likelihood is often used as an umbrella term for, or interchangeably with, the probability density. The mainstream machine learning community would do well to agree to the use of one of these terms, and to sunset the other; while their definitions may differ slightly, the confusion brought about by their dual used in almost identical contexts simply does not warrant by the pedagogical purity we maintain by keeping them distinct.</p>
+<p>How likely is the query point <span class="math">\(x\)</span> under our model? In other words, how likely was it that our model produced <span class="math">\(x\)</span>?</p>
+<p>Note: The likelihood gives a value proportional to a valid probability, but is not necessarily a valid probability itself.</p>
 <h2>Sample</h2>
-<p>Draw samples from the model.</p>
-<h2>Denotation</h2>
+<p>Draw a sample datum <span class="math">\(x\)</span> from the model.</p>
+<h2>Notation</h2>
 <p>Canonically, we denote an instance of our <code>Model</code> in mathematical syntax as follows:</p>
 <div class="math">$$
 x \sim p(x)
 $$</div>
-<p>Again, this simple denotation implies two methods: that we can evaluate the likelihood of having observed <span class="math">\(x\)</span> under our model <span class="math">\(p\)</span>, and that we can sample a new value <span class="math">\(x\)</span> from our model <span class="math">\(p\)</span>.</p>
-<p>Often, we work with <em>conditional</em> models, such as <span class="math">\(y \sim p(y\vert x)\)</span>, in classification and regression tasks. The same two implicit methods apply.</p>
+<p>Again, this simple notation implies two powerful methods: that we can evaluate the <code>likelihood</code> of having observed <span class="math">\(x\)</span> under our model <span class="math">\(p\)</span>, and that we can <code>sample</code> a new value <span class="math">\(x\)</span> from our model <span class="math">\(p\)</span>.</p>
+<p>Often, we work instead with <em>conditional</em> models, e.g. <span class="math">\(y \sim p(y\vert x)\)</span>, in classification and regression tasks. The <code>likelihood</code> and <code>sample</code> methods apply all the same.</p>
 <h2>Boltzmann machines</h2>
-<p>A Boltzmann machine is one of the simplest mechanisms for modeling <span class="math">\(p(x)\)</span>. It is an undirected graphical model where every dimension <span class="math">\(x_i\)</span> of a given observation <span class="math">\(x\)</span> influences every other dimension. <strong>As such, we might use it to model data which we believe to exhibit this property, e.g. an image.</strong> For <span class="math">\(x \in R^3\)</span>, our model would look as follows:</p>
+<p>A Boltzmann machine is one of the simplest mechanisms for modeling <span class="math">\(p(x)\)</span>. It is an undirected graphical model where every dimension <span class="math">\(x_i\)</span> of a given observation <span class="math">\(x\)</span> influences every other dimension. As such, we might use it to model data which we believe to exhibit this property, e.g. an image (where intuitively, pixel values influence neighboring pixel values). For <span class="math">\(x \in R^3\)</span>, our model would look as follows:</p>
 <p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/thorough-introduction-to-boltzmann-machines/boltzmann-machine.svg"/></p>
-<p>For <span class="math">\(x \in R^n\)</span>, a given node <span class="math">\(x_i\)</span> would have <span class="math">\(n - 1\)</span> outgoing connections in total—one to each of the other nodes <span class="math">\(x_j\)</span> for <span class="math">\(j \neq i\)</span>.</p>
+<p>For <span class="math">\(x \in R^n\)</span>, a given node <span class="math">\(x_i\)</span> would have <span class="math">\(n - 1\)</span> outgoing connections in total—one to every other node <span class="math">\(x_j\ \forall\ j \neq i\)</span>.</p>
 <p>Finally, a Boltzmann machine strictly operates on <em>binary</em> data. This keeps things simple.</p>
 <h2>Computing the likelihood</h2>
-<p>A Boltzmann machines admits the following formula for computing the likelihood of data points <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>:</p>
+<p>A Boltzmann machines admits the following formula for computing the <code>likelihood</code> of data points <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>:</p>
 <div class="math">$$
 H(x) = \sum\limits_{i \neq j} w_{i, j} x_i x_j + \sum\limits_i b_i x_i
 $$</div>
@@ -115,27 +114,19 @@ $$</div>
 $$</div>
 <p>Note:</p>
 <ul>
-<li>Since our weights can be negative, <span class="math">\(H(x)\)</span> can be negative. As a likelihood gives an optionally-normalized probability, it must be non-negative.</li>
+<li>Since our weights can be negative, <span class="math">\(H(x)\)</span> can be negative. Since our likelihood is proportional to a valid probability, we'd prefer it to be non-negative.</li>
 <li>To enforce this constraint, we exponentiate <span class="math">\(H(x)\)</span> in the second equation.</li>
 <li>To normalize, we divide by the normalization constant <span class="math">\(Z\)</span>, i.e. the sum of the likelihoods of all possible values of <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>.</li>
 </ul>
-<h2>Computing the partition function, with examples</h2>
-<p>In the case of 2-dimensional binary <span class="math">\(x\)</span>, the only possible "configurations" of <span class="math">\(x\)</span> are: <span class="math">\([0, 0], [0, 1], [1, 0], [1, 1]\)</span>, i.e. 4 distinct values. This means that in evaluating the likelihood of one datum <span class="math">\(x\)</span>, the normalization constant <span class="math">\(Z\)</span> would be a sum of 4 terms.</p>
-<p>Now, with two data points <span class="math">\(x^{(1)}\)</span> and <span class="math">\(x^{(2)}\)</span>, there are 16 possible "configurations":</p>
-<ol>
-<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [0, 0]\)</span></li>
-<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [0, 1]\)</span></li>
-<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [1, 0]\)</span></li>
-<li><span class="math">\(x^{(1)} = [0, 0]\)</span>, <span class="math">\(x^{(2)} = [1, 1]\)</span></li>
-<li><span class="math">\(x^{(1)} = [0, 1]\)</span>, <span class="math">\(x^{(2)} = [0, 0]\)</span></li>
-<li><span class="math">\(x^{(1)} = [0, 1]\)</span>, <span class="math">\(x^{(2)} = [0, 1]\)</span></li>
-<li>Etc.</li>
-</ol>
-<p>This means that in evaluating the likelihood of <span class="math">\(\mathcal{L}(x^{(1)}, x^{(2)})\)</span>, the normalization constant <span class="math">\(Z\)</span> would be a sum of 16 terms.</p>
-<p>More generally, given <span class="math">\(d\)</span>-dimensional <span class="math">\(x\)</span>, where each <span class="math">\(x_i\)</span> can assume one of <span class="math">\(v\)</span> distinct values, and <span class="math">\(n\)</span> data points <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>—in evaluating the likelihood of <span class="math">\(\mathcal{L}(x^{(1)}, ..., x^{(n)})\)</span> the normalization constant <span class="math">\(Z\)</span> would be a sum of <span class="math">\((v^d)^n\)</span> terms. <strong>With a non-trivially large <span class="math">\(v\)</span> or <span class="math">\(d\)</span> (in the discrete case), or a non-trivially large <span class="math">\(k\)</span> in the continuous case, this becomes intractable to compute.</strong></p>
-<p>In the case of a Boltzmann machine, <span class="math">\(v = 2\)</span>, which is not large. Below, we will vary <span class="math">\(d\)</span> and examine its impact on the tractability (in terms of, "can we actually compute <span class="math">\(Z\)</span> before the end of the universe?") of inference.</p>
+<h2>Computing the partition function by hand</h2>
+<p>In the case of 2-dimensional binary datum <span class="math">\(x\)</span>, there are 4 possible "configurations": <span class="math">\([0, 0], [0, 1], [1, 0], [1, 1]\)</span>. As such, to compute the likelihood of one of these configurations, e.g.</p>
+<div class="math">$$
+p([1, 0]) = \frac{\exp{(H([1, 0]))}}{\exp{(H([0, 0]))} + \exp{(H([0, 1]))} + \exp{(H([1, 0]))} + \exp{(H([1, 1]))}}
+$$</div>
+<p>we see that the normalization constant <span class="math">\(Z\)</span> is a sum of 4 terms.</p>
+<p>More generally, given <span class="math">\(d\)</span>-dimensional <span class="math">\(x\)</span>, where each <span class="math">\(x_i\)</span> can assume one of <span class="math">\(v\)</span> distinct values, computing <span class="math">\(p(x)\)</span> implies a summation over <span class="math">\(v^d\)</span> terms. <strong>With a non-trivially large <span class="math">\(v\)</span> or <span class="math">\(d\)</span> this becomes intractable to compute.</strong></p>
+<p>Below, we'll demonstrate how "tractability," i.e. "can we actually compute <span class="math">\(Z\)</span> before the end of the universe?" changes with varying <span class="math">\(d\)</span> for our Boltzmann machine (of <span class="math">\(v = 2\)</span>).</p>
 <h2>The likelihood function in code</h2>
-<p>In code, the likelihood function looks as follows:</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_unnormalized_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
@@ -153,7 +144,7 @@ $$</div>
 <span class="sd">        for which to compute the joint likelihood.</span>
 <span class="sd">    """</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span><span class="p">:</span>
         <span class="k">raise</span><span class="p">(</span><span class="s1">'Please pass 1 or more points of `n_units` dimensions'</span><span class="p">)</span>
 
     <span class="c1"># compute unnormalized likelihoods</span>
@@ -171,13 +162,13 @@ $$</div>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">lik</span> <span class="o">/</span> <span class="n">Z</span> <span class="k">for</span> <span class="n">lik</span> <span class="ow">in</span> <span class="n">likelihood</span><span class="p">])</span>
 </pre></div>
+<p>NB: In mathematical Python code, for-loops are bad; we should prefer <code>numpy</code> instead. Nevertheless, I've used for-loops here because they are easier to read.</p>
 <p>This code block is longer than you might expect because it includes a few supplementary behaviors, namely:</p>
 <ul>
 <li>Computing the likelihood of one or more points</li>
 <li>Avoiding redundant computation of <code>Z</code></li>
 <li>Optionally computing the log-likelihood</li>
 </ul>
-<p>Above all, note that: the likelihood is a function of the model's parameters, i.e. <code>self.weights</code> and <code>self.biases</code>, which we can vary, and the data <code>x</code>, which we can't.</p>
 <h2>Training the model</h2>
 <p>At the outset, the parameters <code>self.weights</code> and <code>self.biases</code> of our model are initialized at random. Trivially, such that the values returned by <code>likelihood</code> and <code>sample</code> are useful, we must first update these parameters by fitting this model to observed data.</p>
 <p>To do so, we will employ the principal of maximum likelihood: compute the parameters that make the observed data maximally likely under the model, via gradient ascent.</p>
@@ -201,11 +192,11 @@ $$</div>
 \begin{align*}
 \mathop{\mathbb{E}}_{x \sim p_{\text{data}}}\big[ \mathcal{L}(x) \big]
 &amp;= \sum\limits_{k=1}^N p_{\text{data}}(x = x^{(k)}) \mathcal{L(x^{(k)})}\\
-&amp;= \sum\limits_{k=1}^N \frac{1}{N} \mathcal{L(x^{(k)})}\\
+&amp;\approx \sum\limits_{k=1}^N \frac{1}{N} \mathcal{L(x^{(k)})}\\
 &amp;= \frac{1}{N} \sum\limits_{k=1}^N  \mathcal{L(x^{(k)})}\\
 \end{align*}
 $$</div>
-<p>In other words, the average. We will continue to denote this as <span class="math">\(\mathcal{L}\)</span>, i.e. <span class="math">\(\mathcal{L} = \frac{1}{N} \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}\)</span>.</p>
+<p>In other words, we wish to maximize the average likelihood of our data under the model. Henceforth, we will refer to this quantity as <span class="math">\(\mathcal{L}\)</span>, i.e. <span class="math">\(\mathcal{L} = \frac{1}{N} \sum\limits_{k=1}^n H(x^{(k)}) - \log{Z}\)</span>.</p>
 <p>Now, deriving the gradient with respect to our weights:</p>
 <h3><span class="math">\(\nabla_{w_{i, j}}\log{\mathcal{L}}\)</span>:</h3>
 <div class="math">$$
@@ -218,23 +209,23 @@ $$</div>
 <div class="math">$$
 \begin{align*}
 \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}}  H(x^{(k)})
-&amp;= \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}} \sum\limits_{i \neq j} w_{i, j} x_i^{(k)} x_j^{(k)} + \sum\limits_i b_i x_i^{(k)}\\
+&amp;= \frac{1}{N} \sum\limits_{k=1}^n \nabla_{w_{i, j}} \bigg[ \sum\limits_{i \neq j} w_{i, j} x_i^{(k)} x_j^{(k)} + \sum\limits_i b_i x_i^{(k)} \bigg]\\
 &amp;= \frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\\
-&amp;= \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j]
+&amp;\approx \mathop{\mathbb{E}}_{x \sim p_{\text{data}}} [x_i  x_j]
 \end{align*}
 $$</div>
 <h3>Second term:</h3>
-<p>NB: <span class="math">\(\sum\limits_{\mathcal{x}}\)</span> implies a summation over all <span class="math">\((v^d)^n\)</span> possible configurations of values that <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span> can assume.</p>
+<p>NB: <span class="math">\(\sum\limits_{\mathcal{x}}\)</span> implies a summation over all <span class="math">\(v^d\)</span> possible configurations of <span class="math">\(x\)</span>.</p>
 <div class="math">$$
 \begin{align*}
 \nabla_{w_{i, j}} \log{Z}
 &amp;= \nabla_{w_{i, j}} \log{\sum\limits_{\mathcal{x}}} \exp{(H(x))}\\
 &amp;= \frac{1}{\sum\limits_{\mathcal{x}} \exp{(H(x))}} \nabla_{w_{i, j}} \sum\limits_{\mathcal{x}} \exp{(H(x))}\\
-&amp;= \frac{1}{Z} \nabla_{w_{i, j}} \sum\limits_{\mathcal{x}} \exp{(H(x))}\\
+&amp;= \frac{1}{Z} \sum\limits_{\mathcal{x}} \nabla_{w_{i, j}} \exp{(H(x))}\\
 &amp;= \frac{1}{Z} \sum\limits_{\mathcal{x}} \exp{(H(x))} \nabla_{w_{i, j}} H(x)\\
 &amp;= \sum\limits_{\mathcal{x}} \frac{\exp{(H(x))}}{Z} \nabla_{w_{i, j}} H(x)\\
-&amp;= \sum\limits_{\mathcal{x}} P(x) \nabla_{w_{i, j}} H(x)\\
-&amp;= \sum\limits_{\mathcal{x}} P(x) [x_i  x_j]\\
+&amp;= \sum\limits_{\mathcal{x}} p(x) \nabla_{w_{i, j}} H(x)\\
+&amp;= \sum\limits_{\mathcal{x}} p(x) [x_i  x_j]\\
 &amp;= \mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]
 \end{align*}
 $$</div>
@@ -249,10 +240,10 @@ $$</div>
 $$</div>
 <p>The first and second terms of each gradient are called, respectively, <strong>the positive and negative phases.</strong></p>
 <h2>Computing the positive phase</h2>
-<p>In the following toy example, our data are small: we can compute the positive phase using all of the training data, i.e. <span class="math">\(\frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\)</span>. Were our data bigger, we could approximate this expectation with a mini-batch of training data and we do in SGD.</p>
+<p>In the following toy example, our data are small: we can compute the positive phase using all of the training data, i.e. <span class="math">\(\frac{1}{N} \sum\limits_{k=1}^n x_i^{(k)} x_j^{(k)}\)</span>. Were our data bigger, we could approximate this expectation with a mini-batch of training data (much like SGD).</p>
 <h2>Computing the negative phase</h2>
-<p>Again, this term asks us to compute then sum the log-likelihood over every possible data configuration in the support of our model, which is <span class="math">\(O(nv^d)\)</span>. <strong>With non-trivially large <span class="math">\(v\)</span> or <span class="math">\(d\)</span>, this becomes intractable to compute.</strong></p>
-<p>Below, we'll begin our toy example computing the true negative-phase, <span class="math">\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, with varying data dimensionalities <span class="math">\(d\)</span>. Then, once this computation becomes slow, we'll look to approximate this expectation later on.</p>
+<p>Again, this term asks us to compute then sum the log-likelihood over every possible data configuration in the support of our model, which is <span class="math">\(O(v^d)\)</span>. <strong>With non-trivially large <span class="math">\(v\)</span> or <span class="math">\(d\)</span>, this becomes intractable to compute.</strong></p>
+<p>Below, we'll begin our toy example by computing the true negative-phase, <span class="math">\(\mathop{\mathbb{E}}_{x \sim p_{\text{model}}} [x_i  x_j]\)</span>, with varying data dimensionalities <span class="math">\(d\)</span>. Then, once this computation becomes slow, we'll look to approximate this expectation later on.</p>
 <h2>Parameter updates in code</h2>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_parameters_with_true_negative_phase</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">biases</span><span class="p">,</span> <span class="n">var_combinations</span><span class="p">,</span> <span class="n">all_configs</span><span class="p">)</span>
@@ -298,7 +289,7 @@ $$</div>
 <span class="sd">    however, there are only 3 distinct weights in this matrix that we'll actually</span>
 <span class="sd">    want to update: those connecting Node 0 --&gt; Node 1, Node 1 --&gt; Node 2, and</span>
 <span class="sd">    Node 0 --&gt; Node 2. This function returns a list containing these tuples</span>
-<span class="sd">    named `var_combinations.</span>
+<span class="sd">    named `var_combinations`.</span>
 
 <span class="sd">    :param n_units: the dimensionality of our data `d`</span>
 <span class="sd">    :param n_obs: the number of observations in our training set</span>
@@ -353,7 +344,7 @@ $$</div>
 <span class="sd">            for which to compute the joint likelihood.</span>
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_units</span><span class="p">:</span>
             <span class="k">raise</span><span class="p">(</span><span class="s1">'Please pass 1 or more points of `n_units` dimensions'</span><span class="p">)</span>
 
         <span class="c1"># compute unnormalized likelihoods</span>
@@ -581,7 +572,7 @@ $$</div>
 <p>When training with the approximate negative phase, we’ll:</p>
 <ul>
 <li>Derive model samples from a <strong>1000-sample Gibbs chain. Of course, this is a parameter we can tune, which will affect both model accuracy and training runtime. However, we don’t explore that in this post;</strong> instead, we just pick something reasonable and hold this value constant throughout our experiments.</li>
-<li>Train several models for a given <code>n_units</code>; Seaborn will average results for us then plot a single line (I think).</li>
+<li>Train several models for a given <code>n_units</code>; Seaborn will average results for us then plot a single line.</li>
 </ul>
 <div class="highlight"><pre><span></span><span class="n">all_updates</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mi">1</span>
