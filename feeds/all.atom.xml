@@ -2112,7 +2112,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -3191,7 +3191,7 @@ The MIT Press, 2006. ISBN 0-262-18253-X. &lt;a class="footnote-backref" href="#
 &lt;li&gt;I once taught a university Spanish course, in French, in Guinea-Conakry.&lt;/li&gt;
 &lt;li&gt;Mathematics and code keep me smiling from ear to ear.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;For more, please see my full &lt;a href="https://cavaunpeu.github.io/about/"&gt;bio&lt;/a&gt; and &lt;a href="{filename}/pages/cv.md"&gt;résumé&lt;/a&gt;. In addition, social links can be found below.&lt;/p&gt;</content><category term="life"></category></entry><entry><title>Neurally Embedded Emojis</title><link href="https://cavaunpeu.github.io/2017/06/19/neurally-embedded-emojis/" rel="alternate"></link><published>2017-06-19T13:00:00-04:00</published><updated>2017-06-19T13:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-06-19:/2017/06/19/neurally-embedded-emojis/</id><summary type="html">&lt;p&gt;Convolutional variational autoencoders for emoji generation and Siamese text-question-emoji-answer models. Keras, bidirectional LSTMs and snarky tweets &lt;a href="https://twitter.com/united"&gt;@united&lt;/a&gt; within.&lt;/p&gt;</summary><content type="html">&lt;p&gt;As I move through my 20's I'm consistently delighted by the subtle ways in which I've changed.&lt;/p&gt;
+&lt;p&gt;For more, please see my full &lt;a href="https://cavaunpeu.github.io/about/"&gt;bio&lt;/a&gt; and &lt;a href="https://cavaunpeu.github.io/images/resume.pdf"&gt;résumé&lt;/a&gt;. In addition, social links can be found below.&lt;/p&gt;</content><category term="life"></category></entry><entry><title>Neurally Embedded Emojis</title><link href="https://cavaunpeu.github.io/2017/06/19/neurally-embedded-emojis/" rel="alternate"></link><published>2017-06-19T13:00:00-04:00</published><updated>2017-06-19T13:00:00-04:00</updated><author><name>Will Wolf</name></author><id>tag:cavaunpeu.github.io,2017-06-19:/2017/06/19/neurally-embedded-emojis/</id><summary type="html">&lt;p&gt;Convolutional variational autoencoders for emoji generation and Siamese text-question-emoji-answer models. Keras, bidirectional LSTMs and snarky tweets &lt;a href="https://twitter.com/united"&gt;@united&lt;/a&gt; within.&lt;/p&gt;</summary><content type="html">&lt;p&gt;As I move through my 20's I'm consistently delighted by the subtle ways in which I've changed.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Will at 22: Reggaeton is a miserable, criminal assault to my ears.&lt;/p&gt;
 &lt;p&gt;Will at 28: &lt;a href="https://www.youtube.com/watch?v=72UO0v5ESUo"&gt;Despacito (Remix)&lt;/a&gt; for breakfast, lunch, dinner.&lt;/p&gt;
@@ -3514,7 +3514,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;

@@ -1825,7 +1825,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -3025,7 +3025,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table table-hover dataframe table-striped"&gt;
+&lt;table border="1" class="dataframe table-hover table table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
