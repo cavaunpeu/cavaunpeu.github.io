@@ -163,7 +163,7 @@ $$</div>
 <p>As such, we can <em>marginalize <span class="math">\(y\)</span> out of the numerator</em> so as to obtain the denominator we require. This denominator is often called the "evidence."</p>
 <h3>Marginalization example</h3>
 <p>Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize <span class="math">\(A\)</span>.</p>
-<table class="table-striped table-hover table">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(A\)</span></th>
@@ -210,7 +210,7 @@ $$</div>
 <li>"Collapse" the remaining columns — in this case, <span class="math">\(B\)</span>.</li>
 </ol>
 <p>Step 1 gives:</p>
-<table class="table-striped table-hover table">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -245,7 +245,7 @@ $$</div>
 </tbody>
 </table>
 <p>Step 2 gives:</p>
-<table class="table-striped table-hover table">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -266,7 +266,7 @@ $$</div>
 <h3>The denominator</h3>
 <p>In the context of our generative model with a given input <span class="math">\(x\)</span>, the result of this marginalization is a <em>scalar</em> — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:</p>
 <p><span class="math">\(P(x, y)\)</span>:</p>
-<table class="table-striped table-hover table">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(y\)</span></th>
@@ -293,7 +293,7 @@ $$</div>
 </tbody>
 </table>
 <p><span class="math">\(\int P(x, y)dy = P(x)\)</span>:</p>
-<table class="table-striped table-hover table">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(X\)</span></th>
