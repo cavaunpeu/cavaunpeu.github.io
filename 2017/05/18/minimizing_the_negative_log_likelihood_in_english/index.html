@@ -86,7 +86,7 @@
 </ol>
 <p>The goal of this post is to take three models we know, love, and know how to use and explain what's really going on underneath the hood. I will assume the reader is familiar with concepts in both machine learning and statistics, and comes in search of a deeper understanding of the connections therein. There will be math—but only as much as necessary. Most of the derivations can be skipped without consequence.</p>
 <p>When deploying a predictive model in a production setting, it is generally in our best interest to <code>import sklearn</code>, i.e. use a model that someone else has built. This is something we already know how to do. As such, this post will start and end here: your head is currently above water; we're going to dive into the pool, touch the bottom, then work our way back to the surface. Lemmas will be written in <em><strong>bold</strong></em>.</p>
-<p><img alt="bottom of pool" class="img-responsive" src="https://previews.123rf.com/images/cookelma/cookelma1603/cookelma160300003/53105871-man-sitting-on-the-bottom-of-the-swimming-pool-under-water.jpg"/></p>
+<p><img alt="bottom of pool" class="img-fluid" src="https://previews.123rf.com/images/cookelma/cookelma1603/cookelma160300003/53105871-man-sitting-on-the-bottom-of-the-swimming-pool-under-water.jpg"/></p>
 <p>First, let's meet our three protagonists. We'll define them in <a href="https://keras.io/">Keras</a> for the illustrative purpose of a unified and idiomatic API.</p>
 <h2><a href="http://ufldl.stanford.edu/tutorial/supervised/LinearRegression/">Linear regression</a> with mean squared error</h2>
 <div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
@@ -191,7 +191,7 @@ $$</div>
 <p>Now, let's dive into the pool. We'll start at the bottom and work our way back to the top.</p>
 <h1>Response variable</h1>
 <p>Roughly speaking, each model looks as follows. It is a diamond that receives an input and produces an output.</p>
-<p><img alt="simple input/output model" class="img-responsive" src="https://cavaunpeu.github.io/images/simple_input_output_model.png"/></p>
+<p><img alt="simple input/output model" class="img-fluid" src="https://cavaunpeu.github.io/images/simple_input_output_model.png"/></p>
 <p>The models differ in the type of response variable they predict, i.e. the <span class="math">\(y\)</span>.</p>
 <ul>
 <li>Linear regression predicts a continuous-valued real number. Let's call it <code>temperature</code>.</li>
@@ -208,7 +208,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal. Nonetheless, <em>can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (0, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table-hover table-striped table">
+<table class="table-striped table">
 <thead>
 <tr>
 <th>uber</th>
@@ -259,8 +259,8 @@ $$</div>
 </tbody>
 </table>
 <p>Plotting, we get:</p>
-<p><img alt="temperature random variable" class="img-responsive" src="https://cavaunpeu.github.io/figures/temperature_random_variable.png"/>
-<img alt="uber random variable" class="img-responsive" src="https://cavaunpeu.github.io/figures/uber_random_variable.png"/></p>
+<p><img alt="temperature random variable" class="img-fluid" src="https://cavaunpeu.github.io/figures/temperature_random_variable.png"/>
+<img alt="uber random variable" class="img-fluid" src="https://cavaunpeu.github.io/figures/uber_random_variable.png"/></p>
 <p>We are not given the true underlying probability distribution associated with each random variable—not its general "shape," nor the parameters that control this shape. We will <em>never</em> be given these things, in fact: the point of statistics is to infer what they are.</p>
 <p>To make an initial choice we keep two things in mind:</p>
 <ul>
@@ -662,11 +662,11 @@ $$</div>
 </ul>
 <p><em><strong>&gt; Instead of a point estimate for <span class="math">\(\theta\)</span>, and a point estimate for <span class="math">\(y\)</span> given a new observation <span class="math">\(x\)</span> (which makes use of <span class="math">\(\theta\)</span>), we have distributions for each</strong></em>.</p>
 <p>Unfortunately, in complex systems with a non-trivial functional form and number of weights, this computation becomes intractably large. As such, in fully Bayesian modeling, we approximate these distributions. In classic machine learning, we assign them a single value (point estimate). It's a bit lazy, really.</p>
-<p><img alt="@betanalpha bayesian tweet" class="img-responsive" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/></p>
+<p><img alt="@betanalpha bayesian tweet" class="img-fluid" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/></p>
 <h1>Summary</h1>
 <p>I hope this post serves as useful context for the machine learning models we know and love. A deeper understanding of these algorithms offers humility—the knowledge that none of these concepts are particularly new—as well as a vision for how to extend these algorithms in the direction of robustness and increased expressivity.</p>
 <p>Thanks so much for reading this far. Now, climb out of the pool, grab a towel and <code>import sklearn</code>.</p>
-<p><img alt="drink and towel" class="img-responsive" src="https://www.washingtonian.com/wp-content/uploads/2015/05/Pool520-994x664.jpg"/></p>
+<p><img alt="drink and towel" class="img-fluid" src="https://www.washingtonian.com/wp-content/uploads/2015/05/Pool520-994x664.jpg"/></p>
 <h2>Resources</h2>
 <p>I recently gave a talk on this topic at <a href="https://www.facebook.com/groups/265793323822652">Facebook Developer Circle: Casablanca</a>. Voilà the:</p>
 <ul>

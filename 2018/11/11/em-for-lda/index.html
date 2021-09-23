@@ -97,7 +97,7 @@ $$</div>
 <p>As such, let's derive a lower-bound which features this term. As <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> is often called the log-"evidence," we'll call our expression the "evidence lower-bound," or ELBO.</p>
 <h2>Jensen's inequality</h2>
 <p><a href="https://en.wikipedia.org/wiki/Jensen%27s_inequality">Jensen's inequality</a><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> generalizes the statement that the line secant to a <strong>concave function</strong> lies below this function. An example is illustrative:</p>
-<p><img alt="png" class="img-responsive" src="https://alliance.seas.upenn.edu/~cis520/dynamic/2017/wiki/uploads/Lectures/jensen.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://alliance.seas.upenn.edu/~cis520/dynamic/2017/wiki/uploads/Lectures/jensen.png"/></p>
 <p>First, we note that the red line is below the blue for all points for which it is defined.</p>
 <p>Second, working through the example, and assuming:</p>
 <ul>
@@ -179,14 +179,14 @@ $$</div>
 <p><strong>The EM algorithm is a repeated alternation between Step 2 (E-step) and Step 3 (M-step).</strong> After each M-Step, <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> is guaranteed to increase (unless it is already at a maximum)<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
 <p>A graphic<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup> is further illustrative.</p>
 <h3>Initial decomposition</h3>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/initial_decomp.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/em-for-lda/initial_decomp.png"/></p>
 <p>Here, the ELBO is written as <span class="math">\(\mathcal{L}(q, \theta)\)</span>.</p>
 <h3>E-step</h3>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/e_step.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/em-for-lda/e_step.png"/></p>
 <p>In other words, holding the parameters <span class="math">\(\theta\)</span> constant, minimize <span class="math">\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)</span> with respect to <span class="math">\(q(\mathbf{Z})\)</span>. Remember, as <span class="math">\(q\)</span> is a distribution with a fixed functional form, this amounts to updating its parameters <span class="math">\(\lambda\)</span>.</p>
 <p>The caption implies that we can always compute <span class="math">\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)</span>. We will show below that this is not the case for LDA, nor for many interesting models.</p>
 <h3>M-step</h3>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/m_step.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/em-for-lda/m_step.png"/></p>
 <p>In other words, in the M-step, maximize the ELBO with respect to the model parameters <span class="math">\(\theta\)</span>.</p>
 <p>Expanding the ELBO:</p>
 <div class="math">$$
@@ -201,7 +201,7 @@ $$</div>
 <h2>EM for LDA</h2>
 <p>To give an example of the above, we'll examine the classic Latent Dirichlet Allocation<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> paper.</p>
 <h3>Model</h3>
-<p><img alt="png" class="img-responsive" src="https://cavaunpeu.github.io/figures/em-for-lda/lda_formulation.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/em-for-lda/lda_formulation.png"/></p>
 <p>"Given the parameters <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span>, the joint distribution of a topic mixture <span class="math">\(\theta\)</span>, a set of <span class="math">\(N\)</span> topics <span class="math">\(\mathbf{z}\)</span>, and a set of <span class="math">\(N\)</span> words <span class="math">\(\mathbf{w}\)</span> is given by:"<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <div class="math">$$
 p(\theta, \mathbf{z}, \mathbf{w}\vert \alpha, \beta) = p(\theta\vert \alpha)\prod\limits_{n=1}^{N}p(z_n\vert \theta)p(w_n\vert z_n, \beta)
