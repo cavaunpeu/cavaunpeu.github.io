@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="https://willwolf.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,20 +20,20 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+  <meta name="twitter:domain" content="https://willwolf.io">
     <meta property="twitter:title" content="Minimizing the Negative Log-Likelihood, in English"/>
     <meta property="twitter:description" content="Statistical underpinnings of the machine learning models we know and love. A walk through random variables, entropy, exponential family distributions, generalized linear models, maximum likelihood estimation, cross entropy, KL-divergence, maximum a posteriori estimation and going &#34;fully Bayesian.&#34;"/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/images/bottleneck.png"/>
+    <meta property="twitter:image" content="https://willwolf.io/images/bottleneck.png"/>
 
 	<!-- CSS -->
-	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -45,19 +45,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
             <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/images/resume.pdf" title="Résumé"><span class="glyphicon glyphicon-folder-open"></span> Résumé</a></li>
-              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://willwolf.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://willwolf.io/images/resume.pdf" title="Résumé"><span class="glyphicon glyphicon-folder-open"></span> Résumé</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://willwolf.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://willwolf.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -191,7 +191,7 @@ $$</div>
 <p>Now, let's dive into the pool. We'll start at the bottom and work our way back to the top.</p>
 <h1>Response variable</h1>
 <p>Roughly speaking, each model looks as follows. It is a diamond that receives an input and produces an output.</p>
-<p><img alt="simple input/output model" class="img-fluid" src="https://cavaunpeu.github.io/images/simple_input_output_model.png"/></p>
+<p><img alt="simple input/output model" class="img-fluid" src="https://willwolf.io/images/simple_input_output_model.png"/></p>
 <p>The models differ in the type of response variable they predict, i.e. the <span class="math">\(y\)</span>.</p>
 <ul>
 <li>Linear regression predicts a continuous-valued real number. Let's call it <code>temperature</code>.</li>
@@ -208,7 +208,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal. Nonetheless, <em>can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (0, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table-striped table">
+<table class="table table-striped">
 <thead>
 <tr>
 <th>uber</th>
@@ -259,8 +259,8 @@ $$</div>
 </tbody>
 </table>
 <p>Plotting, we get:</p>
-<p><img alt="temperature random variable" class="img-fluid" src="https://cavaunpeu.github.io/figures/temperature_random_variable.png"/>
-<img alt="uber random variable" class="img-fluid" src="https://cavaunpeu.github.io/figures/uber_random_variable.png"/></p>
+<p><img alt="temperature random variable" class="img-fluid" src="https://willwolf.io/figures/temperature_random_variable.png"/>
+<img alt="uber random variable" class="img-fluid" src="https://willwolf.io/figures/uber_random_variable.png"/></p>
 <p>We are not given the true underlying probability distribution associated with each random variable—not its general "shape," nor the parameters that control this shape. We will <em>never</em> be given these things, in fact: the point of statistics is to infer what they are.</p>
 <p>To make an initial choice we keep two things in mind:</p>
 <ul>
@@ -317,7 +317,7 @@ $$</div>
 <ul>
 <li><span class="math">\(\eta\)</span> is the <em>canonical parameter</em> of the distribution. (We will hereby work with the single-canonical-parameter exponential family form.)</li>
 <li><span class="math">\(T(y)\)</span> is the <em>sufficient statistic</em>. It is often the case that <span class="math">\(T(y) = y\)</span>.</li>
-<li><span class="math">\(a(\eta)\)</span> is the <em>log partition function</em>, which normalizes the distribution. (A more in-depth discussion of this normalizing constant can be found in a previous post of mine: <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">Deriving the Softmax from First Principles</a>.)</li>
+<li><span class="math">\(a(\eta)\)</span> is the <em>log partition function</em>, which normalizes the distribution. (A more in-depth discussion of this normalizing constant can be found in a previous post of mine: <a href="https://willwolf.io/2017/04/19/deriving-the-softmax-from-first-principles/">Deriving the Softmax from First Principles</a>.)</li>
 </ul>
 <p>"A fixed choice of <span class="math">\(T\)</span>, <span class="math">\(a\)</span> and <span class="math">\(b\)</span> defines a family (or set) of distributions that is parameterized by <span class="math">\(\eta\)</span>; as we vary <span class="math">\(\eta\)</span>, we then get different distributions within this family."<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> This simply means that a coin with <span class="math">\(\Pr(\text{heads}) = .6\)</span> gives a different distribution over outcomes than one with <span class="math">\(\Pr(\text{heads}) = .7\)</span>. Easy.</p>
 <h3>Gaussian distribution</h3>
@@ -438,7 +438,7 @@ $$</div>
   &amp;= \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}
 \end{align*}
 $$</div>
-<p>This you will recognize as the softmax function. (For a probabilistically-motivated derivation, please see a previous <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">post</a>.)</p>
+<p>This you will recognize as the softmax function. (For a probabilistically-motivated derivation, please see a previous <a href="https://willwolf.io/2017/04/19/deriving-the-softmax-from-first-principles/">post</a>.)</p>
 <p>Finally:</p>
 <div class="math">$$
 \begin{align*}
@@ -500,7 +500,7 @@ $$</div>
 <p>We did this above as well: <span class="math">\(\pi_{k, i} = \frac{e^{\eta_k}}{\sum\limits_{k=1}^K e^{\eta_k}}\)</span>. This is the softmax function.</p>
 <p><em><strong>&gt; The softmax function gives us the probability that the response variable takes on each of the possible classes. This probability mass function is required by the multinomial distribution, which dictates the outcomes of the multi-class target <span class="math">\(y\)</span>.</strong></em></p>
 <p>Finally, why a linear model, i.e. why <span class="math">\(\eta = \theta^Tx\)</span>?</p>
-<p>Andrew Ng calls it a "design choice."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> I've motivated this formulation a bit in the <a href="https://cavaunpeu.github.io/2017/04/19/deriving-the-softmax-from-first-principles/">softmax post</a>. mathematicalmonk<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
+<p>Andrew Ng calls it a "design choice."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> I've motivated this formulation a bit in the <a href="https://willwolf.io/2017/04/19/deriving-the-softmax-from-first-principles/">softmax post</a>. mathematicalmonk<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> would probably have a more principled explanation than us both. For now, we'll make do with the following:</p>
 <ul>
 <li>A linear combination is perhaps the simplest way to consider the impact of each feature on the canonical parameter.</li>
 <li>A linear combination commands that either <span class="math">\(x\)</span>, or a <em>function of <span class="math">\(x\)</span></em>, vary linearly with <span class="math">\(\eta\)</span>. As such, we could write our model as <span class="math">\(\eta = \theta^T\Phi(x)\)</span>, where <span class="math">\(\Phi\)</span> applies some complex transformation to our features. This makes the "simplicity" of the linear combination less simple.</li>
@@ -662,7 +662,7 @@ $$</div>
 </ul>
 <p><em><strong>&gt; Instead of a point estimate for <span class="math">\(\theta\)</span>, and a point estimate for <span class="math">\(y\)</span> given a new observation <span class="math">\(x\)</span> (which makes use of <span class="math">\(\theta\)</span>), we have distributions for each</strong></em>.</p>
 <p>Unfortunately, in complex systems with a non-trivial functional form and number of weights, this computation becomes intractably large. As such, in fully Bayesian modeling, we approximate these distributions. In classic machine learning, we assign them a single value (point estimate). It's a bit lazy, really.</p>
-<p><img alt="@betanalpha bayesian tweet" class="img-fluid" src="https://cavaunpeu.github.io/images/going_fully_bayesian.png"/></p>
+<p><img alt="@betanalpha bayesian tweet" class="img-fluid" src="https://willwolf.io/images/going_fully_bayesian.png"/></p>
 <h1>Summary</h1>
 <p>I hope this post serves as useful context for the machine learning models we know and love. A deeper understanding of these algorithms offers humility—the knowledge that none of these concepts are particularly new—as well as a vision for how to extend these algorithms in the direction of robustness and increased expressivity.</p>
 <p>Thanks so much for reading this far. Now, climb out of the pool, grab a towel and <code>import sklearn</code>.</p>
@@ -797,9 +797,9 @@ $$</div>
 				      Categories
 				    </h4>
 				    <ul>
-				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
-				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
-				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
 				    </ul>
 				  </div>
 				</div>
@@ -809,7 +809,7 @@ $$</div>
 				      Pages
 				    </h4>
 				    <ul>
-				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
 				    </ul>
 				  </div>
 				</div>

@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="https://willwolf.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,20 +20,20 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+  <meta name="twitter:domain" content="https://willwolf.io">
     <meta property="twitter:title" content="Travel Recommendations with Jaccard Similarities"/>
     <meta property="twitter:description" content="A Scala-based web app that gives travel recommendations via Twitter data and the Jaccard similarity."/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/colombia_recommendations.png"/>
+    <meta property="twitter:image" content="https://willwolf.io/figures/colombia_recommendations.png"/>
 
 	<!-- CSS -->
-	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -45,19 +45,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
             <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/images/resume.pdf" title="Résumé"><span class="glyphicon glyphicon-folder-open"></span> Résumé</a></li>
-              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://willwolf.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://willwolf.io/images/resume.pdf" title="Résumé"><span class="glyphicon glyphicon-folder-open"></span> Résumé</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://willwolf.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://willwolf.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -83,11 +83,11 @@
 <li>Compute a <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard similarity</a> - defined as the size of the intersection of 2 sets divided by the size of their union - between all combinations of countries.</li>
 <li>When a country is queried, return the 5 countries Jaccard-most similar. The length of the bars on the plot are the respective similarity scores. So - let's try a few out!</li>
 </ol>
-<p><img alt="colombia recommendations" class="img-fluid" src="https://cavaunpeu.github.io/figures/colombia_recommendations.png"/></p>
+<p><img alt="colombia recommendations" class="img-fluid" src="https://willwolf.io/figures/colombia_recommendations.png"/></p>
 <p>Not bad. Venezuela - neighbor to the East - is recommended most highly. Again, this implies that those tweeting about Colombia were also tweeting about Venezuela.</p>
-<p><img alt="malaysia recommendations" class="img-fluid" src="https://cavaunpeu.github.io/figures/malaysia_recommendations.png"/></p>
+<p><img alt="malaysia recommendations" class="img-fluid" src="https://willwolf.io/figures/malaysia_recommendations.png"/></p>
 <p>Seems logical.</p>
-<p><img alt="india recommendations" class="img-fluid" src="https://cavaunpeu.github.io/figures/india_recommendations.png"/></p>
+<p><img alt="india recommendations" class="img-fluid" src="https://willwolf.io/figures/india_recommendations.png"/></p>
 <p>Strange one, maybe? Then again, all countries - especially Greece, Italy, and France - are universally popular travel destinations, just like our query country India. As such, it's certainly conceivable that they were being promoted by similar users. We'd want to read the tweets to be sure.</p>
 <p>Moving forward, I plan to implement a more robust similarity metric/methodology. While a Jaccard similarity is effective, it's a little bit "bulky": most notably, being a <em>set</em> similarity metric, it doesn't consider repeat tweets about a given country. For example, if User A tweeted 12 times about Hungary and 1 time about Turkey, a Jaccard similarity would consider these behaviors equal (by simply including User A in each country's respective set). As such, a cosine-based metric might be more appropriate. See <a href="http://www.benfrederickson.com/distance-metrics/">here</a> for an excellent overview of possible approaches to a "people who like this also like" analysis.</p>
 <p>Once more, the app is linked <a href="http://countryrecommender.herokuapp.com/">here</a>. In addition, the code powering the app can be found on my <a href="https://github.com/cavaunpeu/countryrecommender">GitHub</a>. Backend in Scala, and front-end in HTML, CSS, and native JavaScript. Do take it for a spin, and <a href="https://twitter.com/WillTravelLife">let me know</a> what you think!</p></div>
@@ -142,9 +142,9 @@
 				      Categories
 				    </h4>
 				    <ul>
-				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
-				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
-				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
 				    </ul>
 				  </div>
 				</div>
@@ -154,7 +154,7 @@
 				      Pages
 				    </h4>
 				    <ul>
-				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
 				    </ul>
 				  </div>
 				</div>

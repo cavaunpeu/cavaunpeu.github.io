@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="https://cavaunpeu.github.io/theme/html5.js"></script>
+		<script src="https://willwolf.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,20 +20,20 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="https://cavaunpeu.github.io">
+  <meta name="twitter:domain" content="https://willwolf.io">
     <meta property="twitter:title" content="Additional Strategies for Confronting the Partition Function"/>
     <meta property="twitter:description" content="Stochastic maximum likelihood, contrastive divergence, negative contrastive estimation and negative sampling for improving or avoiding the computation of the gradient of the log-partition function. (Oof, that&#39;s a mouthful.)"/>
-    <meta property="twitter:image" content="https://cavaunpeu.github.io/figures/additional-strategies-partition-function/output_3_0.png"/>
+    <meta property="twitter:image" content="https://willwolf.io/figures/additional-strategies-partition-function/output_3_0.png"/>
 
 	<!-- CSS -->
-	<link href="https://cavaunpeu.github.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="https://cavaunpeu.github.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -45,19 +45,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="https://cavaunpeu.github.io/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
             <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://cavaunpeu.github.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li><a href="https://cavaunpeu.github.io/images/resume.pdf" title="Résumé"><span class="glyphicon glyphicon-folder-open"></span> Résumé</a></li>
-              <li><a href="https://cavaunpeu.github.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
+              <li><a href="https://willwolf.io/about/" title="About"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li><a href="https://willwolf.io/images/resume.pdf" title="Résumé"><span class="glyphicon glyphicon-folder-open"></span> Résumé</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books"><span class="glyphicon glyphicon-book"></span> Books</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="https://cavaunpeu.github.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="https://willwolf.io" title=English id="activeLanguage"><span class="glyphicon glyphicon-flag"></span>EN<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                  <a id="inactiveLanguage" href="https://cavaunpeu.github.io/es/" title=Español>ES</a>
+                  <a id="inactiveLanguage" href="https://willwolf.io/es/" title=Español>ES</a>
                 </li>
             </ul>
           </li>
@@ -75,7 +75,7 @@
 		</span>
 		<time datetime="2018-10-29T22:00:00-04:00" itemprop="datePublished">October 29, 2018</time>
 	</div>
-	<div itemprop="articleBody" class="article-body"><p>In the <a href="https://cavaunpeu.github.io/2018/10/20/thorough-introduction-to-boltzmann-machines/">previous post</a> we introduced Boltzmann machines and the infeasibility of computing the gradient of its log-partition function <span class="math">\(\nabla\log{Z}\)</span>. To this end, we explored one strategy for its approximation: Gibbs sampling. Gibbs sampling is a viable alternative because the expression for our gradient simplifies to an expectation over the model distribution, which can be approximated with Monte Carlo samples.</p>
+	<div itemprop="articleBody" class="article-body"><p>In the <a href="https://willwolf.io/2018/10/20/thorough-introduction-to-boltzmann-machines/">previous post</a> we introduced Boltzmann machines and the infeasibility of computing the gradient of its log-partition function <span class="math">\(\nabla\log{Z}\)</span>. To this end, we explored one strategy for its approximation: Gibbs sampling. Gibbs sampling is a viable alternative because the expression for our gradient simplifies to an expectation over the model distribution, which can be approximated with Monte Carlo samples.</p>
 <p>In this post, we'll highlight the imperfections of this approximate approach itself, then present more preferable alternatives.</p>
 <h1>Pitfalls of Gibbs sampling</h1>
 <p>To refresh, the two gradients we seek to compute in a reasonable amount of time are:</p>
@@ -237,7 +237,7 @@ $$</div>
 <p>Since I learn best by implementing things, let's play around. Below, we train Boltzmann machines via noise contrastive estimation and negative sampling.</p>
 <h2>Load data</h2>
 <p>For this exercise, we'll fit a Boltzmann machine to the <a href="https://www.kaggle.com/zalando-research/fashionmnist">Fashion MNIST</a> dataset.</p>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/additional-strategies-partition-function/output_3_0.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/additional-strategies-partition-function/output_3_0.png"/></p>
 <h2>Define model</h2>
 <p>Below, as opposed to in the previous post, I offer a vectorized implementation of the Boltzmann energy function.</p>
 <p>This said, the code is still imperfect: especially re: the line in which I iterate through data points individually to compute the joint likelihood.</p>
@@ -393,7 +393,7 @@ $$</div>
 <span class="c1"># show images</span>
 <span class="n">imshow</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">make_grid</span><span class="p">(</span><span class="n">images</span><span class="p">))</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/additional-strategies-partition-function/output_12_0.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/additional-strategies-partition-function/output_12_0.png"/></p>
 <h2>Train model</h2>
 <div class="highlight"><pre><span></span><span class="c1"># define model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">n_units</span><span class="p">)</span>
@@ -433,7 +433,7 @@ $$</div>
 <span class="err">Wall time: 4min 17s</span>
 </pre></div>
 <p>Takes forever!</p>
-<p><img alt="png" class="img-fluid" src="https://cavaunpeu.github.io/figures/additional-strategies-partition-function/output_18_0.png"/></p>
+<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/additional-strategies-partition-function/output_18_0.png"/></p>
 <p>Nothing great. These samples are highly correlated, if perfectly identical, as expected.</p>
 <p>To generate better images, we'll have to let this run for a lot longer and "thin" the chain (taking every <code>every_n</code> samples, where <code>every_n</code> is on the order of 1, 10, or 100, roughly).</p>
 <h1>Summary</h1>
@@ -573,9 +573,9 @@ year={2016}
 				      Categories
 				    </h4>
 				    <ul>
-				      <li><a href="https://cavaunpeu.github.io/geopolitics/">geopolitics</li>
-				      <li><a href="https://cavaunpeu.github.io/life/">life</li>
-				      <li><a href="https://cavaunpeu.github.io/machine-learning/">machine-learning</li>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
 				    </ul>
 				  </div>
 				</div>
@@ -585,7 +585,7 @@ year={2016}
 				      Pages
 				    </h4>
 				    <ul>
-				      <li><a href="https://cavaunpeu.github.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
 				    </ul>
 				  </div>
 				</div>
