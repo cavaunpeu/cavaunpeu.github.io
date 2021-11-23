@@ -313,11 +313,11 @@ $$</div>
 <p>NB: This may require significant computation.</p>
 <h1>Approximating a Gaussian</h1>
 <p>Here, we'll approximate a 2D multivariate Gaussian with a factorized mean-field approximation.</p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-1.png"/></p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-2.png"/></p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-3.png"/></p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-4.png"/></p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-5.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-2.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-3.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-4.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/mean-field-variational-bayes/mv-gaussian-approx-5.png"/></p>
 <h1>Summing up</h1>
 <p>Mean-Field Variational Bayes is an iterative optimization algorithm for maximizing a lower-bound of the marginal likelihood of some data <span class="math">\(\mathbf{X}\)</span> under a given model with latent variables <span class="math">\(\mathbf{Z}\)</span>. It accomplishes this task by positing a factorized variational distribution over all latent variables <span class="math">\(\mathbf{Z}\)</span> and parameters <span class="math">\(\theta\)</span>, then computes, <em>analytically</em>, the algebraic forms and parameters of each factor which maximize this bound.</p>
 <p>In practice, this process can be cumbersome and labor-intensive. As such, in recent years, "black-box variational inference" techniques were born, which <em>fix</em> the forms of each factor <span class="math">\(q_j(\mathbf{Z}_j)\)</span>, then optimize its parameters via gradient descent.</p>

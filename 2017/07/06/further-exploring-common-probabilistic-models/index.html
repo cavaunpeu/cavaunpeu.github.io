@@ -77,7 +77,7 @@
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>The <a href="https://willwolf.io/2017/05/18/minimizing_the_negative_log_likelihood_in_english/">previous post</a> on this blog sought to expose the statistical underpinnings of several machine learning models you know and love. Therein, we made the analogy of a swimming pool: you start on the surface — you know what these models do and how to use them for fun and profit — dive to the bottom — you deconstruct these models into their elementary assumptions and intentions — then finally, work your way back to the surface — reconstructing their functional forms, optimization exigencies and loss functions one step at a time.</p>
 <p>In this post, we're going to stay on the surface: instead of deconstructing common models, we're going to further explore the relationships between them — swimming to different corners of the pool itself. Keeping us afloat will be Bayes' theorem — a balanced, dependable yet at times fragile pool ring, so to speak — which we'll take with us wherever we go.</p>
-<p><img alt="pool ring" class="img-fluid" src="https://c1.staticflickr.com/7/6151/6137348439_199f5119be_b.jpg"/></p>
+<p><img alt="pool ring" class="img-responsive" src="https://c1.staticflickr.com/7/6151/6137348439_199f5119be_b.jpg"/></p>
 <p>While there are many potential themes of probabilistic models we might explore, we'll herein focus on two: <strong>generative vs. discriminative models</strong>, and <strong>"fully Bayesian" vs. "lowly point estimate" learning</strong>. We will stick to the supervised setting as well.</p>
 <p>Finally, our pool ring is not a godhead — we are not nautical missionaries brandishing a divine statistical truth, demanding that each model we encounter implement this truth in a rigid, bottom-up fashion. Instead, we'll explore the unique goals, formulations and shortcomings of each, and fall back on Bayes' theorem to bridge the gaps between. Without it, we'd quickly start sinking.</p>
 <h1>Discriminative vs. generative models</h1>
@@ -163,7 +163,7 @@ $$</div>
 <p>As such, we can <em>marginalize <span class="math">\(y\)</span> out of the numerator</em> so as to obtain the denominator we require. This denominator is often called the "evidence."</p>
 <h3>Marginalization example</h3>
 <p>Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize <span class="math">\(A\)</span>.</p>
-<table class="table-striped table">
+<table class="table-hover table-striped table">
 <thead>
 <tr>
 <th><span class="math">\(A\)</span></th>
@@ -210,7 +210,7 @@ $$</div>
 <li>"Collapse" the remaining columns — in this case, <span class="math">\(B\)</span>.</li>
 </ol>
 <p>Step 1 gives:</p>
-<table class="table-striped table">
+<table class="table-hover table-striped table">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -245,7 +245,7 @@ $$</div>
 </tbody>
 </table>
 <p>Step 2 gives:</p>
-<table class="table-striped table">
+<table class="table-hover table-striped table">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -266,7 +266,7 @@ $$</div>
 <h3>The denominator</h3>
 <p>In the context of our generative model with a given input <span class="math">\(x\)</span>, the result of this marginalization is a <em>scalar</em> — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:</p>
 <p><span class="math">\(P(x, y)\)</span>:</p>
-<table class="table-striped table">
+<table class="table-hover table-striped table">
 <thead>
 <tr>
 <th><span class="math">\(y\)</span></th>
@@ -293,7 +293,7 @@ $$</div>
 </tbody>
 </table>
 <p><span class="math">\(\int P(x, y)dy = P(x)\)</span>:</p>
-<table class="table-striped table">
+<table class="table-hover table-striped table">
 <thead>
 <tr>
 <th><span class="math">\(X\)</span></th>
@@ -499,7 +499,7 @@ $$</div>
 <p>The notion is the same in probabilistic modeling. Furthermore, we often build models with "not big data," and therefore have a substantially non-zero amount of uncertainty in our parameter estimates and subsequent predictions.</p>
 <p>Finally, with distributional estimates in hand, we can begin to make more robust, measured and logical decisions. We can do this because, while point estimates give a quick summary of the dynamics of our system, distributions tell the full, thorough story: where the peaks are, their width and height, their distance from one another, etc. For an excellent exploration of what we can do with posterior distributions, check out Rasmus Bååth's <a href="http://www.sumsar.net/blog/2015/01/probable-points-and-credible-intervals-part-two/">Probable Points and Credible Intervals, Part 2: Decision Theory</a>.</p>
 <p>Many thanks for reading, and to our pool ring Bayes'.</p>
-<p><img alt="girls having drinks on pool rings" class="img-fluid" src="https://ak8.picdn.net/shutterstock/videos/19157749/thumb/2.jpg"/></p>
+<p><img alt="girls having drinks on pool rings" class="img-responsive" src="https://ak8.picdn.net/shutterstock/videos/19157749/thumb/2.jpg"/></p>
 <div class="footnote">
 <hr/>
 <ol>

@@ -237,7 +237,7 @@ $$</div>
 <p>Since I learn best by implementing things, let's play around. Below, we train Boltzmann machines via noise contrastive estimation and negative sampling.</p>
 <h2>Load data</h2>
 <p>For this exercise, we'll fit a Boltzmann machine to the <a href="https://www.kaggle.com/zalando-research/fashionmnist">Fashion MNIST</a> dataset.</p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/additional-strategies-partition-function/output_3_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/additional-strategies-partition-function/output_3_0.png"/></p>
 <h2>Define model</h2>
 <p>Below, as opposed to in the previous post, I offer a vectorized implementation of the Boltzmann energy function.</p>
 <p>This said, the code is still imperfect: especially re: the line in which I iterate through data points individually to compute the joint likelihood.</p>
@@ -393,7 +393,7 @@ $$</div>
 <span class="c1"># show images</span>
 <span class="n">imshow</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">make_grid</span><span class="p">(</span><span class="n">images</span><span class="p">))</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/additional-strategies-partition-function/output_12_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/additional-strategies-partition-function/output_12_0.png"/></p>
 <h2>Train model</h2>
 <div class="highlight"><pre><span></span><span class="c1"># define model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">n_units</span><span class="p">)</span>
@@ -433,7 +433,7 @@ $$</div>
 <span class="err">Wall time: 4min 17s</span>
 </pre></div>
 <p>Takes forever!</p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/additional-strategies-partition-function/output_18_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/additional-strategies-partition-function/output_18_0.png"/></p>
 <p>Nothing great. These samples are highly correlated, if perfectly identical, as expected.</p>
 <p>To generate better images, we'll have to let this run for a lot longer and "thin" the chain (taking every <code>every_n</code> samples, where <code>every_n</code> is on the order of 1, 10, or 100, roughly).</p>
 <h1>Summary</h1>

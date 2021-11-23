@@ -240,7 +240,7 @@ $$</div>
         text-align: right;
     }
 </style>
-<table border="1" class="dataframe table-striped table">
+<table border="1" class="table-hover table-striped table dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -286,7 +286,7 @@ K(\mathbf x, \mathbf y)
 $$</div>
 <p>Note that this is nothing else but a dot product between two vectors <span class="math">\((1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)</span> and <span class="math">\((1, y_1^2, y_2^2, \sqrt{2} y_1, \sqrt{2} y_2, \sqrt{2} y_1 y_2)\)</span>, and <span class="math">\(\varphi(\mathbf x) = \varphi(x_1, x_2) = (1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)</span>. So the kernel <span class="math">\(K(\mathbf x, \mathbf y) = (1 + \mathbf x^T \mathbf y)^2 = \varphi(\mathbf x) \cdot \varphi(\mathbf y)\)</span> computes a dot product in 6-dimensional space without explicitly visiting this space."</p>
 <h3>What this means</h3>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/kernels-for-gaussian-processes.svg"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/kernels-for-gaussian-processes.svg"/></p>
 <ul>
 <li>We start with inputs <span class="math">\(X\)</span> and <span class="math">\(Y\)</span>.</li>
 <li>Our goal is to compute the similarity between then, <span class="math">\(\text{Sim}(X, Y)\)</span>.</li>
@@ -377,9 +377,9 @@ $$</div>
 <span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="o">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 <h2>Visualizing results</h2>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
 <p>And for good measure, with some samples from the posterior:</p>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_19_0.png"/></p>
 <h2>In summary</h2>
 <p>In this post, we've unpacked the notion of a kernel, and its ubiquitous use in Gaussian Processes.</p>
 <p>In addition, we've introduced the RBF kernel, i.e. "squared exponential" kernel, and motivated its widespread application in these models.</p>

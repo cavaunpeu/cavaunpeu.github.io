@@ -125,7 +125,7 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'`Gaussian(mu=.123, var=.456)` Density'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_8_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_8_0.png"/></p>
 <p>If we increase the variance <code>var</code>, what happens?</p>
 <div class="highlight"><pre><span></span><span class="n">bigger_number</span> <span class="o">=</span> <span class="mf">3.45</span>
 
@@ -138,7 +138,7 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'`Gaussian(mu=.123, var=bigger_number)` Density'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_10_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_10_0.png"/></p>
 <p>The density gets fatter. This should be familiar to you.</p>
 <p>Similarly, we can draw <em>samples</em> from a <code>Gaussian</code> distribution, e.g. from the initial <code>Gaussian(mu=.123, var=.456)</code> above. Its corresponding density plot (also above) governs this procedure, where <code>(x, y)</code> tuples give the (unnormalized) probability <code>y</code> that a given sample will take the value <code>x</code>.</p>
 <p><code>x</code>-values with large corresponding <code>y</code>-values are more likely to be sampled. Here, values near .123 are most likely to be sampled.</p>
@@ -161,7 +161,7 @@
 <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of 500 samples from `Gaussian(mu=.123, var=.456)`'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/></p>
 <p>This looks similar to the true <code>Gaussian(mu=.123, var=.456)</code> density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate the true density.</p>
 <p>Now, we'll start to move a bit faster.</p>
 <h2>2D Gaussians</h2>
@@ -252,7 +252,7 @@
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Draws from 2D-Gaussians with Varying (mu, cov)'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_17_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_17_1.png"/></p>
 <h2>Gaussians are closed under linear maps</h2>
 <p>Each cloud of Gaussian dots tells us the following:</p>
 <div class="math">$$
@@ -314,7 +314,7 @@ $$</div>
     <span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_lm</span><span class="p">,</span> <span class="n">cov_lm</span><span class="p">)</span>  <span class="c1"># lm.shape: (200,)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lm</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_20_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_20_0.png"/></p>
 <p><strong>This distribution over linear maps gives a distribution over functions</strong>, where the "mean function" is <span class="math">\(\phi(X)^T\mu_w\)</span> (which reads directly from the <code>mu_lm</code> variable above).</p>
 <p><strong>Notwithstanding, I find this phrasing to be confusing</strong>; to me, a "distribution over functions" sounds like some opaque object that spits out algebraic symbols via logic miles above my cognitive ceiling. As such, I instead think of this in more intuitive terms as a <strong>distribution over function evaluations</strong>, where a single function evaluation is a list of <code>(x, y)</code> tuples and nothing more.</p>
 <p>For example, given a vector <code>x = np.array([1, 2, 3])</code> and a function <code>lambda x: x**2</code>, an evaluation of this function gives <code>y = np.array([1, 4, 9])</code>. We now have tuples <code>[(1, 1), (2, 4), (3, 9)]</code> from which we can create a line plot. This gives one "function evaluation."</p>
@@ -323,13 +323,13 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="c1"># Make different, though still arbitrary, features</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_23_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_23_0.png"/></p>
 <p>"The features we choose give a 'language' with which we can express a relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>."<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Some features are more expressive than others; some restrict us entirely from expressing certain relationships.</p>
 <p>For further illustration, let's employ step functions as features and see what happens.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Make features, as before</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_25_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_25_0.png"/></p>
 <h2>Gaussians are closed under conditioning and marginalization</h2>
 <p>Let's revisit the 2D Gaussians plotted above. They took the form</p>
 <div class="math">$$
@@ -362,7 +362,7 @@ $$</div>
 <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of y-values, when x &gt; 1'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_28_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_28_0.png"/></p>
 <p>Cool! Looks kind of Gaussian as well.</p>
 <p>Instead, what if we wanted to know the functional form of the real density, <span class="math">\(P(y\vert x)\)</span>, instead of this empirical distribution of its samples? One of the axioms of conditional probability tells us that:</p>
 <div class="math">$$
@@ -511,7 +511,7 @@ $$</div>
 <span class="n">first_dim_prior</span><span class="p">,</span> <span class="n">second_dim_prior</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">samples_prior</span><span class="p">))</span>
 <span class="n">first_dim_post</span><span class="p">,</span> <span class="n">second_dim_post</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">samples_post</span><span class="p">))</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_34_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_34_1.png"/></p>
 <p>Samples from the prior are plotted in orange; samples from the posterior are plotted in blue. As this is a stochastic dimensionality-reduction algorithm, the results will be slightly different each time.</p>
 <p>At best, we can see that the posterior has slightly larger values in its covariance matrix, evidenced by the fact that the blue cloud is more disperse than the orange, and has probably maintained a similar mean. The magnitude of change (read: a small one) is expected, as we've only conditioned on 6 ground-truth tuples.</p>
 <h1>Predicting on new data</h1>
@@ -562,7 +562,7 @@ $$</div>
 
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_40_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_40_0.png"/></p>
 <p>The posterior distribution is nothing more than a distribution over function evaluations (from which we've sampled 25 function evaluations above) <em>most consistent with our model and observed data tuples.</em> As such, and to give further intuition, a crude way of computing this distribution might be continuously <em>drawing samples from our prior over function evaluations, and keeping only the ones that pass through, i.e. are "most consistent with," all of the red points above.</em></p>
 <p>Finally, we stated before that <strong>the features we choose (i.e. our <code>phi_func</code>) give a "language" with which we can express the relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>.</strong> Here, we've chosen a language with 20 words. What if we chose a different 20?</p>
 <div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">20</span>
@@ -581,7 +581,7 @@ $$</div>
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_42_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_42_0.png"/></p>
 <p>Not great. As a brief aside, how do we read the plot above? It's simply a function, a transformation, a lookup: given an <span class="math">\(x\)</span>, it tells us the corresponding expected value <span class="math">\(y\)</span>, and the variance around this estimate.</p>
 <p>For instance, right around <span class="math">\(x = -3\)</span>, we can see that <span class="math">\(y\)</span> is somewhere in <span class="math">\([-1, 1]\)</span>; given that we've only conditioned on 6 "training points," we're still quite unsure as to what the true answer is. To this effect, a GP (and other fully-Bayesian models) allows us to quantify this uncertainty judiciously.</p>
 <p>Now, let's try some more features and examine the model we're able to build.</p>
@@ -589,11 +589,11 @@ $$</div>
 <span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_44_1.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_44_1.png"/></p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_45_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_45_0.png"/></p>
 <p>That last one might look familiar. Therein, the features we chose (still arbitrarily, really) are called "radial basis functions" (among other names).</p>
 <p>We've loosely examined what happens when we change the language through which we articulate our model. Next, what if we changed the size of its vocabulary?</p>
 <p>First, let's backtrack, and try 8 of these radial basis functions instead of 20.</p>
@@ -612,7 +612,7 @@ $$</div>
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_47_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_47_0.png"/></p>
 <p>Very different! Holy overfit. What about 250?</p>
 <div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">250</span>
 
@@ -629,7 +629,7 @@ $$</div>
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
-<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_49_0.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_49_0.png"/></p>
 <p>It appears that the more features we use, the more expressive, and/or less endemically prone to overfitting, our model becomes.</p>
 <p>So, how far do we take this? <code>D = 1000</code>? <code>D = 50000</code>? How high can we go? <strong>We'll pick up here in the next post.</strong></p>
 <h1>Summary</h1>
