@@ -4,7 +4,7 @@
 &lt;p&gt;To &lt;em&gt;explore&lt;/em&gt; is to try something new. It's to implicitly concede that while your favorite restaurant is great, it may not be the best overall. Your new choice may very well end in vomit and tears. However, you'll never find something better unless you try.&lt;/p&gt;
 &lt;h2&gt;ASAPP&lt;/h2&gt;
 &lt;p&gt;Four and a half years at &lt;a href="https://willwolf.io/2021/12/04/leaving-asapp/"&gt;ASAPP&lt;/a&gt; was my career on "exploit." ASAPP is a company solving important problems replete with wonderful colleagues and ample opportunity for personal growth. I benefited from this environment each and every day. I kept choosing ASAPP because it unfailingly was, and remains, an excellent place to call my professional home.&lt;/p&gt;
-&lt;p&gt;I joined ASAPP at age 28. I'm now 32. And I'd like to see what else there is. Where else I can learn, enjoy, create and grow. In simple terms, I'd like to explore.&lt;/p&gt;
+&lt;p&gt;I joined ASAPP at age 28. I'm now 32. And I'd like to see what else there is. Where else I can learn, enjoy, create, and grow. In simple terms, I'd like to explore.&lt;/p&gt;
 &lt;h2&gt;What's next&lt;/h2&gt;
 &lt;p&gt;On the technical front:&lt;/p&gt;
 &lt;ul&gt;
@@ -2141,7 +2141,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -3543,7 +3543,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7730,7 +7730,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -9260,7 +9260,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12616,7 +12616,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12718,7 +12718,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12820,7 +12820,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12922,7 +12922,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13024,7 +13024,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13131,7 +13131,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13225,7 +13225,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13316,7 +13316,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13411,7 +13411,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13527,7 +13527,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13997,7 +13997,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -14066,7 +14066,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15804,7 +15804,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15923,7 +15923,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -16042,7 +16042,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -16161,7 +16161,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
+&lt;table border="1" class="table-striped table-hover dataframe table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
