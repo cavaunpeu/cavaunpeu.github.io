@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>will wolf</title>
-	<meta name="description" content="writings on machine learning, crypto, geopolitics, life">
+	<meta name="description" content="writings on machine learning, geopolitics, life">
 	<meta name="author" content="Will Wolf">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
@@ -46,7 +46,7 @@
           <span class="icon-bar"></span>
         </button>
         <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
-            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-crypto" href="/crypto">crypto</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
@@ -116,7 +116,7 @@ $$</div>
 <ul>
 <li>Since our weights can be negative, <span class="math">\(H(x)\)</span> can be negative. Since our likelihood is proportional to a valid probability, we'd prefer it to be non-negative.</li>
 <li>To enforce this constraint, we exponentiate <span class="math">\(H(x)\)</span> in the second equation.</li>
-<li>To normalize, we divide by the normalization constant <span class="math">\(Z\)</span>, i.e. the sum of the likelihoods of all possible values of <span class="math">\(x^{(1)}, ..., x^{(n)}\)</span>.</li>
+<li>To normalize, we divide by the normalization constant <span class="math">\(Z\)</span>, i.e. the sum of the likelihoods of all possible values of <span class="math">\(x\)</span>.</li>
 </ul>
 <h2>Computing the partition function by hand</h2>
 <p>In the case of 2-dimensional binary datum <span class="math">\(x\)</span>, there are 4 possible "configurations": <span class="math">\([0, 0], [0, 1], [1, 0], [1, 1]\)</span>. As such, to compute the likelihood of one of these configurations, e.g.</p>
@@ -796,7 +796,6 @@ $$</div>
 				      Categories
 				    </h4>
 				    <ul>
-				      <li><a href="https://willwolf.io/crypto/">crypto</li>
 				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
 				      <li><a href="https://willwolf.io/life/">life</li>
 				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
