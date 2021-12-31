@@ -3,7 +3,7 @@
 &lt;p&gt;Here's a running list of things I've built in and around this space.&lt;/p&gt;
 &lt;h2&gt;Anchor Escrow Program&lt;/h2&gt;
 &lt;p&gt;A toy implementation of a Solana escrow &lt;a href="https://anchor-escrow-program.netlify.app/"&gt;program&lt;/a&gt; in Anchor and React.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="" class="img-responsive" src="https://anchor-escrow-program.netlify.app/card_image.png"/&gt;&lt;/p&gt;</content><category term="crypto"></category></entry><entry><title>Exploring, Crypto</title><link href="https://willwolf.io/2021/12/10/exploring-crypto/" rel="alternate"></link><published>2021-12-10T10:00:00-05:00</published><updated>2021-12-10T10:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:willwolf.io,2021-12-10:/2021/12/10/exploring-crypto/</id><summary type="html">&lt;p&gt;I'm taking some time to explore: Rust, complex systems, crypto.&lt;/p&gt;</summary><content type="html">&lt;p&gt;To "explore vs. exploit" is a classic dilemma in decision-making. To illustrate, imagine it’s date-night in downtown Manhattan and you’re choosing where to eat.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="escrow program screenshot" class="img-responsive" src="https://anchor-escrow-program.netlify.app/card_image.png"/&gt;&lt;/p&gt;</content><category term="crypto"></category></entry><entry><title>Exploring, Crypto</title><link href="https://willwolf.io/2021/12/10/exploring-crypto/" rel="alternate"></link><published>2021-12-10T10:00:00-05:00</published><updated>2021-12-10T10:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:willwolf.io,2021-12-10:/2021/12/10/exploring-crypto/</id><summary type="html">&lt;p&gt;I'm taking some time to explore: Rust, complex systems, crypto.&lt;/p&gt;</summary><content type="html">&lt;p&gt;To "explore vs. exploit" is a classic dilemma in decision-making. To illustrate, imagine it’s date-night in downtown Manhattan and you’re choosing where to eat.&lt;/p&gt;
 &lt;p&gt;To &lt;em&gt;exploit&lt;/em&gt; is to dine at your favorite restaurant. The food is well-cooked. The servers are attentive. You'll have a great meal and you know it.&lt;/p&gt;
 &lt;p&gt;To &lt;em&gt;explore&lt;/em&gt; is to try something new. It's to implicitly concede that while your favorite restaurant is great, it may not be the best overall. Your new choice may very well end in vomit and tears. However, you'll never find something better unless you try.&lt;/p&gt;
 &lt;h2&gt;ASAPP&lt;/h2&gt;
@@ -2145,7 +2145,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="dataframe table table-hover table-striped"&gt;
+&lt;table border="1" class="table-hover dataframe table-striped table"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
