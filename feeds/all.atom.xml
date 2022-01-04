@@ -191,6 +191,8 @@ $$&lt;/div&gt;
 &lt;p&gt;In solution, they propose to learn a (neural) classifier that instead discriminates between &lt;em&gt;dependent&lt;/em&gt; sample-parameter pairs &lt;span class="math"&gt;\((\mathbf{x}, \boldsymbol{\theta}) \sim p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)&lt;/span&gt; from &lt;em&gt;independent&lt;/em&gt; sample-parameter pairs &lt;span class="math"&gt;\((\mathbf{x}, \boldsymbol{\theta}) \sim p(\mathbf{x})p(\boldsymbol{\theta})\)&lt;/span&gt;. Since &lt;span class="math"&gt;\(p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)&lt;/span&gt; and &lt;span class="math"&gt;\(p(\mathbf{x})p(\boldsymbol{\theta})\)&lt;/span&gt; occupy the same space, they share a common support. In other words, the likelihood of a given &lt;span class="math"&gt;\(\mathbf{x}\)&lt;/span&gt; will &lt;em&gt;always&lt;/em&gt; be positive for &lt;em&gt;some&lt;/em&gt; &lt;span class="math"&gt;\(\boldsymbol{\theta}\)&lt;/span&gt; in the figure above.&lt;/p&gt;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;Simulation-based inference is a class of techniques that allows us to perform Bayesian inference where our data-generating model &lt;span class="math"&gt;\(p(\mathbf{x}\mid\boldsymbol{\theta})\)&lt;/span&gt; lacks a tractable likelihood function, yet permits simulation of novel data. In the above sections, we detailed several SBI approaches, and ways in which neural networks are currently being used in each.&lt;/p&gt;
+&lt;h2&gt;Credit&lt;/h2&gt;
+&lt;p&gt;Credit to &lt;a href="https://www.processmaker.com/wp-content/uploads/2021/07/simulation-modeling-process-mining.jpg"&gt;ProcessMaker&lt;/a&gt; for social card image.&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%&amp;#64;#$&amp;#64;#')) {
     var align = "center",
         indent = "0em",
@@ -2428,7 +2430,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="dataframe table-striped table"&gt;
+&lt;table border="1" class="table table-striped dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;

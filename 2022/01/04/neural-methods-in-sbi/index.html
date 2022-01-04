@@ -23,7 +23,7 @@
   <meta name="twitter:domain" content="https://willwolf.io">
     <meta property="twitter:title" content="Neural Methods in Simulation-Based Inference"/>
     <meta property="twitter:description" content="A survey of how neural networks are currently being used in simulation-based inference routines."/>
-    <meta property="twitter:image" content="https://willwolf.io/https://www.processmaker.com/wp-content/uploads/2021/07/simulation-modeling-process-mining.jpg"/>
+    <meta property="twitter:image" content="https://willwolf.io/images/neural-sbi.jpeg"/>
 
 	<!-- CSS -->
 	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
@@ -264,6 +264,8 @@ $$</div>
 <p>In solution, they propose to learn a (neural) classifier that instead discriminates between <em>dependent</em> sample-parameter pairs <span class="math">\((\mathbf{x}, \boldsymbol{\theta}) \sim p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span> from <em>independent</em> sample-parameter pairs <span class="math">\((\mathbf{x}, \boldsymbol{\theta}) \sim p(\mathbf{x})p(\boldsymbol{\theta})\)</span>. Since <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span> and <span class="math">\(p(\mathbf{x})p(\boldsymbol{\theta})\)</span> occupy the same space, they share a common support. In other words, the likelihood of a given <span class="math">\(\mathbf{x}\)</span> will <em>always</em> be positive for <em>some</em> <span class="math">\(\boldsymbol{\theta}\)</span> in the figure above.</p>
 <h1>Conclusion</h1>
 <p>Simulation-based inference is a class of techniques that allows us to perform Bayesian inference where our data-generating model <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> lacks a tractable likelihood function, yet permits simulation of novel data. In the above sections, we detailed several SBI approaches, and ways in which neural networks are currently being used in each.</p>
+<h2>Credit</h2>
+<p>Credit to <a href="https://www.processmaker.com/wp-content/uploads/2021/07/simulation-modeling-process-mining.jpg">ProcessMaker</a> for social card image.</p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%&#64;#$&#64;#')) {
     var align = "center",
         indent = "0em",
