@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="writings on machine learning, crypto, geopolitics, life">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://willwolf.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@willwolf_">
+  <meta name="twitter:creator" content="@willwolf_">
+  <meta name="twitter:domain" content="https://willwolf.io">
+    <meta property="twitter:title" content="Neural Methods in Simulation-Based Inference"/>
+    <meta property="twitter:description" content="A survey of how neural networks are currently being used in simulation-based inference routines."/>
+    <meta property="twitter:image" content="https://willwolf.io/https://www.processmaker.com/wp-content/uploads/2021/07/simulation-modeling-process-mining.jpg"/>
+
+	<!-- CSS -->
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-crypto" href="/crypto">crypto</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://willwolf.io/about/" title="About">About</a></li>
+              <li><a href="https://willwolf.io/images/resume.pdf" title="Résumé"></span> Résumé</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books">Books</a></li>
+          <li>
+            <button id="subscribeButton">
+              <a href="https://willwolf.io/subscribe/" title="Get new posts by email">Subscribe</a>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Neural Methods in Simulation-Based Inference</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2022-01-04T10:00:00-05:00" itemprop="datePublished">January 4, 2022</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>Bayesian inference is the task of quantifying a posterior belief over parameters <span class="math">\(\boldsymbol{\theta}\)</span> given observed data <span class="math">\(\mathbf{x}\)</span>—where <span class="math">\(\mathbf{x}\)</span> was generated from a model <span class="math">\(p(\mathbf{x}\mid{\boldsymbol{\theta}})\)</span>—via Bayes' Theorem:</p>
+<div class="math">$$
+    p(\boldsymbol{\theta}\mid\mathbf{x}) = \frac{p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})}{p(\mathbf{x})}
+$$</div>
+<p>In numerous applications of scientific interest, e.g. cosmological, climatic or urban-mobility phenomena, the likelihood of the data <span class="math">\(\mathbf{x}\)</span> under the data-generating function <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> is intractable to compute, precluding classical inference approaches. Notwithstanding, <em>simulating</em> new data <span class="math">\(\mathbf{x}\)</span> from this function is often trivial—for example, by coding the generative process in a few lines of Python—</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generative_process</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># some deterministic logic</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># some stochastic logic</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># whatever you want!</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+<span class="n">simulated_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">generative_process</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+</pre></div>
+<p>—motivating the study of <em>simulation-based</em> Bayesian <em>inference</em> methods, termed SBI.</p>
+<p>Furthermore, the evidence <span class="math">\(p(\mathbf{x}) = \int{p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})}d\boldsymbol{\theta}\)</span> is typically intractable to compute as well. This is because the integral has no closed-form solution; or, were the functional form of the likelihood (which we don't have) and the prior (which we do have) available, expanding these terms yields a summation over an "impractically large" number of terms, e.g. the number of possible cluster assignment configurations in a mixture of Gaussians <a href="#10.1080/01621459.2017.1285773" id="ref-10.1080/01621459.2017.1285773-1">(Blei et al., 2017)</a>. For this reason, in SBI, we typically estimate the <em>unnormalized</em> posterior <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x}) = p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta}) \propto \frac{p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})}{p(\mathbf{x})}\)</span>.</p>
+<p>Recent work has explored the use of neural networks to perform key density estimation tasks, i.e. subroutines, of the SBI routine itself. We refer to this work as Neural SBI. In the following sections, we detail the various classes of these estimation tasks. For a more thorough analysis of their respective motivations, behaviors, and tradeoffs, we refer the reader to the original work.</p>
+<h1>Neural Posterior Estimation</h1>
+<p>In this class of models, we estimate <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x})\)</span> with a conditional neural density estimator <span class="math">\(q_{\phi}(\boldsymbol{\theta}\mid\mathbf{x})\)</span>. Simply, this estimator is a neural network with parameters <span class="math">\(\phi\)</span> that accepts <span class="math">\(\mathbf{x}\)</span> as input and produces <span class="math">\(\boldsymbol{\theta}\)</span> as output. For example, It is trained on data tuples <span class="math">\(\{\boldsymbol{\theta}_n, \mathbf{x}_n\}_{1:N}\)</span> sampled from <span class="math">\(p(\mathbf{x}, \boldsymbol{\theta}) = p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span>, where <span class="math">\(p(\boldsymbol{\theta})\)</span> is a prior we choose, and <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> is our <em>simulator</em>. For example, we can construct this training set as follows:</p>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">prior</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">generative_process</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span>
+</pre></div>
+<p>Then, we train our network.</p>
+<div class="highlight"><pre><span></span><span class="n">q_phi</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+<p>Finally, once trained, we can estimate <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x} = \mathbf{x}_o)\)</span>—our posterior belief over parameters <span class="math">\(\boldsymbol{\theta}\)</span> given our <em>observed</em> (not simulated!) data <span class="math">\(\mathbf{x}_o\)</span> as <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x}_o) = q_{\phi}(\boldsymbol{\theta}\mid\mathbf{x} = \mathbf{x}_o)\)</span>.</p>
+<h2>Learning the wrong estimator</h2>
+<p>Ultimately, our goal is to perform the following computation:</p>
+<div class="math">$$
+q_{\phi}(\boldsymbol{\theta}\mid\mathbf{x} = \mathbf{x}_o)
+$$</div>
+<p>Such that <span class="math">\(q_{\phi}\)</span> produces an <em>accurate</em> estimation of the parameters <span class="math">\(\boldsymbol{\theta}\)</span> given observed data <span class="math">\(\mathbf{x}_o\)</span>, we require that <span class="math">\(q_{\phi}\)</span> be <em>trained</em> on tuples <span class="math">\(\{\boldsymbol{\theta}_n, \mathbf{x}_n\}\)</span> where:</p>
+<ol>
+<li><span class="math">\(\mathbf{x}_n \sim p(\mathbf{x}\mid\boldsymbol{\theta}_n)\)</span> via our simulation step.</li>
+<li><span class="math">\(\mid\mathbf{x}_n - \mathbf{x}_o\mid\)</span> is small, i.e. our simulated are nearby our observed data.</li>
+</ol>
+<p>Otherwise, <span class="math">\(q_{\phi}\)</span> will learn to estimate a posterior over parameters given data <em>unlike</em> our own.</p>
+<h2>Learning a better estimator</h2>
+<p>So, how do we obtain parameters <span class="math">\(\boldsymbol{\theta}_n\)</span> that produce <span class="math">\(\mathbf{x}_n \sim p(\mathbf{x}\mid\boldsymbol{\theta}_n)\)</span> near <span class="math">\(\mathbf{x}_o\)</span>? We take those that have high (estimated) posterior density given <span class="math">\(\mathbf{x}_o\)</span>!</p>
+<p>In this vein, we build our training set as follows:</p>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">q_phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_o</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">generative_process</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span>
+</pre></div>
+<p>Stitching this all together, our SBI routine becomes:</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_ROUNDS</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">prior</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">q_phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_o</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">generative_process</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span>
+    <span class="n">q_phi</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">posterior_samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">q_phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_o</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ANY_NUMBER</span><span class="p">)]</span>
+</pre></div>
+<h2>Learning the right estimator</h2>
+<p>Unfortunately, we're still left with a problem:</p>
+<ol>
+<li>In the first round, we learn <span class="math">\(q_{\phi, r=0}(\boldsymbol{\theta}\mid\mathbf{x}) \approx p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span>, i.e. the <strong>right</strong> estimator.</li>
+<li>Thereafter, we learn <span class="math">\(q_{\phi, r}(\boldsymbol{\theta}\mid\mathbf{x}) \approx p(\mathbf{x}\mid\boldsymbol{\theta})q_{\phi, r-1}(\boldsymbol{\theta}\mid\mathbf{x})\)</span>, i.e. the <strong>wrong</strong> estimator.</li>
+</ol>
+<p>So, how do we correct this mistake?</p>
+<p>In <a href="#papamakarios2016" id="ref-papamakarios2016-1">Papamakarios and Murray (2016)</a>, the authors adjust the learned posterior <span class="math">\(q_{\phi, r}(\boldsymbol{\theta}\mid\mathbf{x})\)</span> by simply dividing it by <span class="math">\(q_{\phi, r-1}(\boldsymbol{\theta}\mid\mathbf{x})\)</span> then multiplying it by <span class="math">\(p(\boldsymbol{\theta})\)</span>. Furthermore, as they choose <span class="math">\(q_{\phi}\)</span> to be a <em>Mixture Density Network</em>—a neural network which outputs the parameters of a mixture of Gaussians—and the prior to be "simple distribution (uniform or Gaussian, as is typically the case in practice)," this adjustment can be done analytically.</p>
+<p>Conversely, <a href="#lueckmann2017" id="ref-lueckmann2017-1">Lueckmann et al. (2017)</a> <em>train</em> <span class="math">\(q_{\phi}\)</span> on a target <em>reweighted</em> to similar effect: instead of maximizing the total (log) likelihood <span class="math">\(\Sigma_{n} \log q_{\phi}(\boldsymbol{\theta}_n\mid\mathbf{x}_n)\)</span>, they maximize <span class="math">\(\Sigma_{n} \log w_n q_{\phi}(\boldsymbol{\theta}_n\mid\mathbf{x}_n)\)</span>, where <span class="math">\(w_n = \frac{p(\boldsymbol{\theta}_n)}{q_{\phi, r-1}(\boldsymbol{\theta}_n\mid\mathbf{x}_n)}\)</span>.</p>
+<p>While both approaches carry further nuance and potential pitfalls, they bring us effective methods for using a neural network to directly estimate a faithful posterior in SBI routines.</p>
+<h1>Neural Likelihood Estimation</h1>
+<p>In neural likelihood estimation (NLE), we use a neural network to directly estimate the (intractable) likelihood function of the simulator <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> itself. We denote this estimator <span class="math">\(q_{\phi}(\mathbf{x}\mid\boldsymbol{\theta})\)</span>. Finally, we compute our desired posterior as <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x}_o) \approx q_{\phi}(\mathbf{x}_o\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span>.</p>
+<p>Similar to Neural Posterior Estimation (NPE) approaches, we'd like to learn our estimator on inputs <span class="math">\(\boldsymbol{\theta}\)</span> that produce <span class="math">\(\mathbf{x}_n \sim p(\mathbf{x}\mid\boldsymbol{\theta}_n)\)</span> near <span class="math">\(\mathbf{x}_o\)</span>. To do this, we again sample them from regions of high approximate posterior density. In each round <span class="math">\(r\)</span>, in NPE, this posterior was <span class="math">\(q_{\phi, r-1}(\boldsymbol{\theta}\mid\mathbf{x} = \mathbf{x}_o)\)</span>; in NLE, it is <span class="math">\(q_{\phi, r-1}(\mathbf{x}_o\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span>. In both cases, we draw samples from our approximate posterior density, then feed them to the simulator to generate novel data for training our estimator <span class="math">\(q_{\phi, r}\)</span>.</p>
+<p>For a more detailed treatment, please refer to original works <a href="#pmlr-v89-papamakarios19a" id="ref-pmlr-v89-papamakarios19a-1">Papamakarios et al. (2019)</a> and <a href="#pmlr-v96-lueckmann19a" id="ref-pmlr-v96-lueckmann19a-1">Lueckmann et al. (2019)</a> (among others).</p>
+<h1>Neural Likelihood Ratio Estimation</h1>
+<p>In this final class of models, we instead try to directly draw <em>samples</em> from the true posterior itself. However, since we can't compute <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> nor <span class="math">\(p(\mathbf{x})\)</span>, we first need a sampling algorithm that satisifes these constraints. One such class of algorithms is <em>Markov chain Monte Carlo</em>, termed MCMC.</p>
+<p>In MCMC, we first <em>propose</em> parameter samples <span class="math">\(\boldsymbol{\theta}_i\)</span> from a proposal distribution. Then, we evaluate their <em>fitness</em> by asking the question: "does this sample <span class="math">\(\boldsymbol{\theta}_i\)</span> have higher posterior density than the previous sample <span class="math">\(\boldsymbol{\theta}_j\)</span> we drew?" Generally, this question is answered through comparison, e.g.</p>
+<div class="math">$$
+\frac{
+    p(\boldsymbol{\theta}_i\mid\mathbf{x})
+} {
+    p(\boldsymbol{\theta}_{j}\mid\mathbf{x})
+} = \frac{
+    p(\mathbf{x}\mid\boldsymbol{\theta}_i)p(\boldsymbol{\theta}_i) / p(\mathbf{x})
+} {
+    p(\mathbf{x}\mid\boldsymbol{\theta}_j)p(\boldsymbol{\theta}_j) / p(\mathbf{x})
+}
+$$</div>
+<p>Fortunately, the evidence terms <span class="math">\(p(\mathbf{x})\)</span> cancel, and the prior densities <span class="math">\(p(\boldsymbol{\theta})\)</span> are evaluable. Though we cannot compute the likelihood terms outright, we can estimate their <em>ratio</em> and proceed with MCMC as per normal. If <span class="math">\(\frac{p(\boldsymbol{\theta}_i\mid\mathbf{x})}{p(\boldsymbol{\theta}_j\mid\mathbf{x})} \gt 1\)</span>, we (are likely to) <em>accept</em> <span class="math">\(\boldsymbol{\theta}_i\)</span> as a valid sample from our target posterior.</p>
+<h2>Estimating the likelihood ratio</h2>
+<p>Let us term the likelihood ratio as</p>
+<div class="math">$$
+r(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j) = \frac{
+    p(\mathbf{x}\mid\boldsymbol{\theta}_i)
+} {
+    p(\mathbf{x}\mid\boldsymbol{\theta}_j)
+}
+$$</div>
+<p>Ingeniously, <a href="#cranmer2015" id="ref-cranmer2015-1">Cranmer et al. (2015)</a> propose to learn a classifier to discriminate samples <span class="math">\(\mathbf{x} \sim p(\mathbf{x}\mid\boldsymbol{\theta}_i)\)</span> from <span class="math">\(\mathbf{x} \sim p(\mathbf{x}\mid\boldsymbol{\theta}_j)\)</span>, then use its predictions to estimate <span class="math">\(r(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j)\)</span>.</p>
+<p>To do this, they draw training samples <span class="math">\((\mathbf{x}, y=1) \sim p(\mathbf{x}\mid\boldsymbol{\theta}_i)\)</span> and <span class="math">\((\mathbf{x}, y=0) \sim p(\mathbf{x}\mid\boldsymbol{\theta}_j)\)</span> then train a binary classifer <span class="math">\(d(y\mid\mathbf{x})\)</span> on this data. In this vein, a perfect classifier gives:</p>
+<div class="math">$$
+\begin{align*}
+d^*(y=1\mid\mathbf{x})
+&amp;= \frac{
+    p(\mathbf{x}\mid\boldsymbol{\theta}_i)
+} {
+    p(\mathbf{x}\mid\boldsymbol{\theta}_i) + p(\mathbf{x}\mid\boldsymbol{\theta}_j)
+} \\
+d^*(y=0\mid\mathbf{x})
+&amp;= \frac{
+    p(\mathbf{x}\mid\boldsymbol{\theta}_j)
+} {
+    p(\mathbf{x}\mid\boldsymbol{\theta}_i) + p(\mathbf{x}\mid\boldsymbol{\theta}_j)
+} \\
+\end{align*}
+$$</div>
+<p>Consequently,</p>
+<div class="math">$$
+\begin{align*}
+r(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j)
+&amp;= \frac{
+    p(\mathbf{x}\mid\boldsymbol{\theta}_i)
+} {
+    p(\mathbf{x}\mid\boldsymbol{\theta}_j)
+} \\
+&amp;= \frac{
+    d^*(y=1\mid\mathbf{x})
+} {
+    d^*(y=0\mid\mathbf{x})
+} \\
+&amp;= \frac{
+    d^*(y=1\mid\mathbf{x})
+} {
+    1 - d^*(y=1\mid\mathbf{x})
+}
+\end{align*}
+$$</div>
+<p>Since our classifier won't be perfect, we simply term it <span class="math">\(d(y\mid\mathbf{x})\)</span>, where</p>
+<div class="math">$$
+\begin{align*}
+\hat{r}(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j)
+&amp;= \frac{d(y=1\mid\mathbf{x})}{1 - d(y=1\mid\mathbf{x})}\\
+&amp;\approx r(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j)
+\end{align*}
+$$</div>
+<p>With <span class="math">\(\hat{r}(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j)\)</span> in hand, we can compare the posterior density of proposed samples <span class="math">\(\boldsymbol{\theta}_i\)</span> and <span class="math">\(\boldsymbol{\theta}_j\)</span> in our MCMC routine.</p>
+<h2>Generalizing our classifier</h2>
+<p>To use the above classifier in our inference routine, we must <em>retrain</em> a <em>new</em> classifier for every <em>unique</em> set of parameters <span class="math">\(\{\boldsymbol{\theta}_i, \boldsymbol{\theta}_j\}\)</span>. Clearly, this is extremely impractical. How can we generalize our classifier such that we only have to train it once?</p>
+<p>In <a href="#cranmer2015" id="ref-cranmer2015-2">Cranmer et al. (2015)</a>, the authors learn a <em>single</em> classifier <span class="math">\(d(y\mid\mathbf{x}, \boldsymbol{\theta})\)</span> to discriminate samples <span class="math">\(\mathbf{x} \sim p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> from <span class="math">\(\mathbf{x} \sim p(\mathbf{x}\mid\boldsymbol{\theta}_{ref})\)</span>, where <span class="math">\(\boldsymbol{\theta}\)</span> is an <em>arbitrary</em> parameter value, and <span class="math">\(\boldsymbol{\theta}_{ref}\)</span> is a fixed, <em>reference</em> parameter value. It is trained on data <span class="math">\((\mathbf{x},  \boldsymbol{\theta}, y=1) \sim p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> and <span class="math">\((\mathbf{x}, \boldsymbol{\theta}_{ref},  y=0) \sim p(\mathbf{x}\mid\boldsymbol{\theta}_{ref})\)</span>. Once trained, it gives:</p>
+<div class="math">$$
+r(\mathbf{x}\mid\boldsymbol{\theta}, \boldsymbol{\theta}_{ref})
+= \frac{
+    d^*(y\mid\mathbf{x}, \boldsymbol{\theta})
+} {
+    1 - d^*(y\mid\mathbf{x}, \boldsymbol{\theta})
+}
+$$</div>
+<p>Consequently,</p>
+<div class="math">$$
+\begin{align*}
+r(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_j)
+&amp;= \frac{
+    r(\mathbf{x}\mid\boldsymbol{\theta}_i, \boldsymbol{\theta}_{ref})
+} {
+    r(\mathbf{x}\mid\boldsymbol{\theta}_j, \boldsymbol{\theta}_{ref})
+} \\
+&amp;= \frac{
+    d^*(y\mid\mathbf{x}, \boldsymbol{\theta}_i)
+} {
+    1 - d^*(y\mid\mathbf{x}, \boldsymbol{\theta}_i)
+} * \frac{
+    1 - d^*(y\mid\mathbf{x}, \boldsymbol{\theta}_j)
+} {
+    d^*(y\mid\mathbf{x}, \boldsymbol{\theta}_j)
+}
+\end{align*}
+$$</div>
+<p>With a <em>single</em> model, we can now compare the density of two proposed posterior samples.</p>
+<h2>Improving our generalized classifier</h2>
+<p>Once more, our classifier <span class="math">\(d(y\mid\mathbf{x}, \boldsymbol{\theta})\)</span> discriminates samples <span class="math">\(\mathbf{x} \sim p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> from <span class="math">\(\mathbf{x} \sim p(\mathbf{x}\mid\boldsymbol{\theta}_{ref})\)</span>. In this vein, in the case that a given <span class="math">\(\mathbf{x}\)</span> was drawn from neither <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> <em>nor</em> <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta}_{ref})\)</span>, what should our classifier do? In <a href="#hermans2019" id="ref-hermans2019-1">Hermans et al. (2019)</a>, the authors illustrate this problem—</p>
+<p><img alt="png" class="img-fluid" src="https://willwolf.io/figures/neural-sbi/undefined-classifier.png"/></p>
+<p>—stressing that "poor inference results occur in the absence of support between <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> and <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta}_{ref})\)</span>."</p>
+<p>In solution, they propose to learn a (neural) classifier that instead discriminates between <em>dependent</em> sample-parameter pairs <span class="math">\((\mathbf{x}, \boldsymbol{\theta}) \sim p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span> from <em>independent</em> sample-parameter pairs <span class="math">\((\mathbf{x}, \boldsymbol{\theta}) \sim p(\mathbf{x})p(\boldsymbol{\theta})\)</span>. Since <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span> and <span class="math">\(p(\mathbf{x})p(\boldsymbol{\theta})\)</span> occupy the same space, they share a common support. In other words, the likelihood of a given <span class="math">\(\mathbf{x}\)</span> will <em>always</em> be positive for <em>some</em> <span class="math">\(\boldsymbol{\theta}\)</span> in the figure above.</p>
+<h1>Conclusion</h1>
+<p>Simulation-based inference is a class of techniques that allows us to perform Bayesian inference where our data-generating model <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> lacks a tractable likelihood function, yet permits simulation of novel data. In the above sections, we detailed several SBI approaches, and ways in which neural networks are currently being used in each.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%&#64;#$&#64;#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%&#64;#$&#64;#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script><hr/>
+<h2>Bibliography</h2>
+<p id="10.1080/01621459.2017.1285773">David M. Blei, Alp Kucukelbir, and Jon D. McAuliffe.
+<span class="bibtex-protected">Variational Inference: A Review for Statisticians</span>.
+<em>Journal of the American Statistical Association</em>, 112(518):859–877, 2017.
+<a href="https://arxiv.org/abs/1601.00670">arXiv:1601.00670</a>, <a href="https://doi.org/10.1080/01621459.2017.1285773">doi:10.1080/01621459.2017.1285773</a>. <a class="cite-backref" href="#ref-10.1080/01621459.2017.1285773-1" title="Jump back to reference 1">↩</a></p>
+<p id="cranmer2015">Kyle Cranmer, Juan Pavez, and Gilles Louppe.
+<span class="bibtex-protected">Approximating Likelihood Ratios with Calibrated Discriminative Classifiers</span>.
+<em>arXiv</em>, 2015.
+<a href="https://arxiv.org/abs/1506.02169">arXiv:1506.02169</a>. <a class="cite-backref" href="#ref-cranmer2015-1" title="Jump back to reference 1">↩</a><a class="cite-backref" href="#ref-cranmer2015-1" title="Jump back to reference 1"> <sup>1</sup> </a><a class="cite-backref" href="#ref-cranmer2015-2" title="Jump back to reference 2"><sup>2</sup> </a></p>
+<p id="hermans2019">Joeri Hermans, Volodimir Begy, and Gilles Louppe.
+<span class="bibtex-protected">Likelihood-free MCMC with Amortized Approximate Ratio Estimators</span>.
+<em>arXiv</em>, 2019.
+<a href="https://arxiv.org/abs/1903.04057">arXiv:1903.04057</a>. <a class="cite-backref" href="#ref-hermans2019-1" title="Jump back to reference 1">↩</a></p>
+<p id="pmlr-v96-lueckmann19a">Jan-Matthis Lueckmann, Giacomo Bassetto, Theofanis Karaletsos, and Jakob H. Macke.
+Likelihood-free inference with emulator networks.
+In Francisco Ruiz, Cheng Zhang, Dawen Liang, and Thang Bui, editors, <em>Proceedings of The 1st Symposium on Advances in Approximate Bayesian Inference</em>, volume 96 of Proceedings of Machine Learning Research, 32–53. 02 Dec 2019. PMLR.
+URL: <a href="http://proceedings.mlr.press/v96/lueckmann19a.html">http://proceedings.mlr.press/v96/lueckmann19a.html</a>. <a class="cite-backref" href="#ref-pmlr-v96-lueckmann19a-1" title="Jump back to reference 1">↩</a></p>
+<p id="lueckmann2017">Jan-Matthis Lueckmann, Pedro J Goncalves, Giacomo Bassetto, Kaan Öcal, Marcel Nonnenmacher, and Jakob H Macke.
+<span class="bibtex-protected">Flexible statistical inference for mechanistic models of neural dynamics</span>.
+<em>arXiv</em>, 2017.
+<a href="https://arxiv.org/abs/1711.01861">arXiv:1711.01861</a>. <a class="cite-backref" href="#ref-lueckmann2017-1" title="Jump back to reference 1">↩</a></p>
+<p id="papamakarios2016">George Papamakarios and Iain Murray.
+Fast ε-free inference of simulation models with bayesian conditional density estimation.
+In D. Lee, M. Sugiyama, U. Luxburg, I. Guyon, and R. Garnett, editors, <em>Advances in Neural Information Processing Systems</em>, volume 29. Curran Associates, Inc., 2016.
+URL: <a href="https://proceedings.neurips.cc/paper/2016/file/6aca97005c68f1206823815f66102863-Paper.pdf">https://proceedings.neurips.cc/paper/2016/file/6aca97005c68f1206823815f66102863-Paper.pdf</a>. <a class="cite-backref" href="#ref-papamakarios2016-1" title="Jump back to reference 1">↩</a></p>
+<p id="pmlr-v89-papamakarios19a">George Papamakarios, David Sterratt, and Iain Murray.
+Sequential neural likelihood: fast likelihood-free inference with autoregressive flows.
+In Kamalika Chaudhuri and Masashi Sugiyama, editors, <em>Proceedings of the Twenty-Second International Conference on Artificial Intelligence and Statistics</em>, volume 89 of Proceedings of Machine Learning Research, 837–848. PMLR, 16–18 Apr 2019.
+URL: <a href="http://proceedings.mlr.press/v89/papamakarios19a.html">http://proceedings.mlr.press/v89/papamakarios19a.html</a>. <a class="cite-backref" href="#ref-pmlr-v89-papamakarios19a-1" title="Jump back to reference 1">↩</a></p>
+</div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf';
+    var disqus_title = 'Neural Methods in Simulation-Based Inference';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Contact
+						</h4>
+						<li><a href="mailto:williamabrwolf@gmail.com">Email</a></li>
+							<li><a href="http://twitter.com/willwolf_">Twitter</a></li>
+							<li><a href="http://linkedin.com/in/williamabrwolf">LinkedIn</a></li>
+							<li><a href="http://calendly.com/willwolf">Calendly</a></li>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="http://github.com/cavaunpeu">Github</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://willwolf.io/crypto/">crypto</li>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2020</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

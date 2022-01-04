@@ -86,7 +86,7 @@
 <p>Emojis are an increasingly-pervasive sub-lingua-franca of the internet. They capture meaning in a rich, concise manner — alternative to the 13 seconds of mobile thumb-fumbling required to capture the same meaning with text. Furthermore, they bring two levels of semantic information: their context within raw text and the pixels of the emoji itself.</p>
 <h2>Question-answer models</h2>
 <p>The original aim of this post was to explore Siamese question-answer models of the type typically applied to the <a href="https://github.com/shuzi/insuranceQA">InsuranceQA Corpus</a> as introduced in "Applying Deep Learning To Answer Selection: A Study And An Open Task" (<a href="https://arxiv.org/pdf/1508.01585v2.pdf">Feng, Xiang, Glass, Wang, &amp; Zhou, 2015</a>). We'll call them SQAM for clarity. The basic architecture looks as follows:</p>
-<p><img alt="qa model architecture" class="img-responsive" src="https://willwolf.io/figures/qa_model_architecture.png"/></p>
+<p><img alt="qa model architecture" class="img-fluid" src="https://willwolf.io/figures/qa_model_architecture.png"/></p>
 <p>By layer and in general terms:</p>
 <ol>
 <li>An input — typically a sequence of token ids — for both question (Q) and answer (A).</li>
@@ -126,7 +126,7 @@
 
 <span class="n">z_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z_samples</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 </pre></div>
-<p><img alt="aggregate gaussian" class="img-responsive" src="https://willwolf.io/figures/aggregate_gaussian.png"/></p>
+<p><img alt="aggregate gaussian" class="img-fluid" src="https://willwolf.io/figures/aggregate_gaussian.png"/></p>
 <p>Training a variational autoencoder to learn low-dimensional emoji embeddings serves two principal ends:</p>
 <ol>
 <li>We can feed these low-dimensional embeddings as input to our SQAM.</li>
@@ -178,7 +178,7 @@
 <span class="err">    y_val:    (182, 36, 36, 4)</span>
 </pre></div>
 <p>Before we begin, let's examine some emojis.</p>
-<p><img alt="emojis" class="img-responsive" src="https://willwolf.io/images/emojis.png"/></p>
+<p><img alt="emojis" class="img-fluid" src="https://willwolf.io/images/emojis.png"/></p>
 <h2>Model emojis</h2>
 <div class="highlight"><pre><span></span><span class="n">EMBEDDING_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="n">FILTER_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
@@ -328,13 +328,13 @@ This is an iterative approach, where you start with a straightforward baseline a
 </pre></div>
 <div class="highlight"><pre><span></span><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_A</span><span class="p">)</span>
 </pre></div>
-<p><img alt="generated emojis A" class="img-responsive" src="https://willwolf.io/figures/generated_emojis_A.png"/></p>
+<p><img alt="generated emojis A" class="img-fluid" src="https://willwolf.io/figures/generated_emojis_A.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_B</span><span class="p">)</span>
 </pre></div>
-<p><img alt="generated emojis B" class="img-responsive" src="https://willwolf.io/figures/generated_emojis_B.png"/></p>
+<p><img alt="generated emojis B" class="img-fluid" src="https://willwolf.io/figures/generated_emojis_B.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_C</span><span class="p">)</span>
 </pre></div>
-<p><img alt="generated emojis C" class="img-responsive" src="https://willwolf.io/figures/generated_emojis_C.png"/></p>
+<p><img alt="generated emojis C" class="img-fluid" src="https://willwolf.io/figures/generated_emojis_C.png"/></p>
 <p>As our emojis live in a continuous latent space we can observe the smoothness of the transition from one to the next.</p>
 <p>The generated emojis have the makings of maybe some devils, maybe some bubbles, maybe some hearts, maybe some fish. I doubt they'll be featured on your cell phone's keyboard anytime soon.</p>
 <h2>Text-question, emoji-answer</h2>
@@ -395,7 +395,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 </style>
-<table border="1" class="dataframe table-striped table table-hover">
+<table border="1" class="dataframe table-striped table">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -551,7 +551,7 @@ This is an iterative approach, where you start with a straightforward baseline a
 <span class="c1"># model</span>
 <span class="n">qa_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">],</span> <span class="p">[</span><span class="n">cosine_sim</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">'qa_model'</span><span class="p">)</span>
 </pre></div>
-<p><img alt="qa model" class="img-responsive" src="https://willwolf.io/figures/qa_model.png"/></p>
+<p><img alt="qa model" class="img-fluid" src="https://willwolf.io/figures/qa_model.png"/></p>
 <h3>Build contrastive model</h3>
 <p>Two Siamese networks, trained jointly so as to minimize the hinge loss of their respective outputs.</p>
 <div class="highlight"><pre><span></span><span class="c1"># contrastive model</span>
@@ -684,19 +684,19 @@ This is an iterative approach, where you start with a straightforward baseline a
 <span class="n">top_5_matches</span> <span class="o">=</span> <span class="n">extract_top_5_argmax</span><span class="p">(</span><span class="n">preds_1</span><span class="p">)</span>
 <span class="n">display_top_5_results</span><span class="p">(</span><span class="n">top_5_matches</span><span class="p">)</span>
 </pre></div>
-<p><img alt="predicted tweets 1" class="img-responsive" src="https://willwolf.io/images/predicted_tweets_1.png"/></p>
+<p><img alt="predicted tweets 1" class="img-fluid" src="https://willwolf.io/images/predicted_tweets_1.png"/></p>
 <h3>Tweet #2</h3>
 <div class="highlight"><pre><span></span><span class="n">preds_2</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="n">n_sentiments</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">n_sentiments</span><span class="p">]</span>
 <span class="n">top_5_matches</span> <span class="o">=</span> <span class="n">extract_top_5_argmax</span><span class="p">(</span><span class="n">preds_2</span><span class="p">)</span>
 <span class="n">display_top_5_results</span><span class="p">(</span><span class="n">top_5_matches</span><span class="p">)</span>
 </pre></div>
-<p><img alt="predicted tweets 2" class="img-responsive" src="https://willwolf.io/images/predicted_tweets_2.png"/></p>
+<p><img alt="predicted tweets 2" class="img-fluid" src="https://willwolf.io/images/predicted_tweets_2.png"/></p>
 <h3>Tweet #3</h3>
 <div class="highlight"><pre><span></span><span class="n">preds_3</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n_sentiments</span><span class="p">:]</span>
 <span class="n">top_5_matches</span> <span class="o">=</span> <span class="n">extract_top_5_argmax</span><span class="p">(</span><span class="n">preds_3</span><span class="p">)</span>
 <span class="n">display_top_5_results</span><span class="p">(</span><span class="n">top_5_matches</span><span class="p">)</span>
 </pre></div>
-<p><img alt="predicted tweets 3" class="img-responsive" src="https://willwolf.io/images/predicted_tweets_3.png"/></p>
+<p><img alt="predicted tweets 3" class="img-fluid" src="https://willwolf.io/images/predicted_tweets_3.png"/></p>
 <p>Not particularly useful. These emojis have 0 notion of sentiment, though: the model is simply predicting on their (pixel-based) latent codes.</p>
 <h2>Future work</h2>
 <p>In this work, we trained a convolutional variational autoencoder to model the distribution of emojis. Next, we trained a Siamese question-answer model to answer text questions with emoji answers. Finally, we were able to use the latter to predict on novel emojis from the former.</p>
