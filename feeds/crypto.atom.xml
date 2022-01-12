@@ -3,4 +3,7 @@
 &lt;p&gt;Here's a running list of things I've built in and around this space.&lt;/p&gt;
 &lt;h2&gt;Anchor Escrow Program&lt;/h2&gt;
 &lt;p&gt;A toy implementation of a Solana escrow &lt;a href="https://anchor-escrow-program.netlify.app/"&gt;program&lt;/a&gt; in Anchor and React.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="escrow program screenshot" class="img-fluid" src="https://anchor-escrow-program.netlify.app/card_image.png"/&gt;&lt;/p&gt;</content><category term="crypto"></category></entry></feed>
+&lt;p&gt;&lt;img alt="escrow program screenshot" class="img-fluid" src="https://anchor-escrow-program.netlify.app/card_image.png"/&gt;&lt;/p&gt;
+&lt;h2&gt;Solana Economic Simulator&lt;/h2&gt;
+&lt;p&gt;A Streamlit &lt;a href="https://share.streamlit.io/cavaunpeu/solana-economics/main/app/main.py"&gt;app&lt;/a&gt; for simulating Solana validator economics&lt;/p&gt;
+&lt;p&gt;&lt;img alt="solana economics simulation screenshot" class="img-fluid" src="https://raw.githubusercontent.com/cavaunpeu/solana-economics/main/screenshot.png"/&gt;&lt;/p&gt;</content><category term="crypto"></category></entry></feed>
