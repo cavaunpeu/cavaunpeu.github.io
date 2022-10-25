@@ -73,7 +73,7 @@
 		<time datetime="2017-05-08T12:45:00-04:00" itemprop="datePublished">May 8, 2017</time>
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:</p>
-<table class="table table-striped">
+<table class="table-hover table-striped table">
 <thead>
 <tr>
 <th>user_id</th>
@@ -248,7 +248,7 @@
 <span class="n">simple_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">simple_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">simple_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="simple regression initial" class="img-fluid" src="https://willwolf.io/figures/transfer_learning_simple_regression_initial.png"/></p>
+<p><img alt="simple regression initial" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_simple_regression_initial.png"/></p>
 <h2>Deeper regression</h2>
 <div class="highlight"><pre><span></span><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
@@ -256,7 +256,7 @@
 <span class="n">deeper_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">deeper_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">deeper_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="deeper regression initial" class="img-fluid" src="https://willwolf.io/figures/transfer_learning_deeper_regression_initial.png"/></p>
+<p><img alt="deeper regression initial" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_deeper_regression_initial.png"/></p>
 <h2>Test set predictions</h2>
 <div class="highlight"><pre><span></span><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">y_pred_deeper</span> <span class="o">=</span> <span class="n">deeper_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
@@ -302,7 +302,7 @@
 <p><em><strong>In the context of autoencoders (and dimensionality reduction algorithms), "learning 'structure' in our data" means nothing more than finding that ceramic plate amidst a galaxy of stars</strong></em>.</p>
 <h3>Graphical models</h3>
 <p>Variational autoencoders do not have the same notion of an "output" - namely, "does a route between two airports exist?" - as our dot product siamese network. To detail this model, we'll start near first principles with probabilistic graphical models with our notion of the ceramic plate in mind:</p>
-<p><img alt="VAE pgm" class="img-fluid" src="https://willwolf.io/images/vae_pgm.png"/></p>
+<p><img alt="VAE pgm" class="img-responsive" src="https://willwolf.io/images/vae_pgm.png"/></p>
 <p>Coordinates on the plate detail airport character; choosing coordinates - say, <code>[global_hub_ness = 500, is_in_asia = 500]</code> - allows us to <em>generate</em> an airport. In this case, it might be Seoul. In variational autoencoders, ceramic-plate coordinates are called the "latent vector," denoted <span class="math">\(z\)</span>. The joint probability of our graphical model is given as:</p>
 <div class="math">$$P(z)P(x\vert z) = P(z, x)$$</div>
 <p>Our goal is to infer the priors that likely generated these data via Bayes' rule:</p>
@@ -452,9 +452,9 @@ $$</div>
 <span class="n">dp_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">)</span>
 <span class="n">SVG</span><span class="p">(</span><span class="n">model_to_dot</span><span class="p">(</span><span class="n">dp_model</span><span class="o">.</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'dot'</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">'svg'</span><span class="p">))</span>
 </pre></div>
-<p><img alt="dot product embedding model" class="img-fluid" src="https://willwolf.io/figures/dot_product_embedding_model.svg"/></p>
+<p><img alt="dot product embedding model" class="img-responsive" src="https://willwolf.io/figures/dot_product_embedding_model.svg"/></p>
 <h2>Fit</h2>
-<p><img alt="dot product embedding model fit" class="img-fluid" src="https://willwolf.io/figures/dot_product_embedding_model_fit.png"/></p>
+<p><img alt="dot product embedding model fit" class="img-responsive" src="https://willwolf.io/figures/dot_product_embedding_model_fit.png"/></p>
 <h2>Visualize embeddings</h2>
 <p>To visualize results, we'll:
 1. Compose a list of unique origin airports.
@@ -569,7 +569,7 @@ $$</div>
                   <span class="n">loss_weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">])</span>
 <span class="n">SVG</span><span class="p">(</span><span class="n">model_to_dot</span><span class="p">(</span><span class="n">vae_model</span><span class="o">.</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'dot'</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">'svg'</span><span class="p">))</span>
 </pre></div>
-<p><img alt="vae embedding model" class="img-fluid" src="https://willwolf.io/figures/vae_embedding_model.svg"/></p>
+<p><img alt="vae embedding model" class="img-responsive" src="https://willwolf.io/figures/vae_embedding_model.svg"/></p>
 <div class="highlight"><pre><span></span><span class="c1"># build VAE training, test sets</span>
 <span class="n">one_hot_airports</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">)</span>
 
@@ -591,7 +591,7 @@ $$</div>
 <span class="err">    Test:       (21907, 3186)</span>
 </pre></div>
 <h2>Fit</h2>
-<p><img alt="vae product embedding model fit" class="img-fluid" src="https://willwolf.io/figures/vae_product_embedding_model_fit.png"/></p>
+<p><img alt="vae product embedding model fit" class="img-responsive" src="https://willwolf.io/figures/vae_product_embedding_model_fit.png"/></p>
 <h2>Visualize</h2>
 <p><iframe allowfullscreen="" frameborder="0" height="800" src="https://willwolf-public.s3.amazonaws.com/transfer-learning-flight-delays/vae_model_map.html" width="946"></iframe></p>
 <h2>Finally, transfer the learning</h2>
@@ -609,14 +609,14 @@ $$</div>
 
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">simple_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="simple regression augmented" class="img-fluid" src="https://willwolf.io/figures/transfer_learning_simple_regression_augmented.png"/></p>
+<p><img alt="simple regression augmented" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_simple_regression_augmented.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
 <span class="n">deeper_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">deeper_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">deeper_reg_fit</span><span class="p">)</span>
 </pre></div>
-<p><img alt="deeper regression augmented" class="img-fluid" src="https://willwolf.io/figures/transfer_learning_deeper_regression_augmented.png"/></p>
+<p><img alt="deeper regression augmented" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_deeper_regression_augmented.png"/></p>
 <div class="highlight"><pre><span></span><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">y_pred_deeper</span> <span class="o">=</span> <span class="n">deeper_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">mse_simple</span> <span class="o">=</span> <span class="n">mean_squared_error_scikit</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_simple</span><span class="p">)</span>

@@ -2,13 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom"><title>will wolf - crypto</title><link href="https://willwolf.io/" rel="alternate"></link><link href="https://willwolf.io/feeds/crypto.atom.xml" rel="self"></link><id>https://willwolf.io/</id><updated>2021-12-21T18:00:00-05:00</updated><subtitle>writings on machine learning, crypto, geopolitics, life</subtitle><entry><title>Things I've Built in Crypto</title><link href="https://willwolf.io/2021/12/21/crypto-projects/" rel="alternate"></link><published>2021-12-21T18:00:00-05:00</published><updated>2021-12-21T18:00:00-05:00</updated><author><name>Will Wolf</name></author><id>tag:willwolf.io,2021-12-21:/2021/12/21/crypto-projects/</id><summary type="html">&lt;p&gt;A running list of things I've built in and around the crypto space.&lt;/p&gt;</summary><content type="html">&lt;p&gt;A running list of things I've built in and around this space.&lt;/p&gt;
 &lt;h1&gt;simsim&lt;/h1&gt;
 &lt;p&gt;A (sim)ple (sim)ulation &lt;a href="https://github.com/cavaunpeu/simsim"&gt;framework&lt;/a&gt; for generalized dynamical systems, in Rust.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="simsim" class="img-fluid" src="https://willwolf.io/images/simsim.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="simsim" class="img-responsive" src="https://willwolf.io/images/simsim.png"/&gt;&lt;/p&gt;
 &lt;h1&gt;solsim&lt;/h1&gt;
 &lt;p&gt;A &lt;a href="https://github.com/cavaunpeu/solsim"&gt;simulator&lt;/a&gt; for complex systems on the Solana blockchain.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="solsim results app screenshot" class="img-fluid" src="https://raw.githubusercontent.com/cavaunpeu/solsim/main/img/results_explorer_app.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="solsim results app screenshot" class="img-responsive" src="https://raw.githubusercontent.com/cavaunpeu/solsim/main/img/results_explorer_app.png"/&gt;&lt;/p&gt;
 &lt;h1&gt;Solana Economic Simulator&lt;/h1&gt;
 &lt;p&gt;A Streamlit &lt;a href="https://share.streamlit.io/cavaunpeu/solana-economics/main/app/main.py"&gt;app&lt;/a&gt; for simulating Solana validator economics.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="solana economics simulation screenshot" class="img-fluid" src="https://raw.githubusercontent.com/cavaunpeu/solana-economics/main/screenshot.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="solana economics simulation screenshot" class="img-responsive" src="https://raw.githubusercontent.com/cavaunpeu/solana-economics/main/screenshot.png"/&gt;&lt;/p&gt;
 &lt;h1&gt;Anchor Escrow Program&lt;/h1&gt;
 &lt;p&gt;A toy implementation of a Solana escrow &lt;a href="https://anchor-escrow-program.netlify.app/"&gt;program&lt;/a&gt; in Anchor and React.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="escrow program screenshot" class="img-fluid" src="https://anchor-escrow-program.netlify.app/card_image.png"/&gt;&lt;/p&gt;</content><category term="crypto"></category></entry></feed>
+&lt;p&gt;&lt;img alt="escrow program screenshot" class="img-responsive" src="https://anchor-escrow-program.netlify.app/card_image.png"/&gt;&lt;/p&gt;</content><category term="crypto"></category></entry></feed>

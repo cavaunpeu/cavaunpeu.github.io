@@ -170,9 +170,9 @@ $$</div>
 </pre></div>
 <h3>Criticize model</h3>
 <h4>Visualize data fit given parameter priors</h4>
-<p><img alt="data fit given parameter priors" class="img-fluid" src="https://willwolf.io/figures/data_fit_given_parameter_priors.png"/></p>
+<p><img alt="data fit given parameter priors" class="img-responsive" src="https://willwolf.io/figures/data_fit_given_parameter_priors.png"/></p>
 <h4>Visualize data fit given parameter posteriors</h4>
-<p><img alt="data fit given parameter posteriors" class="img-fluid" src="https://willwolf.io/figures/data_fit_given_parameter_posteriors.png"/></p>
+<p><img alt="data fit given parameter posteriors" class="img-responsive" src="https://willwolf.io/figures/data_fit_given_parameter_posteriors.png"/></p>
 <p>It appears as if our model fits the data along the first two dimensions. This said, we could improve this fit considerably. This will become apparent when we compute the MAE on our validation set.</p>
 <div class="highlight"><pre><span></span><span class="n">param_posteriors</span> <span class="o">=</span> <span class="err">{</span>
   <span class="n">β_fixed_effects</span><span class="o">:</span> <span class="n">qβ_fixed_effects</span><span class="p">.</span><span class="n">mean</span><span class="p">(),</span>
@@ -190,10 +190,10 @@ $$</div>
 <span class="n">Mean</span> <span class="n">absolute</span> <span class="k">error</span> <span class="k">on</span> <span class="k">validation</span> <span class="k">data</span><span class="o">:</span> <span class="mf">0.089943</span>
 </pre></div>
 <h4>Inspect residuals</h4>
-<p><img alt="bayesian linear regression residuals" class="img-fluid" src="https://willwolf.io/figures/bayesian_linear_regression_residuals.png"/></p>
+<p><img alt="bayesian linear regression residuals" class="img-responsive" src="https://willwolf.io/figures/bayesian_linear_regression_residuals.png"/></p>
 <p>"The residuals appear normally distributed with mean 0: this is a good sanity check for the model."<sup>1</sup> However, with respect to the magnitude of the mean of the validation <code>logerror</code>, our validation score is terrible. This is likely due to the fact that three predictors are not nearly sufficient for capturing the variation in the response. (Additionally, because the response itself is an <em>error</em>, it should be fundamentally harder to capture than the thing actually being predicted — the house price. This is because Zillow's team has already built models to capture this signal, then effectively threw the remaining "uncaptured" signal into this competition, i.e. "figure out how to get right the little that we got wrong.")</p>
 <h4>Inspect parameter posteriors</h4>
-<p><img alt="bayesian linear regression posteriors" class="img-fluid" src="https://willwolf.io/figures/bayesian_linear_regression_posteriors.png"/></p>
+<p><img alt="bayesian linear regression posteriors" class="img-responsive" src="https://willwolf.io/figures/bayesian_linear_regression_posteriors.png"/></p>
 <p>In keeping with the definition of multivariate linear regression itself, the above parameter posteriors tell us: "conditional on the assumption that the log-error and fixed effects can be related by a straight line, what is the predictive value of one variable once I already know the values of all other variables?"<sup>2</sup></p>
 <h2>Bayesian linear regression with random effects</h2>
 <p>Random effects models — also known as hierarchical models — allow us to ascribe distinct behaviors to different "clusters" of observations, i.e. groups that may each act in a materially unique way. Furthermore, these models allow us to infer these tendencies in a <em>collaborative</em> fashion: while each cluster is assumed to behave differently, it can learn its parameters by heeding to the behavior of the population at large. In this example, we assume that houses in different zipcodes — holding all other predictors constant — should be priced in different ways.</p>
@@ -247,11 +247,11 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="err">Mean absolute error on validation data: 0.084635</span>
 </pre></div>
 <h4>Inspect residuals</h4>
-<p><img alt="bayesian linear regression with random effects residuals" class="img-fluid" src="https://willwolf.io/figures/bayesian_linear_regression_with_random_effects_residuals.png"/></p>
+<p><img alt="bayesian linear regression with random effects residuals" class="img-responsive" src="https://willwolf.io/figures/bayesian_linear_regression_with_random_effects_residuals.png"/></p>
 <h3>Plot shrinkage</h3>
 <p>To illustrate shrinkage we'll pare our model down to intercepts only (removing the fixed effects entirely). We'll first fit a random-effects model on the full dataset then compute the cluster-specific-intercept posterior means. Next, we'll fit a separate model to each individual cluster and compute the intercept posterior mean of each. The plot below shows how estimates from the former can be viewed as "estimates from the latter — shrunk towards the global-intercept posterior mean."</p>
 <p>Finally, <span style="color: #377eb8">blue</span>, <span style="color: #4daf4a">green</span> and <span style="color: #ff7f00">orange</span> points represent small, medium and large clusters respectively. As mentioned before, the larger the cluster size, i.e. the more data points we've observed belonging to a given cluster, the <em>less</em> prone it is to shrinkage towards the mean.</p>
-<p><img alt="shrinkage plot" class="img-fluid" src="https://willwolf.io/figures/shrinkage_plot.png"/></p>
+<p><img alt="shrinkage plot" class="img-responsive" src="https://willwolf.io/figures/shrinkage_plot.png"/></p>
 <h2>Neural network with random effects</h2>
 <p>Neural networks are powerful function approximators. Keras is a library that lets us flexibly define complex neural architectures. Thus far, we've been approximating the relationship between our fixed effects and response variable with a simple dot product; can we leverage Keras to make this relationship more expressive? Is it painless? Finally, how does it integrate with Edward's existing APIs and constructs? Can we couple nimble generative models with deep neural networks?</p>
 <p>While my experimentation was brief, all answers point delightfully towards "yes" for two simple reasons:</p>
@@ -290,7 +290,7 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="err">Mean absolute error on validation data: 0.081484</span>
 </pre></div>
 <h4>Inspect residuals</h4>
-<p><img alt="neural network with random effects residuals" class="img-fluid" src="https://willwolf.io/figures/neural_network_with_random_effects_residuals.png"/></p>
+<p><img alt="neural network with random effects residuals" class="img-responsive" src="https://willwolf.io/figures/neural_network_with_random_effects_residuals.png"/></p>
 <h1>Future work</h1>
 <p>We've now laid a stable, if trivially simple foundation for building models with Edward and Keras. From here, I see two distinct paths to building more expressive probabilistic models using these tools:</p>
 <ol>
