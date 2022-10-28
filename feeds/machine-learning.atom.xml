@@ -2110,7 +2110,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -3310,7 +3310,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -7497,7 +7497,7 @@ $$\tilde{r}_{u, i} = \log{\bigg(\frac{1 + r_{u, i}}{\epsilon}\bigg)}$$&lt;p&gt;T
 &lt;div class="prompt output_prompt"&gt;Out[143]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;song_id&lt;/th&gt;
@@ -9027,7 +9027,7 @@ JEmSJAVjQyJJkiQpGBsSSZIkScHYkEiSJEkK5j8wC9EyBozJaQAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[165]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12383,7 +12383,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[211]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12485,7 +12485,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[212]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12587,7 +12587,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[213]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12689,7 +12689,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[214]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12791,7 +12791,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[215]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12898,7 +12898,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[216]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -12992,7 +12992,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[217]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13083,7 +13083,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[218]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13178,7 +13178,7 @@ BwAAAAAG938I1U9urWdMGwAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[219]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13294,7 +13294,7 @@ $$&lt;p&gt;Let's briefly see what this looks like.&lt;/p&gt;
 &lt;div class="prompt output_prompt"&gt;Out[220]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13764,7 +13764,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[16]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -13833,7 +13833,7 @@ RCQj/wf3B/4faiP+LAAAAABJRU5ErkJggg==
 &lt;div class="prompt output_prompt"&gt;Out[17]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15571,7 +15571,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[443]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15690,7 +15690,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[444]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15809,7 +15809,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[445]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
@@ -15928,7 +15928,7 @@ Validation: 0.19050085125816704
 &lt;div class="prompt output_prompt"&gt;Out[446]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;div&gt;
-&lt;table border="1" class="table table-striped dataframe table-hover"&gt;
+&lt;table border="1" class="dataframe table table-striped table-hover"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
