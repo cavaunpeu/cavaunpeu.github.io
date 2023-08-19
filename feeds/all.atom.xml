@@ -23,12 +23,12 @@
 &lt;h1&gt;A menu of questions&lt;/h1&gt;
 &lt;p&gt;In this post, I explore our future with LLMs from the perspective of &lt;em&gt;data&lt;/em&gt;. I'll do so by asking and answering a series of questions—touching on the methods, the players, the economics, and the power struggles that potentially lie ahead.&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;How will LLMs learn new information?&lt;/li&gt;
-&lt;li&gt;What will we do with human-LLM conversations?&lt;/li&gt;
-&lt;li&gt;How do we solve the "hallucination" problem?&lt;/li&gt;
-&lt;li&gt;How will we compensate data providers?&lt;/li&gt;
-&lt;li&gt;Will data annotation be lucrative?&lt;/li&gt;
-&lt;li&gt;Is this the new Marxist struggle?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How will LLMs learn new information?&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What will we do with human-LLM conversations?&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do we solve the "hallucination" problem?&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How will we compensate data providers?&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Will data annotation be lucrative?&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Is this the new Marxist struggle?&lt;/strong&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Let's begin.&lt;/p&gt;
 &lt;h2&gt;How will LLMs learn new information?&lt;/h2&gt;
