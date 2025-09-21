@@ -90,7 +90,7 @@
 <h2>The more features we use, the more expressive our model</h2>
 <p>We concluded the previous post by plotting posteriors over function evaluations given various <code>phi_func</code>s, i.e. a function that creates "features" <span class="math">\(\phi(X)\)</span> given an input <span class="math">\(X\)</span>.</p>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 5 inputs</span>
+<div class="highlight"><pre><span></span><code><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 5 inputs</span>
 <span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>  <span class="c1"># 5 corresponding outputs, which we'll use later on</span>
 
 <span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -99,14 +99,14 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
 <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>One common such set of features are those given by "radial basis functions", a.k.a. the "squared exponential" function, defined as:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
 <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>Again, the choice of which features to use is ultimately arbitrary, i.e. a choice left to the modeler.</p>
 <p>Throughout the exercise, we saw that the larger the dimensionality <span class="math">\(d\)</span> of our feature function <code>phi_func</code>, the more expressive, i.e. less endemically prone to overfitting, our model became.</p>
 <p><strong>So, how far can we take this?</strong></p>
@@ -136,7 +136,7 @@ $$</div>
 <ul>
 <li>Next, this equation in code:</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="c1"># Define initial parameters</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Define initial parameters</span>
 <span class="n">D</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># dimensionality of `phi_func`</span>
 
 <span class="n">mu_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># often a vector of zeros, though it doesn't have to be</span>
@@ -155,14 +155,14 @@ $$</div>
           <span class="o">=</span> <span class="n">mu_w</span> <span class="o">+</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="n">y_train</span>
 <span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov_y</span><span class="p">)</span> <span class="o">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span>
            <span class="o">=</span> <span class="n">cov_w</span> <span class="o">-</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span>
-</pre></div>
+</code></pre></div>
 <h3><span class="math">\(P(y_*\ \vert\ y) = P(\phi(X_{*})^Tw\ \vert\ y)\)</span></h3>
 <p>Here, <span class="math">\(X_*\)</span> is a set of test points, e.g. <code>np.linspace(-10, 10, 200)</code>.</p>
 <p>In addition, let's call <span class="math">\(X_* \rightarrow\)</span> <code>X_test</code> and <span class="math">\(y_* \rightarrow\)</span> <code>y_test</code>.</p>
 <ul>
 <li>The mathematical equations in code:</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="c1"># Featurize `X_test`</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Featurize `X_test`</span>
 <span class="n">phi_x_test</span> <span class="o">=</span> <span class="n">phi_func</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
 
 <span class="c1"># The following two equations were defined above</span>
@@ -178,15 +178,15 @@ $$</div>
                 <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span> <span class="o">-</span> \
                   <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> \
                   <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
-</pre></div>
+</code></pre></div>
 <h2>Never alone</h2>
 <p>Squinting at the equations for <code>mu_y_test_post</code> and <code>cov_y_test_post</code>, we see that <code>phi_x</code> and <code>phi_x_test</code> appear <strong>only in the presence of another <code>phi_x</code>, or <code>phi_x_test</code>.</strong></p>
 <p>These four distinct such terms are:</p>
-<div class="highlight"><pre><span></span><span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
+<div class="highlight"><pre><span></span><code><span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
 <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span>
 <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span>
 <span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x_test</span>
-</pre></div>
+</code></pre></div>
 <p>In mathematical notation, they are (respectively):</p>
 <ul>
 <li><span class="math">\(\phi(X_*)^T\Sigma_w \phi(X_*)\)</span></li>
@@ -219,7 +219,7 @@ $$</div>
 <li><span class="math">\(\phi(X)^T\Sigma_w \phi(X_*) = \varphi(X) \cdot \varphi(X_*)\)</span></li>
 </ul>
 <p><strong>In other words, these terms can be equivalently written as dot-products in some space <span class="math">\(\varphi\)</span>.</strong></p>
-<p><em>NB: we have <strong>not</strong> explicitly chosen what this <span class="math">\(\varphi\)</span> function is.</em></p>
+<p><em>NB: we have </em><em>not</em><em> explicitly chosen what this <span class="math">\(\varphi\)</span> function is.</em></p>
 <h2>Kernels</h2>
 <p>A "kernel" is a function which gives the similarity between individual elements in two sets, i.e. a Gram matrix.</p>
 <p>For instance, imagine we have two sets of countries, <span class="math">\(\{\text{France}, \text{Germany}, \text{Iceland}\}\)</span> and <span class="math">\(\{\text{Morocco}, \text{Denmark}\}\)</span>, and that similarity is given by an integer value in <span class="math">\([1, 5]\)</span>, where 1 is the least similar, and 5 is the most. Applying a kernel to these sets might give a Gram matrix such as:</p>
@@ -237,7 +237,7 @@ $$</div>
         text-align: right;
     }
 </style>
-<table border="1" class="table table-striped dataframe table-hover">
+<table border="1" class="table-hover table table-striped dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -328,7 +328,7 @@ $$</div>
 <p>This kernel is implicitly computing a <span class="math">\(d=\infty\)</span>-dimensional dot-product. That's it. <strong>That's why it's so ubiquitous in Gaussian processes.</strong></p>
 <h2>Rewriting our equations</h2>
 <p>With all of the above in mind, let's rewrite the equations for the parameters of our posterior distribution over function evaluations.</p>
-<div class="highlight"><pre><span></span><span class="c1"># The mean of the posterior distribution over function evaluations</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># The mean of the posterior distribution over function evaluations</span>
 <span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mu_w_post</span>
                <span class="o">=</span> <span class="n">phi_x_test</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">phi_x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">cov_w</span> <span class="o">@</span> <span class="n">phi_x</span><span class="p">)</span> <span class="o">@</span> <span class="n">y_train</span>
 
@@ -344,14 +344,14 @@ $$</div>
                 <span class="c1"># Now, substituting in our kernels</span>
                 <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> \
                   <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">))</span> <span class="o">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2>Defining the kernel in code</h2>
 <p>Mathematically, the RBF kernel is defined as follows:</p>
 <div class="math">$$
 K(X, Y) = \exp(-\frac{1}{2}\vert X - Y \vert ^2)
 $$</div>
 <p>To conclude, let's define a Python function for the parameters of our posterior over function evaluations, using this RBF kernel as <code>k</code>, then plot the resulting distribution.</p>
-<div class="highlight"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 5 inputs</span>
+<div class="highlight"><pre><span></span><code><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 5 inputs</span>
 <span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>  <span class="c1"># 5 corresponding outputs, which we'll use below</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># vector of test inputs</span>
 
@@ -359,7 +359,7 @@ $$</div>
 <span class="k">def</span> <span class="nf">rbf_kernel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: (len(x), 1)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># shape: (1, len(y))</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># shape: (len(x), len(y))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># shape: (len(x), len(y))</span>
 
 
 <span class="k">def</span> <span class="nf">k</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -372,7 +372,7 @@ $$</div>
 
 <span class="n">mu_y_test_post</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">y_train</span>            
 <span class="n">cov_y_test_post</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="o">@</span> <span class="n">k</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2>Visualizing results</h2>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-2/output_17_0.png"/></p>
 <p>And for good measure, with some samples from the posterior:</p>

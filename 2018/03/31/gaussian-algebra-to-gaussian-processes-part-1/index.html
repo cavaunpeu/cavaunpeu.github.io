@@ -101,7 +101,7 @@
 <li>Is instantiated with characteristic parameters <code>mu</code> (the mean) and <code>var</code> (the variance).</li>
 <li>Has a single public method, <code>density</code>, which accepts a <code>float</code> value <code>x</code>, and returns a <code>float</code> proportional to the probability of this <code>Gaussian</code> having produced <code>x</code>.</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gaussian</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Gaussian</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span>
@@ -110,10 +110,10 @@
 
     <span class="k">def</span> <span class="nf">density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stddev</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>So, how do we make those cool bell-shaped plots? A 2D plot is just a list of tuples— each with an <code>x</code>, and a corresponding <code>y</code>—shown visually.</p>
 <p>As such, we lay out our <code>x</code>-axis, then compute the corresponding <code>y</code>—the <code>density</code>—for each. We'll choose an arbitrary <code>mu</code> and <code>variance</code>.</p>
-<div class="highlight"><pre><span></span><span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=.</span><span class="mi">123</span><span class="p">,</span> <span class="n">var</span><span class="o">=.</span><span class="mi">456</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mf">.123</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="mf">.456</span><span class="p">)</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">gaussian</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span> <span class="k">for</span> <span class="n">xx</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
@@ -121,12 +121,12 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'`Gaussian(mu=.123, var=.456)` Density'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_8_0.png"/></p>
 <p>If we increase the variance <code>var</code>, what happens?</p>
-<div class="highlight"><pre><span></span><span class="n">bigger_number</span> <span class="o">=</span> <span class="mf">3.45</span>
+<div class="highlight"><pre><span></span><code><span class="n">bigger_number</span> <span class="o">=</span> <span class="mf">3.45</span>
 
-<span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=.</span><span class="mi">123</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="n">bigger_number</span><span class="p">)</span>
+<span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mf">.123</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="n">bigger_number</span><span class="p">)</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">gaussian</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span> <span class="k">for</span> <span class="n">xx</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
@@ -134,13 +134,13 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'`Gaussian(mu=.123, var=bigger_number)` Density'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_10_0.png"/></p>
 <p>The density gets fatter. This should be familiar to you.</p>
 <p>Similarly, we can draw <em>samples</em> from a <code>Gaussian</code> distribution, e.g. from the initial <code>Gaussian(mu=.123, var=.456)</code> above. Its corresponding density plot (also above) governs this procedure, where <code>(x, y)</code> tuples give the (unnormalized) probability <code>y</code> that a given sample will take the value <code>x</code>.</p>
 <p><code>x</code>-values with large corresponding <code>y</code>-values are more likely to be sampled. Here, values near .123 are most likely to be sampled.</p>
 <p>Let's add a method to our class, draw 500 samples, then plot their histogram.</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stddev</span><span class="p">)</span><span class="o">.</span><span class="n">rvs</span><span class="p">()</span>
 
 
@@ -148,7 +148,7 @@
 <span class="n">Gaussian</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="n">sample</span>
 
 <span class="c1"># Instantiate new Gaussian</span>
-<span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=.</span><span class="mi">123</span><span class="p">,</span> <span class="n">var</span><span class="o">=.</span><span class="mi">456</span><span class="p">)</span>
+<span class="n">gaussian</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mf">.123</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="mf">.456</span><span class="p">)</span>
 
 <span class="c1"># Draw samples</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">gaussian</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">)]</span>
@@ -157,19 +157,19 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of 500 samples from `Gaussian(mu=.123, var=.456)`'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_13_0.png"/></p>
 <p>This looks similar to the true <code>Gaussian(mu=.123, var=.456)</code> density we plotted above. The more random samples we draw (then plot), the closer this histogram will approximate the true density.</p>
 <p>Now, we'll start to move a bit faster.</p>
 <h2>2D Gaussians</h2>
 <p>We just drew samples from a 1-dimensional Gaussian, i.e. the <code>sample</code> itself was a single float. The parameter <code>mu</code> dictated the most-likely value for the <code>sample</code> to assume, and the variance <code>var</code> dictated how much these sample-values vary (hence the name variance).</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">gaussian</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">gaussian</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 <span class="o">-</span><span class="mf">0.5743030051553177</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">gaussian</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 <span class="mf">0.06160509014194515</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">gaussian</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 <span class="mf">1.050830033400354</span>
-</pre></div>
+</code></pre></div>
 <p>In 2D, each sample will be a list of two numbers. <code>mu</code> will dictate the most-likely pair of values for the <code>sample</code> to assume, and a second parameter (yet unnamed) will dictate:</p>
 <ol>
 <li>How much the values for the first element of the pair vary</li>
@@ -178,7 +178,7 @@
 </ol>
 <p>The second parameter is the <strong>covariance matrix</strong>, <code>cov</code>. The elements on the diagonal give Items 1 and 2. The elements off the diagonal give Item 3. The covariance matrix is always square, and the values along its diagonal are always non-negative.</p>
 <p>Given a 2D <code>mu</code> and 2x2 <code>cov</code>, we can draw samples from the 2D Gaussian. Here, we'll use NumPy. Inline, we comment on the expected shape of the samples.</p>
-<div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
 
@@ -248,7 +248,7 @@
 
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Draws from 2D-Gaussians with Varying (mu, cov)'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_17_1.png"/></p>
 <h2>Gaussians are closed under linear maps</h2>
 <p>Each cloud of Gaussian dots tells us the following:</p>
@@ -266,9 +266,9 @@ Aw \sim \text{Normal}(A\mu_w,\ A^T\Sigma_w A)
 $$</div>
 <p>In other words, <span class="math">\(Aw\)</span>, the "linear map" of <span class="math">\(w\)</span> onto <span class="math">\(A\)</span>, is (incidentally) Gaussian-distributed as well.</p>
 <p>Let's plot some draws from this distribution. Let's assume each row of <span class="math">\(A\)</span> (of which there are 200, each containing 2 elements) is computed via the (arbitrary) function:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_features</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_features</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">))])</span>
-</pre></div>
+</code></pre></div>
 <p>Now, how do we get <span class="math">\(A\)</span>? Well, we could simply make such a matrix ourselves — <code>np.random.randn(200, 2)</code> for instance. Separately, imagine we start with a 200D vector <span class="math">\(X\)</span> of arbitrary floats, use the above function to make 2 "features" for each, then take the transpose. This gives us our 200x2 matrix <span class="math">\(A\)</span>.</p>
 <p>Next, and still with the goal of obtaining samples <span class="math">\(Aw\)</span>, we'll multiply this matrix by our 2D mean-vector of weights, <span class="math">\(\mu_w\)</span>. You can think of the latter as passing a batch of data through a linear model (where our data have features <span class="math">\(x = [x_1, x_2]\)</span>, and our parameters are <span class="math">\(\mu_w = [w_1, w_2]\)</span>).</p>
 <p>Finally, we'll take draws from this <span class="math">\(\text{Normal}(A\mu_w,\ A\Sigma_w A^T)\)</span>. This will give us tuples of the form <code>(x, Aw)</code>. For simplicity, we'll hereafter refer to this tuple as <code>(x, y)</code>.</p>
@@ -287,7 +287,7 @@ $$</div>
 \phi(X)^Tw \sim \text{Normal}(\phi(X)^T\mu_w,\ \phi(X)^T\Sigma_w \phi(X))
 $$</div>
 <p>In addition, let's set <span class="math">\(\mu_w =\)</span> <code>np.array([0, 0])</code> and <span class="math">\(\Sigma_w =\)</span> <code>np.diag([1, 2])</code>. Finally, we'll take draws, then plot.</p>
-<div class="highlight"><pre><span></span><span class="c1"># x-values</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># x-values</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
 <span class="c1"># Make features, as before</span>
@@ -310,22 +310,22 @@ $$</div>
     <span class="c1"># Plot draws. `lm` is a vector of 200 `y` values, each corresponding to the original `x`-values</span>
     <span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_lm</span><span class="p">,</span> <span class="n">cov_lm</span><span class="p">)</span>  <span class="c1"># lm.shape: (200,)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lm</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_20_0.png"/></p>
 <p><strong>This distribution over linear maps gives a distribution over functions</strong>, where the "mean function" is <span class="math">\(\phi(X)^T\mu_w\)</span> (which reads directly from the <code>mu_lm</code> variable above).</p>
 <p><strong>Notwithstanding, I find this phrasing to be confusing</strong>; to me, a "distribution over functions" sounds like some opaque object that spits out algebraic symbols via logic miles above my cognitive ceiling. As such, I instead think of this in more intuitive terms as a <strong>distribution over function evaluations</strong>, where a single function evaluation is a list of <code>(x, y)</code> tuples and nothing more.</p>
 <p>For example, given a vector <code>x = np.array([1, 2, 3])</code> and a function <code>lambda x: x**2</code>, an evaluation of this function gives <code>y = np.array([1, 4, 9])</code>. We now have tuples <code>[(1, 1), (2, 4), (3, 9)]</code> from which we can create a line plot. This gives one "function evaluation."</p>
 <p>Above, we sampled 17 function evaluations, then plotted the 200 resulting <code>(x, y)</code> tuples (as our input was a 200D vector <span class="math">\(X\)</span>) for each. The evaluations are similar because of the given mean function <code>mu_lm</code>; they are different because of the given covariance matrix <code>cov_lm</code>.</p>
 <p>Let's try some different "features" for our <code>x</code>-values then plot the same thing.</p>
-<div class="highlight"><pre><span></span><span class="c1"># Make different, though still arbitrary, features</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Make different, though still arbitrary, features</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_23_0.png"/></p>
 <p>"The features we choose give a 'language' with which we can express a relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>."<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Some features are more expressive than others; some restrict us entirely from expressing certain relationships.</p>
 <p>For further illustration, let's employ step functions as features and see what happens.</p>
-<div class="highlight"><pre><span></span><span class="c1"># Make features, as before</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Make features, as before</span>
 <span class="n">phi_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_25_0.png"/></p>
 <h2>Gaussians are closed under conditioning and marginalization</h2>
 <p>Let's revisit the 2D Gaussians plotted above. They took the form</p>
@@ -345,10 +345,10 @@ P(x, y) = \mathcal{N}\bigg([\mu_x, \mu_y],
     \Sigma_{xy}^T &amp; \Sigma_y\\
     \end{bmatrix}\bigg)
 $$</div>
-<p><em>NB: In this case, all 4 "Sigmas" in the 2x2 covariance matrix are floats. If our covariance were bigger, say 31x31, then these 4 Sigmas would be <strong>matrices</strong> (with an aggregate size totaling 31x31).</em></p>
+<p><em>NB: In this case, all 4 "Sigmas" in the 2x2 covariance matrix are floats. If our covariance were bigger, say 31x31, then these 4 Sigmas would be </em><em>matrices</em><em> (with an aggregate size totaling 31x31).</em></p>
 <p>What if we wanted to know the distribution over <span class="math">\(y\)</span> conditional on <span class="math">\(x\)</span> taking on a certain value, e.g. <span class="math">\(P(y\vert x &gt; 1)\)</span>?</p>
 <p><span class="math">\(y\)</span> is a single element, so the resulting conditional will be a univariate distribution. To gain intuition, let's do this in a very crude manner:</p>
-<div class="highlight"><pre><span></span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight"><pre><span></span><code><span class="n">y_values</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">mu</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">345</span><span class="p">:</span>  <span class="c1"># some random sample size</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">cov</span><span class="p">)</span>
@@ -358,7 +358,7 @@ $$</div>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of y-values, when x &gt; 1'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_28_0.png"/></p>
 <p>Cool! Looks kind of Gaussian as well.</p>
 <p>Instead, what if we wanted to know the functional form of the real density, <span class="math">\(P(y\vert x)\)</span>, instead of this empirical distribution of its samples? One of the axioms of conditional probability tells us that:</p>
@@ -381,7 +381,7 @@ $$</div>
 $$</div>
 <p><strong>Marginalizing a &gt; 1D Gaussian over one of its elements yields another Gaussian</strong>: you just "pluck out" the elements you'd like to examine. <strong>In other words, Gaussians are closed under marginalization.</strong> "It's almost too easy to warrant a formula."<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <p>As an example, imagine we had the following Gaussian <span class="math">\(P(a, b, c)\)</span>, and wanted to compute the marginal over the first 2 elements, i.e. <span class="math">\(P(a, b) = \int P(a, b, c)dc\)</span>:</p>
-<div class="highlight"><pre><span></span><span class="c1"># P(a, b, c)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># P(a, b, c)</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
 <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
     <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">33</span><span class="p">],</span>
@@ -397,7 +397,7 @@ $$</div>
 <span class="p">])</span>
 
 <span class="c1"># That's it.</span>
-</pre></div>
+</code></pre></div>
 <p>Finally, we compute the conditional Gaussian of interest—a result well-documented by mathematicians long ago:</p>
 <div class="math">$$
 \begin{align*}
@@ -447,7 +447,7 @@ P(w\vert y)
 $$</div>
 <p>This formula gives the posterior distribution over our weights <span class="math">\(P(w\vert y)\)</span> given the model and observed data tuples <code>(x, y)</code>.</p>
 <p>Until now, we've assumed a 2D <span class="math">\(w\)</span>, and therefore a <span class="math">\(\phi(X)\)</span> in <span class="math">\(\mathbb{R}^2\)</span> as well. Moving forward, we'll work with weights and features in a higher-dimensional space, <span class="math">\(\mathbb{R}^{20}\)</span>; this will give us a more expressive language with which to capture the true relationship between some quantity <span class="math">\(x\)</span> and its corresponding <span class="math">\(y\)</span>. <span class="math">\(\mathbb{R}^{20}\)</span> is an arbitrary choice; it could have been <span class="math">\(\mathbb{R}^{17}\)</span>, or <span class="math">\(\mathbb{R}^{31}\)</span>, or <span class="math">\(\mathbb{R}^{500}\)</span> as well.</p>
-<div class="highlight"><pre><span></span><span class="c1"># The true function that maps `x` to `y`. This is what we are trying to recover with our mathematical model.</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># The true function that maps `x` to `y`. This is what we are trying to recover with our mathematical model.</span>
 <span class="k">def</span> <span class="nf">true_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">7</span>
 
@@ -479,7 +479,7 @@ $$</div>
 
 
 <span class="k">def</span> <span class="nf">compute_weights_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
-    <span class="sd">"""</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    NB: "Computing a posterior," and given that that posterior is Gaussian, implies nothing more than</span>
 <span class="sd">    computing the mean-vector and covariance matrix of this Gaussian.</span>
 <span class="sd">    """</span>
@@ -498,16 +498,16 @@ $$</div>
 
 <span class="c1"># Compute weights posterior</span>
 <span class="n">mu_w_post</span><span class="p">,</span> <span class="n">cov_w_post</span> <span class="o">=</span> <span class="n">compute_weights_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>As with our prior over our weights, we can equivalently draw samples from the posterior over our weights, then plot. These samples will be 20D vectors; we reduce them to 2D for ease of visualization.</p>
-<div class="highlight"><pre><span></span><span class="c1"># Draw samples</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Draw samples</span>
 <span class="n">samples_prior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 <span class="n">samples_post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_w_post</span><span class="p">,</span> <span class="n">cov_w_post</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
 <span class="c1"># Reduce to 2D for ease of visualization</span>
 <span class="n">first_dim_prior</span><span class="p">,</span> <span class="n">second_dim_prior</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">samples_prior</span><span class="p">))</span>
 <span class="n">first_dim_post</span><span class="p">,</span> <span class="n">second_dim_post</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">samples_post</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_34_1.png"/></p>
 <p>Samples from the prior are plotted in orange; samples from the posterior are plotted in blue. As this is a stochastic dimensionality-reduction algorithm, the results will be slightly different each time.</p>
 <p>At best, we can see that the posterior has slightly larger values in its covariance matrix, evidenced by the fact that the blue cloud is more disperse than the orange, and has probably maintained a similar mean. The magnitude of change (read: a small one) is expected, as we've only conditioned on 6 ground-truth tuples.</p>
@@ -521,7 +521,7 @@ $$</div>
 <p><strong>This gives us a posterior distribution over function evaluations.</strong></p>
 <p>In machine learning parlance, this is akin to: given some test data <code>X_test</code>, and a model whose weights were trained/optimized with respect to/conditioned on some observed ground-truth tuples <code>(X_train, y_train)</code>, we'd like to generate predictions <code>y_test</code>, i.e. samples from the posterior over function evaluations.</p>
 <p>The function to compute this posterior, i.e. compute the mean-vector and covariance matrix of this Gaussian, will appear both short and familiar.</p>
-<div class="highlight"><pre><span></span><span class="n">x_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">x_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">):</span>
@@ -532,9 +532,9 @@ $$</div>
 
 
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>To plot, we typically just plot the error bars, i.e. the space within <code>(mu_y_post - var_y_post, mu_y_post + var_y_post)</code> for each <code>x</code>, as well as the ground-truth tuples as big red dots. <strong>This gives nothing more than a picture of the mean-vector and covariance of our posterior.</strong> Optionally, we can plot samples from this posterior as well, as we did with our prior.</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">ylim</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -545,7 +545,7 @@ $$</div>
 
     <span class="c1"># Plot the error bars.</span>
     <span class="c1"># To do this, we fill the space between `(mu_y_post - var_y_post, mu_y_post + var_y_post)` for each `x`</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">mu_y_post</span> <span class="o">-</span> <span class="n">var_y_post</span><span class="p">,</span> <span class="n">mu_y_post</span> <span class="o">+</span> <span class="n">var_y_post</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'#23AEDB'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">mu_y_post</span> <span class="o">-</span> <span class="n">var_y_post</span><span class="p">,</span> <span class="n">mu_y_post</span> <span class="o">+</span> <span class="n">var_y_post</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'#23AEDB'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
 
     <span class="c1"># Scatter-plot our original 6 `(x, y)` tuples</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s1">'ro'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -554,15 +554,15 @@ $$</div>
     <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
             <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
 
 
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_40_0.png"/></p>
 <p>The posterior distribution is nothing more than a distribution over function evaluations (from which we've sampled 25 function evaluations above) <em>most consistent with our model and observed data tuples.</em> As such, and to give further intuition, a crude way of computing this distribution might be continuously <em>drawing samples from our prior over function evaluations, and keeping only the ones that pass through, i.e. are "most consistent with," all of the red points above.</em></p>
 <p>Finally, we stated before that <strong>the features we choose (i.e. our <code>phi_func</code>) give a "language" with which we can express the relationship between <span class="math">\(x\)</span> and <span class="math">\(y\)</span>.</strong> Here, we've chosen a language with 20 words. What if we chose a different 20?</p>
-<div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">20</span>
+<div class="highlight"><pre><span></span><code><span class="n">D</span> <span class="o">=</span> <span class="mi">20</span>
 
 
 <span class="c1"># Params of distribution over weights</span>
@@ -571,30 +571,30 @@ $$</div>
 
 
 <span class="c1"># Still arbitrary, i.e. a modeling choice!</span>
-<span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">a</span><span class="o">=.</span><span class="mi">25</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">.25</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 
 
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_42_0.png"/></p>
 <p>Not great. As a brief aside, how do we read the plot above? It's simply a function, a transformation, a lookup: given an <span class="math">\(x\)</span>, it tells us the corresponding expected value <span class="math">\(y\)</span>, and the variance around this estimate.</p>
 <p>For instance, right around <span class="math">\(x = -3\)</span>, we can see that <span class="math">\(y\)</span> is somewhere in <span class="math">\([-1, 1]\)</span>; given that we've only conditioned on 6 "training points," we're still quite unsure as to what the true answer is. To this effect, a GP (and other fully-Bayesian models) allows us to quantify this uncertainty judiciously.</p>
 <p>Now, let's try some more features and examine the model we're able to build.</p>
-<div class="highlight"><pre><span></span><span class="c1"># Still arbitrary, i.e. a modeling choice!</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Still arbitrary, i.e. a modeling choice!</span>
 <span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_44_1.png"/></p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_45_0.png"/></p>
 <p>That last one might look familiar. Therein, the features we chose (still arbitrarily, really) are called "radial basis functions" (among other names).</p>
 <p>We've loosely examined what happens when we change the language through which we articulate our model. Next, what if we changed the size of its vocabulary?</p>
 <p>First, let's backtrack, and try 8 of these radial basis functions instead of 20.</p>
-<div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">8</span>
+<div class="highlight"><pre><span></span><code><span class="n">D</span> <span class="o">=</span> <span class="mi">8</span>
 
 
 <span class="c1"># Params of distribution over weights</span>
@@ -603,15 +603,15 @@ $$</div>
 
 
 <span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 
 
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_47_0.png"/></p>
 <p>Very different! Holy overfit. What about 250?</p>
-<div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">250</span>
+<div class="highlight"><pre><span></span><code><span class="n">D</span> <span class="o">=</span> <span class="mi">250</span>
 
 
 <span class="c1"># Params of distribution over weights</span>
@@ -620,12 +620,12 @@ $$</div>
 
 
 <span class="k">def</span> <span class="nf">phi_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))])</span>  <span class="c1"># phi_x.shape: (D, len(x))</span>
 
 
 <span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span> <span class="o">=</span> <span class="n">compute_gp_posterior</span><span class="p">(</span><span class="n">mu_w</span><span class="p">,</span> <span class="n">cov_w</span><span class="p">,</span> <span class="n">phi_func</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
 <span class="n">plot_gp_posterior</span><span class="p">(</span><span class="n">mu_y_post</span><span class="p">,</span> <span class="n">cov_y_post</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/gaussian-algebra-to-gaussian-processes-part-1/output_49_0.png"/></p>
 <p>It appears that the more features we use, the more expressive, and/or less endemically prone to overfitting, our model becomes.</p>
 <p>So, how far do we take this? <code>D = 1000</code>? <code>D = 50000</code>? How high can we go? <strong>We'll pick up here in the next post.</strong></p>

@@ -86,11 +86,11 @@
 <p><img alt="K-Means Smooth" class="img-responsive" src="https://willwolf.io/figures/sa_airports_kmeans_smooth.png"/></p>
 <p>The plot seems to corroborate what we previously thought: <span class="math">\(k = 3\)</span> clusters is the best choice for our data set. To be absolutely certain, we can explicitly compute the predicted "loess" values that fall on our smooth line for integers in <span class="math">\([2,9]\)</span> and see where the "marginal returns cutoff point" really is. Simple subtraction.</p>
 <p><img alt="For k-means clustering analysis on SA airports." class="img-responsive" src="https://willwolf.io/figures/sa_airports_predicted_withinss_plot.png"/></p>
-<div class="highlight"><pre><span></span><span class="n">PredSumVal</span> <span class="n">K</span>
-<span class="m">1</span>   <span class="m">43854.32</span> <span class="m">2</span>
-<span class="m">2</span>   <span class="m">33887.51</span> <span class="m">3</span>
-<span class="m">3</span>   <span class="m">27447.83</span> <span class="m">4</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">PredSumVal</span><span class="w"> </span><span class="n">K</span>
+<span class="m">1</span><span class="w">   </span><span class="m">43854.32</span><span class="w"> </span><span class="m">2</span>
+<span class="m">2</span><span class="w">   </span><span class="m">33887.51</span><span class="w"> </span><span class="m">3</span>
+<span class="m">3</span><span class="w">   </span><span class="m">27447.83</span><span class="w"> </span><span class="m">4</span>
+</code></pre></div>
 <p>The graph shows the marginal returns clearly. And since <span class="math">\((43854.32 - 33887.51) \gt (33887.51 - 27447.83)\)</span>, our assumption is confirmed definitively. We want to choose <span class="math">\(k = 3\)</span> clusters: there are three levels of size/volume/connectivity for airports in South America. In the next post, we'll delve deeper into what this analysis can help us learn about each country and the continent as a whole.</p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",

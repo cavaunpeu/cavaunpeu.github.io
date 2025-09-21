@@ -103,17 +103,17 @@
 </ol>
 <p>Trayendo el contenedor a la panadería es igual a un sencillo <code>docker run</code> con el servidor remoto como el <code>docker-machine</code>. Trayendo los ingredientes a la panadería, esto es colocando datos en el sistema de archivo local del servidor remoto, es mucho menos "sexy." En el sentido más simple, es igual a usar <code>scp</code> or <code>rsync</code> para transferir un archivo del entorno local al servidor remoto hasta usar <code>curl</code> para descargar un archivo directamente en el servidor remoto mismo.</p>
 <p>En la práctica, esto se ve generalmente así:</p>
-<div class="highlight"><pre><span></span><span class="err">docker</span>
-<span class="err">    --tlsverify</span>
-<span class="err">    --tlscacert="$HOME/.docker/machine/certs/ca.pem"</span>
-<span class="err">    --tlscert="$HOME/.docker/machine/certs/cert.pem"</span>
-<span class="err">    --tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78</span>
-<span class="err">run</span>
-<span class="err">    --rm</span>
-<span class="err">    -i</span>
-<span class="err">    -v</span>
-<span class="err">    /data:/data kaggle-contest build_model.sh</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker
+    --tlsverify
+    --tlscacert="$HOME/.docker/machine/certs/ca.pem"
+    --tlscert="$HOME/.docker/machine/certs/cert.pem"
+    --tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78
+run
+    --rm
+    -i
+    -v
+    /data:/data kaggle-contest build_model.sh
+</code></pre></div>
 <h2>Utensilios de cocina que no se compran en la tienda</h2>
 <p>Para hacer su pastel, Enrique usó una tabla de cortar única en el mundo que Beto hizo a mano para él. ¿Cómo puede usarla en la panadería? En términos de Kaggle: ¿cómo puedo usar una librería en mi proyecto que no está disponible en un repositorio de paquetes público (una que construí yo mismo)?</p>
 <p>Para esto, no existe una "fórmula secreta." Con la tabla de cortar/librería, podemos:</p>

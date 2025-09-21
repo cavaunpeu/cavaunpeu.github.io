@@ -86,26 +86,26 @@
 <p><img alt="bottom of pool" class="img-responsive" src="https://previews.123rf.com/images/cookelma/cookelma1603/cookelma160300003/53105871-man-sitting-on-the-bottom-of-the-swimming-pool-under-water.jpg"/></p>
 <p>First, let's meet our three protagonists. We'll define them in <a href="https://keras.io/">Keras</a> for the illustrative purpose of a unified and idiomatic API.</p>
 <h2><a href="http://ufldl.stanford.edu/tutorial/supervised/LinearRegression/">Linear regression</a> with mean squared error</h2>
-<div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+<div class="highlight"><pre><span></span><code><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">_</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2><a href="http://ufldl.stanford.edu/tutorial/supervised/LogisticRegression/">Logistic regression</a> with binary cross-entropy loss</h2>
-<div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+<div class="highlight"><pre><span></span><code><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">_</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2><a href="http://ufldl.stanford.edu/tutorial/supervised/SoftmaxRegression/">Softmax regression</a> with categorical cross-entropy loss</h2>
-<div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+<div class="highlight"><pre><span></span><code><span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">_</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>Next, we'll select four components key to each: its response variable, functional form, loss function and loss function plus regularization term. For each model, we'll describe the statistical underpinnings of each component—the steps on the ladder towards the surface of the pool.</p>
 <p>Before diving in, we'll need to define a few important concepts.</p>
 <h2>Random variable</h2>
@@ -117,8 +117,8 @@
 </ul>
 <h2>Probability distribution</h2>
 <p>A probability distribution is a lookup table for the likelihood of observing each unique value of a random variable. Assuming a given variable can take on values in <span class="math">\(\{\text{rain, snow, sleet, hail}\}\)</span>, the following is a valid probability distribution:</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="mf">.14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="mf">.37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="mf">.03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="mf">.46</span><span class="p">}</span>
+</code></pre></div>
 <p>Trivially, these values must sum to 1.</p>
 <ul>
 <li>A <em>probability mass function</em> is a probability distribution for a discrete-valued random variable.</li>
@@ -134,7 +134,7 @@
 <ul>
 <li><em>Four friends climb into each taxi.</em> We could accomplish this with the following assignments:</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="c1"># fill the first, then the second</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># fill the first, then the second</span>
 <span class="n">assignment_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
 <span class="c1"># alternate assignments</span>
@@ -144,12 +144,12 @@
 <span class="n">assignment_3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
 <span class="c1"># etc.</span>
-</pre></div>
+</code></pre></div>
 <ul>
 <li><em>All friends climb into the first taxi.</em> There is only one possible assignment.</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="n">assignment_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">assignment_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</code></pre></div>
 <p>(In this case, the Broadway show is probably in <a href="http://willtravellife.com/2013/04/how-does-a-west-african-bush-taxi-work/">West Africa</a> or a similar part of the world.)</p>
 <p>Since there are more ways to reach the first outcome than there are the second, the first outcome has a higher entropy.</p>
 <h3>More explicitly</h3>
@@ -164,25 +164,25 @@ $$</div>
 </ul>
 <p>Entropy is the <em>weighted-average log probability</em> over possible events—this much reads directly from the equation—which measures the <em>uncertainty inherent in their probability distribution.</em> The higher the entropy, the less certain we are about the value we're going to get.</p>
 <p>Let's calculate the entropy of our distribution above.</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="mf">.14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="mf">.37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="mf">.03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="mf">.46</span><span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">entropy</span><span class="p">(</span><span class="n">prob_dist</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span><span class="nb">sum</span><span class="p">([</span> <span class="n">p</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prob_dist</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">])</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mf">1.1055291211185652</span>
-</pre></div>
+</code></pre></div>
 <p>For comparison, let's assume two more distributions and calculate their respective entropies.</p>
-<div class="highlight"><pre><span></span><span class="n">p_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">59</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">p_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="mf">.01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="mf">.37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="mf">.03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="mf">.59</span><span class="p">}</span>
 
-<span class="n">p_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">95</span><span class="p">}</span>
+<span class="n">p_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="mf">.01</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="mf">.01</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="mf">.03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="mf">.95</span><span class="p">}</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p_2</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="mf">0.8304250977453105</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p_3</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="mf">0.2460287703075343</span>
-</pre></div>
+</code></pre></div>
 <p>In the first distribution, we are least certain as to what tomorrow's weather will bring. As such, this has the highest entropy. In the third distribution, we are almost certain it's going to hail. As such, this has the lowest entropy.</p>
 <p>Finally, it is a probability distribution that dictates the different taxi assignments just above. A distribution for a random variable that has many possible outcomes has a higher entropy than a distribution that gives only one.</p>
 <p>Now, let's dive into the pool. We'll start at the bottom and work our way back to the top.</p>
@@ -205,7 +205,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal. Nonetheless, <em>can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (0, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th>uber</th>
@@ -291,10 +291,10 @@ $$</div>
 <p>Finally, while we do assume that a Gaussian dictates the true distribution of values of both "Uber's yearly profit" and <code>temperature</code>, it is, trivially, a different Gaussian for each. This is because each random variable has its own true underlying mean and variance. These values make the respective Gaussians taller or wider—shifted left or shifted right.</p>
 <h1>Functional form</h1>
 <p>Our three protagonists generate predictions via distinct functions: the <a href="https://en.wikipedia.org/wiki/Identity_function">identity function</a> (i.e. a no-op), the <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> and the <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax function</a>, respectively. The Keras output layers make this clear:</p>
-<div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">)(</span><span class="nb">input</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>In this section, I'd like to:</p>
 <ul>
 <li>Show how each of the Gaussian, binomial and multinomial distributions can be reduced to the same functional form.</li>
@@ -381,8 +381,8 @@ $$</div>
 P(y\vert \pi) = \prod\limits_{k=1}^{K}\pi_k^{y_k}
 $$</div>
 <p>This is almost pedantic: it says that <span class="math">\(\Pr(y=k)\)</span> equals the probability of observing class <span class="math">\(k\)</span>. For example, given</p>
-<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="o">.</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="o">.</span><span class="mi">37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="o">.</span><span class="mi">46</span><span class="p">}</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="mf">.14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="mf">.37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="mf">.03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="mf">.46</span><span class="p">}</span>
+</code></pre></div>
 <p>we would compute:</p>
 <div class="math">$$
 \begin{align*}

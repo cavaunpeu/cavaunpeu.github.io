@@ -79,8 +79,8 @@
 <p>To "pull us down the path," we build three models in additive fashion: a Bayesian linear regression model, a Bayesian linear regression model with random effects, and a neural network with random effects. We fit them on the <a href="https://www.kaggle.com/c/zillow-prize-1">Zillow Prize</a> dataset, which asks us to predict <code>logerror</code> (in house-price estimate, i.e. the "Zestimate") given metadata for a list of homes. These models are intended to be demonstrative, not performant: they will not win you the prize in their current form.</p>
 <h2>Data preparation</h2>
 <h3>Build training DataFrame</h3>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">properties_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id_parcel'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'id_parcel'</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">properties_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id_parcel'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'id_parcel'</span><span class="p">)</span>
+</code></pre></div>
 <h3>Drop columns containing too many nulls</h3>
 <p>Bayesian probabilistic models allow us to flexibly model <em>missing</em> data itself. To this end, we conceive of a given predictor as a vector of both:</p>
 <ol>
@@ -97,22 +97,22 @@ $$</div>
 <p>I tried this in Edward, albeit briefly, to no avail. Dustin Tran gives an <a href="https://discourse.edwardlib.org/t/how-to-handle-missing-values-in-gaussian-matrix-factorization/95/2">example</a> of how one might accomplish this task in the case of Gaussian Matrix Factorization. In my case, I wasn't able to apply a 2-D missing-data-mask placeholder to a 2-D data placeholder via <a href="https://www.tensorflow.org/api_docs/python/tf/gather"><code>tf.gather</code></a> nor <a href="https://www.tensorflow.org/api_docs/python/tf/gather_nd"><code>tf.gather_nd</code></a>. With more effort, I'm sure I could make this work. Help appreciated.</p>
 <p>For now, we'll first drop columns containing too many null values, then, after choosing a few of the predictors most correlated with the target, drop the remaining rows containing nulls.</p>
 <h3>Select three fixed-effect predictors</h3>
-<div class="highlight"><pre><span></span><span class="n">fixed_effect_predictors</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight"><pre><span></span><code><span class="n">fixed_effect_predictors</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">'area_live_finished'</span><span class="p">,</span>
     <span class="s1">'num_bathroom'</span><span class="p">,</span>
     <span class="s1">'build_year'</span>
 <span class="p">]</span>
-</pre></div>
+</code></pre></div>
 <h3>Select one random-effect predictor</h3>
-<div class="highlight"><pre><span></span><span class="n">zip_codes</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'region_zip'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">zip_codes</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'region_zip'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+</code></pre></div>
 <h3>Split data into train, validation sets</h3>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    X_train:  (36986, 3)</span>
-<span class="err">    X_val:    (36986, 3)</span>
-<span class="err">    y_train:  (36986,)</span>
-<span class="err">    y_val:    (36986,)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    X_train:  (36986, 3)
+    X_val:    (36986, 3)
+    y_train:  (36986,)
+    y_val:    (36986,)
+</code></pre></div>
 <h1>Bayesian linear regression</h1>
 <p>Using three fixed-effect predictors we'll fit a model of the following form:</p>
 <div class="math">$$
@@ -133,7 +133,7 @@ $$</div>
 <p>Additionally, I provide an introduction to the basic math behind variational inference and the <a href="https://www.cs.princeton.edu/courses/archive/fall11/cos597C/lectures/variational-inference-i.pdf">ELBO</a> in the previous post on this blog: <a href="https://willwolf.io/2017/07/06/further-exploring-common-probabilistic-models/">Further Exploring Common Probabilistic Models</a>.</p>
 <h3>Fit model</h3>
 <p>For the approximate q-distributions, we apply the <a href="https://www.tensorflow.org/api_docs/python/tf/nn/softplus">softplus function</a> — <code>log(exp(z) + 1)</code> — to the scale parameter values at the suggestion of the Edward docs.</p>
-<div class="highlight"><pre><span></span><span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
+<div class="highlight"><pre><span></span><code><span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
 
 <span class="c1"># fixed-effects placeholders</span>
 <span class="n">fixed_effects</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
@@ -155,9 +155,9 @@ $$</div>
     <span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">([</span><span class="mi">1</span><span class="p">])),</span>
     <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">([</span><span class="mi">1</span><span class="p">])))</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3>Infer parameters</h3>
-<div class="highlight"><pre><span></span><span class="n">latent_vars</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">latent_vars</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">β_fixed_effects</span><span class="p">:</span> <span class="n">qβ_fixed_effects</span><span class="p">,</span>
     <span class="n">α</span><span class="p">:</span> <span class="n">qα</span>
 <span class="p">}</span>
@@ -165,30 +165,30 @@ $$</div>
 <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">INIT_OP</span><span class="p">)</span>
 <span class="n">inference</span> <span class="o">=</span> <span class="n">ed</span><span class="o">.</span><span class="n">KLqp</span><span class="p">(</span><span class="n">latent_vars</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="n">fixed_effects</span><span class="p">:</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_train</span><span class="p">})</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">250/250 [100%] ██████████████████████████████ Elapsed: 4s | Loss: 35405.105</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="mf">250</span><span class="o">/</span><span class="mf">250</span><span class="w"> </span><span class="err">[</span><span class="mf">100</span><span class="err">%]</span><span class="w"> </span><span class="err">██████████████████████████████</span><span class="w"> </span><span class="n">Elapsed</span><span class="p">:</span><span class="w"> </span><span class="mf">4</span><span class="n">s</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="n">Loss</span><span class="p">:</span><span class="w"> </span><span class="mf">35405.105</span>
+</code></pre></div>
 <h3>Criticize model</h3>
 <h4>Visualize data fit given parameter priors</h4>
 <p><img alt="data fit given parameter priors" class="img-responsive" src="https://willwolf.io/figures/data_fit_given_parameter_priors.png"/></p>
 <h4>Visualize data fit given parameter posteriors</h4>
 <p><img alt="data fit given parameter posteriors" class="img-responsive" src="https://willwolf.io/figures/data_fit_given_parameter_posteriors.png"/></p>
 <p>It appears as if our model fits the data along the first two dimensions. This said, we could improve this fit considerably. This will become apparent when we compute the MAE on our validation set.</p>
-<div class="highlight"><pre><span></span><span class="n">param_posteriors</span> <span class="o">=</span> <span class="err">{</span>
-  <span class="n">β_fixed_effects</span><span class="o">:</span> <span class="n">qβ_fixed_effects</span><span class="p">.</span><span class="n">mean</span><span class="p">(),</span>
-  <span class="n">α</span><span class="o">:</span> <span class="n">qα</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">param_posteriors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span>
+<span class="w">  </span><span class="n">β_fixed_effects</span><span class="o">:</span><span class="w"> </span><span class="n">qβ_fixed_effects</span><span class="p">.</span><span class="n">mean</span><span class="p">(),</span>
+<span class="w">  </span><span class="n">α</span><span class="o">:</span><span class="w"> </span><span class="n">qα</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="err">}</span>
-<span class="n">X_val_feed_dict</span> <span class="o">=</span> <span class="err">{</span>
-  <span class="n">fixed_effects</span><span class="o">:</span> <span class="n">X_val</span>
+<span class="n">X_val_feed_dict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span>
+<span class="w">  </span><span class="n">fixed_effects</span><span class="o">:</span><span class="w"> </span><span class="n">X_val</span>
 <span class="err">}</span>
-<span class="n">y_posterior</span> <span class="o">=</span> <span class="n">ed</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">param_posteriors</span><span class="p">)</span>
+<span class="n">y_posterior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ed</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">param_posteriors</span><span class="p">)</span>
 
 <span class="n">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Mean validation `logerror`: {y_val.mean()}'</span><span class="p">)</span>
-<span class="n">compute_mean_absolute_error</span><span class="p">(</span><span class="n">y_posterior</span><span class="p">,</span> <span class="n">X_val_feed_dict</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="k">validation</span> <span class="n n-Quoted">`logerror`</span><span class="o">:</span> <span class="mf">0.012986094738549725</span>
-<span class="n">Mean</span> <span class="n">absolute</span> <span class="k">error</span> <span class="k">on</span> <span class="k">validation</span> <span class="k">data</span><span class="o">:</span> <span class="mf">0.089943</span>
-</pre></div>
+<span class="n">compute_mean_absolute_error</span><span class="p">(</span><span class="n">y_posterior</span><span class="p">,</span><span class="w"> </span><span class="n">X_val_feed_dict</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">Mean</span><span class="w"> </span><span class="k">validation</span><span class="w"> </span><span class="n n-Quoted">`logerror`</span><span class="o">:</span><span class="w"> </span><span class="mf">0.012986094738549725</span>
+<span class="n">Mean</span><span class="w"> </span><span class="n">absolute</span><span class="w"> </span><span class="k">error</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">validation</span><span class="w"> </span><span class="k">data</span><span class="o">:</span><span class="w"> </span><span class="mf">0.089943</span>
+</code></pre></div>
 <h4>Inspect residuals</h4>
 <p><img alt="bayesian linear regression residuals" class="img-responsive" src="https://willwolf.io/figures/bayesian_linear_regression_residuals.png"/></p>
 <p>"The residuals appear normally distributed with mean 0: this is a good sanity check for the model."<sup>1</sup> However, with respect to the magnitude of the mean of the validation <code>logerror</code>, our validation score is terrible. This is likely due to the fact that three predictors are not nearly sufficient for capturing the variation in the response. (Additionally, because the response itself is an <em>error</em>, it should be fundamentally harder to capture than the thing actually being predicted — the house price. This is because Zillow's team has already built models to capture this signal, then effectively threw the remaining "uncaptured" signal into this competition, i.e. "figure out how to get right the little that we got wrong.")</p>
@@ -204,13 +204,13 @@ $$</div>
 </ol>
 <p>Random-effects models "walk the line" between these two approaches — between maximally <em>underfitting</em> and maximally <em>overfitting</em> the behavior of each cluster. To this effect, its parameter estimates exhibit the canonical "shrinkage" phenomenon: the estimate for a given parameter is balanced between the within-cluster expectation and the global expectation. Smaller clusters exhibit larger shrinkage; larger clusters, i.e. those for which we've observed more data, are more bullheaded (in typical Bayesian fashion). A later plot illustrates this point.</p>
 <p>We specify our random-effects functional form as follows:</p>
-<div class="highlight"><pre><span></span><span class="n">μ_y</span> <span class="o">=</span> <span class="n">α</span> <span class="o">+</span> <span class="n">α_random_effects</span> <span class="o">+</span> <span class="n">ed</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fixed_effects</span><span class="p">,</span> <span class="n">β_fixed_effects</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">μ_y</span> <span class="o">=</span> <span class="n">α</span> <span class="o">+</span> <span class="n">α_random_effects</span> <span class="o">+</span> <span class="n">ed</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fixed_effects</span><span class="p">,</span> <span class="n">β_fixed_effects</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">μ_y</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p>With respect to the previous model, we've simply added <code>α_random_effects</code> to the mean of our response. As such, this is a <em>varying-intercepts</em> model: the intercept term will be different for each cluster. To this end, we learn the <em>global</em> intercept <code>α</code> as well as the <em>offsets</em> from this intercept <code>α_random_effects</code> — a random variable with as many dimensions as there are zipcodes. In keeping with the notion of "offset," we ascribe it a prior of <code>(0, σ_zc)</code>. This approach allows us to flexibly extend the model to include more random effects, e.g. city, architecture style, etc. With only one, however, we could have equivalently included the global intercept <em>inside</em> of our prior, i.e. <code>α_random_effects ~ Normal(α, σ_zc)</code>, with priors on both <code>α</code> and <code>σ_zc</code> as per usual. This way, our random effect would no longer be a zip-code-specific <em>offset</em> from the global intercept, but a vector of zip-code-specific intercepts outright.</p>
 <p>Finally, as Richard McElreath notes, "we can think of the <code>σ_zc</code> parameter for each cluster as a crude measure of that cluster's "relevance" in explaining variation in the response variable."<sup>3</sup></p>
 <h3>Fit model</h3>
-<div class="highlight"><pre><span></span><span class="n">n_zip_codes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">zip_codes</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="n">n_zip_codes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">zip_codes</span><span class="p">))</span>
 
 <span class="c1"># random-effect placeholder</span>
 <span class="n">zip_codes_ph</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="p">[</span><span class="n">N</span><span class="p">])</span>
@@ -229,9 +229,9 @@ $$</div>
     <span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">([</span><span class="n">n_zip_codes</span><span class="p">])),</span>
     <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">([</span><span class="n">n_zip_codes</span><span class="p">])))</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3>Infer parameters</h3>
-<div class="highlight"><pre><span></span><span class="n">latent_vars</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">latent_vars</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">β_fixed_effects</span><span class="p">:</span> <span class="n">qβ_fixed_effects</span><span class="p">,</span>
     <span class="n">α</span><span class="p">:</span> <span class="n">qα</span><span class="p">,</span>
     <span class="n">α_zip_code</span><span class="p">:</span> <span class="n">qα_zip_code</span>
@@ -240,12 +240,12 @@ $$</div>
 <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">INIT_OP</span><span class="p">)</span>
 <span class="n">inference</span> <span class="o">=</span> <span class="n">ed</span><span class="o">.</span><span class="n">KLqp</span><span class="p">(</span><span class="n">latent_vars</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="n">fixed_effects</span><span class="p">:</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">zip_codes_ph</span><span class="p">:</span> <span class="n">zip_codes</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_train</span><span class="p">})</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">250/250 [100%] ██████████████████████████████ Elapsed: 6s | Loss: 34898.613</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="mf">250</span><span class="o">/</span><span class="mf">250</span><span class="w"> </span><span class="err">[</span><span class="mf">100</span><span class="err">%]</span><span class="w"> </span><span class="err">██████████████████████████████</span><span class="w"> </span><span class="n">Elapsed</span><span class="p">:</span><span class="w"> </span><span class="mf">6</span><span class="n">s</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="n">Loss</span><span class="p">:</span><span class="w"> </span><span class="mf">34898.613</span>
+</code></pre></div>
 <h3>Criticize model</h3>
-<div class="highlight"><pre><span></span><span class="err">Mean absolute error on validation data: 0.084635</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>Mean absolute error on validation data: 0.084635
+</code></pre></div>
 <h4>Inspect residuals</h4>
 <p><img alt="bayesian linear regression with random effects residuals" class="img-responsive" src="https://willwolf.io/figures/bayesian_linear_regression_with_random_effects_residuals.png"/></p>
 <h3>Plot shrinkage</h3>
@@ -262,7 +262,7 @@ $$</div>
 <p>This said, we must be nonetheless explicit about what's "Bayesian" and what's not, i.e. for which parameters do we infer full (approximate) posterior distributions, and for which do we infer point estimates of the posterior distribution.</p>
 <p>Below, we drop a <code>neural_network</code> in place of our dot product. Our latent variables remain <code>β_fixed_effects</code>, <code>α</code> and <code>α_zip_code</code>: while we will infer their full (approximate) posterior distributions as before, we'll only compute <em>point estimates</em> for the parameters of the neural network as in the typical case. Conversely, to the best of my knowledge, to infer full distributions for the latter, we'll need to specify our network manually in raw TensorFlow, i.e. ditch Keras entirely. We then treat our weights and biases as standard latent variables and infer their approximate posteriors via variational inference.  Edward's documentation contains a straightforward <a href="http://edwardlib.org/tutorials/bayesian-neural-network">tutorial</a> to this end.</p>
 <h3>Fit model</h3>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">neural_network</span><span class="p">(</span><span class="n">fixed_effects</span><span class="p">,</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">001</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">neural_network</span><span class="p">(</span><span class="n">fixed_effects</span><span class="p">,</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.001</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="n">D</span><span class="p">):</span>
     <span class="n">dense</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'tanh'</span><span class="p">,</span> <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">l2</span><span class="p">(</span><span class="n">λ</span><span class="p">))(</span><span class="n">fixed_effects</span><span class="p">)</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'linear'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'output'</span><span class="p">,</span> <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">l2</span><span class="p">(</span><span class="n">λ</span><span class="p">))(</span><span class="n">dense</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -271,8 +271,8 @@ $$</div>
 <span class="n">fixed_effects</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
 <span class="n">μ_y</span> <span class="o">=</span> <span class="n">α</span> <span class="o">+</span> <span class="n">α_random_effects</span> <span class="o">+</span> <span class="n">neural_network</span><span class="p">(</span><span class="n">fixed_effects</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">μ_y</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">latent_vars</span> <span class="o">=</span> <span class="p">{</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">latent_vars</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">β_fixed_effects</span><span class="p">:</span> <span class="n">qβ_fixed_effects</span><span class="p">,</span>
     <span class="n">α</span><span class="p">:</span> <span class="n">qα</span><span class="p">,</span>
     <span class="n">α_zip_code</span><span class="p">:</span> <span class="n">qα_zip_code</span>
@@ -283,12 +283,12 @@ $$</div>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">RMSPropOptimizer</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
 <span class="n">inference</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">1000/1000 [100%] ██████████████████████████████ Elapsed: 18s | Loss: 34446.191</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="mf">1000</span><span class="o">/</span><span class="mf">1000</span><span class="w"> </span><span class="err">[</span><span class="mf">100</span><span class="err">%]</span><span class="w"> </span><span class="err">██████████████████████████████</span><span class="w"> </span><span class="n">Elapsed</span><span class="p">:</span><span class="w"> </span><span class="mf">18</span><span class="n">s</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="n">Loss</span><span class="p">:</span><span class="w"> </span><span class="mf">34446.191</span>
+</code></pre></div>
 <h3>Criticize model</h3>
-<div class="highlight"><pre><span></span><span class="err">Mean absolute error on validation data: 0.081484</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>Mean absolute error on validation data: 0.081484
+</code></pre></div>
 <h4>Inspect residuals</h4>
 <p><img alt="neural network with random effects residuals" class="img-responsive" src="https://willwolf.io/figures/neural_network_with_random_effects_residuals.png"/></p>
 <h1>Future work</h1>

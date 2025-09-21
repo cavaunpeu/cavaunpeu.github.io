@@ -114,7 +114,7 @@
 <p>Let's get started.</p>
 <h2>Convolutional variational autoencoders</h2>
 <p>Variational autoencoders are comprised of two models: an encoder and a decoder. The encoder embeds our 872 <a href="https://github.com/twitter/twemoji">emojis</a> of size <span class="math">\((36, 36, 4)\)</span> into a low-dimensional latent code, <span class="math">\(z_e \in \mathbb{R}^{16}\)</span>, where <span class="math">\(z_e\)</span> is a sample from an emoji-specific Gaussian. The decoder takes as input <span class="math">\(z_e\)</span> and produces a reconstruction of the original emoji. As each individual <span class="math">\(z_e\)</span> is normally distributed, <span class="math">\(z\)</span> should be distributed normally as well. We can verify this with a quick simulation.</p>
-<div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">z_samples</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -125,7 +125,7 @@
 
 
 <span class="n">z_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z_samples</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="aggregate gaussian" class="img-responsive" src="https://willwolf.io/figures/aggregate_gaussian.png"/></p>
 <p>Training a variational autoencoder to learn low-dimensional emoji embeddings serves two principal ends:</p>
 <ol>
@@ -133,23 +133,23 @@
 <li>We can generate novel emojis with which to answer questions.</li>
 </ol>
 <p>As the embeddings in #1 are multivariate Gaussian, we can perform #2 by passing Gaussian samples into our decoder. We can do this by sampling evenly-spaced percentiles from the inverse CDF of the aggregate embedding distribution:</p>
-<div class="highlight"><pre><span></span><span class="n">percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">:</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">generated_emoji</span> <span class="o">=</span> <span class="n">decoder</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">z</span><span class="p">])</span>
-</pre></div>
+</code></pre></div>
 <p>NB: <code>norm.ppf</code> does <em>not</em> accept a <code>size</code> parameter; I believe sampling from the inverse CDF of a <em>multivariate</em> Gaussian is non-trivial in Python.</p>
 <p>Similarly, we could simply iterate over <code>(mu, sd)</code> pairs outright:</p>
-<div class="highlight"><pre><span></span><span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">axis</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">sd</span> <span class="ow">in</span> <span class="n">axis</span><span class="p">:</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
         <span class="n">generated_emoji</span> <span class="o">=</span> <span class="n">decoder</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">z</span><span class="p">])</span>
-</pre></div>
+</code></pre></div>
 <p>The ability to generate new emojis via samples from a well-studied distribution, the Gaussian, is a key reason for choosing a variational autoencoder.</p>
 <p>Finally, as we are working with images, I employ convolutional intermediary layers.</p>
 <h2>Data preparation</h2>
-<div class="highlight"><pre><span></span><span class="n">EMOJIS_DIR</span> <span class="o">=</span> <span class="s1">'data/emojis'</span>
+<div class="highlight"><pre><span></span><code><span class="n">EMOJIS_DIR</span> <span class="o">=</span> <span class="s1">'data/emojis'</span>
 <span class="n">N_CHANNELS</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">EMOJI_SHAPE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="n">N_CHANNELS</span><span class="p">)</span>
 
@@ -163,33 +163,33 @@
         <span class="n">emojis_dict</span><span class="p">[</span><span class="n">slug</span><span class="p">]</span> <span class="o">=</span> <span class="n">emoji</span>
 
 <span class="n">emojis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="nb">list</span><span class="p">(</span><span class="n">emojis_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3>Split data into train, validation sets</h3>
 <p>Additionally, scale pixel values to <span class="math">\([0, 1]\)</span>.</p>
-<div class="highlight"><pre><span></span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">emojis</span><span class="p">)</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span>
+<div class="highlight"><pre><span></span><code><span class="n">train_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">emojis</span><span class="p">)</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span>
 
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">emojis</span><span class="p">[</span><span class="n">train_mask</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span>
 <span class="n">X_val</span> <span class="o">=</span> <span class="n">y_val</span> <span class="o">=</span> <span class="n">emojis</span><span class="p">[</span><span class="o">~</span><span class="n">train_mask</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    X_train:  (685, 36, 36, 4)</span>
-<span class="err">    X_val:    (182, 36, 36, 4)</span>
-<span class="err">    y_train:  (685, 36, 36, 4)</span>
-<span class="err">    y_val:    (182, 36, 36, 4)</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    X_train:  (685, 36, 36, 4)
+    X_val:    (182, 36, 36, 4)
+    y_train:  (685, 36, 36, 4)
+    y_val:    (182, 36, 36, 4)
+</code></pre></div>
 <p>Before we begin, let's examine some emojis.</p>
 <p><img alt="emojis" class="img-responsive" src="https://willwolf.io/images/emojis.png"/></p>
 <h2>Model emojis</h2>
-<div class="highlight"><pre><span></span><span class="n">EMBEDDING_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
+<div class="highlight"><pre><span></span><code><span class="n">EMBEDDING_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="n">FILTER_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 <span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
-</pre></div>
+</code></pre></div>
 <h3>Variational layer</h3>
 <p>This is taken from a previous post of mine, <a href="https://willwolf.io/2017/05/08/transfer-learning-flight-delay-prediction/">Transfer Learning for Flight Delay Prediction via Variational Autoencoders</a>.</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">'''A custom "variational" Keras layer that completes the</span>
+<span class="w">        </span><span class="sd">'''A custom "variational" Keras layer that completes the</span>
 <span class="sd">        variational autoencoder.</span>
 
 <span class="sd">        Args:</span>
@@ -247,9 +247,9 @@
 
     <span class="k">def</span> <span class="nf">compute_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">input_shape</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span><span class="p">,)</span>
-</pre></div>
+</code></pre></div>
 <h3>Autoencoder</h3>
-<div class="highlight"><pre><span></span><span class="c1"># encoder</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># encoder</span>
 <span class="n">original</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">EMOJI_SHAPE</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'original'</span><span class="p">)</span>
 
 <span class="n">conv</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">FILTER_SIZE</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">original</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">)(</span><span class="n">original</span><span class="p">)</span>
@@ -271,14 +271,14 @@
 <span class="n">deconv</span> <span class="o">=</span> <span class="n">Conv2DTranspose</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">FILTER_SIZE</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">encoded</span><span class="o">.</span><span class="n">shape</span><span class="p">)(</span><span class="n">reshape</span><span class="p">)</span>
 <span class="n">deconv</span> <span class="o">=</span> <span class="n">Conv2DTranspose</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">FILTER_SIZE</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">)(</span><span class="n">deconv</span><span class="p">)</span>
 <span class="n">deconv</span> <span class="o">=</span> <span class="n">Conv2DTranspose</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">FILTER_SIZE</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">)(</span><span class="n">deconv</span><span class="p">)</span>
-<span class="n">dropout</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">)(</span><span class="n">deconv</span><span class="p">)</span>
+<span class="n">dropout</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">.8</span><span class="p">)(</span><span class="n">deconv</span><span class="p">)</span>
 <span class="n">reconstructed</span> <span class="o">=</span> <span class="n">Conv2DTranspose</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">N_CHANNELS</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)(</span><span class="n">dropout</span><span class="p">)</span>
 
 <span class="n">decoder</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">encoded</span><span class="p">],</span> <span class="p">[</span><span class="n">reconstructed</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">'decoder'</span><span class="p">)</span>
 
 <span class="c1"># end-to-end</span>
 <span class="n">encoder_decoder</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">original</span><span class="p">],</span> <span class="n">decoder</span><span class="p">(</span><span class="n">encoder</span><span class="p">([</span><span class="n">original</span><span class="p">])))</span>
-</pre></div>
+</code></pre></div>
 <p>The full model <code>encoder_decoder</code> is composed of separate models <code>encoder</code> and <code>decoder</code>. Training the former will implicitly train the latter two; they are available for our use thereafter.</p>
 <p>The above architecture takes inspiration from <a href="https://github.com/fchollet/keras/blob/master/examples/variational_autoencoder_deconv.py">Keras</a>, <a href="https://github.com/blei-lab/edward/blob/master/examples/vae_convolutional.py">Edward</a> and the GDGS (gradient descent by grad student) method by as discussed by <a href="https://www.reddit.com/r/MachineLearning/comments/6hso7g/d_how_do_people_come_up_with_all_these_crazy_deep/">Brudaks on Reddit</a>:</p>
 <blockquote>
@@ -287,7 +287,7 @@ This is an iterative approach, where you start with a straightforward baseline a
 </blockquote>
 <p>I'm not a grad student but I think it still plays.</p>
 <h3>Fit model</h3>
-<div class="highlight"><pre><span></span><span class="n">encoder_decoder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="o">.</span><span class="mi">003</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="n">variational_layer</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">encoder_decoder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="mf">.003</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="n">variational_layer</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
 
 <span class="n">encoder_decoder_fit</span> <span class="o">=</span> <span class="n">encoder_decoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
@@ -296,22 +296,22 @@ This is an iterative approach, where you start with a straightforward baseline a
     <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">)</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2>Generate emojis</h2>
 <p>As promised we'll generate emojis. Again, latent codes are distributed as a (16-dimensional) Gaussian; to generate, we'll simply take samples thereof and feed them to our <code>decoder</code>.</p>
 <p>While scanning a 16-dimensional hypercube, i.e. taking (evenly-spaced, usually) samples from our latent space, is a few lines of Numpy, visualizing a 16-dimensional grid is impractical. In solution, we'll work on a 2-dimensional grid while treating subsets of our latent space as homogenous.</p>
 <p>For example, if our 2-D sample were <code>(0, 1)</code>, we could posit 16-D samples as:</p>
-<div class="highlight"><pre><span></span><span class="err">A. `(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)`</span>
-<span class="err">B. `(0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1)`</span>
-<span class="err">C. `(0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1)`</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>A. `(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)`
+B. `(0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1)`
+C. `(0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1)`
+</code></pre></div>
 <p>Then, if another sample were <code>(2, 3.5)</code>, we could posit 16-D samples as:</p>
-<div class="highlight"><pre><span></span><span class="err">A. `(2, 2, 2, 2, 2, 2, 2, 2, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5)`</span>
-<span class="err">B. `(2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5)`</span>
-<span class="err">C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>A. `(2, 2, 2, 2, 2, 2, 2, 2, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5)`
+B. `(2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5)`
+C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
+</code></pre></div>
 <p>There is no math here: I'm just creating 16-element lists in different ways. We'll then plot "A-lists," "B-lists," etc. separately.</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compose_code_A</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compose_code_A</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
     <span class="k">return</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">[</span><span class="n">coord_1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">[</span><span class="n">coord_2</span><span class="p">]</span>
 
 
@@ -325,15 +325,15 @@ This is an iterative approach, where you start with a straightforward baseline a
 
 <span class="n">ticks</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ticks</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_A</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_A</span><span class="p">)</span>
+</code></pre></div>
 <p><img alt="generated emojis A" class="img-responsive" src="https://willwolf.io/figures/generated_emojis_A.png"/></p>
-<div class="highlight"><pre><span></span><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_B</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_B</span><span class="p">)</span>
+</code></pre></div>
 <p><img alt="generated emojis B" class="img-responsive" src="https://willwolf.io/figures/generated_emojis_B.png"/></p>
-<div class="highlight"><pre><span></span><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_C</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_generated_emojis</span><span class="p">(</span><span class="n">compose_code_C</span><span class="p">)</span>
+</code></pre></div>
 <p><img alt="generated emojis C" class="img-responsive" src="https://willwolf.io/figures/generated_emojis_C.png"/></p>
 <p>As our emojis live in a continuous latent space we can observe the smoothness of the transition from one to the next.</p>
 <p>The generated emojis have the makings of maybe some devils, maybe some bubbles, maybe some hearts, maybe some fish. I doubt they'll be featured on your cell phone's keyboard anytime soon.</p>
@@ -376,11 +376,11 @@ This is an iterative approach, where you start with a straightforward baseline a
 <p>Finally, we compute the cosine similarity between the resulting embeddings.</p>
 <h2>Prepare questions, answers</h2>
 <h3>Import tweets</h3>
-<div class="highlight"><pre><span></span><span class="n">tweets_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'data/tweets.csv'</span><span class="p">)[[</span><span class="s1">'text'</span><span class="p">,</span> <span class="s1">'airline_sentiment'</span><span class="p">]]</span>\
+<div class="highlight"><pre><span></span><code><span class="n">tweets_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'data/tweets.csv'</span><span class="p">)[[</span><span class="s1">'text'</span><span class="p">,</span> <span class="s1">'airline_sentiment'</span><span class="p">]]</span>\
     <span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>\
     <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 <span class="n">tweets_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <div>
 <style>
     .dataframe thead tr:only-child th {
@@ -395,7 +395,7 @@ This is an iterative approach, where you start with a straightforward baseline a
         vertical-align: top;
     }
 </style>
-<table border="1" class="table table-striped dataframe table-hover">
+<table border="1" class="table-hover table table-striped dataframe">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -440,7 +440,7 @@ This is an iterative approach, where you start with a straightforward baseline a
 </div>
 <h3>Embed answers into 16-D latent space</h3>
 <p>Additionally, scale the latent codes; these will be fed to our network as input.</p>
-<div class="highlight"><pre><span></span><span class="c1"># embed</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># embed</span>
 <span class="n">sentiment_embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">emojis_dict</span><span class="p">[</span><span class="s1">'1f389.png'</span><span class="p">],</span> <span class="n">emojis_dict</span><span class="p">[</span><span class="s1">'1f608.png'</span><span class="p">],</span> <span class="n">emojis_dict</span><span class="p">[</span><span class="s1">'1f621.png'</span><span class="p">]])</span>
 <span class="n">sentiment_embeddings</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sentiment_embeddings</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
@@ -463,20 +463,20 @@ This is an iterative approach, where you start with a straightforward baseline a
 <span class="n">questions</span> <span class="o">=</span> <span class="n">tweets_df</span><span class="p">[</span><span class="s1">'text'</span><span class="p">]</span>
 <span class="n">correct_answers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">correct_answers</span><span class="p">)</span>
 <span class="n">incorrect_answers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">incorrect_answers</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>We've now built (only) one <code>(question, correct_answer, incorrect_answer)</code> training triplet for each ground-truth <code>(question, correct_answer)</code>. In practice, we should likely have many more, i.e. <code>(question, correct_answer, incorrect_answer_1), (question, correct_answer, incorrect_answer_2), ..., (question, correct_answer, incorrect_answer_n)</code>.</p>
 <h3>Construct sequences of token ids</h3>
-<div class="highlight"><pre><span></span><span class="n">MAX_QUESTION_LEN</span> <span class="o">=</span> <span class="mi">20</span>
+<div class="highlight"><pre><span></span><code><span class="n">MAX_QUESTION_LEN</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">VOCAB_SIZE</span> <span class="o">=</span> <span class="mi">2000</span>
 
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span><span class="o">=</span><span class="n">VOCAB_SIZE</span><span class="p">)</span>
 <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">questions</span><span class="p">)</span>
 <span class="n">question_seqs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">questions</span><span class="p">)</span>
 <span class="n">question_seqs</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">question_seqs</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">MAX_QUESTION_LEN</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3>Split data into train, validation sets</h3>
 <p>NB: We don't actually have <code>y</code> values: we pass <code>(question, correct_answer, incorrect_answer)</code> triplets to our network and try to minimize <code>max(0, margin - correct_cos_sim + incorrect_cos_sim)</code>. Notwithstanding, Keras requires that we pass both <code>x</code> and <code>y</code> (as Numpy arrays); we pass the latter as a vector of 0's.</p>
-<div class="highlight"><pre><span></span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">question_seqs</span><span class="p">)</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span>
+<div class="highlight"><pre><span></span><code><span class="n">train_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">question_seqs</span><span class="p">)</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span>
 
 <span class="n">questions_train</span> <span class="o">=</span> <span class="n">question_seqs</span><span class="p">[</span><span class="n">train_mask</span><span class="p">]</span>
 <span class="n">correct_answers_train</span> <span class="o">=</span> <span class="n">correct_answers</span><span class="p">[</span><span class="n">train_mask</span><span class="p">]</span>
@@ -488,17 +488,17 @@ This is an iterative approach, where you start with a straightforward baseline a
 
 <span class="n">y_train_dummy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">questions_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">y_val_dummy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">questions_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    questions_train:         (4079, 20)</span>
-<span class="err">    correct_answers_train:   (4079, 16)</span>
-<span class="err">    incorrect_answers_train: (4079, 16)</span>
-<span class="err">    questions_val:           (921, 20)</span>
-<span class="err">    correct_answers_val:     (921, 16)</span>
-<span class="err">    incorrect_answers_val:   (921, 16)</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    questions_train:         (4079, 20)
+    correct_answers_train:   (4079, 16)
+    incorrect_answers_train: (4079, 16)
+    questions_val:           (921, 20)
+    correct_answers_val:     (921, 16)
+    incorrect_answers_val:   (921, 16)
+</code></pre></div>
 <h3>Build embedding layer from Glove vectors</h3>
-<div class="highlight"><pre><span></span><span class="n">GLOVE_EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">100</span>
+<div class="highlight"><pre><span></span><code><span class="n">GLOVE_EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">100</span>
 
 <span class="c1"># 1. Load Glove embeddings</span>
 
@@ -512,10 +512,10 @@ This is an iterative approach, where you start with a straightforward baseline a
     <span class="n">input_length</span><span class="o">=</span><span class="n">MAX_QUESTION_LEN</span><span class="p">,</span>
     <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3>Build Siamese question-answer model (SQAM)</h3>
 <p>GDGS architecture, ✌️.</p>
-<div class="highlight"><pre><span></span><span class="n">LSTM_HIDDEN_STATE_SIZE</span> <span class="o">=</span> <span class="mi">50</span>
+<div class="highlight"><pre><span></span><code><span class="n">LSTM_HIDDEN_STATE_SIZE</span> <span class="o">=</span> <span class="mi">50</span>
 
 <span class="c1"># question</span>
 <span class="n">question</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">MAX_QUESTION_LEN</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int32'</span><span class="p">)</span>
@@ -550,17 +550,17 @@ This is an iterative approach, where you start with a straightforward baseline a
 
 <span class="c1"># model</span>
 <span class="n">qa_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">],</span> <span class="p">[</span><span class="n">cosine_sim</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">'qa_model'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="qa model" class="img-responsive" src="https://willwolf.io/figures/qa_model.png"/></p>
 <h3>Build contrastive model</h3>
 <p>Two Siamese networks, trained jointly so as to minimize the hinge loss of their respective outputs.</p>
-<div class="highlight"><pre><span></span><span class="c1"># contrastive model</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># contrastive model</span>
 <span class="n">correct_answer</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">EMBEDDING_SIZE</span><span class="p">,))</span>
 <span class="n">incorrect_answer</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">EMBEDDING_SIZE</span><span class="p">,))</span>
 <span class="n">correct_cos_sim</span> <span class="o">=</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">correct_answer</span><span class="p">])</span>
 <span class="n">incorrect_cos_sim</span> <span class="o">=</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">incorrect_answer</span><span class="p">])</span>
 
-<span class="k">def</span> <span class="nf">hinge_loss</span><span class="p">(</span><span class="n">cos_sims</span><span class="p">,</span> <span class="n">margin</span><span class="o">=.</span><span class="mi">2</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hinge_loss</span><span class="p">(</span><span class="n">cos_sims</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">.2</span><span class="p">):</span>
     <span class="n">correct</span><span class="p">,</span> <span class="n">incorrect</span> <span class="o">=</span> <span class="n">cos_sims</span>
     <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">margin</span> <span class="o">-</span> <span class="n">correct</span> <span class="o">+</span> <span class="n">incorrect</span><span class="p">)</span>
 
@@ -568,15 +568,15 @@ This is an iterative approach, where you start with a straightforward baseline a
 
 <span class="c1"># model</span>
 <span class="n">contrastive_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">correct_answer</span><span class="p">,</span> <span class="n">incorrect_answer</span><span class="p">],</span> <span class="p">[</span><span class="n">contrastive_loss</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">'contrastive_model'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3>Build prediction model</h3>
 <p>This is what we'll use to compute the cosine similarity of novel <code>(question, answer)</code> pairs.</p>
-<div class="highlight"><pre><span></span><span class="n">prediction_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">],</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'prediction_model'</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">prediction_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">],</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'prediction_model'</span><span class="p">)</span>
+</code></pre></div>
 <h3>Fit contrastive model</h3>
 <p>Fitting <code>contrastive_model</code> will implicitly fit <code>prediction_model</code> as well, so long as the latter has been compiled.</p>
-<div class="highlight"><pre><span></span><span class="c1"># compile</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="o">.</span><span class="mi">001</span><span class="p">,</span> <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># compile</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="mf">.001</span><span class="p">,</span> <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
 
 <span class="n">contrastive_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
 <span class="n">prediction_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
@@ -589,15 +589,15 @@ This is an iterative approach, where you start with a straightforward baseline a
     <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">validation_data</span><span class="o">=</span><span class="p">([</span><span class="n">questions_val</span><span class="p">,</span> <span class="n">correct_answers_val</span><span class="p">,</span> <span class="n">incorrect_answers_val</span><span class="p">],</span> <span class="n">y_val_dummy</span><span class="p">)</span>
 <span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Train on 4089 samples, validate on 911 samples</span>
-<span class="err">Epoch 1/3</span>
-<span class="err">4089/4089 [==============================] - 18s - loss: 0.1069 - val_loss: 0.0929</span>
-<span class="err">Epoch 2/3</span>
-<span class="err">4089/4089 [==============================] - 14s - loss: 0.0796 - val_loss: 0.0822</span>
-<span class="err">Epoch 3/3</span>
-<span class="err">4089/4089 [==============================] - 14s - loss: 0.0675 - val_loss: 0.0828</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Train on 4089 samples, validate on 911 samples
+Epoch 1/3
+4089/4089 [==============================] - 18s - loss: 0.1069 - val_loss: 0.0929
+Epoch 2/3
+4089/4089 [==============================] - 14s - loss: 0.0796 - val_loss: 0.0822
+Epoch 3/3
+4089/4089 [==============================] - 14s - loss: 0.0675 - val_loss: 0.0828
+</code></pre></div>
 <h3>Predict on new tweets</h3>
 <blockquote>
 <ol>
@@ -612,7 +612,7 @@ This is an iterative approach, where you start with a straightforward baseline a
 </li>
 </ol>
 </blockquote>
-<div class="highlight"><pre><span></span><span class="n">new_questions</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight"><pre><span></span><code><span class="n">new_questions</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"@united Flight is awful only one lavatory functioning, and people lining up, bumping, etc. because can't use 1st class bathroom. Ridiculous"</span><span class="p">,</span>
     <span class="s2">"@usairways I've called for 3 days and can't get thru. is there some secret method i can use that doesn't result in you hanging up on me?"</span><span class="p">,</span>
     <span class="s2">"@AmericanAir Let's all have a extraordinary week and make it a year to remember #GoingForGreat 2015 thanks so much American Airlines!!!"</span>
@@ -620,82 +620,82 @@ This is an iterative approach, where you start with a straightforward baseline a
 
 <span class="n">new_questions_seq</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">new_questions</span><span class="p">)</span>
 <span class="n">new_questions_seq</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">MAX_QUESTION_LEN</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">n_questions</span><span class="p">,</span> <span class="n">n_sentiments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentiment_embeddings</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">n_questions</span><span class="p">,</span> <span class="n">n_sentiments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentiment_embeddings</span><span class="p">)</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="n">n_sentiments</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">sentiment_embeddings</span><span class="p">,</span> <span class="p">(</span><span class="n">n_questions</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 <span class="n">preds</span> <span class="o">=</span> <span class="n">prediction_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">q</span><span class="p">,</span> <span class="n">a</span><span class="p">])</span>
-</pre></div>
+</code></pre></div>
 <h3>Tweet #1</h3>
-<div class="highlight"><pre><span></span><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Predictions:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    🎉 (Positive): </span><span class="si">{</span><span class="n">positive_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    😈 (Neutral) : </span><span class="si">{</span><span class="n">neutral_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    😡 (Negative): </span><span class="si">{</span><span class="n">negative_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="c">Predictions:</span>
-<span class="c">    🎉 (Positive): 0.51141</span>
-<span class="c">    😈 (Neutral) : 0.56273</span>
-<span class="c">    😡 (Negative): 0.9728</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Predictions:
+    🎉 (Positive): 0.51141
+    😈 (Neutral) : 0.56273
+    😡 (Negative): 0.9728
+</code></pre></div>
 <h3>Tweet #2</h3>
-<div class="highlight"><pre><span></span><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Predictions:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    🎉 (Positive): </span><span class="si">{</span><span class="n">positive_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    😈 (Neutral) : </span><span class="si">{</span><span class="n">neutral_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    😡 (Negative): </span><span class="si">{</span><span class="n">negative_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="c">Predictions:</span>
-<span class="c">    🎉 (Positive): 0.41422</span>
-<span class="c">    😈 (Neutral) : 0.61587</span>
-<span class="c">    😡 (Negative): 0.99161</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Predictions:
+    🎉 (Positive): 0.41422
+    😈 (Neutral) : 0.61587
+    😡 (Negative): 0.99161
+</code></pre></div>
 <h3>Tweet #3</h3>
-<div class="highlight"><pre><span></span><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">positive_pred</span><span class="p">,</span> <span class="n">neutral_pred</span><span class="p">,</span> <span class="n">negative_pred</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Predictions:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    🎉 (Positive): </span><span class="si">{</span><span class="n">positive_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    😈 (Neutral) : </span><span class="si">{</span><span class="n">neutral_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    😡 (Negative): </span><span class="si">{</span><span class="n">negative_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">0.5</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="c">Predictions:</span>
-<span class="c">    🎉 (Positive): 0.87107</span>
-<span class="c">    😈 (Neutral) : 0.46741</span>
-<span class="c">    😡 (Negative): 0.73435</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Predictions:
+    🎉 (Positive): 0.87107
+    😈 (Neutral) : 0.46741
+    😡 (Negative): 0.73435
+</code></pre></div>
 <h3>Additionally, we can predict on the full set of emojis</h3>
 <p>Some emoji embeddings contain <code>np.inf</code> values, unfortunately. We could likely mitigate this by further tweaking the hyperparameters of our autoencoder.</p>
-<div class="highlight"><pre><span></span><span class="n">all_embeddings</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">emojis</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">all_embeddings</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">emojis</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 <span class="n">inf_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">all_embeddings</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="mi">100</span> <span class="o">*</span> <span class="n">inf_mask</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">% of values are `np.inf`.'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">inf_mask</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1">% of values are `np.inf`.'</span><span class="p">)</span>
 
 <span class="n">all_embeddings</span> <span class="o">=</span> <span class="n">all_embeddings</span><span class="p">[</span><span class="o">~</span><span class="n">inf_mask</span><span class="p">]</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">4.15% of values are `np.inf`.</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">n_questions</span><span class="p">,</span> <span class="n">n_sentiments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_embeddings</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="mf">4.15</span><span class="err">%</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="nb">val</span><span class="n">ues</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="err">`</span><span class="n">np</span><span class="mf">.</span><span class="n">inf</span><span class="err">`</span><span class="mf">.</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">n_questions</span><span class="p">,</span> <span class="n">n_sentiments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_embeddings</span><span class="p">)</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">new_questions_seq</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="n">n_sentiments</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">all_embeddings</span><span class="p">,</span> <span class="p">(</span><span class="n">n_questions</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 <span class="n">preds</span> <span class="o">=</span> <span class="n">prediction_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">q</span><span class="p">,</span> <span class="n">a</span><span class="p">])</span>
-</pre></div>
+</code></pre></div>
 <h3>Tweet #1</h3>
-<div class="highlight"><pre><span></span><span class="n">preds_1</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[:</span><span class="n">n_sentiments</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">preds_1</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[:</span><span class="n">n_sentiments</span><span class="p">]</span>
 <span class="n">top_5_matches</span> <span class="o">=</span> <span class="n">extract_top_5_argmax</span><span class="p">(</span><span class="n">preds_1</span><span class="p">)</span>
 <span class="n">display_top_5_results</span><span class="p">(</span><span class="n">top_5_matches</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="predicted tweets 1" class="img-responsive" src="https://willwolf.io/images/predicted_tweets_1.png"/></p>
 <h3>Tweet #2</h3>
-<div class="highlight"><pre><span></span><span class="n">preds_2</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="n">n_sentiments</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">n_sentiments</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">preds_2</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="n">n_sentiments</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">n_sentiments</span><span class="p">]</span>
 <span class="n">top_5_matches</span> <span class="o">=</span> <span class="n">extract_top_5_argmax</span><span class="p">(</span><span class="n">preds_2</span><span class="p">)</span>
 <span class="n">display_top_5_results</span><span class="p">(</span><span class="n">top_5_matches</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="predicted tweets 2" class="img-responsive" src="https://willwolf.io/images/predicted_tweets_2.png"/></p>
 <h3>Tweet #3</h3>
-<div class="highlight"><pre><span></span><span class="n">preds_3</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n_sentiments</span><span class="p">:]</span>
+<div class="highlight"><pre><span></span><code><span class="n">preds_3</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n_sentiments</span><span class="p">:]</span>
 <span class="n">top_5_matches</span> <span class="o">=</span> <span class="n">extract_top_5_argmax</span><span class="p">(</span><span class="n">preds_3</span><span class="p">)</span>
 <span class="n">display_top_5_results</span><span class="p">(</span><span class="n">top_5_matches</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="predicted tweets 3" class="img-responsive" src="https://willwolf.io/images/predicted_tweets_3.png"/></p>
 <p>Not particularly useful. These emojis have 0 notion of sentiment, though: the model is simply predicting on their (pixel-based) latent codes.</p>
 <h2>Future work</h2>

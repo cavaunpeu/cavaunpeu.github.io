@@ -102,17 +102,17 @@
 </ol>
 <p>Carrying the container to the bakery is akin to a simple <code>docker run</code> onto the remote machine. Carrying ingredients to the bakery, i.e. placing a data file on the local file system of the remote machine, is much less sexy. In the simplest sense, this is akin to using <code>scp</code> or <code>rsync</code> to transfer a file from the local machine to the remote, or even using <code>curl</code> to download a file directly onto the remote machine itself.</p>
 <p>In practice, this often looks like:</p>
-<div class="highlight"><pre><span></span><span class="err">docker</span>
-<span class="err">    --tlsverify</span>
-<span class="err">    --tlscacert="$HOME/.docker/machine/certs/ca.pem"</span>
-<span class="err">    --tlscert="$HOME/.docker/machine/certs/cert.pem"</span>
-<span class="err">    --tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78</span>
-<span class="err">run</span>
-<span class="err">    --rm</span>
-<span class="err">    -i</span>
-<span class="err">    -v</span>
-<span class="err">    /data:/data kaggle-contest build_model.sh</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker
+    --tlsverify
+    --tlscacert="$HOME/.docker/machine/certs/ca.pem"
+    --tlscert="$HOME/.docker/machine/certs/cert.pem"
+    --tlskey="$HOME/.docker/machine/certs/key.pem" -H=tcp://12.34.56:78
+run
+    --rm
+    -i
+    -v
+    /data:/data kaggle-contest build_model.sh
+</code></pre></div>
 <h2>Cooking tools that you can't buy at the store</h2>
 <p>To bake his cupcake, Ernie used a one-of-a-kind cutting board that Bert had hand-molded for him. How can he use this at the bakery? In Kaggle terms: how can I use a library in my project that is not available on a public package repository (i.e. one that I built myself)?</p>
 <p>To this end, there's really no secret sauce. With the cutting board/library, we can either:</p>

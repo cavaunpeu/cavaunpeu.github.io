@@ -73,7 +73,7 @@
 		<time datetime="2017-05-08T12:45:00-04:00" itemprop="datePublished">May 8, 2017</time>
 	</div>
 	<div itemprop="articleBody" class="article-body"><p>In this work, we explore improving a vanilla regression model with knowledge learned elsewhere. As a motivating example, consider the task of predicting the number of checkins a given user will make at a given location. Our training data consist of checkins from 4 users across 4 locations in the week of May 1st, 2017 and looks as follows:</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th>user_id</th>
@@ -144,7 +144,7 @@
 <h2>Data preparation</h2>
 <p>Our flight-delay design matrix <span class="math">\(X\)</span> will include the following columns: <code>DayOfWeek</code>, <code>DayofMonth</code>, <code>Month</code>, <code>ScheduledDepTimestamp</code>, <code>Origin</code>, <code>Dest</code> and <code>UniqueCarrier</code>. All columns will be one-hotted for simplicity. (Alternatively, I explored mapping each column to its respective <code>value_counts()</code>, i.e. <code>X.loc[:, col] = X[col].map(col_val_counts)</code>, which led to less agreeable convergence.)</p>
 <p>Let's get started.</p>
-<div class="highlight"><pre><span></span><span class="n">TEST_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="o">.</span><span class="mi">4</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">TEST_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">.4</span><span class="p">)</span>
 
 
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">TEST_SIZE</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -154,12 +154,12 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Train:      </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Validation: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Test:       </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    Train:      (30000, 657)</span>
-<span class="err">    Validation: (10000, 657)</span>
-<span class="err">    Test:       (10000, 657)</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    Train:      (30000, 657)
+    Validation: (10000, 657)
+    Test:       (10000, 657)
+</code></pre></div>
 <h2>Flight-delay models</h2>
 <p>Let's build two baseline models with the data we have. Both models have a single ReLU output and are trained to minimize the mean squared error of the predicted delay via stochastic gradient descent.</p>
 <p>ReLU was chosen as an output activation because delays are both bounded below at 0 and bi-modal. I considered three separate strategies for predicting this distribution.</p>
@@ -169,7 +169,7 @@
 <li>Train a single network with a ReLU activation. This gives a reasonably elegant way to clip our outputs below at 0, and mean-squared-error still tries to place our observations into the correct mode (of the bimodal output distribution; this said, mean-squared-error may try to "play it safe" and predict between the modes).</li>
 </ol>
 <p>I chose Option #3 because it performed best in brief experimentation and was the simplest to both fit and explain.</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseEmbeddingModel</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">BaseEmbeddingModel</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
@@ -191,7 +191,7 @@
 <span class="k">class</span> <span class="nc">SimpleRegression</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="sd">'''Initializes the model parameters.</span>
+<span class="w">        </span><span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            input_dim : The number of columns in our design matrix.</span>
@@ -213,7 +213,7 @@
 <span class="k">class</span> <span class="nc">DeeperRegression</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dropout_p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="sd">'''Initializes the model parameters.</span>
+<span class="w">        </span><span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            input_dim : The number of columns in our design matrix.</span>
@@ -237,38 +237,38 @@
         <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'regression_output'</span><span class="p">)(</span><span class="n">dense</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2>Simple regression</h2>
-<div class="highlight"><pre><span></span><span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="o">.</span><span class="mi">0001</span>
+<div class="highlight"><pre><span></span><code><span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">.0001</span>
 
 
-<span class="n">simple_reg</span> <span class="o">=</span> <span class="n">SimpleRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">05</span><span class="p">)</span>
+<span class="n">simple_reg</span> <span class="o">=</span> <span class="n">SimpleRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.05</span><span class="p">)</span>
 <span class="n">simple_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
 
 <span class="n">simple_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">simple_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">simple_reg_fit</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="simple regression initial" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_simple_regression_initial.png"/></p>
 <h2>Deeper regression</h2>
-<div class="highlight"><pre><span></span><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">.0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
 
 <span class="n">deeper_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">deeper_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">deeper_reg_fit</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="deeper regression initial" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_deeper_regression_initial.png"/></p>
 <h2>Test set predictions</h2>
-<div class="highlight"><pre><span></span><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">y_pred_deeper</span> <span class="o">=</span> <span class="n">deeper_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">mse_simple</span> <span class="o">=</span> <span class="n">mean_squared_error_scikit</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_simple</span><span class="p">)</span>
 <span class="n">mse_deeper</span> <span class="o">=</span> <span class="n">mean_squared_error_scikit</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_deeper</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Mean squared error, simple regression: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_simple</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Mean squared error, deeper regression: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_deeper</span><span class="p">))</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Mean squared error, simple regression: 2.331459019628268</span>
-<span class="err">Mean squared error, deeper regression: 2.3186310632259204</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nx">Mean</span><span class="w"> </span><span class="nx">squared</span><span class="w"> </span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">simple</span><span class="w"> </span><span class="nx">regression</span><span class="p">:</span><span class="w"> </span><span class="m m-Double">2.331459019628268</span>
+<span class="nx">Mean</span><span class="w"> </span><span class="nx">squared</span><span class="w"> </span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">deeper</span><span class="w"> </span><span class="nx">regression</span><span class="p">:</span><span class="w"> </span><span class="m m-Double">2.3186310632259204</span>
+</code></pre></div>
 <h2>Learning airport embeddings</h2>
 <p>We propose two networks through which to learn airport embeddings: a dot product siamese network, and a <a href="https://jaan.io/what-is-variational-autoencoder-vae-tutorial/">variational autoencoder</a>.</p>
 <h2>Dot product siamese network</h2>
@@ -356,7 +356,7 @@ $$</div>
 <p>The decoder network takes as input <span class="math">\(z\)</span> and produces <span class="math">\(P(x\vert z)\)</span>: a reconstruction of the airport vector (hence, autoencoder). It is parameterized by a weight matrix <span class="math">\(\phi\)</span>.</p>
 <h4>Loss function</h4>
 <p>The network's loss function is the sum of the mean squared reconstruction error of the original input <span class="math">\(x\)</span> and the KL divergence between the true distribution of <span class="math">\(z\)</span> and its approximation <span class="math">\(q\)</span>. Given the reparameterization trick (next section) and another healthy scoop of algebra, we write this in Python code as follows:</p>
-<div class="highlight"><pre><span></span><span class="sd">'''</span>
+<div class="highlight"><pre><span></span><code><span class="sd">'''</span>
 <span class="sd">`z_mean` gives the mean of the Gaussian that generates `z`</span>
 <span class="sd">`z_log_var` gives the log-variance of the Gaussian that generates `z`</span>
 <span class="sd">`z` is generated via:</span>
@@ -372,12 +372,12 @@ $$</div>
 
 <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x_decoded</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x_decoded</span><span class="p">)</span> <span class="o">+</span> <span class="n">kl_loss</span>
-</pre></div>
+</code></pre></div>
 <h3>Reparameterization trick</h3>
 <p>When back-propagating the network's loss to <span class="math">\(\theta\)</span> , we need to go through <span class="math">\(z\)</span> — <em>a sample</em> taken from <span class="math">\(q_{\theta}(z\vert x)\)</span>. Trivially, this sample is a scalar; intuitively, its derivative should be non-zero. In solution, we'd like the sample to depend not on the <em>stochasticity</em> of the random variable, but on the random variable's <em>parameters</em>. To this end, we employ the <a href="https://stats.stackexchange.com/questions/199605/how-does-the-reparameterization-trick-for-vaes-work-and-why-is-it-important">"reparametrization trick"</a>, such that the sample depends on these parameters <em>deterministically</em>.</p>
 <p>As a quick example, this trick allows us to write <span class="math">\(\mathcal{N}(\mu, \sigma)\)</span> as <span class="math">\(z = \mu + \sigma \odot \epsilon\)</span>, where <span class="math">\(\epsilon \sim \mathcal{N}(0, 1)\)</span>. Drawing samples this way allows us to propagate error backwards through our network.</p>
 <h2>Auxiliary data</h2>
-<div class="highlight"><pre><span></span><span class="c1"># build X_routes, y_routes</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># build X_routes, y_routes</span>
 <span class="n">geo_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'origin_latitude'</span><span class="p">,</span> <span class="s1">'origin_longitude'</span><span class="p">,</span> <span class="s1">'dest_latitude'</span><span class="p">,</span> <span class="s1">'dest_longitude'</span><span class="p">]</span>
 <span class="n">X_r</span> <span class="o">=</span> <span class="n">routes</span><span class="p">[</span> <span class="p">[</span><span class="s1">'origin_id'</span><span class="p">,</span> <span class="s1">'dest_id'</span><span class="p">]</span> <span class="o">+</span> <span class="n">geo_cols</span> <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">y_r</span> <span class="o">=</span> <span class="n">routes</span><span class="p">[</span><span class="s1">'exists'</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -395,21 +395,21 @@ $$</div>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Train:      </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_train_r</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Validation: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_val_r</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Test:       </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_test_r</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    Train:      (87630, 6)</span>
-<span class="err">    Validation: (21907, 6)</span>
-<span class="err">    Test:       (21907, 6)</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    Train:      (87630, 6)
+    Validation: (21907, 6)
+    Test:       (21907, 6)
+</code></pre></div>
 <h2>Dot product embedding model</h2>
 <p>To start, let's train our model with a single latent dimension then visualize the results on the world map.</p>
-<div class="highlight"><pre><span></span><span class="n">N_UNIQUE_AIRPORTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_airports</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">N_UNIQUE_AIRPORTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_airports</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">DotProductEmbeddingModel</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_unique_airports</span><span class="o">=</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">):</span>
-        <span class="sd">'''Initializes the model parameters.</span>
+<span class="w">        </span><span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            embedding_size : The desired number of latent dimensions in our</span>
@@ -447,11 +447,11 @@ $$</div>
         <span class="n">exists</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)(</span><span class="n">tanh</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">origin</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">origin_geo</span><span class="p">,</span> <span class="n">dest_geo</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">exists</span><span class="p">])</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">dp_model</span> <span class="o">=</span> <span class="n">DotProductEmbeddingModel</span><span class="p">(</span><span class="n">embedding_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">0001</span><span class="p">)</span>
-<span class="n">dp_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">dp_model</span> <span class="o">=</span> <span class="n">DotProductEmbeddingModel</span><span class="p">(</span><span class="n">embedding_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.0001</span><span class="p">)</span>
+<span class="n">dp_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">.001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">)</span>
 <span class="n">SVG</span><span class="p">(</span><span class="n">model_to_dot</span><span class="p">(</span><span class="n">dp_model</span><span class="o">.</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'dot'</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">'svg'</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="dot product embedding model" class="img-responsive" src="https://willwolf.io/figures/dot_product_embedding_model.svg"/></p>
 <h2>Fit</h2>
 <p><img alt="dot product embedding model fit" class="img-responsive" src="https://willwolf.io/figures/dot_product_embedding_model_fit.png"/></p>
@@ -461,14 +461,14 @@ $$</div>
 2. Extract the learned (1-dimensional) embedding for each.
 3. Scale the results to <span class="math">\([0, 1]\)</span>.
 4. Use the scaled embedding as a percentile-index into a color gradient. Here, we've chosen the colors of the rainbow: low values are blue/purple, and high values are orange/red.</p>
-<div class="highlight"><pre><span></span><span class="n">plot_embeddings_on_world_map</span><span class="p">(</span><span class="n">unique_origins</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s1">'</span><span class="si">{static}</span><span class="s1">/figures/dp_model_map.html'</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_embeddings_on_world_map</span><span class="p">(</span><span class="n">unique_origins</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s1">'</span><span class="si">{static}</span><span class="s1">/figures/dp_model_map.html'</span><span class="p">)</span>
+</code></pre></div>
 <iframe allowfullscreen="" frameborder="0" height="800" src="https://willwolf-public.s3.amazonaws.com/transfer-learning-flight-delays/dp_model_map.html" width="946"></iframe>
 <h2>Variational autoencoder</h2>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">'''A custom "variational" Keras layer that completes the</span>
+<span class="w">        </span><span class="sd">'''A custom "variational" Keras layer that completes the</span>
 <span class="sd">        variational autoencoder.</span>
 
 <span class="sd">        Args:</span>
@@ -520,11 +520,11 @@ $$</div>
 
     <span class="k">def</span> <span class="nf">compute_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">input_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dim</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariationalAutoEncoderEmbeddingModel</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">VariationalAutoEncoderEmbeddingModel</span><span class="p">(</span><span class="n">BaseEmbeddingModel</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dense_layer_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">λ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_unique_airports</span><span class="o">=</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">):</span>
-        <span class="sd">'''Initializes the model parameters.</span>
+<span class="w">        </span><span class="sd">'''Initializes the model parameters.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            embedding_size : The desired number of latent dimensions in our</span>
@@ -563,14 +563,14 @@ $$</div>
         <span class="c1"># end-to-end</span>
         <span class="n">encoder_decoder</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">origin</span><span class="p">,</span> <span class="n">origin_geo</span><span class="p">],</span> <span class="n">decoder</span><span class="p">(</span><span class="n">encoder</span><span class="p">([</span><span class="n">origin</span><span class="p">,</span> <span class="n">origin_geo</span><span class="p">])))</span>
         <span class="k">return</span> <span class="n">encoder_decoder</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">vae_model</span> <span class="o">=</span> <span class="n">VariationalAutoEncoderEmbeddingModel</span><span class="p">(</span><span class="n">embedding_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dense_layer_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">003</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">vae_model</span> <span class="o">=</span> <span class="n">VariationalAutoEncoderEmbeddingModel</span><span class="p">(</span><span class="n">embedding_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dense_layer_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.003</span><span class="p">)</span>
 <span class="n">vae_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="p">[</span><span class="n">vae_model</span><span class="o">.</span><span class="n">variational_layer</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="s1">'mean_squared_logarithmic_error'</span><span class="p">],</span>
-                  <span class="n">loss_weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">])</span>
+                  <span class="n">loss_weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">.2</span><span class="p">])</span>
 <span class="n">SVG</span><span class="p">(</span><span class="n">model_to_dot</span><span class="p">(</span><span class="n">vae_model</span><span class="o">.</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'dot'</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">'svg'</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="vae embedding model" class="img-responsive" src="https://willwolf.io/figures/vae_embedding_model.svg"/></p>
-<div class="highlight"><pre><span></span><span class="c1"># build VAE training, test sets</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># build VAE training, test sets</span>
 <span class="n">one_hot_airports</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N_UNIQUE_AIRPORTS</span><span class="p">)</span>
 
 <span class="n">X_train_r_origin</span> <span class="o">=</span> <span class="n">one_hot_airports</span><span class="p">[</span> <span class="n">X_train_r</span><span class="p">[</span><span class="s1">'origin_id'</span><span class="p">]</span> <span class="p">]</span>
@@ -584,50 +584,50 @@ $$</div>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Train:      </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_train_r_origin</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Validation: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_val_r_origin</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'    Test:       </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_test_r_origin</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    Train:      (87630, 3186)</span>
-<span class="err">    Validation: (21907, 3186)</span>
-<span class="err">    Test:       (21907, 3186)</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    Train:      (87630, 3186)
+    Validation: (21907, 3186)
+    Test:       (21907, 3186)
+</code></pre></div>
 <h2>Fit</h2>
 <p><img alt="vae product embedding model fit" class="img-responsive" src="https://willwolf.io/figures/vae_product_embedding_model_fit.png"/></p>
 <h2>Visualize</h2>
-<p><iframe allowfullscreen="" frameborder="0" height="800" src="https://willwolf-public.s3.amazonaws.com/transfer-learning-flight-delays/vae_model_map.html" width="946"></iframe></p>
+<iframe allowfullscreen="" frameborder="0" height="800" src="https://willwolf-public.s3.amazonaws.com/transfer-learning-flight-delays/vae_model_map.html" width="946"></iframe>
 <h2>Finally, transfer the learning</h2>
 <p>Retrain both models with 20 latent dimensions, then join the embedding back to our original dataset.</p>
 <h2>Extract embeddings, construct joint dataset</h2>
-<div class="highlight"><pre><span></span><span class="err">Dataset sizes:</span>
-<span class="err">    Train:      (30000, 151)</span>
-<span class="err">    Validation: (10000, 151)</span>
-<span class="err">    Test:       (10000, 151)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>Dataset sizes:
+    Train:      (30000, 151)
+    Validation: (10000, 151)
+    Test:       (10000, 151)
+</code></pre></div>
 <h2>Train original models</h2>
-<div class="highlight"><pre><span></span><span class="n">simple_reg</span> <span class="o">=</span> <span class="n">SimpleRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">05</span><span class="p">)</span>
-<span class="n">simple_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">0005</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">simple_reg</span> <span class="o">=</span> <span class="n">SimpleRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.05</span><span class="p">)</span>
+<span class="n">simple_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">.0005</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
 <span class="n">simple_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">simple_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">simple_reg_fit</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="simple regression augmented" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_simple_regression_augmented.png"/></p>
-<div class="highlight"><pre><span></span><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=.</span><span class="mi">03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">deeper_reg</span> <span class="o">=</span> <span class="n">DeeperRegression</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">λ</span><span class="o">=</span><span class="mf">.03</span><span class="p">,</span> <span class="n">dropout_p</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">deeper_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">.0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">)</span>
 <span class="n">deeper_reg_fit</span> <span class="o">=</span> <span class="n">fit_flight_model</span><span class="p">(</span><span class="n">deeper_reg</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="n">plot_model_fit</span><span class="p">(</span><span class="n">deeper_reg_fit</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><img alt="deeper regression augmented" class="img-responsive" src="https://willwolf.io/figures/transfer_learning_deeper_regression_augmented.png"/></p>
-<div class="highlight"><pre><span></span><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">y_pred_simple</span> <span class="o">=</span> <span class="n">simple_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">y_pred_deeper</span> <span class="o">=</span> <span class="n">deeper_reg</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="n">mse_simple</span> <span class="o">=</span> <span class="n">mean_squared_error_scikit</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_simple</span><span class="p">)</span>
 <span class="n">mse_deeper</span> <span class="o">=</span> <span class="n">mean_squared_error_scikit</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_deeper</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Mean squared error, simple regression: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_simple</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Mean squared error, deeper regression: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse_deeper</span><span class="p">))</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">Mean squared error, simple regression: 2.3176028493805263</span>
-<span class="err">Mean squared error, deeper regression: 2.291221474968889</span>
-</pre></div>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nx">Mean</span><span class="w"> </span><span class="nx">squared</span><span class="w"> </span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">simple</span><span class="w"> </span><span class="nx">regression</span><span class="p">:</span><span class="w"> </span><span class="m m-Double">2.3176028493805263</span>
+<span class="nx">Mean</span><span class="w"> </span><span class="nx">squared</span><span class="w"> </span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">deeper</span><span class="w"> </span><span class="nx">regression</span><span class="p">:</span><span class="w"> </span><span class="m m-Double">2.291221474968889</span>
+</code></pre></div>
 <h2>Summary</h2>
 <p>In fitting these models to both the original and "augmented" datasets, I spent time tuning their parameters — regularization strengths, amount of dropout, number of epochs, learning rates, etc. Additionally, the respective datasets are of different dimensionality. For these reasons, comparison between the two sets of models is clearly not "apples to apples."</p>
 <p>Notwithstanding, the airport embeddings do seem to provide a nice lift over our original one-hot encodings. Of course, their use is not limited to predicting flight delays: they can be used in any task concerned with airports. Additionally, these embeddings give insight into the nature of the airports themselves: those nearby in vector space can be considered as "similar" by some latent metric. To figure out what these metrics mean, though - it's back to the map.</p>

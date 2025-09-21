@@ -130,33 +130,33 @@ $$</div>
 <li><strong>As such, <span class="math">\(\mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]\)</span> gives a function of the value of <span class="math">\(\mathbf{Z}_j\)</span></strong> which itself maps to the aforementioned real number.</li>
 </ul>
 <p>To further illustrate, let's employ some toy Python code:</p>
-<div class="highlight"><pre><span></span><span class="c1"># Suppose `Z = [Z_0, Z_1, Z_2]`, with corresponding (discrete) variational distributions `q_0`, `q_1`, `q_2`</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Suppose `Z = [Z_0, Z_1, Z_2]`, with corresponding (discrete) variational distributions `q_0`, `q_1`, `q_2`</span>
 
 <span class="n">q_0</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">),</span>  <span class="c1"># q_0(1) = .2</span>
-    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">),</span>
-    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">.2</span><span class="p">),</span>  <span class="c1"># q_0(1) = .2</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">.3</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">.5</span><span class="p">)</span>
 <span class="p">]</span>
 
 <span class="n">q_1</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">),</span>
-    <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">),</span>
-    <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">)</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">.3</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">.3</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">.4</span><span class="p">)</span>
 <span class="p">]</span>
 
 <span class="n">q_2</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">),</span>
-    <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">),</span>
-    <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">.2</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">.1</span><span class="p">)</span>
 <span class="p">]</span>
 
 <span class="n">dists</span> <span class="o">=</span> <span class="p">(</span><span class="n">q_0</span><span class="p">,</span> <span class="n">q_1</span><span class="p">,</span> <span class="n">q_2</span><span class="p">)</span>
 
 <span class="c1"># Next, suppose we'd like to isolate Z_2</span>
 <span class="n">j</span> <span class="o">=</span> <span class="mi">2</span>
-</pre></div>
+</code></pre></div>
 <p><span class="math">\(\mathop{\mathbb{E}}_{i \neq j}[\log{p(\mathbf{X, Z})}]\)</span>, written <code>E_i_neq_j_log_p_X_Z</code> below, can be computed as:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">E_i_neq_j_log_p_X_Z</span><span class="p">(</span><span class="n">Z_j</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">E_i_neq_j_log_p_X_Z</span><span class="p">(</span><span class="n">Z_j</span><span class="p">):</span>
 
     <span class="n">E</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">Z_i_neq_j_dists</span> <span class="o">=</span> <span class="p">[</span><span class="n">dist</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dists</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">]</span>
@@ -178,19 +178,19 @@ $$</div>
         <span class="n">E</span> <span class="o">+=</span> <span class="n">prob</span> <span class="o">*</span> <span class="n">ln_p_X_Z</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">E</span>
-</pre></div>
+</code></pre></div>
 <ul>
 <li>Continuing with our notes, it was not immediately obvious to me how and why we're able to introduce a second integral sign on line 3 of the derivation above. Notwithstanding, the reason is quite simple; a simple exercise of nested for-loops is illustrative.</li>
 </ul>
 <p>Before beginning, we remind the definition of an integral in code. In its simplest example, <span class="math">\(\int{ydx}\)</span> can be written as:</p>
-<div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower_lim</span><span class="p">,</span> <span class="n">upper_lim</span><span class="p">,</span> <span class="n">n_ticks</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower_lim</span><span class="p">,</span> <span class="n">upper_lim</span><span class="p">,</span> <span class="n">n_ticks</span><span class="p">)</span>
 
 <span class="n">integral</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">y</span> <span class="o">*</span> <span class="n">dx</span> <span class="k">for</span> <span class="n">dx</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
 
 <span class="c1"># ...where `n_ticks` approaches infinity.</span>
-</pre></div>
+</code></pre></div>
 <p>With this in mind, the following confirms the self-evidence of the second integral sign:</p>
-<div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><code><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
 
 
 <span class="k">def</span> <span class="nf">ln_p_X_Z</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">):</span>
@@ -226,7 +226,7 @@ $$</div>
 
 
 <span class="k">assert</span> <span class="n">total</span> <span class="o">==</span> <span class="n">TOTAL</span>
-</pre></div>
+</code></pre></div>
 <p>In effect, isolating <span class="math">\(q_j(\mathbf{Z}_j)\)</span> is akin to the penultimate line <code>total += prob_z_0 * _total</code>, i.e. multiplying <span class="math">\(q_j(\mathbf{Z}_j)\)</span> by an intermediate summation <code>_total</code>.  Therefore, the second integral sign is akin to <code>_total += prob_z_1 * prob_z_2 * ln_p_X_Z(X, Z)</code>, i.e. the computation of this intermediate summation itself.</p>
 <p>More succinctly, a multi-dimensional integral can be thought of as a nested-for-loop which commutes a global sum. Herein, we are free to compute intermediate sums at will.</p>
 <h2>Expanding the second term</h2>

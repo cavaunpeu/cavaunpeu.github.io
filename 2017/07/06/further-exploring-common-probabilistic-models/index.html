@@ -160,7 +160,7 @@ $$</div>
 <p>As such, we can <em>marginalize <span class="math">\(y\)</span> out of the numerator</em> so as to obtain the denominator we require. This denominator is often called the "evidence."</p>
 <h3>Marginalization example</h3>
 <p>Marginalization took me a while to understand. Imagine we have the following joint probability distribution out of which we'd like to marginalize <span class="math">\(A\)</span>.</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(A\)</span></th>
@@ -207,7 +207,7 @@ $$</div>
 <li>"Collapse" the remaining columns — in this case, <span class="math">\(B\)</span>.</li>
 </ol>
 <p>Step 1 gives:</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -242,7 +242,7 @@ $$</div>
 </tbody>
 </table>
 <p>Step 2 gives:</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(B\)</span></th>
@@ -263,7 +263,7 @@ $$</div>
 <h3>The denominator</h3>
 <p>In the context of our generative model with a given input <span class="math">\(x\)</span>, the result of this marginalization is a <em>scalar</em> — not a distribution. To see why, let's construct the joint distribution — the numerator — then marginalize:</p>
 <p><span class="math">\(P(x, y)\)</span>:</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(y\)</span></th>
@@ -290,7 +290,7 @@ $$</div>
 </tbody>
 </table>
 <p><span class="math">\(\int P(x, y)dy = P(x)\)</span>:</p>
-<table class="table table-striped table-hover">
+<table class="table-hover table table-striped">
 <thead>
 <tr>
 <th><span class="math">\(X\)</span></th>
@@ -332,7 +332,7 @@ $$</div>
 <p>As you'll now note, the <span class="math">\(x\)</span>-specific partition function gives a result equivalent to that of the marginalized-over-<span class="math">\(y\)</span> joint distribution: a scalar value <span class="math">\(P(x)\)</span> with which to normalize the numerator. However, crucially, please keep in mind:</p>
 <ul>
 <li><em>The partition function is a specific component of a probabilistic model. It always yields a scalar</em>.</li>
-<li><em>Marginalization is a <strong>much more general</strong> operation performed on a probability distribution, which yields a scalar only when the remaining variable(s) are homogeneous, i.e. each remaining column contains a single distinct value.</em></li>
+<li><em>Marginalization is a </em><em>much more general</em><em> operation performed on a probability distribution, which yields a scalar only when the remaining variable(s) are homogeneous, i.e. each remaining column contains a single distinct value.</em></li>
 <li>In the majority of cases, marginalization will simply yield a reduced probability distribution over many value configurations, similar to the <span class="math">\(P(B)\)</span> example above.</li>
 </ul>
 <h3>In practice, this is superfluous</h3>

@@ -77,30 +77,30 @@
     p(\boldsymbol{\theta}\mid\mathbf{x}) = \frac{p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})}{p(\mathbf{x})}
 $$</div>
 <p>In numerous applications of scientific interest, e.g. cosmological, climatic or urban-mobility phenomena, the likelihood of the data <span class="math">\(\mathbf{x}\)</span> under the data-generating function <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> is intractable to compute, precluding classical inference approaches. Notwithstanding, <em>simulating</em> new data <span class="math">\(\mathbf{x}\)</span> from this function is often trivial—for example, by coding the generative process in a few lines of Python—</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generative_process</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">generative_process</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># some deterministic logic</span>
     <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># some stochastic logic</span>
     <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># whatever you want!</span>
     <span class="k">return</span> <span class="n">data</span>
 
-<span class="n">simulated_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">generative_process</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
-</pre></div>
+<span class="n">simulated_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">generative_process</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">.2</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mf">.6</span><span class="p">,</span> <span class="mf">.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+</code></pre></div>
 <p>—motivating the study of <em>simulation-based</em> Bayesian <em>inference</em> methods, termed SBI.</p>
 <p>Furthermore, the evidence <span class="math">\(p(\mathbf{x}) = \int{p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})}d\boldsymbol{\theta}\)</span> is typically intractable to compute as well. This is because the integral has no closed-form solution; or, were the functional form of the likelihood (which we don't have) and the prior (which we do have) available, expanding these terms yields a summation over an "impractically large" number of terms, e.g. the number of possible cluster assignment configurations in a mixture of Gaussians <a href="#10.1080/01621459.2017.1285773" id="ref-10.1080/01621459.2017.1285773-1">(Blei et al., 2017)</a>. For this reason, in SBI, we typically estimate the <em>unnormalized</em> posterior <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x}) = p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta}) \propto \frac{p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})}{p(\mathbf{x})}\)</span>.</p>
 <p>Recent work has explored the use of neural networks to perform key density estimation tasks, i.e. subroutines, of the SBI routine itself. We refer to this work as Neural SBI. In the following sections, we detail the various classes of these estimation tasks. For a more thorough analysis of their respective motivations, behaviors, and tradeoffs, we refer the reader to the original work.</p>
 <h1>Neural Posterior Estimation</h1>
 <p>In this class of models, we estimate <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x})\)</span> with a conditional neural density estimator <span class="math">\(q_{\phi}(\boldsymbol{\theta}\mid\mathbf{x})\)</span>. Simply, this estimator is a neural network with parameters <span class="math">\(\phi\)</span> that accepts <span class="math">\(\mathbf{x}\)</span> as input and produces <span class="math">\(\boldsymbol{\theta}\)</span> as output. For example, It is trained on data tuples <span class="math">\(\{\boldsymbol{\theta}_n, \mathbf{x}_n\}_{1:N}\)</span> sampled from <span class="math">\(p(\mathbf{x}, \boldsymbol{\theta}) = p(\mathbf{x}\mid\boldsymbol{\theta})p(\boldsymbol{\theta})\)</span>, where <span class="math">\(p(\boldsymbol{\theta})\)</span> is a prior we choose, and <span class="math">\(p(\mathbf{x}\mid\boldsymbol{\theta})\)</span> is our <em>simulator</em>. For example, we can construct this training set as follows:</p>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
     <span class="n">theta</span> <span class="o">=</span> <span class="n">prior</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">generative_process</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
     <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p>Then, we train our network.</p>
-<div class="highlight"><pre><span></span><span class="n">q_phi</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">q_phi</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
 <p>Finally, once trained, we can estimate <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x} = \mathbf{x}_o)\)</span>—our posterior belief over parameters <span class="math">\(\boldsymbol{\theta}\)</span> given our <em>observed</em> (not simulated!) data <span class="math">\(\mathbf{x}_o\)</span> as <span class="math">\(\tilde{p}(\boldsymbol{\theta}\mid\mathbf{x}_o) = q_{\phi}(\boldsymbol{\theta}\mid\mathbf{x} = \mathbf{x}_o)\)</span>.</p>
 <h2>Learning the wrong estimator</h2>
 <p>Ultimately, our goal is to perform the following computation:</p>
@@ -116,16 +116,16 @@ $$</div>
 <h2>Learning a better estimator</h2>
 <p>So, how do we obtain parameters <span class="math">\(\boldsymbol{\theta}_n\)</span> that produce <span class="math">\(\mathbf{x}_n \sim p(\mathbf{x}\mid\boldsymbol{\theta}_n)\)</span> near <span class="math">\(\mathbf{x}_o\)</span>? We take those that have high (estimated) posterior density given <span class="math">\(\mathbf{x}_o\)</span>!</p>
 <p>In this vein, we build our training set as follows:</p>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
     <span class="n">theta</span> <span class="o">=</span> <span class="n">q_phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_o</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">generative_process</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
     <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p>Stitching this all together, our SBI routine becomes:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_ROUNDS</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_ROUNDS</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -138,7 +138,7 @@ $$</div>
     <span class="n">q_phi</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
 <span class="n">posterior_samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">q_phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_o</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ANY_NUMBER</span><span class="p">)]</span>
-</pre></div>
+</code></pre></div>
 <h2>Learning the right estimator</h2>
 <p>Unfortunately, we're still left with a problem:</p>
 <ol>
