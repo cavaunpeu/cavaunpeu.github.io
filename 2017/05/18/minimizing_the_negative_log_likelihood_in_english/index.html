@@ -166,7 +166,7 @@ $$</div>
 <p>Let's calculate the entropy of our distribution above.</p>
 <div class="highlight"><pre><span></span><code><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'rain'</span><span class="p">:</span> <span class="mf">.14</span><span class="p">,</span> <span class="s1">'snow'</span><span class="p">:</span> <span class="mf">.37</span><span class="p">,</span> <span class="s1">'sleet'</span><span class="p">:</span> <span class="mf">.03</span><span class="p">,</span> <span class="s1">'hail'</span><span class="p">:</span> <span class="mf">.46</span><span class="p">}</span>
 
-<span class="k">def</span> <span class="nf">entropy</span><span class="p">(</span><span class="n">prob_dist</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">entropy</span><span class="p">(</span><span class="n">prob_dist</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span><span class="nb">sum</span><span class="p">([</span> <span class="n">p</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prob_dist</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">])</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
@@ -205,7 +205,7 @@ $$</div>
 <p>For clarity, each one of these assumptions is utterly banal. Nonetheless, <em>can we use them nonetheless to select probability distributions for our random variables?</em></p>
 <h2>Maximum entropy distributions</h2>
 <p>Consider another continuous-valued random variable: "Uber's yearly profit." Like <code>temperature</code>, it also has an underlying true mean <span class="math">\(\mu \in (-\infty, \infty)\)</span> and variance <span class="math">\(\sigma^2 \in (0, \infty)\)</span>. Trivially, the respective means and variances will be different. Assume we observe 10 (fictional) values of each that look as follows:</p>
-<table class="table-hover table table-striped">
+<table class="table-striped table-hover table">
 <thead>
 <tr>
 <th>uber</th>
@@ -809,6 +809,7 @@ $$</div>
 				    </h4>
 				    <ul>
 				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/WillWolfResume.pdf" title="Résumé">Résumé</a></li>
 				    </ul>
 				  </div>
 				</div>

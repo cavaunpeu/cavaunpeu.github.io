@@ -105,21 +105,21 @@
 <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-15</span>
 </code></pre></div>
 <p>We have our model:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wTx</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wTx</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
    <span class="k">return</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
 
-<span class="k">def</span> <span class="nf">logistic_predictions</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">logistic_predictions</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
    <span class="n">predictions</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">wTx</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
    <span class="k">return</span> <span class="n">predictions</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">eps</span><span class="p">)</span>
 </code></pre></div>
 <p>And we define our loss function. Here, I've decided on a variant of log loss, with the latter logarithmic term exponentiated and the sign reversed. In English, it says: "If the flight actually leaves on time, and we predict that it leaves on time (and leave our house early enough), then all is right with the world. However, if we instead predict that it will be delayed (and leave our house 30 minutes later), then we'll be stressed, -$1000, and dining on rubber for the following few hours.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">custom_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y_predicted</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y_predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">custom_loss_given_weights</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_loss_given_weights</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
     <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">logistic_predictions</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">custom_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
 </code></pre></div>
@@ -266,6 +266,7 @@
 				    </h4>
 				    <ul>
 				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/WillWolfResume.pdf" title="Résumé">Résumé</a></li>
 				    </ul>
 				  </div>
 				</div>

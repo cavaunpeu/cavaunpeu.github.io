@@ -103,7 +103,7 @@
 </code></pre></div>
 <p>En cada prueba, asumimos una proporción verdadera y subyacente <span class="math">\(p_{\text{yes}}\%\)</span> de gente que vota por el "Sí." Por ejemplo, si le damos .48 al <span class="math">\(p_{\text{yes}}\)</span>, tendremos <span class="math">\(V_t * p_{\text{yes}}\)</span> individuos con la intención de votar por el "Sí," y los demás <span class="math">\(V_t * (1-p_{\text{yes}})\)</span> por el "No." Asumimos que estos valores son estáticos: no son generados por un proceso random.</p>
 <p>A continuación, cada person entrega un voto inválido con probabilidad <span class="math">\(p_{\text{invalid}}\)</span>, que modelamos como una Binomial random variable. Los votos válidos que quedan se ponen en la urna equivocada, también modelado con un proceso Binomial. Por fin, el número de votos por el "Sí" y por el "No" se cuentan, y el porcentaje de los que pertenecen al "Sí" se entrega.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">simulate_vote</span><span class="p">(</span><span class="n">probability_yes</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">simulate_vote</span><span class="p">(</span><span class="n">probability_yes</span><span class="p">):</span>
     <span class="n">yes_votes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">TOTAL_VOTES</span> <span class="o">*</span> <span class="n">probability_yes</span><span class="p">)</span>
     <span class="n">no_votes</span> <span class="o">=</span> <span class="n">TOTAL_VOTES</span> <span class="o">-</span> <span class="n">yes_votes</span>
 
@@ -293,6 +293,7 @@
 				    </h4>
 				    <ul>
 				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/WillWolfResume.pdf" title="Résumé">Résumé</a></li>
 				    </ul>
 				  </div>
 				</div>

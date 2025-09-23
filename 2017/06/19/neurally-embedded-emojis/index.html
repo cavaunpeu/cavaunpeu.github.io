@@ -186,9 +186,9 @@
 </code></pre></div>
 <h3>Variational layer</h3>
 <p>This is taken from a previous post of mine, <a href="https://willwolf.io/2017/05/08/transfer-learning-flight-delay-prediction/">Transfer Learning for Flight Delay Prediction via Variational Autoencoders</a>.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">VariationalLayer</span><span class="p">(</span><span class="n">KerasLayer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epsilon_std</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">'''A custom "variational" Keras layer that completes the</span>
 <span class="sd">        variational autoencoder.</span>
 
@@ -200,7 +200,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_std</span> <span class="o">=</span> <span class="n">epsilon_std</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z_mean_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_weight</span><span class="p">(</span>
             <span class="n">shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span><span class="p">,),</span>
             <span class="n">initializer</span><span class="o">=</span><span class="s1">'glorot_normal'</span><span class="p">,</span>
@@ -227,7 +227,7 @@
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="n">z_mean</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_mean_weights</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_mean_bias</span>
         <span class="n">z_log_var</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_log_var_weights</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_log_var_bias</span>
         <span class="n">epsilon</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">random_normal</span><span class="p">(</span>
@@ -240,12 +240,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">kl_loss</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">K</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">kl_loss_numerator</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">z_mean</span> <span class="o">+</span> <span class="n">K</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z_log_var</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">epsilon</span>
 
-    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_decoded</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_decoded</span><span class="p">):</span>
         <span class="n">base_loss</span> <span class="o">=</span> <span class="n">binary_crossentropy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x_decoded</span><span class="p">)</span>
         <span class="n">base_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">base_loss</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">base_loss</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_loss</span>
 
-    <span class="k">def</span> <span class="nf">compute_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">input_shape</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span><span class="p">,)</span>
 </code></pre></div>
 <h3>Autoencoder</h3>
@@ -311,15 +311,15 @@ B. `(2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5, 2, 3.5)`
 C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 </code></pre></div>
 <p>There is no math here: I'm just creating 16-element lists in different ways. We'll then plot "A-lists," "B-lists," etc. separately.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compose_code_A</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compose_code_A</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
     <span class="k">return</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">[</span><span class="n">coord_1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">[</span><span class="n">coord_2</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">compose_code_B</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_code_B</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
     <span class="k">return</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">[</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">compose_code_C</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_code_C</span><span class="p">(</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">):</span>
     <span class="k">return</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">[</span><span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_1</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">,</span> <span class="n">coord_2</span><span class="p">]</span>
 
 
@@ -395,7 +395,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
         vertical-align: top;
     }
 </style>
-<table border="1" class="table-hover table table-striped dataframe">
+<table border="1" class="table-striped table-hover dataframe table">
 <thead>
 <tr style="text-align: right;">
 <th></th>
@@ -560,7 +560,7 @@ C. `(2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5, 2, 2, 3.5, 3.5)`
 <span class="n">correct_cos_sim</span> <span class="o">=</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">correct_answer</span><span class="p">])</span>
 <span class="n">incorrect_cos_sim</span> <span class="o">=</span> <span class="n">qa_model</span><span class="p">([</span><span class="n">question</span><span class="p">,</span> <span class="n">incorrect_answer</span><span class="p">])</span>
 
-<span class="k">def</span> <span class="nf">hinge_loss</span><span class="p">(</span><span class="n">cos_sims</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">.2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hinge_loss</span><span class="p">(</span><span class="n">cos_sims</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">.2</span><span class="p">):</span>
     <span class="n">correct</span><span class="p">,</span> <span class="n">incorrect</span> <span class="o">=</span> <span class="n">cos_sims</span>
     <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">margin</span> <span class="o">-</span> <span class="n">correct</span> <span class="o">+</span> <span class="n">incorrect</span><span class="p">)</span>
 
@@ -849,6 +849,7 @@ Epoch 3/3
 				    </h4>
 				    <ul>
 				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/WillWolfResume.pdf" title="Résumé">Résumé</a></li>
 				    </ul>
 				  </div>
 				</div>
