@@ -34,6 +34,129 @@
 	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
 	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
 	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<!-- KaTeX for math rendering (modern, fast) - Latest version with proper font loading -->
+	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+	<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+	<style>
+	/* Beautiful, large, clear KaTeX math rendering */
+	.katex,
+	.katex * {
+		font-family: KaTeX_Main, KaTeX_Math, KaTeX_AMS, "Times New Roman", serif !important;
+	}
+
+	/* Ensure proper font loading for all KaTeX font variants */
+	.katex .mathnormal { font-family: KaTeX_Math !important; }
+	.katex .mathit { font-family: KaTeX_Math !important; font-style: italic !important; }
+	.katex .mathbf { font-family: KaTeX_Main !important; font-weight: bold !important; }
+	.katex .boldsymbol { font-family: KaTeX_Math !important; font-weight: bold !important; }
+	.katex .amsrm { font-family: KaTeX_AMS !important; }
+	.katex .mathbb { font-family: KaTeX_AMS !important; }
+	.katex .mathcal { font-family: KaTeX_Caligraphic !important; }
+	.katex .mathfrak { font-family: KaTeX_Fraktur !important; }
+	.katex .mathscr { font-family: KaTeX_Script !important; }
+
+	/* Standard beautiful KaTeX styling */
+	.katex {
+		font-size: 1.1em;
+	}
+
+	.katex-display {
+		margin: 1.5em auto;
+		text-align: center;
+	}
+
+	/* Fix red text issue - ensure math inherits normal text color */
+	.katex,
+	.katex *,
+	span.math,
+	.math {
+		color: inherit !important;
+	}
+
+	span.math,
+	.math {
+		text-decoration: none !important;
+	}
+	</style>
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		// Wait for KaTeX to be fully loaded
+		function processMath() {
+			if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
+				setTimeout(processMath, 50);
+				return;
+			}
+
+			// Process math blocks wrapped by render_math plugin (class="math")
+			// These contain raw LaTeX that needs to be rendered
+			const mathElements = document.querySelectorAll('.math');
+			mathElements.forEach(element => {
+				let mathContent = element.textContent.trim();
+				if (mathContent) {
+					// Determine if it's display or inline math
+					const isDisplay = element.tagName === 'DIV' ||
+					                  mathContent.includes('\\begin{align') ||
+					                  mathContent.includes('\\[') ||
+					                  (mathContent.startsWith('$$') && mathContent.endsWith('$$'));
+
+					// Clean up the content - remove delimiters
+					// render_math plugin wraps inline math with \( and \)
+					// and display math with $$ or \[ \]
+					if (mathContent.startsWith('\\(') && mathContent.endsWith('\\)')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('$$') && mathContent.endsWith('$$')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('\\[') && mathContent.endsWith('\\]')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					}
+
+					try {
+						// Render with KaTeX
+						katex.render(mathContent, element, {
+							throwOnError: false,
+							displayMode: isDisplay,
+							strict: false,
+							trust: false,
+							errorColor: 'transparent',
+							macros: {
+								"\\RR": "\\mathbb{R}",
+								"\\EE": "\\mathbb{E}",
+								"\\PP": "\\mathbb{P}",
+							}
+						});
+					} catch (e) {
+						console.warn('KaTeX rendering error:', e, 'for math:', mathContent.substring(0, 50));
+					}
+				}
+			});
+
+			// Also process any remaining $$ blocks in the document
+			renderMathInElement(document.body, {
+				delimiters: [
+					{left: "$$", right: "$$", display: true},
+					{left: "$", right: "$", display: false},
+					{left: "\\(", right: "\\)", display: false},
+					{left: "\\[", right: "\\]", display: true}
+				],
+				throwOnError: false,
+				errorColor: 'transparent',
+				strict: false,
+				trust: false,
+				macros: {
+					"\\RR": "\\mathbb{R}",
+					"\\EE": "\\mathbb{E}",
+					"\\PP": "\\mathbb{P}",
+				}
+			});
+		}
+
+		// Call the processing function
+		processMath();
+	});
+	</script>
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -65,6 +188,18 @@
 </div>	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
   <div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="https://willwolf.io/2025/11/18/monopoly-deal-rl/">
+		<h2 itemprop="name headline">Reinforcement Learning for Monopoly Deal</h2>
+	</a>
+	<time datetime="2025-11-18T08:00:00-05:00" itemprop="datePublished">November 18, 2025</time>
+	&nbsp;—&nbsp;
+	<span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+		<span itemprop="name">Will Wolf</span>
+	</span>
+	<div class="summary"><p>Modern reinforcement learning algorithms applied to the game of Monopoly Deal.</p></div>
+</div>
+<hr>
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
 	<a href="https://willwolf.io/2023/08/19/future-with-llms/">
 		<h2 itemprop="name headline">Our Future with LLMs</h2>
 	</a>
@@ -170,18 +305,6 @@
 		<span itemprop="name">Will Wolf</span>
 	</span>
 	<div class="summary"><p>Convolutional variational autoencoders for emoji generation and Siamese text-question-emoji-answer models. Keras, bidirectional LSTMs and snarky tweets <a href="https://twitter.com/united">@united</a> within.</p></div>
-</div>
-<hr>
-<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
-	<a href="https://willwolf.io/2017/06/15/random-effects-neural-networks/">
-		<h2 itemprop="name headline">Random Effects Neural Networks in Edward and Keras</h2>
-	</a>
-	<time datetime="2017-06-15T18:00:00-04:00" itemprop="datePublished">June 15, 2017</time>
-	&nbsp;—&nbsp;
-	<span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-		<span itemprop="name">Will Wolf</span>
-	</span>
-	<div class="summary"><p>Coupling nimble probabilistic models with neural architectures in Edward and Keras: "what worked and what didn't," a conceptual overview of random effects, and directions for further exploration.</p></div>
 </div>
 <hr>
  <div class="text-center">

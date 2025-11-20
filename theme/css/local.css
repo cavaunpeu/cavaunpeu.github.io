@@ -102,3 +102,24 @@ div.collapseheader {
 	cursor: pointer;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
+
+/* KaTeX math rendering - standard beautiful styling */
+
+/* Inline math spacing */
+.katex:not(.katex-display) {
+	margin: 0 0.15em;
+}
+
+/* Display math overflow handling */
+.katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+	.katex-display {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}

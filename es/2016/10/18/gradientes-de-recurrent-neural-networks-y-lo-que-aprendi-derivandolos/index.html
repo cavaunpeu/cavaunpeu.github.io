@@ -34,6 +34,129 @@
 	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
 	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
 	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<!-- KaTeX for math rendering (modern, fast) - Latest version with proper font loading -->
+	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+	<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+	<style>
+	/* Beautiful, large, clear KaTeX math rendering */
+	.katex,
+	.katex * {
+		font-family: KaTeX_Main, KaTeX_Math, KaTeX_AMS, "Times New Roman", serif !important;
+	}
+
+	/* Ensure proper font loading for all KaTeX font variants */
+	.katex .mathnormal { font-family: KaTeX_Math !important; }
+	.katex .mathit { font-family: KaTeX_Math !important; font-style: italic !important; }
+	.katex .mathbf { font-family: KaTeX_Main !important; font-weight: bold !important; }
+	.katex .boldsymbol { font-family: KaTeX_Math !important; font-weight: bold !important; }
+	.katex .amsrm { font-family: KaTeX_AMS !important; }
+	.katex .mathbb { font-family: KaTeX_AMS !important; }
+	.katex .mathcal { font-family: KaTeX_Caligraphic !important; }
+	.katex .mathfrak { font-family: KaTeX_Fraktur !important; }
+	.katex .mathscr { font-family: KaTeX_Script !important; }
+
+	/* Standard beautiful KaTeX styling */
+	.katex {
+		font-size: 1.1em;
+	}
+
+	.katex-display {
+		margin: 1.5em auto;
+		text-align: center;
+	}
+
+	/* Fix red text issue - ensure math inherits normal text color */
+	.katex,
+	.katex *,
+	span.math,
+	.math {
+		color: inherit !important;
+	}
+
+	span.math,
+	.math {
+		text-decoration: none !important;
+	}
+	</style>
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		// Wait for KaTeX to be fully loaded
+		function processMath() {
+			if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
+				setTimeout(processMath, 50);
+				return;
+			}
+
+			// Process math blocks wrapped by render_math plugin (class="math")
+			// These contain raw LaTeX that needs to be rendered
+			const mathElements = document.querySelectorAll('.math');
+			mathElements.forEach(element => {
+				let mathContent = element.textContent.trim();
+				if (mathContent) {
+					// Determine if it's display or inline math
+					const isDisplay = element.tagName === 'DIV' ||
+					                  mathContent.includes('\\begin{align') ||
+					                  mathContent.includes('\\[') ||
+					                  (mathContent.startsWith('$$') && mathContent.endsWith('$$'));
+
+					// Clean up the content - remove delimiters
+					// render_math plugin wraps inline math with \( and \)
+					// and display math with $$ or \[ \]
+					if (mathContent.startsWith('\\(') && mathContent.endsWith('\\)')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('$$') && mathContent.endsWith('$$')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('\\[') && mathContent.endsWith('\\]')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					}
+
+					try {
+						// Render with KaTeX
+						katex.render(mathContent, element, {
+							throwOnError: false,
+							displayMode: isDisplay,
+							strict: false,
+							trust: false,
+							errorColor: 'transparent',
+							macros: {
+								"\\RR": "\\mathbb{R}",
+								"\\EE": "\\mathbb{E}",
+								"\\PP": "\\mathbb{P}",
+							}
+						});
+					} catch (e) {
+						console.warn('KaTeX rendering error:', e, 'for math:', mathContent.substring(0, 50));
+					}
+				}
+			});
+
+			// Also process any remaining $$ blocks in the document
+			renderMathInElement(document.body, {
+				delimiters: [
+					{left: "$$", right: "$$", display: true},
+					{left: "$", right: "$", display: false},
+					{left: "\\(", right: "\\)", display: false},
+					{left: "\\[", right: "\\]", display: true}
+				],
+				throwOnError: false,
+				errorColor: 'transparent',
+				strict: false,
+				trust: false,
+				macros: {
+					"\\RR": "\\mathbb{R}",
+					"\\EE": "\\mathbb{E}",
+					"\\PP": "\\mathbb{P}",
+				}
+			});
+		}
+
+		// Call the processing function
+		processMath();
+	});
+	</script>
 </head><body>
 <div class="container">
 <div class="page-header">
@@ -316,69 +439,7 @@ $$</div>
 <li><a href="https://karpathy.github.io/2015/05/21/rnn-effectiveness/">The Unreasonable Effectiveness of Recurrent Neural Networks</a></li>
 <li><a href="https://gist.github.com/karpathy/d4dee566867f8291f086">Minimal character-level language model with a Vanilla Recurrent Neural Network, in Python/numpy</a></li>
 <li><a href="https://www.existor.com/en/ml-rnn.html">Machine Learning - Recurrent Neural Networks Maths</a></li>
-</ul>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script></div>
+</ul></div>
 	<hr>
 	<h2>Comments</h2>
 <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>

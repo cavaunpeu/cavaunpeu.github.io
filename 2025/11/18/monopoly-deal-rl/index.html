@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="writings on machine learning, crypto, geopolitics, life">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://willwolf.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@willwolf_">
+  <meta name="twitter:creator" content="@willwolf_">
+  <meta name="twitter:domain" content="https://willwolf.io">
+    <meta property="twitter:title" content="Reinforcement Learning for Monopoly Deal"/>
+    <meta property="twitter:description" content="Modern reinforcement learning algorithms applied to the game of Monopoly Deal."/>
+    <meta property="twitter:image" content="https://willwolf.io/images/monopoly-deal-rl/app-screenshot.png"/>
+
+	<!-- CSS -->
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<!-- KaTeX for math rendering (modern, fast) - Latest version with proper font loading -->
+	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+	<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+	<style>
+	/* Beautiful, large, clear KaTeX math rendering */
+	.katex,
+	.katex * {
+		font-family: KaTeX_Main, KaTeX_Math, KaTeX_AMS, "Times New Roman", serif !important;
+	}
+
+	/* Ensure proper font loading for all KaTeX font variants */
+	.katex .mathnormal { font-family: KaTeX_Math !important; }
+	.katex .mathit { font-family: KaTeX_Math !important; font-style: italic !important; }
+	.katex .mathbf { font-family: KaTeX_Main !important; font-weight: bold !important; }
+	.katex .boldsymbol { font-family: KaTeX_Math !important; font-weight: bold !important; }
+	.katex .amsrm { font-family: KaTeX_AMS !important; }
+	.katex .mathbb { font-family: KaTeX_AMS !important; }
+	.katex .mathcal { font-family: KaTeX_Caligraphic !important; }
+	.katex .mathfrak { font-family: KaTeX_Fraktur !important; }
+	.katex .mathscr { font-family: KaTeX_Script !important; }
+
+	/* Standard beautiful KaTeX styling */
+	.katex {
+		font-size: 1.1em;
+	}
+
+	.katex-display {
+		margin: 1.5em auto;
+		text-align: center;
+	}
+
+	/* Fix red text issue - ensure math inherits normal text color */
+	.katex,
+	.katex *,
+	span.math,
+	.math {
+		color: inherit !important;
+	}
+
+	span.math,
+	.math {
+		text-decoration: none !important;
+	}
+	</style>
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		// Wait for KaTeX to be fully loaded
+		function processMath() {
+			if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
+				setTimeout(processMath, 50);
+				return;
+			}
+
+			// Process math blocks wrapped by render_math plugin (class="math")
+			// These contain raw LaTeX that needs to be rendered
+			const mathElements = document.querySelectorAll('.math');
+			mathElements.forEach(element => {
+				let mathContent = element.textContent.trim();
+				if (mathContent) {
+					// Determine if it's display or inline math
+					const isDisplay = element.tagName === 'DIV' ||
+					                  mathContent.includes('\\begin{align') ||
+					                  mathContent.includes('\\[') ||
+					                  (mathContent.startsWith('$$') && mathContent.endsWith('$$'));
+
+					// Clean up the content - remove delimiters
+					// render_math plugin wraps inline math with \( and \)
+					// and display math with $$ or \[ \]
+					if (mathContent.startsWith('\\(') && mathContent.endsWith('\\)')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('$$') && mathContent.endsWith('$$')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('\\[') && mathContent.endsWith('\\]')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					}
+
+					try {
+						// Render with KaTeX
+						katex.render(mathContent, element, {
+							throwOnError: false,
+							displayMode: isDisplay,
+							strict: false,
+							trust: false,
+							errorColor: 'transparent',
+							macros: {
+								"\\RR": "\\mathbb{R}",
+								"\\EE": "\\mathbb{E}",
+								"\\PP": "\\mathbb{P}",
+							}
+						});
+					} catch (e) {
+						console.warn('KaTeX rendering error:', e, 'for math:', mathContent.substring(0, 50));
+					}
+				}
+			});
+
+			// Also process any remaining $$ blocks in the document
+			renderMathInElement(document.body, {
+				delimiters: [
+					{left: "$$", right: "$$", display: true},
+					{left: "$", right: "$", display: false},
+					{left: "\\(", right: "\\)", display: false},
+					{left: "\\[", right: "\\]", display: true}
+				],
+				throwOnError: false,
+				errorColor: 'transparent',
+				strict: false,
+				trust: false,
+				macros: {
+					"\\RR": "\\mathbb{R}",
+					"\\EE": "\\mathbb{E}",
+					"\\PP": "\\mathbb{P}",
+				}
+			});
+		}
+
+		// Call the processing function
+		processMath();
+	});
+	</script>
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-crypto" href="/crypto">crypto</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://willwolf.io/about/" title="About">About</a></li>
+              <li><a href="https://willwolf.io/consulting/" title="Consulting"></span> Consulting</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books">Books</a></li>
+          <li>
+            <button id="subscribeButton">
+              <a href="https://willwolf.io/subscribe/" title="Get new posts by email">Subscribe</a>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Reinforcement Learning for Monopoly Deal</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Will Wolf</h4>
+		</span>
+		<time datetime="2025-11-18T08:00:00-05:00" itemprop="datePublished">November 18, 2025</time>
+	</div>
+	<div itemprop="articleBody" class="article-body"><h1>Introduction</h1>
+<p>For the past 12 months, I've been building a research platform for training AI algorithms to learn <em>Monopoly Deal</em> via self-play. What began with humble aspirations to more closely study game theory and reinforcement learning has morphed into a clear data model, plug-and-play state abstractions, multiple training pipelines with multiple parallelization modes, and a polished web application for evaluation and interactive play. I even wrote a paper, <a href="https://arxiv.org/abs/2510.25080">Monopoly Deal: A Benchmark Environment for Bounded One-Sided Response Games</a>, introducing <em>Monopoly Deal</em> as a novel benchmark for game-playing AI (mileage may vary, fingers crossed for a citation or two...). Honestly, it's been thrilling.</p>
+<p>To date, I've only trained CFR models to learn this game. In this post, we turn to reinforcement learning: I train several policy-gradient models, compare them to CFR and to one another, and see how they perform.</p>
+<p>Specifically, we train three models on two different state abstractions:</p>
+<ol>
+<li>Tabular REINFORCE</li>
+<li>Neural REINFORCE</li>
+<li>Neural Actor-Critic (GAE/PPO)</li>
+</ol>
+<p>All models are trained with JAX and Optax on a single CPU. You can find the training code <a href="https://github.com/cavaunpeu/monopoly-deal-ai/tree/main/models">here</a>, and play against these models at <a href="https://monopolydeal.ai">monopolydeal.ai</a>. Below, we introduce each model, including the policy-gradient formulation, the generalized-advantage estimator, the PPO objective, the state abstractions, and the training modifications. Finally, we conclude with empirical results.</p>
+<p><img alt="Screenshot of the Monopoly Deal AI web application" class="img-responsive" src="https://willwolf.io/images/monopoly-deal-rl/app-screenshot.png"/></p>
+<h1>Policy Gradient</h1>
+<p>We begin with the standard episodic policy-gradient formulation. Define a single game trajectory as:</p>
+<div class="math">$$
+\tau = (s_0, a_0, r_0,\ldots, s_{T-1}, a_{T-1}, r_{T-1}),
+$$</div>
+<p>generated by a policy <span class="math">\(\pi_\theta(a\mid s)\)</span>. When training our model, we wish to maximize the expected return:</p>
+<div class="math">$$
+J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\Big[\sum_{t=0}^{T-1} r_t\Big].
+$$</div>
+<p>To achieve this goal, we'd like to tweak the policy parameters <span class="math">\(\theta\)</span> in the direction of the gradient of <span class="math">\(J(\theta)\)</span>. Using the log-derivative trick, we can compute this gradient as:</p>
+<div class="math">$$
+\begin{align*}
+\nabla_\theta J(\theta)
+&amp;= \nabla_\theta \int p_\theta(\tau)\, R(\tau)\, d\tau \\[4pt]
+&amp;= \int \nabla_\theta p_\theta(\tau)\, R(\tau)\, d\tau \\[4pt]
+&amp;= \int p_\theta(\tau)\, \frac{\nabla_\theta p_\theta(\tau)}{p_\theta(\tau)}\, R(\tau)\, d\tau \\[4pt]
+&amp;= \int p_\theta(\tau)\, \nabla_\theta \log p_\theta(\tau)\, R(\tau)\, d\tau \\[4pt]
+\end{align*}
+$$</div>
+<p>where <span class="math">\(R_t = \sum_{k=t}^{T-1} r_k\)</span> is the Monte Carlo return from timestep <span class="math">\(t\)</span>, i.e. the true return of the full trajectory.</p>
+<p>Equivalently, we can write the gradient as <span class="math">\(\mathbb{E}_{\tau \sim \pi_\theta}\big[\nabla_\theta \log p_\theta(\tau)\, R(\tau)\big]\)</span>, which can be approximated with the unbiased estimator <span class="math">\(\frac{1}{N} \sum_{i=1}^N \nabla_\theta \log p_\theta(\tau_i)\, R(\tau_i)\)</span>, i.e. the sample average of the log-policy gradient times the true return. In this vein, actions that produce high returns are further encouraged, while actions followed by low returns are discouraged. This estimator is unbiased, easy to implement, and forms the basis of REINFORCE.</p>
+<p>Unfortunately, in practice, this estimator's variance is high—especially in games with delayed terminal rewards, such as Monopoly Deal, with game lengths of ~50 turns—necessitating variance-reduction techniques. A common modification introduces a baseline <span class="math">\(b(s_t)\)</span> that does not change the expectation:</p>
+<div class="math">$$
+\nabla_\theta J(\theta)
+= \mathbb{E}\Bigg[\sum_{t} \nabla_\theta \log \pi_\theta(a_t \mid s_t)\,\big(R_t - b(s_t)\big)\Bigg].
+$$</div>
+<p>Choosing <span class="math">\(b(s_t)\)</span> to approximate the abstract value <span class="math">\(V(s_t)\)</span> of the state—the trajectory reward expected if we follow the policy <span class="math">\(\pi_\theta\)</span> from state <span class="math">\(s_t\)</span>—yields the <strong>advantage</strong>, <span class="math">\(A_t = R_t - V(s_t)\)</span>. This is a simple measure that answers the question: "In this state, how much better is taking the specific action <span class="math">\(a_t\)</span> than simply <em>sampling</em> from the policy itself?" This produces a modified gradient estimator, known as <strong>REINFORCE with a baseline</strong>.</p>
+<p>However, this estimator still relies on the full Monte Carlo return <span class="math">\(R_t\)</span>, which sums random noise over the entire episode, resulting in high variance. To fix this, instead of using the full return, we <strong>bootstrap</strong>. We estimate the return using the immediate reward plus the discounted value of the next state: <span class="math">\(r_t + \gamma V(s_{t+1})\)</span>.</p>
+<p>Relying on this <em>predicted</em> future reduces variance (since we don't sum noise over a long horizon) but introduces bias (since our value function might be wrong). Balancing this bias-variance trade-off is the core motivation behind <strong>Generalized Advantage Estimation (GAE)</strong>.</p>
+<h1>Generalized Advantage Estimation</h1>
+<p>To more carefully control the bias-variance trade-off of the advantage estimator, <a href="https://arxiv.org/abs/1506.02438">Schulman et al. (2015)</a> proposed Generalized Advantage Estimation (GAE), which replaces advantage estimates with a weighted average of <span class="math">\(n\)</span>-step TD residuals.</p>
+<h2>Temporal-difference residuals</h2>
+<p>The one-step TD residual is</p>
+<div class="math">$$
+\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t),
+$$</div>
+<p>which provides a lower-variance (but biased) estimate of <span class="math">\(A_t\)</span>. Extending this to multi-step returns yields the <span class="math">\(n\)</span>-step TD residual:</p>
+<div class="math">$$
+A_t^{(n)} = \sum_{k=0}^{n-1} \gamma^k\,\delta_{t+k}.
+$$</div>
+<p>Small <span class="math">\(n\)</span> produces low-variance but biased estimates; large <span class="math">\(n\)</span> approaches the unbiased Monte Carlo return but comes with higher variance.</p>
+<h2>Exponential weighting</h2>
+<p>Generalized Advantage Estimation introduces an exponentially weighted mixture of these <span class="math">\(n\)</span>-step estimators:</p>
+<div class="math">$$
+A_t^{\text{GAE}(\gamma, \lambda)}
+= \sum_{n=1}^{\infty} (\gamma\lambda)^{\,n-1}\, A_t^{(n)}.
+$$</div>
+<p>Equivalently, GAE can be written directly in terms of TD residuals (derivation in Equation 16 of the paper):</p>
+<div class="math">$$
+A_t = \sum_{k=0}^{T-t-1} (\gamma\lambda)^k\, \delta_{t+k}.
+$$</div>
+<p>The parameters <span class="math">\(\gamma\)</span> and <span class="math">\(\lambda\)</span> play distinct roles in this estimation. <span class="math">\(\gamma\)</span> is the discount factor, which is part of the problem definition itself; it determines the scale of the value function and how much the agent should care about long-term vs. immediate rewards. <span class="math">\(\lambda\)</span>, on the other hand, is a smoothing parameter used strictly for variance reduction.</p>
+<p>The parameter <span class="math">\(\lambda\)</span> allows us to interpolate between two extremes:</p>
+<ul>
+<li>
+<p><strong><span class="math">\(\lambda = 0\)</span>:</strong> This yields the standard one-step TD residual <span class="math">\(\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)\)</span>. It has the lowest variance but introduces bias, as it relies heavily on the accuracy of the current value function.</p>
+</li>
+<li>
+<p><strong><span class="math">\(\lambda = 1\)</span>:</strong> This accumulates the full sum of discounted rewards. It is unbiased (assuming the correct <span class="math">\(\gamma\)</span>) but suffers from high variance because it sums the noise of every step in the trajectory.</p>
+</li>
+</ul>
+<p>In our experiments, we did not perform extensive hyperparameter tuning, but found that <span class="math">\(\gamma=0.99\)</span> and <span class="math">\(\lambda=0.9\)</span> provided a reasonable balance, utilizing the value function to reduce variance while allowing real rewards to correct for value-function bias.</p>
+<h1>PPO</h1>
+<p>Although GAE provides stable advantage estimates, policy-gradient updates can still be unstable when the new policy diverges too quickly from the old one. <a href="https://arxiv.org/abs/1707.06347">Schulman et al. (2017)</a> proposed Proximal Policy Optimization (PPO), which addresses this by constraining the size of each policy update through a clipped surrogate objective.</p>
+<p>Given a batch of trajectories, let <span class="math">\(\pi_\theta\)</span> be the current policy and <span class="math">\(\pi_{\theta_{\text{old}}}\)</span> the policy used to generate the data. Define the probability ratio</p>
+<div class="math">$$
+r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(a_t \mid s_t)}.
+$$</div>
+<p>A naïve policy-gradient update would directly maximize</p>
+<div class="math">$$
+\mathbb{E}\,[ r_t(\theta)\, A_t ].
+$$</div>
+<p>However, this can create training instability when <span class="math">\(r_t(\theta)\)</span> grows too large. PPO replaces this with a clipped objective:</p>
+<div class="math">$$
+L^{\text{CLIP}}(\theta)
+= \mathbb{E}\Big[
+\min\big(
+r_t(\theta) A_t,\;
+\text{clip}(r_t(\theta),\, 1-\epsilon,\, 1+\epsilon)\, A_t
+\big)
+\Big].
+$$</div>
+<p>The clipping enforces a bound on how far the policy can move in a single update, preventing extremely large or sign-flipping gradients when the policy changes too rapidly.</p>
+<h2>Value-function loss</h2>
+<p>In addition to our policy, we train a value function <span class="math">\(V_\theta(s)\)</span> to predict the Monte Carlo return <span class="math">\(R_t\)</span>. This is done with a squared-error loss:</p>
+<div class="math">$$
+L^{\text{VF}}(\theta) = \frac{1}{2} \big(V_\theta(s_t) - R_t\big)^2.
+$$</div>
+<p>In our models, we use a shared encoder for the policy and value function. In practice, this simply means adding an additional logit in the model's output layer that, when passed through a sigmoid, predicts the eventual trajectory value.</p>
+<h2>Entropy regularization</h2>
+<p>Entropy regularization encourages the policy to remain exploratory:</p>
+<div class="math">$$
+S[\pi_\theta] = \mathcal{H}(\pi_\theta(\cdot \mid s_t)),
+$$</div>
+<p>where <span class="math">\(\mathcal{H}(\pi_\theta(\cdot \mid s_t))\)</span> is the entropy of the policy at state <span class="math">\(s_t\)</span>. High entropy is useful early on; later it slows convergence. We therefore apply entropy decay, decreasing the entropy coefficient over training so the agent gradually shifts from exploration to refinement.</p>
+<h2>Combined objective</h2>
+<p>The full PPO loss used in this work is</p>
+<div class="math">$$
+L(\theta)
+= \underbrace{- L^{\text{CLIP}}(\theta)}_{\text{Maximize Reward}}
+  + c_v \underbrace{L^{\text{VF}}(\theta)}_{\text{Minimize Error}}
+  - c_e \underbrace{S[\pi_\theta]}_{\text{Maximize Entropy}}.
+$$</div>
+<p>where we minimize the total loss <span class="math">\(L(\theta)\)</span>, <span class="math">\(c_v\)</span> is the value-loss weight, and <span class="math">\(c_e\)</span> is the entropy coefficient. The optimization proceeds with multiple epochs over the same batch, yielding a more sample-efficient update while keeping the policy within the clipped "trust" region. The hyperparameters <span class="math">\(c_v\)</span> and <span class="math">\(c_e\)</span> are tuned to balance the influence of the value and entropy terms.</p>
+<h1>State Abstractions</h1>
+<p>The behavior of policy-gradient methods in <em>Monopoly Deal</em> is strongly shaped by the underlying state representation. Unlike CFR—where the abstraction defines the information sets over which regret is accumulated—policy-gradient models operate directly on a feature vector. The choice of abstraction therefore determines the dimensionality of the input, the required expressivity of the model, and the structure of the credit-assignment problem itself.</p>
+<h2>Intent-based abstraction</h2>
+<p>In the CFR paper, we use an "intent-based abstraction": instead of encoding raw card identities, it maps each game state to a structured summary of strategic “intents,” such as:</p>
+<ul>
+<li>Adding to a property set</li>
+<li>Completing a property set</li>
+<li>Collecting rent</li>
+<li>Giving cash to an opponent</li>
+<li>Giving a property to an opponent as cash</li>
+<li>Etc.</li>
+</ul>
+<p>In practice, as this abstraction was designed by a human knowledgeable about the game, it is highly informative and produces competitive strategies with minimal memory overhead and fast convergence.</p>
+<h2>Full state abstraction</h2>
+<p>In this work, we also train on a <em>full</em> state representation. Rather than summarizing playability or intent, the state vector directly encodes:</p>
+<ul>
+<li>Counts of each raw card in the player's hand</li>
+<li>Counter of properties in the player's property set</li>
+<li>Counter of cash in the player's cash pile</li>
+<li>Counter of properties in the opponent's property set</li>
+<li>Counter of cash in the opponent's cash pile</li>
+</ul>
+<p>This representation encodes maximal information about the game state. However, it requires the model to work significantly harder to learn the game's dynamics and strategic priorities. In theory, with enough training, we should expect the full state abstraction to outperform the intent abstraction.</p>
+<h1>Models We Train</h1>
+<p>Our experiments evaluate three policy-gradient models: Tabular REINFORCE, Neural REINFORCE, and Neural Actor-Critic (GAE/PPO). Each model is trained on the intent abstraction and the full state abstraction, yielding six total models. Within a model class, the same hyperparameters are used for both abstractions.</p>
+<h2>Tabular REINFORCE</h2>
+<p>For each abstract state–action pair, this model maintains a scalar logit and updates it with:</p>
+<div class="math">$$
+\theta_{s,a} \leftarrow \theta_{s,a}
+    + \alpha\, R_t\, \nabla_{\theta_{s,a}} \log \pi_\theta(a \mid s),
+$$</div>
+<p>where <span class="math">\(R_t\)</span> is the true Monte Carlo return from the timestep at which the action was taken. The dimensionality is small enough that a full table is feasible, and gradients act only on the logits of the visited state–action pairs. To compute action probabilities, we simply softmax the logits for the actions in a given state.</p>
+<h2>Neural REINFORCE</h2>
+<p>The neural REINFORCE model replaces the table with a small MLP producing action logits. Its training loop follows the same Monte Carlo policy-gradient update, but gradients now flow through shared weights and biases. This decouples states via generalization: the model can reason about actions in states it has never actually seen.</p>
+<h2>Neural Actor-Critic (GAE/PPO)</h2>
+<p>The Neural Actor-Critic (GAE/PPO) model uses a shared network for both the policy and value function. The policy is updated with the clipped PPO objective:</p>
+<div class="math">$$
+L_{\text{clip}}(\theta)
+= \mathbb{E}_t\Big[
+\min\big(
+r_t(\theta) A_t,\;
+\text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t
+\big)
+\Big]
+$$</div>
+<p>while the value network is trained with a squared-error loss on temporal-difference targets. Advantages <span class="math">\(A_t\)</span> are computed using the generalized-advantage estimator.</p>
+<h2>Training setup</h2>
+<p>All three models are trained against a fixed CFR baseline. While CFR is guaranteed to converge to a Nash-optimal policy, the RL models are merely tasked with <em>exploiting</em> the CFR model itself. In addition, when the models reach a certain performance threshold against CFR, they are used as a "snapshot" model to self-play against themselves, discarding the CFR opponent outright.</p>
+<p>All models are implemented in JAX and trained with Optax optimizers on a single CPU. Batching, rollout generation, advantage computation, and PPO epochs all run inside JIT-compiled functions.</p>
+<h1>Tricks to Get This to Train</h1>
+<p>Neural network models are notoriously "alchemical," and <em>Monopoly Deal</em>–with long episodes and sparse rewards—is a difficult game to learn! The following modifications were key for getting the neural network models to reliably converge on competitive policies.</p>
+<h2>Multiple epochs per update</h2>
+<p>The same rollout is reused for several gradient steps (10, in our experiments), providing more effective sample usage.</p>
+<h2>Shared policy–value parameters</h2>
+<p>The policy and value networks share a single encoder: the first few layers process the state and feed into both heads. This reduces parameter count, improves sample efficiency, and tends to stabilize value estimation early in training. (Unfortunately, we did not conduct strict ablations against other architectures, e.g. a separate head, and/or separate optimizer, for the policy and value functions.)</p>
+<h2>Entropy regularization and decay</h2>
+<p>An entropy bonus encourages the policy to remain exploratory:</p>
+<div class="math">$$
+L_{\text{entropy}} = -\beta\, H\big(\pi_\theta(\cdot \mid s)\big).
+$$</div>
+<p>High entropy is useful early on; later it slows convergence. We therefore apply entropy decay, decreasing <span class="math">\(\beta\)</span> over training so the agent gradually shifts from exploration to refinement.</p>
+<h2>He initialization</h2>
+<p>Because the full state abstraction produces relatively high-dimensional inputs (card counts, property structures, cash values), careful initialization helps prevent early saturation. We initialize all dense layers with <strong>He uniform</strong> initialization (introduced in <a href="https://arxiv.org/abs/1502.01852">He et al. (2015)</a>), which produced more stable early gradients than Xavier in this environment.</p>
+<h2>Learning-rate decay</h2>
+<p>Both REINFORCE and PPO models benefit from a decaying learning rate:</p>
+<ul>
+<li>Initial learning rate large enough to escape poor initial policies.</li>
+<li>Exponential decay to reduce variance in the late phase.</li>
+</ul>
+<h2>Entropy decay</h2>
+<p>Entropy and learning rate are decayed on similar schedules. The combination gradually shifts the agent from broad exploration to precise exploitation without collapsing too early.</p>
+<h2>Value-loss weighting</h2>
+<p>The PPO objective includes a value-function regression term:</p>
+<div class="math">$$
+L_{\text{value}} = c_v (V_\theta(s_t) - \hat{V}_t)^2.
+$$</div>
+<p>We tune <span class="math">\(c_v\)</span> to balance the influence of the value head. If the weight is too small, the advantages become noisy; if too large, the model prioritizes value prediction at the expense of the policy.</p>
+<h2>Clip epsilon</h2>
+<p>The PPO ratio-clip parameter <span class="math">\(\epsilon\)</span> is critical. Too small, and the policy barely moves; too large, and updates become unstable. Values between 0.1 and 0.3 consistently produced the most stable learning curves.</p>
+<h2>Gradient clipping</h2>
+<p>We apply global-norm gradient clipping to prevent noisy advantage estimates from generating outsized updates. This is especially important during the first few thousand steps before the value function stabilizes.</p>
+<h2>Batch size</h2>
+<p>Larger batch sizes (number of trajectories that comprise a given parameter update) reduce gradient variance and produce noticeably smoother training.</p>
+<h1>Full Hyperparameter Table</h1>
+<p>The following table summarizes the hyperparameters used when training each model.</p>
+<table class="table-hover table-striped table">
+<thead>
+<tr>
+<th>Model</th>
+<th>Abstraction</th>
+<th>Learning Rate</th>
+<th>Hidden Layers</th>
+<th>Epochs/Update</th>
+<th>Batch Size</th>
+<th>Entropy Coef</th>
+<th>Value Loss Weight</th>
+<th>Clip ε</th>
+<th>γ</th>
+<th>λ</th>
+<th>Weight Decay</th>
+<th>Gradient Clip</th>
+<th>Entropy Decay</th>
+<th>LR Decay</th>
+<th>Games Trained</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tabular REINFORCE</td>
+<td>Intent</td>
+<td>0.1</td>
+<td>—</td>
+<td>1</td>
+<td>250</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>Tabular REINFORCE</td>
+<td>Full</td>
+<td>0.1</td>
+<td>—</td>
+<td>1</td>
+<td>250</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>Neural REINFORCE</td>
+<td>Intent</td>
+<td>1e-3</td>
+<td>[256, 128]</td>
+<td>10</td>
+<td>250</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>1e-5</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>Neural REINFORCE</td>
+<td>Full</td>
+<td>1e-3</td>
+<td>[256, 128]</td>
+<td>10</td>
+<td>250</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>1e-5</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>Neural Actor-Critic (GAE/PPO)</td>
+<td>Intent</td>
+<td>5e-4</td>
+<td>[256, 128]</td>
+<td>10</td>
+<td>250</td>
+<td>0.02</td>
+<td>1.0</td>
+<td>0.1</td>
+<td>0.99</td>
+<td>0.9</td>
+<td>1e-5</td>
+<td>1.0</td>
+<td>—</td>
+<td>—</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>Neural Actor-Critic (GAE/PPO)</td>
+<td>Full</td>
+<td>5e-4</td>
+<td>[256, 128]</td>
+<td>10</td>
+<td>250</td>
+<td>0.02</td>
+<td>1.0</td>
+<td>0.1</td>
+<td>0.99</td>
+<td>0.9</td>
+<td>1e-5</td>
+<td>1.0</td>
+<td>—</td>
+<td>—</td>
+<td>25000</td>
+</tr>
+</tbody>
+</table>
+<h1>Results</h1>
+<p><img alt="Compare Winrates of Models Against CFR" class="img-responsive" src="https://willwolf.io/images/monopoly-deal-rl/winrates-cfr-comparison.svg"/></p>
+<p>The results demonstrate that although the <code>FullStateAbstraction</code> contains more information, and therefore should be more powerful, the <code>IntentStateAbstraction</code> produces more competitive policies across all models. This is likely due to the fact that the <code>IntentStateAbstraction</code> encodes the game's strategic priorities outright, significantly simplifying the learning problem.</p>
+<p>Slicing by abstraction type, we see that for the <code>FullStateAbstraction</code>, performance improves as the model becomes more complex, with the Neural Actor-Critic (GAE/PPO) model achieving the highest performance. Conversely, for the <code>IntentStateAbstraction</code>, the Neural REINFORCE model achieves the highest performance. We hypothesize that the <code>IntentStateAbstraction</code> creates a smoother optimization landscape where PPO's conservative trust-region constraints are unnecessary, allowing the more aggressive REINFORCE updates to converge faster.</p>
+<p>Overall, the results demonstrate that a medium-complexity neural network model that can generalize across unseen states, combined with an intent-based state abstraction that encodes a useful learning manifold <em>a priori</em>, produces the most competitive policy.</p>
+<p>If interested, you can play against these models at <a href="https://monopolydeal.ai">monopolydeal.ai</a> and see for yourself.</p>
+<h1>Conclusion</h1>
+<p>In this post, we trained three policy-gradient models on two different state abstractions: <code>IntentStateAbstraction</code> and <code>FullStateAbstraction</code>. We found that the <code>IntentStateAbstraction</code> produces more competitive policies across all models, and that a medium-complexity neural network model that can generalize across unseen states, combined with an intent-based state abstraction that encodes the game's key strategic priorities, produces the most competitive policy.</p>
+<h1>Acknowledgments</h1>
+<p>I'd like to thank Carey Hughes for introducing me to the game of <em>Monopoly Deal</em> last summer.</p></div>
+	<hr>
+	<h2>Comments</h2>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="willwolf_">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'willwolf';
+    var disqus_title = 'Reinforcement Learning for Monopoly Deal';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Contact
+						</h4>
+						<li><a href="mailto:williamabrwolf@gmail.com">Email</a></li>
+							<li><a href="http://twitter.com/willwolf_">Twitter</a></li>
+							<li><a href="http://linkedin.com/in/williamabrwolf">LinkedIn</a></li>
+							<li><a href="http://calendly.com/willwolf">Calendly</a></li>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="http://github.com/cavaunpeu">Github</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/resume.pdf" title="Résumé">Résumé</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2020</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
