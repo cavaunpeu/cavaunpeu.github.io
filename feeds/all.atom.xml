@@ -183,8 +183,6 @@ $$&lt;/div&gt;
 &lt;li&gt;Initial learning rate large enough to escape poor initial policies.&lt;/li&gt;
 &lt;li&gt;Exponential decay to reduce variance in the late phase.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Entropy decay&lt;/h2&gt;
-&lt;p&gt;Entropy and learning rate are decayed on similar schedules. The combination gradually shifts the agent from broad exploration to precise exploitation without collapsing too early.&lt;/p&gt;
 &lt;h2&gt;Value-loss weighting&lt;/h2&gt;
 &lt;p&gt;The PPO objective includes a value-function regression term:&lt;/p&gt;
 &lt;div class="math"&gt;$$
@@ -199,7 +197,7 @@ $$&lt;/div&gt;
 &lt;p&gt;Larger batch sizes (number of trajectories that comprise a given parameter update) reduce gradient variance and produce noticeably smoother training.&lt;/p&gt;
 &lt;h1&gt;Full Hyperparameter Table&lt;/h1&gt;
 &lt;p&gt;The following table summarizes the hyperparameters used when training each model.&lt;/p&gt;
-&lt;table class="table-hover table table-striped"&gt;
+&lt;table class="table-striped table table-hover"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Model&lt;/th&gt;
@@ -2983,7 +2981,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="table-hover dataframe table table-striped"&gt;
+&lt;table border="1" class="table dataframe table-hover table-striped"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
