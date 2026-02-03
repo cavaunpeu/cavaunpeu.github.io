@@ -2981,7 +2981,7 @@ $$&lt;/div&gt;
         text-align: right;
     }
 &lt;/style&gt;
-&lt;table border="1" class="dataframe table-striped table-hover table"&gt;
+&lt;table border="1" class="table-striped table-hover table dataframe"&gt;
 &lt;thead&gt;
 &lt;tr style="text-align: right;"&gt;
 &lt;th&gt;&lt;/th&gt;
