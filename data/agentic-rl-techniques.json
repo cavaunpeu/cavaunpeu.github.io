@@ -1,0 +1,875 @@
+{
+  "title": "Agentic RL for LLMs: Survey Summary",
+  "facets": {
+    "capability": [
+      "planning",
+      "tool-use",
+      "memory",
+      "self-improvement",
+      "reasoning"
+    ],
+    "maturity": [
+      "previous",
+      "current",
+      "future"
+    ]
+  },
+  "cards": [
+    {
+      "id": "planning_prompting_modular",
+      "title": "Planning before RL (Prompted/Modular)",
+      "tags": {
+        "capability": "planning",
+        "paradigm": "external-guide",
+        "maturity": "previous"
+      },
+      "summary": "Planning is scaffolded by prompting and modular decomposition, with little adaptation from experience.",
+      "what_it_is": "For LLMs, planning means splitting problem solving into two stages: first generate an explicit plan, then execute it step-by-step, instead of directly generating a final answer in one pass.",
+      "how_it_works": "Run multiple invocations of the same LLM with different role prompts (planner, checker, coordinator) to draft, verify, and refine steps before execution. You can inspect outcomes at each step and iterate, but improvement is mostly manual prompt/rule editing rather than learned policy updates.",
+      "example": {
+        "flow": "Template: Decompose -> Verify prerequisites -> Execute step -> Check result -> Continue",
+        "language": "python",
+        "code": "def plan_then_execute(goal):\n    plan = llm('Break goal into steps: ' + goal)\n    checked = llm('Check for conflicts and missing prerequisites:\\n' + plan)\n    for step in parse_steps(checked):\n        run_step(step)\n    # improve by editing prompts, not model weights"
+      },
+      "works": [
+        "MAP",
+        "early prompted planning"
+      ],
+      "papers": [
+        {
+          "title": "Modular Agentic Planner (MAP) (Webb et al., 2025)",
+          "url": "https://doi.org/10.1038/s41467-025-63804-5",
+          "label": "Modular Agentic Planner"
+        },
+        {
+          "title": "Prompting-based planning reference (Huang et al., 2024a)",
+          "url": "https://doi.org/10.48550/arXiv.2402.02716",
+          "label": "Prompting-based planning r\u2026"
+        },
+        {
+          "title": "ReAct (Yao et al., 2023b)",
+          "url": "https://openreview.net/forum?id=WE_vluYUL-X",
+          "label": "ReAct"
+        }
+      ],
+      "why_works": [
+        "Easy to implement and inspect",
+        "Works well on known plan templates"
+      ],
+      "why_fails": [
+        "Limited adaptation to novel failures",
+        "No principled learning from long-horizon outcomes"
+      ]
+    },
+    {
+      "id": "planning_external_value_search",
+      "title": "RL as External Guide for Planning",
+      "tags": {
+        "capability": "planning",
+        "paradigm": "external-guide",
+        "maturity": "current"
+      },
+      "summary": "LLM proposes actions while RL-trained value/heuristic functions guide search.",
+      "what_it_is": "For LLMs, planning means adding a learned guidance layer on top of generation: the model proposes candidate steps, and a learned value signal decides which partial plan is worth continuing.",
+      "how_it_works": "Use the LLM for branch proposal, not final one-shot answering. Collect trajectories, train a value function on outcomes, then run search (e.g., MCTS) where branch expansion/pruning is driven by that value model before executing the chosen plan.",
+      "example": {
+        "flow": "LLM proposes branches -> value model scores branch states -> search keeps best branches -> execute best plan",
+        "language": "python",
+        "code": "for _ in range(N):\n    tree = init_search_tree(state)\n    for _ in range(B):\n        node = select_node_ucb(tree)\n        actions = llm_propose_actions(node.state)        # explicit action candidates\n        children = expand_node(node, actions)\n        score_children_with_value(children, value_model) # V(s') guidance\n        backup_scores_to_root(children)\n    best_traj = extract_best_plan(tree)\n    final_reward = execute_plan(best_traj)\n    buffer.append((best_traj, final_reward))\n\ntrain_value_model_from_trajectories(value_model, buffer)"
+      },
+      "works": [
+        "RAP",
+        "LATS",
+        "Planning without Search",
+        "Learning When to Plan"
+      ],
+      "papers": [
+        {
+          "title": "RAP (Hao et al., 2023)",
+          "url": "https://aclanthology.org/2023.emnlp-main.507/",
+          "label": "RAP"
+        },
+        {
+          "title": "LATS (Zhou et al., 2024a)",
+          "url": "https://arxiv.org/abs/2310.04406",
+          "label": "LATS"
+        },
+        {
+          "title": "Planning without Search (Hong et al., 2025d)",
+          "url": "https://arxiv.org/abs/2505.18098",
+          "label": "Planning w/o Search"
+        }
+      ],
+      "why_works": [
+        "Improves search efficiency under fixed compute",
+        "Keeps base LLM stable while adding adaptive guidance"
+      ],
+      "why_fails": [
+        "Value miscalibration can bias exploration",
+        "Search-time overhead can still be large"
+      ]
+    },
+    {
+      "id": "planning_internal_policy_refinement",
+      "title": "RL as Internal Driver of Planning",
+      "tags": {
+        "capability": "planning",
+        "paradigm": "internal-driver",
+        "maturity": "current"
+      },
+      "summary": "LLM is directly treated as policy and optimized from interaction outcomes.",
+      "what_it_is": "For LLMs, planning means training the generator itself to become a better planner, instead of only using an external search/value module to steer it.",
+      "how_it_works": "Treat each plan step (including optional tool actions) as policy actions from the LLM. Collect trajectories with rewards or pairwise preferences, then update model weights with PPO/DPO-style objectives so future planning behavior improves directly.",
+      "example": {
+        "flow": "Rollout plan trajectories -> attach reward/preference feedback -> optimize policy weights -> repeat",
+        "language": "python",
+        "code": "for _ in range(N):\n    traj = rollout_with_policy(model, env)\n    buffer.append(traj)\nbatch = make_training_batch(buffer)\nupdate_policy(model, batch)  # PPO/DPO-family step"
+      },
+      "works": [
+        "ETO",
+        "VOYAGER",
+        "DSP",
+        "RLTR",
+        "AdaPlan",
+        "Planner-R1"
+      ],
+      "papers": [
+        {
+          "title": "ETO (Song et al., 2024b)",
+          "url": "https://aclanthology.org/2024.acl-long.409/",
+          "label": "ETO"
+        },
+        {
+          "title": "VOYAGER (Wang et al., 2024a)",
+          "url": "https://openreview.net/forum?id=ehfRiF0R3a",
+          "label": "VOYAGER"
+        },
+        {
+          "title": "Dynamic Speculative Planning (Guan et al., 2025b)",
+          "url": "https://arxiv.org/abs/2509.01920",
+          "label": "DSP"
+        },
+        {
+          "title": "RLTR (Li et al., 2025p)",
+          "url": "https://arxiv.org/abs/2508.19598",
+          "label": "RLTR"
+        },
+        {
+          "title": "AdaPlan / PilotRL (Lu et al., 2025c)",
+          "url": "https://arxiv.org/abs/2508.00344",
+          "label": "AdaPlan"
+        },
+        {
+          "title": "Planner-R1 (Zhu et al., 2025d)",
+          "url": "https://arxiv.org/abs/2509.25779",
+          "label": "Planner-R1"
+        }
+      ],
+      "why_works": [
+        "Internalizes planning behavior across tasks",
+        "Can jointly optimize quality and system cost"
+      ],
+      "why_fails": [
+        "Reward shaping is sensitive",
+        "Training stability in open environments remains hard"
+      ]
+    },
+    {
+      "id": "planning_deliberation_intuition_synthesis",
+      "title": "Planning Frontier: Deliberation + Intuition Synthesis",
+      "tags": {
+        "capability": "planning",
+        "paradigm": "hybrid",
+        "maturity": "future"
+      },
+      "summary": "Unify fast intuitive planning with slow deliberate search via a learned meta-policy.",
+      "what_it_is": "For LLMs, planning means learning both what to do and how much deliberation to allocate, so the model can switch between fast intuition and slow structured search.",
+      "how_it_works": "Introduce a meta-controller over planning modes (fast act, branch, prune, tool-check, commit). At each step, the controller chooses the mode, and training rewards task success while charging for compute/latency to avoid unnecessary overthinking.",
+      "example": {
+        "flow": "Observe state/uncertainty -> choose planning mode -> execute mode -> repeat until commit",
+        "language": "python",
+        "code": "MODES = ['fast_act', 'explore_branch', 'prune', 'tool_check', 'commit']\nfor t in range(T):\n    mode = meta_policy.sample(state, history, uncertainty)\n    state = apply_mode(mode, state)\n    if mode == 'commit':\n        break\nreward = task_success(state) - lam * compute_used\nupdate_meta_policy(reward)"
+      },
+      "works": [
+        "prospective direction from survey"
+      ],
+      "papers": [
+        {
+          "title": "Planning section in survey (prospective synthesis)",
+          "url": "https://arxiv.org/html/2509.02547v4",
+          "label": "Planning section in survey"
+        }
+      ],
+      "why_works": [
+        "Balances speed and robustness per task",
+        "Treats planning depth as a learnable control variable"
+      ],
+      "why_fails": [
+        "Meta-credit assignment is difficult",
+        "Can overthink without good compute penalties"
+      ]
+    },
+    {
+      "id": "tool_react_sft",
+      "title": "ReAct-style Tool Calling",
+      "tags": {
+        "capability": "tool-use",
+        "paradigm": "external-guide",
+        "maturity": "previous"
+      },
+      "summary": "Tool use is induced by prompting or SFT over static interaction traces.",
+      "what_it_is": "For LLMs, tool use means turning free-form generation into an explicit think-act-observe loop where the model calls tools between reasoning steps.",
+      "how_it_works": "Use prompt templates or SFT traces to teach a fixed interaction pattern: reason, emit a tool call, read tool output, continue reasoning, then answer. Behavior is mostly imitation of known patterns, not outcome-optimized policy learning.",
+      "example": {
+        "language": "python",
+        "code": "def solve_with_react(question):\n    thought = llm(f'Think step-by-step for: {question}')\n    action = llm(f'Choose tool call from thought:\\n{thought}')\n    obs = call_tool(action)\n    thought2 = llm(f'Observation: {obs}\\nUpdate reasoning.')\n    return llm(f'Final answer from reasoning:\\n{thought2}')"
+      },
+      "works": [
+        "ReAct",
+        "Toolformer",
+        "FireAct",
+        "AgentTuning",
+        "AgentFLAN"
+      ],
+      "papers": [
+        {
+          "title": "ReAct (Yao et al., 2023b)",
+          "url": "https://openreview.net/forum?id=WE_vluYUL-X",
+          "label": "ReAct"
+        },
+        {
+          "title": "Toolformer (Schick et al., 2023)",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/file/d842425e4bf79ba039352da0f658a906-Paper-Conference.pdf",
+          "label": "Toolformer"
+        },
+        {
+          "title": "FireAct (Chen et al., 2023)",
+          "url": "https://arxiv.org/abs/2310.05915",
+          "label": "FireAct"
+        },
+        {
+          "title": "AgentTuning (Zeng et al., 2024)",
+          "url": "https://aclanthology.org/2024.findings-acl.181/",
+          "label": "AgentTuning"
+        },
+        {
+          "title": "Agent-FLAN (Chen et al., 2024h)",
+          "url": "https://aclanthology.org/2024.findings-acl.557/",
+          "label": "Agent-FLAN"
+        }
+      ],
+      "why_works": [
+        "Reliable syntax and invocation patterns",
+        "Simple pipeline with no RL infra"
+      ],
+      "why_fails": [
+        "Weak adaptation to novel failures",
+        "Imitates static patterns instead of optimizing outcomes"
+      ]
+    },
+    {
+      "id": "tool_integrated_rl_tir",
+      "title": "Tool-integrated RL (TIR)",
+      "tags": {
+        "capability": "tool-use",
+        "paradigm": "internal-driver",
+        "maturity": "current"
+      },
+      "summary": "Tool calls become policy actions optimized for end-task reward.",
+      "what_it_is": "For LLMs, tool use becomes RL action selection: each token/tool decision is part of one policy optimized for task outcomes.",
+      "how_it_works": "Run trajectories where the model can emit either normal text or tool calls. Environment/tool responses produce transitions and rewards; train with PPO/GRPO-style updates so the policy learns when tools are worth calling and how to chain them effectively.",
+      "example": {
+        "language": "python",
+        "code": "for episode in range(N):\n    traj = []\n    state = env.reset()\n    while not state.done:\n        action = policy.sample(state)  # token or tool_call\n        next_state, reward = env.step(action)\n        traj.append((state, action, reward, next_state))\n        state = next_state\n    update_policy_with_advantage(policy, traj)"
+      },
+      "works": [
+        "ToolRL",
+        "OTC-PO",
+        "ReTool",
+        "AutoTIR",
+        "VTool-R1",
+        "ToRL",
+        "ASPO"
+      ],
+      "papers": [
+        {
+          "title": "ToolRL (Qian et al., 2025)",
+          "url": "https://arxiv.org/abs/2504.13958",
+          "label": "ToolRL"
+        },
+        {
+          "title": "OTC-PO (Wang et al., 2025e)",
+          "url": "https://arxiv.org/abs/2504.14870",
+          "label": "OTC-PO"
+        },
+        {
+          "title": "ReTool (Feng et al., 2025a)",
+          "url": "https://doi.org/10.48550/arXiv.2504.11536",
+          "label": "ReTool"
+        },
+        {
+          "title": "AutoTIR (Wei et al., 2025c)",
+          "url": "https://arxiv.org/abs/2507.21836",
+          "label": "AutoTIR"
+        },
+        {
+          "title": "ToRL (Li et al., 2025l)",
+          "url": "https://arxiv.org/abs/2503.23383",
+          "label": "ToRL"
+        },
+        {
+          "title": "ASPO (Lin & Xu, 2025)",
+          "url": "https://arxiv.org/abs/2508.19201",
+          "label": "ASPO"
+        }
+      ],
+      "why_works": [
+        "Learns when/how to call tools adaptively",
+        "Deterministic tool transitions improve feedback quality"
+      ],
+      "why_fails": [
+        "Reward hacking via tool misuse is possible",
+        "Large action spaces increase exploration difficulty"
+      ]
+    },
+    {
+      "id": "tool_long_horizon_tir",
+      "title": "Long-horizon TIR (Credit Assignment Frontier)",
+      "tags": {
+        "capability": "tool-use",
+        "paradigm": "hybrid",
+        "maturity": "future"
+      },
+      "summary": "Main bottleneck is assigning credit to specific tool calls in long, interdependent trajectories.",
+      "what_it_is": "For LLM agents, the frontier is not basic tool calling but correctly assigning credit across long multi-turn tool chains.",
+      "how_it_works": "Instead of only final success/failure reward, compute more granular per-turn credit so early tool choices can be rewarded or penalized appropriately. Train policy with step-level advantages while balancing exploration vs reward hacking.",
+      "example": {
+        "language": "python",
+        "code": "traj = rollout_long_horizon(policy, env)\nstep_rewards = score_each_turn(traj)          # dense/process reward\nadvantages = compute_turn_advantages(step_rewards, traj.values)\nupdate_policy(policy, traj.states, traj.actions, advantages)"
+      },
+      "works": [
+        "GiGPO",
+        "SpaRL",
+        "prospective direction"
+      ],
+      "papers": [
+        {
+          "title": "GiGPO (Feng et al., 2025b)",
+          "url": "https://arxiv.org/abs/2505.10978",
+          "label": "GiGPO"
+        },
+        {
+          "title": "SpaRL (Wang et al., 2025b)",
+          "url": "https://arxiv.org/abs/2505.20732",
+          "label": "SpaRL"
+        },
+        {
+          "title": "Temporal credit assignment background (Pignatelli et al., 2024)",
+          "url": "https://openreview.net/forum?id=bNtr6SLgZf",
+          "label": "Temporal credit assignment\u2026"
+        }
+      ],
+      "why_works": [
+        "More precise guidance for long chains",
+        "Less reliance on fragile end-only reward"
+      ],
+      "why_fails": [
+        "Dense rewards can distort behavior",
+        "Incorrect shaping can punish useful exploration"
+      ]
+    },
+    {
+      "id": "memory_static_rag_baseline",
+      "title": "Memory Baseline: Static RAG-style Memory",
+      "tags": {
+        "capability": "memory",
+        "paradigm": "external-guide",
+        "maturity": "previous"
+      },
+      "summary": "Memory is an external store with handcrafted retrieval/storage heuristics.",
+      "what_it_is": "For LLMs, memory is an external context store (vector DB/notes/graph) queried at inference time, with fixed retrieval/write rules.",
+      "how_it_works": "Pipeline is rule-based: store by predefined policy, retrieve by similarity or graph heuristics, then stuff retrieved context into the prompt. The LLM does not learn memory-control actions like write/update/delete.",
+      "example": {
+        "language": "python",
+        "code": "def answer_with_static_memory(query):\n    docs = vector_db.similarity_search(query, k=5)\n    prompt = build_prompt(query, docs)\n    return llm(prompt)"
+      },
+      "works": [
+        "MemoryBank",
+        "MemGPT",
+        "HippoRAG"
+      ],
+      "papers": [
+        {
+          "title": "MemoryBank (Zhong et al., 2024)",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/29946",
+          "label": "MemoryBank"
+        },
+        {
+          "title": "MemGPT (Packer et al., 2023)",
+          "url": "https://doi.org/10.48550/arXiv.2310.08560",
+          "label": "MemGPT"
+        },
+        {
+          "title": "HippoRAG (Gutierrez et al., 2024)",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/6ddc001d07ca4f319af96a3024f6dbd1-Paper-Conference.pdf",
+          "label": "HippoRAG"
+        }
+      ],
+      "why_works": [
+        "Simple and stable engineering pattern",
+        "Good first-order recall boost"
+      ],
+      "why_fails": [
+        "No adaptation of memory behavior",
+        "Cannot learn task-specific memory control"
+      ]
+    },
+    {
+      "id": "memory_rl_guided_retrieval",
+      "title": "RL-guided Retrieval and Memory Management",
+      "tags": {
+        "capability": "memory",
+        "paradigm": "internal-driver",
+        "maturity": "current"
+      },
+      "summary": "RL starts controlling retrieval and basic memory operations.",
+      "what_it_is": "For LLMs, memory becomes an action space: the agent learns when to retrieve and, in stronger systems, how to write/update/delete memory.",
+      "how_it_works": "At each turn, a memory policy chooses operations such as RETRIEVE, ADD, UPDATE, DELETE, or NOOP. Downstream task reward (quality + efficiency) supervises these decisions, so memory behavior adapts to task demands.",
+      "example": {
+        "language": "python",
+        "code": "for t in range(T):\n    mem_action = memory_policy.sample(state)   # RETRIEVE/ADD/UPDATE/DELETE/NOOP\n    memory_state = apply_memory_action(memory_state, mem_action)\n    answer, reward = answer_agent.step(state, memory_state)\n    update_memory_policy(mem_action, reward)"
+      },
+      "works": [
+        "Prospect",
+        "Memory-R1",
+        "Mem-alpha",
+        "Memory-as-action"
+      ],
+      "papers": [
+        {
+          "title": "Prospect (Tan et al., 2025b)",
+          "url": "https://aclanthology.org/2025.acl-long.413/",
+          "label": "Prospect"
+        },
+        {
+          "title": "Memory-R1 (Yan et al., 2025b)",
+          "url": "https://arxiv.org/abs/2508.19828",
+          "label": "Memory-R1"
+        },
+        {
+          "title": "Mem-alpha (Wang et al., 2025t)",
+          "url": "https://arxiv.org/abs/2509.25911",
+          "label": "Mem-alpha"
+        },
+        {
+          "title": "Memory-as-action (Zhang et al., 2025v)",
+          "url": "https://arxiv.org/abs/2510.12635",
+          "label": "Memory-as-action"
+        }
+      ],
+      "why_works": [
+        "Adapts memory behavior to task demands",
+        "Improves long-context utility over fixed heuristics"
+      ],
+      "why_fails": [
+        "Memory action credit assignment is hard",
+        "Can over-store or over-prune without regularization"
+      ]
+    },
+    {
+      "id": "memory_structured_rl_frontier",
+      "title": "Structured Memory under RL (Frontier)",
+      "tags": {
+        "capability": "memory",
+        "paradigm": "hybrid",
+        "maturity": "future"
+      },
+      "summary": "Move from token buffers to graph/atomic/hierarchical memory with learned control.",
+      "what_it_is": "For LLMs, the next step is learned control over structured memory objects (graphs, entities, timelines), not just flat retrieval snippets.",
+      "how_it_works": "Treat structural edits as policy actions: create nodes, link facts, abstract clusters, prune stale edges. Use long-horizon task reward to train which structural updates improve future retrieval and reasoning.",
+      "example": {
+        "language": "python",
+        "code": "for t in range(T):\n    # 1) Memory-controller acts first (state curation step)\n    mem_op = struct_mem_policy.sample(state, memory_graph)\n    #    e.g., ADD_NODE, LINK, ABSTRACT_CLUSTER, DELETE_EDGE\n    memory_graph = apply_graph_op(memory_graph, mem_op)\n\n    # 2) Task-agent then reasons over updated memory\n    action = agent_policy.sample(state, memory_graph)\n    next_state, task_reward = env.step(action)\n\n    # 3) Credit memory operation by downstream impact\n    mem_reward = task_reward - mem_op_cost(mem_op)\n    update_struct_mem_policy(mem_op, mem_reward)\n    update_agent_policy(action, task_reward)\n    state = next_state"
+      },
+      "works": [
+        "Zep",
+        "A-MEM",
+        "G-Memory",
+        "Mem0 (as precursor systems)"
+      ],
+      "papers": [
+        {
+          "title": "Zep (Rasmussen et al., 2025)",
+          "url": "https://arxiv.org/abs/2501.13956",
+          "label": "Zep"
+        },
+        {
+          "title": "A-MEM (Xu et al., 2025d)",
+          "url": "https://arxiv.org/abs/2502.12110",
+          "label": "A-MEM"
+        },
+        {
+          "title": "G-Memory (Zhang et al., 2025d)",
+          "url": "https://arxiv.org/abs/2506.07398",
+          "label": "G-Memory"
+        },
+        {
+          "title": "Mem0 (Chhikara et al., 2025)",
+          "url": "https://arxiv.org/abs/2504.19413",
+          "label": "Mem0"
+        }
+      ],
+      "why_works": [
+        "Encodes temporal and relational dependencies better",
+        "Potentially stronger retrieval precision and reasoning support"
+      ],
+      "why_fails": [
+        "Much harder dynamics than flat memory",
+        "Sparse supervision for structural edits"
+      ]
+    },
+    {
+      "id": "self_verbal_correction",
+      "title": "Verbal Self-correction",
+      "tags": {
+        "capability": "self-improvement",
+        "paradigm": "external-guide",
+        "maturity": "previous"
+      },
+      "summary": "Prompt-only generate->critique->revise loops improve outputs in-session without weight updates.",
+      "what_it_is": "For LLMs, self-correction starts as an inference-time loop: generate, critique in language, then revise without changing model weights.",
+      "how_it_works": "Use prompt scaffolds (and optionally tools) to run one or more critique/revision passes inside a single session. Gains are immediate but ephemeral because no parameter update happens.",
+      "example": {
+        "language": "python",
+        "code": "draft = llm(task_prompt)\ncritique = llm(f'Find likely errors in:\\n{draft}')\nrevised = llm(f'Revise using critique:\\n{critique}\\nOriginal:\\n{draft}')\nreturn revised"
+      },
+      "works": [
+        "Reflexion",
+        "Self-Refine",
+        "CRITIC",
+        "Chain-of-Verification"
+      ],
+      "papers": [
+        {
+          "title": "Reflexion (Shinn et al., 2023)",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/file/1b44b878bb782e6954cd888628510e90-Paper-Conference.pdf",
+          "label": "Reflexion"
+        },
+        {
+          "title": "Self-Refine (Madaan et al., 2023)",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/file/91edff07232fb1b55a505a9e9f6c0ff3-Paper-Conference.pdf",
+          "label": "Self-Refine"
+        },
+        {
+          "title": "CRITIC (Gou et al., 2024)",
+          "url": "https://openreview.net/forum?id=Sx038qxjek",
+          "label": "CRITIC"
+        },
+        {
+          "title": "Chain-of-Verification (He et al., 2024)",
+          "url": "https://aclanthology.org/2024.findings-emnlp.607/",
+          "label": "CoVe"
+        }
+      ],
+      "why_works": [
+        "Cheap quality gains at inference",
+        "Easy to bolt onto existing models"
+      ],
+      "why_fails": [
+        "Improvements are ephemeral",
+        "Can become verbose without true correction"
+      ]
+    },
+    {
+      "id": "self_internalized_correction",
+      "title": "Internalized Self-correction with RL/DPO",
+      "tags": {
+        "capability": "self-improvement",
+        "paradigm": "internal-driver",
+        "maturity": "current"
+      },
+      "summary": "Train model parameters on reflective feedback so correction ability persists.",
+      "what_it_is": "For LLMs, self-correction is internalized when critique/revision outcomes are turned into training signals that update model weights.",
+      "how_it_works": "Collect better-vs-worse revisions (or scalar rewards), then train with DPO/RL objectives so the base model learns to produce improved outputs directly on future tasks.",
+      "example": {
+        "language": "python",
+        "code": "def collect_revision_pairs(tasks):\n    pairs = []\n    for task in tasks:\n        draft = actor(task)\n        critique = critic_or_prompt(f'Find errors:\\n{draft}')\n        revised = actor(f'Revise using critique:\\n{critique}\\nDraft:\\n{draft}')\n\n        # rank candidates via verifier / reward model / execution result\n        score_draft = score_solution(task, draft)\n        score_revised = score_solution(task, revised)\n        better, worse = (revised, draft) if score_revised >= score_draft else (draft, revised)\n        pairs.append((task, worse, better))\n    return pairs\n\npairs = collect_revision_pairs(train_tasks)\nloss = dpo_loss(model, pairs)\noptimizer.step(loss)"
+      },
+      "works": [
+        "KnowSelf",
+        "Reflection-DPO",
+        "DuPo",
+        "SWEET-RL",
+        "ACC-Collab"
+      ],
+      "papers": [
+        {
+          "title": "KnowSelf (Qiao et al., 2025)",
+          "url": "https://openreview.net/forum?id=PGdSLjYwMT",
+          "label": "KnowSelf"
+        },
+        {
+          "title": "Reflection-DPO (Patel et al., 2025)",
+          "url": "https://arxiv.org/abs/2504.04040",
+          "label": "Reflection-DPO"
+        },
+        {
+          "title": "DuPo (She et al., 2025)",
+          "url": "https://arxiv.org/abs/2508.14460",
+          "label": "DuPo"
+        },
+        {
+          "title": "SWEET-RL (Zhou et al., 2025e)",
+          "url": "https://arxiv.org/abs/2503.15478",
+          "label": "SWEET-RL"
+        },
+        {
+          "title": "ACC-Collab (Estornell et al., 2025b)",
+          "url": "https://openreview.net/forum?id=nfKfAzkiez",
+          "label": "ACC-Collab"
+        }
+      ],
+      "why_works": [
+        "Builds durable self-correction behavior",
+        "Learns from own mistakes without dense labels"
+      ],
+      "why_fails": [
+        "Noisy feedback can teach wrong corrections",
+        "Critic quality strongly influences learning"
+      ]
+    },
+    {
+      "id": "self_iterative_self_training",
+      "title": "Iterative Self-training Loops",
+      "tags": {
+        "capability": "self-improvement",
+        "paradigm": "hybrid",
+        "maturity": "current"
+      },
+      "summary": "Agent generates tasks/trajectories, verifies outcomes, and trains itself in closed loops.",
+      "what_it_is": "For LLM agents, iterative self-training means the system creates parts of its own data, feedback, and curriculum instead of relying only on fixed human datasets.",
+      "how_it_works": "Run a closed loop: generate tasks/trajectories, verify outcomes via execution or critics, train policy/value models, then use improved models to generate stronger next-round experience.",
+      "example": {
+        "language": "python",
+        "code": "for round_idx in range(R):\n    tasks = propose_tasks(agent)\n    trajectories = [solve_and_verify(agent, t) for t in tasks]\n    agent = train_on_verified_rollouts(agent, trajectories)\n    curriculum = update_curriculum(tasks, trajectories)"
+      },
+      "works": [
+        "R-Zero",
+        "ISC",
+        "Absolute Zero",
+        "SEC",
+        "TTRL",
+        "SiriuS",
+        "MALT"
+      ],
+      "papers": [
+        {
+          "title": "R-Zero (Huang et al., 2025a)",
+          "url": "https://arxiv.org/abs/2508.05004",
+          "label": "R-Zero"
+        },
+        {
+          "title": "ISC (Tian et al., 2024)",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5e5853f35164e434015716a8c2a66543-Paper-Conference.pdf",
+          "label": "ISC"
+        },
+        {
+          "title": "Absolute Zero (Zhao et al., 2025a)",
+          "url": "https://arxiv.org/abs/2505.03335",
+          "label": "Absolute Zero"
+        },
+        {
+          "title": "Self-Evolving Curriculum (Chen et al., 2025f)",
+          "url": "https://arxiv.org/abs/2505.14970",
+          "label": "SEC"
+        },
+        {
+          "title": "TTRL (Zuo et al., 2025)",
+          "url": "https://arxiv.org/abs/2504.16084",
+          "label": "TTRL"
+        },
+        {
+          "title": "SiriuS (Zhao et al., 2025e)",
+          "url": "https://openreview.net/forum?id=sLBSJr3hH5",
+          "label": "SiriuS"
+        },
+        {
+          "title": "MALT (Motwani et al., 2025)",
+          "url": "https://arxiv.org/abs/2412.01928",
+          "label": "MALT"
+        }
+      ],
+      "why_works": [
+        "Scales data generation beyond static corpora",
+        "Creates continuously improving feedback loops"
+      ],
+      "why_fails": [
+        "Distribution drift and self-reinforced errors",
+        "Needs robust verifiers and quality control"
+      ]
+    },
+    {
+      "id": "self_meta_reflection_frontier",
+      "title": "Meta-evolution of Reflection Ability",
+      "tags": {
+        "capability": "self-improvement",
+        "paradigm": "hybrid",
+        "maturity": "future"
+      },
+      "summary": "Learn not only to correct errors, but to choose and improve reflection strategies themselves.",
+      "what_it_is": "For LLMs, the frontier is learning how to reflect, not just reflecting: choose the right correction strategy per context and update that strategy over time.",
+      "how_it_works": "A meta-policy selects reflection mode (quick verbal check, tool execution, deeper search, or stop). Reward combines solution quality and compute cost, so reflection budget becomes a learned control policy.",
+      "example": {
+        "language": "python",
+        "code": "mode = meta_reflector.sample(state)  # verbal/tool/search/stop\nresult = run_reflection_mode(mode, state)\nreward = quality(result) - beta * compute_cost(mode)\nupdate_meta_reflector(mode, reward)"
+      },
+      "works": [
+        "prospective direction"
+      ],
+      "papers": [
+        {
+          "title": "Meta-reflection discussion in survey",
+          "url": "https://arxiv.org/html/2509.02547v4",
+          "label": "Meta-reflection discussion\u2026"
+        }
+      ],
+      "why_works": [
+        "Adapts reflection budget to task difficulty",
+        "Improves both learning efficiency and solution quality"
+      ],
+      "why_fails": [
+        "Second-order credit assignment complexity",
+        "Can over-optimize short-term cost metrics"
+      ]
+    },
+    {
+      "id": "reasoning_fast_system1",
+      "title": "Fast Reasoning (System-1 style)",
+      "tags": {
+        "capability": "reasoning",
+        "paradigm": "internal-driver",
+        "maturity": "previous"
+      },
+      "summary": "One-pass, heuristic next-token inference prioritizes speed and fluency.",
+      "what_it_is": "For LLMs, fast reasoning is direct single-pass generation: minimal explicit deliberation, maximum speed.",
+      "how_it_works": "Model decodes answer tokens immediately from prompt context. Any reliability improvement usually comes from lightweight heuristics (confidence checks, simple reranking), not heavy multi-step reasoning loops.",
+      "example": {
+        "language": "python",
+        "code": "answer = llm(prompt, max_tokens=256, temperature=0.2)\nreturn answer"
+      },
+      "works": [
+        "conventional LLM fast reasoning line"
+      ],
+      "papers": [
+        {
+          "title": "Reasoning section in survey",
+          "url": "https://arxiv.org/html/2509.02547v4",
+          "label": "Reasoning section in surve\u2026"
+        }
+      ],
+      "why_works": [
+        "Low latency and high throughput",
+        "Good for routine pattern-matching tasks"
+      ],
+      "why_fails": [
+        "Shallow reasoning on hard tasks",
+        "Higher factual/logical brittleness"
+      ]
+    },
+    {
+      "id": "reasoning_slow_deliberate",
+      "title": "Slow Reasoning (Structured Deliberation)",
+      "tags": {
+        "capability": "reasoning",
+        "paradigm": "internal-driver",
+        "maturity": "current"
+      },
+      "summary": "Explicit intermediate reasoning, verification, and longer trajectories improve robustness.",
+      "what_it_is": "For LLMs, slow reasoning is explicit multi-step deliberation with intermediate checks before committing to an answer.",
+      "how_it_works": "Model generates and tests intermediate reasoning steps (plan, verify, revise), optionally with tools/search. Training and inference both allocate extra compute to reduce logical/factual error on hard tasks.",
+      "example": {
+        "language": "python",
+        "code": "trace = llm('Plan solution steps for: ' + problem)\nfor _ in range(K):\n    trace = llm('Verify and revise this trace:\\n' + trace)\nanswer = llm('Produce final answer from trace:\\n' + trace)\nreturn answer"
+      },
+      "works": [
+        "o1/o3 line",
+        "DeepSeek-R1",
+        "test-time scaling methods"
+      ],
+      "papers": [
+        {
+          "title": "OpenAI o1 (OpenAI et al., 2024)",
+          "url": "https://arxiv.org/abs/2412.16720",
+          "label": "OpenAI o1"
+        },
+        {
+          "title": "OpenAI o3 (OpenAI Team, 2025)",
+          "url": "https://openai.com/blog/openai-o3-o4-mini",
+          "label": "OpenAI o3"
+        },
+        {
+          "title": "DeepSeek-R1 citation in survey",
+          "url": "https://arxiv.org/abs/2501.12948",
+          "label": "DeepSeek-R1"
+        },
+        {
+          "title": "Multi-step verification (Qin et al., 2024a)",
+          "url": "https://arxiv.org/abs/2410.18982",
+          "label": "Step Verification"
+        }
+      ],
+      "why_works": [
+        "Higher accuracy on complex knowledge-intensive tasks",
+        "Supports explicit verification and correction"
+      ],
+      "why_fails": [
+        "Higher latency and compute",
+        "Risk of overthinking and unnecessary chain expansion"
+      ]
+    },
+    {
+      "id": "reasoning_fast_slow_hybrid_frontier",
+      "title": "Reasoning Frontier: Adaptive Fast/Slow Hybrid",
+      "tags": {
+        "capability": "reasoning",
+        "paradigm": "hybrid",
+        "maturity": "future"
+      },
+      "summary": "Learn a controller that decides how much thinking is needed per query.",
+      "what_it_is": "For LLMs, hybrid reasoning learns when to answer fast vs when to trigger deeper deliberation, so accuracy and latency are optimized jointly.",
+      "how_it_works": "A controller estimates uncertainty/difficulty and routes each query to fast or slow path. Policy is trained against a quality-cost objective so expensive deliberation is reserved for cases where it pays off.",
+      "example": {
+        "language": "python",
+        "code": "difficulty = estimate_difficulty(prompt)\nif difficulty < tau:\n    return fast_model(prompt)\ntrace = slow_reasoner(prompt)\nreturn finalize_from_trace(trace)"
+      },
+      "works": [
+        "adaptive test-time scaling frontier"
+      ],
+      "papers": [
+        {
+          "title": "Hybrid strategy reference (Yang et al., 2025a)",
+          "url": "https://arxiv.org/abs/2505.09388",
+          "label": "Hybrid strategy reference"
+        },
+        {
+          "title": "Fast-slow integration (Yang et al., 2025g)",
+          "url": "https://arxiv.org/abs/2502.18080",
+          "label": "Fast-slow integration"
+        },
+        {
+          "title": "Fast-slow integration (Hou et al., 2025)",
+          "url": "https://arxiv.org/abs/2504.01296",
+          "label": "Fast-slow integration"
+        }
+      ],
+      "why_works": [
+        "Combines efficiency with reliability",
+        "Avoids always-fast and always-slow extremes"
+      ],
+      "why_fails": [
+        "Controller calibration is difficult",
+        "Mis-specified costs can bias toward wrong mode"
+      ]
+    }
+  ]
+}

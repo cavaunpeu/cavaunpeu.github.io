@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>will wolf</title>
+	<meta name="description" content="writings on machine learning, crypto, geopolitics, life">
+	<meta name="author" content="Will Wolf">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="https://willwolf.io/theme/html5.js"></script>
+		<![endif]-->
+
+	<!-- Atom Feed -->
+
+	<!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@willwolf_">
+  <meta name="twitter:creator" content="@willwolf_">
+  <meta name="twitter:domain" content="https://willwolf.io">
+    <meta property="twitter:title" content="Agentic RL for LLMs: Survey Summary"/>
+    <meta property="twitter:description" content="Flashcard-style summaries of techniques from &#34;The Landscape of Agentic Reinforcement Learning for LLMs: A Survey (Zhang et al., 2026),&#34; covering planning, tool-use, memory, self-improvement, and reasoning approaches."/>
+    <meta property="twitter:image" content="https://willwolf.io/"/>
+
+	<!-- CSS -->
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
+	<!-- KaTeX for math rendering (modern, fast) - Latest version with proper font loading -->
+	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+	<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+	<style>
+	/* Beautiful, large, clear KaTeX math rendering */
+	.katex,
+	.katex * {
+		font-family: KaTeX_Main, KaTeX_Math, KaTeX_AMS, "Times New Roman", serif !important;
+	}
+
+	/* Ensure proper font loading for all KaTeX font variants */
+	.katex .mathnormal { font-family: KaTeX_Math !important; }
+	.katex .mathit { font-family: KaTeX_Math !important; font-style: italic !important; }
+	.katex .mathbf { font-family: KaTeX_Main !important; font-weight: bold !important; }
+	.katex .boldsymbol { font-family: KaTeX_Math !important; font-weight: bold !important; }
+	.katex .amsrm { font-family: KaTeX_AMS !important; }
+	.katex .mathbb { font-family: KaTeX_AMS !important; }
+	.katex .mathcal { font-family: KaTeX_Caligraphic !important; }
+	.katex .mathfrak { font-family: KaTeX_Fraktur !important; }
+	.katex .mathscr { font-family: KaTeX_Script !important; }
+
+	/* Standard beautiful KaTeX styling */
+	.katex {
+		font-size: 1.1em;
+	}
+
+	.katex-display {
+		margin: 1.5em auto;
+		text-align: center;
+	}
+
+	/* Fix red text issue - ensure math inherits normal text color */
+	.katex,
+	.katex *,
+	span.math,
+	.math {
+		color: inherit !important;
+	}
+
+	span.math,
+	.math {
+		text-decoration: none !important;
+	}
+	</style>
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		// Wait for KaTeX to be fully loaded
+		function processMath() {
+			if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
+				setTimeout(processMath, 50);
+				return;
+			}
+
+			// Process math blocks wrapped by render_math plugin (class="math")
+			// These contain raw LaTeX that needs to be rendered
+			const mathElements = document.querySelectorAll('.math');
+			mathElements.forEach(element => {
+				let mathContent = element.textContent.trim();
+				if (mathContent) {
+					// Determine if it's display or inline math
+					const isDisplay = element.tagName === 'DIV' ||
+					                  mathContent.includes('\\begin{align') ||
+					                  mathContent.includes('\\[') ||
+					                  (mathContent.startsWith('$$') && mathContent.endsWith('$$'));
+
+					// Clean up the content - remove delimiters
+					// render_math plugin wraps inline math with \( and \)
+					// and display math with $$ or \[ \]
+					if (mathContent.startsWith('\\(') && mathContent.endsWith('\\)')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('$$') && mathContent.endsWith('$$')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					} else if (mathContent.startsWith('\\[') && mathContent.endsWith('\\]')) {
+						mathContent = mathContent.slice(2, -2).trim();
+					}
+
+					try {
+						// Render with KaTeX
+						katex.render(mathContent, element, {
+							throwOnError: false,
+							displayMode: isDisplay,
+							strict: false,
+							trust: false,
+							errorColor: 'transparent',
+							macros: {
+								"\\RR": "\\mathbb{R}",
+								"\\EE": "\\mathbb{E}",
+								"\\PP": "\\mathbb{P}",
+							}
+						});
+					} catch (e) {
+						console.warn('KaTeX rendering error:', e, 'for math:', mathContent.substring(0, 50));
+					}
+				}
+			});
+
+			// Also process any remaining $$ blocks in the document
+			renderMathInElement(document.body, {
+				delimiters: [
+					{left: "$$", right: "$$", display: true},
+					{left: "$", right: "$", display: false},
+					{left: "\\(", right: "\\)", display: false},
+					{left: "\\[", right: "\\]", display: true}
+				],
+				throwOnError: false,
+				errorColor: 'transparent',
+				strict: false,
+				trust: false,
+				macros: {
+					"\\RR": "\\mathbb{R}",
+					"\\EE": "\\mathbb{E}",
+					"\\PP": "\\mathbb{P}",
+				}
+			});
+		}
+
+		// Call the processing function
+		processMath();
+	});
+	</script>
+</head><body>
+<div class="container">
+<div class="page-header">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
+            <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-crypto" href="/crypto">crypto</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://willwolf.io/about/" title="About">About</a></li>
+              <li><a href="https://willwolf.io/consulting/" title="Consulting"></span> Consulting</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books">Books</a></li>
+          <li>
+            <button id="subscribeButton">
+              <a href="https://willwolf.io/subscribe/" title="Get new posts by email">Subscribe</a>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="articleBody" class="article-body"><style>
+.arc-shell {
+  margin: 22px auto;
+  max-width: 1180px;
+  border: 1px solid #e5e7eb;
+  background: #fcfcff;
+  border-radius: 16px;
+  padding: 20px;
+}
+.arc-hero-subtitle {
+  color: #59637a;
+  margin-bottom: 10px;
+}
+.arc-badge {
+  display: inline-block;
+  border: 1px solid #d8def2;
+  background: #eef2ff;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 12px;
+  margin-right: 6px;
+  color: #34417a;
+}
+.arc-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 14px 0 14px;
+}
+.arc-controls button {
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  background: #fff;
+  padding: 7px 12px;
+  line-height: 1.2;
+}
+.arc-legend {
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.arc-grid-wrap {
+  margin: 8px 0 8px;
+}
+.arc-grid-title {
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+.arc-grid {
+  display: grid;
+  grid-template-columns: 150px repeat(3, minmax(120px, 1fr));
+  gap: 6px;
+  width: 100%;
+  max-width: 940px;
+}
+.arc-grid-cell {
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 9px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arc-grid-cell.header {
+  background: #f5f6fb;
+  cursor: default;
+  font-weight: 600;
+}
+.arc-grid-cell.cap {
+  background: #f9f7ff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.arc-grid-cell.is-active {
+  color: #fff;
+  border-color: transparent;
+}
+.arc-grid-cell.active-cap {
+  background: #6d5bd0;
+}
+.arc-grid-cell.active-both {
+  background: #275cc6;
+}
+.arc-meta {
+  color: #667085;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.arc-controls .arc-meta {
+  margin-top: 0;
+}
+.arc-progress {
+  width: 100%;
+  max-width: 760px;
+  height: 8px;
+  border-radius: 999px;
+  background: #e7eaf4;
+  overflow: hidden;
+  margin: 8px 0 14px;
+}
+.arc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6d5bd0, #275cc6);
+  width: 0%;
+  transition: width 180ms ease;
+}
+.arc-card {
+  margin-top: 10px;
+  border: 1px solid #d6ddea;
+  border-radius: 14px;
+  padding: 20px 22px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+.arc-title {
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.arc-tagline {
+  color: #667085;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.arc-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.arc-block-title {
+  font-weight: 600;
+  margin-top: 8px;
+}
+.arc-list {
+  margin: 4px 0 8px 16px;
+  padding: 0;
+}
+.arc-list li {
+  margin: 3px 0;
+}
+.arc-row {
+  margin: 10px 0;
+  max-width: 74ch;
+  line-height: 1.55;
+}
+.arc-paper-chip {
+  display: inline-block;
+  margin: 4px 8px 0 0;
+  padding: 2px 7px;
+  border: 1px solid #dbe3f0;
+  border-radius: 999px;
+  color: #2f4b8f;
+  text-decoration: none;
+  font-size: 11px;
+  line-height: 1.2;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.arc-example-wrap {
+  max-width: 100%;
+  margin: 10px auto 0;
+}
+.arc-example-card {
+  margin-top: 8px;
+  border: 1px solid #dbe3f0;
+  border-radius: 12px;
+  background: #fbfcff;
+  overflow: hidden;
+}
+.arc-example-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid #e5eaf5;
+  background: #f3f6fd;
+}
+.arc-example-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+.arc-example-panel {
+  margin: 10px 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #d9e1ee;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  max-width: none;
+}
+.arc-example-label {
+  display: inline-block;
+  margin: 0;
+  font-weight: 600;
+  font-size: 12px;
+  color: #475467;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.arc-code-toolbar {
+  margin: 10px 12px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.arc-code-toolbar .arc-example-label {
+  margin: 0;
+}
+.arc-code-actions {
+  display: flex;
+  gap: 6px;
+}
+.arc-code-btn {
+  border: 1px solid #cfd8ea;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #344054;
+  padding: 3px 9px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.arc-code-btn:hover {
+  background: #f4f7ff;
+  border-color: #b8c7e6;
+}
+.arc-code-wrap {
+  max-width: 100%;
+  margin: 0 12px 12px;
+}
+.arc-code {
+  margin-top: 0;
+  padding: 0;
+  border-radius: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid #d9e1ee;
+  background: #111827 !important;
+}
+.arc-code code {
+  display: block;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px 14px;
+  white-space: pre;
+  width: max-content;
+  min-width: 100%;
+  color: #e5e7eb !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #e5e7eb;
+}
+.arc-code .hljs {
+  background: #111827 !important;
+  color: #e5e7eb !important;
+  opacity: 1 !important;
+}
+.arc-code .hljs-keyword,
+.arc-code .hljs-selector-tag,
+.arc-code .hljs-built_in {
+  color: #c4b5fd !important;
+}
+.arc-code .hljs-string,
+.arc-code .hljs-attr {
+  color: #86efac !important;
+}
+.arc-code .hljs-comment {
+  color: #9ca3af !important;
+}
+.arc-code .hljs-number,
+.arc-code .hljs-literal,
+.arc-code .hljs-title,
+.arc-code .hljs-function,
+.arc-code .hljs-params,
+.arc-code .hljs-variable,
+.arc-code .hljs-type,
+.arc-code .hljs-meta,
+.arc-code .hljs-subst {
+  color: #e5e7eb !important;
+}
+.arc-code .hljs-title.function_,
+.arc-code .hljs-function .hljs-title,
+.arc-code .hljs-symbol {
+  color: #93c5fd !important;
+}
+.arc-code .hljs-variable.language_,
+.arc-code .hljs-property {
+  color: #f9a8d4 !important;
+}
+.arc-code-wrap.is-collapsed {
+  display: none;
+}
+.arc-nav {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.arc-nav button {
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  background: #fff;
+  padding: 6px 10px;
+  min-width: 110px;
+}
+.arc-nav-status {
+  color: #667085;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+.arc-matches {
+  margin-top: 8px;
+  padding-left: 18px;
+}
+.arc-matches li {
+  margin: 3px 0;
+}
+@media (max-width: 900px) {
+  .arc-grid {
+    grid-template-columns: 120px repeat(3, minmax(90px, 1fr));
+  }
+}
+</style>
+<p><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" rel="stylesheet"/></p>
+<p>Lately, I've been diving into agentic RL for LLMs—a fascinating topic that sits neatly at the intersection of many of my technical interests. In this post, I share high-level, flashcard-style of key ideas from one of the better survey papers I've come across—<em>The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</em>—including techniques for LLM planning, tool use, memory management, self-improvement, and reasoning. If these resonate, please let me know in the comments and I'll happily share more.</p>
+<div class="arc-shell" id="arc-root">
+<div id="arc-loading">Loading technique config...</div>
+<div id="arc-app" style="display:none;">
+<div>
+<span class="arc-badge" id="arc-badge-count">0 cards</span>
+<span class="arc-badge">Source: Zhang et al. (TMLR 2026)</span>
+<span class="arc-badge">Use ← / → keyboard arrows</span>
+</div>
+<div class="arc-controls">
+<button id="arc-reset-top">Reset Filters</button>
+<span class="arc-meta">Pick capability and maturity from the grid below.</span>
+</div>
+<div class="arc-legend">
+<strong>Maturity guide:</strong>
+<strong>previous</strong> = prompting/SFT-era patterns,
+      <strong>current</strong> = currently adopted RL patterns,
+      <strong>future</strong> = frontier/open directions.
+    </div>
+<div class="arc-grid-wrap" id="arc-grid-wrap"></div>
+<div class="arc-meta" id="arc-meta"></div>
+<div class="arc-progress"><div class="arc-progress-fill" id="arc-progress-fill"></div></div>
+<div class="arc-card" id="arc-card"></div>
+<div class="arc-nav-status" id="arc-nav-status"></div>
+<div class="arc-nav">
+<button id="arc-prev">← Prev</button>
+<button id="arc-next">Next →</button>
+</div>
+<ul class="arc-matches" id="arc-matches" style="display:none;"></ul>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+(async function () {
+  const configUrl = "/data/agentic-rl-techniques.json?v=4";
+  const loading = document.getElementById("arc-loading");
+  const app = document.getElementById("arc-app");
+  const gridWrap = document.getElementById("arc-grid-wrap");
+  const cardRoot = document.getElementById("arc-card");
+  const metaRoot = document.getElementById("arc-meta");
+  const badgeCountRoot = document.getElementById("arc-badge-count");
+  const progressFill = document.getElementById("arc-progress-fill");
+  const matchesRoot = document.getElementById("arc-matches");
+  const navStatusRoot = document.getElementById("arc-nav-status");
+  const prevBtn = document.getElementById("arc-prev");
+  const nextBtn = document.getElementById("arc-next");
+  const resetBtn = document.getElementById("arc-reset-top");
+
+  let cfg;
+  try {
+    const res = await fetch(configUrl);
+    cfg = await res.json();
+  } catch (err) {
+    loading.textContent = "Could not load config at " + configUrl;
+    return;
+  }
+
+  loading.style.display = "none";
+  app.style.display = "block";
+  // Safety: remove any cached/legacy in-box title node.
+  app.querySelectorAll(".arc-hero-title").forEach((el) => el.remove());
+
+  const selected = { capability: "", maturity: "" };
+  let index = 0;
+
+  // Map survey bibliography anchors to original paper URLs.
+  const BIB_URL_MAP = {
+    "bib.bib37": "https://arxiv.org/abs/2310.05915",
+    "bib.bib49": "https://arxiv.org/abs/2505.14970",
+    "bib.bib56": "https://aclanthology.org/2024.findings-acl.557/",
+    "bib.bib64": "https://arxiv.org/abs/2504.19413",
+    "bib.bib79": "https://arxiv.org/abs/2501.12948",
+    "bib.bib98": "https://openreview.net/forum?id=nfKfAzkiez",
+    "bib.bib106": "https://doi.org/10.48550/arXiv.2504.11536",
+    "bib.bib107": "https://arxiv.org/abs/2505.10978",
+    "bib.bib126": "https://openreview.net/forum?id=Sx038qxjek",
+    "bib.bib131": "https://arxiv.org/abs/2509.01920",
+    "bib.bib139": "https://proceedings.neurips.cc/paper_files/paper/2024/file/6ddc001d07ca4f319af96a3024f6dbd1-Paper-Conference.pdf",
+    "bib.bib145": "https://aclanthology.org/2023.emnlp-main.507/",
+    "bib.bib149": "https://aclanthology.org/2024.findings-emnlp.607/",
+    "bib.bib156": "https://arxiv.org/abs/2505.18098",
+    "bib.bib161": "https://arxiv.org/abs/2504.01296",
+    "bib.bib167": "https://arxiv.org/abs/2508.05004",
+    "bib.bib170": "https://doi.org/10.48550/arXiv.2402.02716",
+    "bib.bib224": "https://arxiv.org/abs/2503.23383",
+    "bib.bib229": "https://arxiv.org/abs/2508.19598",
+    "bib.bib245": "https://arxiv.org/abs/2508.19201",
+    "bib.bib278": "https://arxiv.org/abs/2508.00344",
+    "bib.bib291": "https://proceedings.neurips.cc/paper_files/paper/2023/file/91edff07232fb1b55a505a9e9f6c0ff3-Paper-Conference.pdf",
+    "bib.bib307": "https://arxiv.org/abs/2412.01928",
+    "bib.bib319": "https://arxiv.org/abs/2412.16720",
+    "bib.bib320": "https://openai.com/blog/openai-o3-o4-mini",
+    "bib.bib325": "https://doi.org/10.48550/arXiv.2310.08560",
+    "bib.bib332": "https://arxiv.org/abs/2504.04040",
+    "bib.bib335": "https://openreview.net/forum?id=bNtr6SLgZf",
+    "bib.bib342": "https://arxiv.org/abs/2504.13958",
+    "bib.bib344": "https://openreview.net/forum?id=PGdSLjYwMT",
+    "bib.bib345": "https://arxiv.org/abs/2410.18982",
+    "bib.bib350": "https://arxiv.org/abs/2501.13956",
+    "bib.bib357": "https://proceedings.neurips.cc/paper_files/paper/2023/file/d842425e4bf79ba039352da0f658a906-Paper-Conference.pdf",
+    "bib.bib363": "https://arxiv.org/abs/2508.14460",
+    "bib.bib370": "https://proceedings.neurips.cc/paper_files/paper/2023/file/1b44b878bb782e6954cd888628510e90-Paper-Conference.pdf",
+    "bib.bib380": "https://aclanthology.org/2024.acl-long.409/",
+    "bib.bib397": "https://aclanthology.org/2025.acl-long.413/",
+    "bib.bib410": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5e5853f35164e434015716a8c2a66543-Paper-Conference.pdf",
+    "bib.bib421": "https://openreview.net/forum?id=ehfRiF0R3a",
+    "bib.bib423": "https://arxiv.org/abs/2505.20732",
+    "bib.bib427": "https://arxiv.org/abs/2504.14870",
+    "bib.bib452": "https://arxiv.org/abs/2509.25911",
+    "bib.bib459": "https://doi.org/10.1038/s41467-025-63804-5",
+    "bib.bib462": "https://arxiv.org/abs/2507.21836",
+    "bib.bib503": "https://arxiv.org/abs/2502.12110",
+    "bib.bib508": "https://arxiv.org/abs/2508.19828",
+    "bib.bib510": "https://arxiv.org/abs/2505.09388",
+    "bib.bib517": "https://arxiv.org/abs/2502.18080",
+    "bib.bib521": "https://openreview.net/forum?id=WE_vluYUL-X",
+    "bib.bib542": "https://aclanthology.org/2024.findings-acl.181/",
+    "bib.bib552": "https://arxiv.org/abs/2506.07398",
+    "bib.bib576": "https://arxiv.org/abs/2510.12635",
+    "bib.bib582": "https://arxiv.org/abs/2505.03335",
+    "bib.bib586": "https://openreview.net/forum?id=sLBSJr3hH5",
+    "bib.bib599": "https://ojs.aaai.org/index.php/AAAI/article/view/29946",
+    "bib.bib600": "https://arxiv.org/abs/2310.04406",
+    "bib.bib608": "https://arxiv.org/abs/2503.15478",
+    "bib.bib614": "https://arxiv.org/abs/2509.25779",
+    "bib.bib618": "https://arxiv.org/abs/2504.16084"
+  };
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function decodeEscapedNewlines(text) {
+    if (!text) return "";
+    return text
+      .replace(/\\r\\n/g, "\n")
+      .replace(/\\n/g, "\n");
+  }
+
+  function parseExample(raw) {
+    if (!raw) return { flow: "", code: "", language: "python" };
+
+    // Robust schema-first path:
+    // example: { flow: "...", code: "...", language: "python" }
+    if (typeof raw === "object" && !Array.isArray(raw)) {
+      return {
+        flow: (raw.flow || "").trim(),
+        code: (raw.code || "").trim(),
+        language: (raw.language || "python").trim() || "python"
+      };
+    }
+
+    // Backward compatibility for legacy string examples
+    const original = String(raw).trim();
+    if (!original) return { flow: "", code: "", language: "python" };
+    const normalized = decodeEscapedNewlines(original);
+    const marker = /\n\s*Python sketch:\s*\n/i;
+    if (marker.test(normalized)) {
+      const parts = normalized.split(marker);
+      return {
+        flow: parts[0].trim(),
+        code: parts.slice(1).join("\n").trim(),
+        language: "python"
+      };
+    }
+    const looksLikeCode = /(^|\n)\s*(def |class |for |if |while |import |from )/.test(normalized);
+    return looksLikeCode
+      ? { flow: "", code: normalized, language: "python" }
+      : { flow: normalized, code: "", language: "python" };
+  }
+
+  function resolvePaperUrl(url) {
+    if (!url) return "#";
+    const match = url.match(/#(bib\.bib[0-9]+)$/);
+    if (!match) return url;
+    return BIB_URL_MAP[match[1]] || url;
+  }
+
+  function shortPaperLabel(paper) {
+    if (paper.label) return paper.label;
+    const full = (paper.title || "").trim();
+    if (!full) return "paper";
+    // Drop trailing author/year parenthetical, keep meaningful acronym chunks.
+    const cut = full.replace(/\s*\([^()]*\d{4}[^()]*\)\s*$/u, "").trim();
+    return cut || full;
+  }
+
+  function renderGrid() {
+    gridWrap.innerHTML = "";
+    const title = document.createElement("div");
+    title.className = "arc-grid-title";
+    title.textContent = "Capability × Maturity";
+    gridWrap.appendChild(title);
+
+    const grid = document.createElement("div");
+    grid.className = "arc-grid";
+
+    const corner = document.createElement("div");
+    corner.className = "arc-grid-cell header";
+    corner.textContent = "cap \\ mat";
+    corner.onclick = () => { selected.capability = ""; selected.maturity = ""; index = 0; rerender(); };
+    grid.appendChild(corner);
+
+    cfg.facets.maturity.forEach((m) => {
+      const h = document.createElement("div");
+      h.className = "arc-grid-cell header";
+      h.textContent = m;
+      h.onclick = () => { selected.maturity = m; index = 0; rerender(); };
+      grid.appendChild(h);
+    });
+
+    cfg.facets.capability.forEach((cap) => {
+      const rowHead = document.createElement("div");
+      rowHead.className = "arc-grid-cell cap" + (selected.capability === cap ? " is-active active-cap" : "");
+      rowHead.textContent = cap;
+      rowHead.onclick = () => { selected.capability = cap; index = 0; rerender(); };
+      grid.appendChild(rowHead);
+
+      cfg.facets.maturity.forEach((m) => {
+        const cell = document.createElement("div");
+        const count = cfg.cards.filter((c) => c.tags.capability === cap && c.tags.maturity === m).length;
+        cell.className = "arc-grid-cell";
+        if (selected.capability === cap && selected.maturity === m) {
+          cell.className += " is-active active-both";
+        }
+        cell.textContent = `${count}`;
+        cell.title = `${cap} × ${m}`;
+        cell.onclick = () => { selected.capability = cap; selected.maturity = m; index = 0; rerender(); };
+        grid.appendChild(cell);
+      });
+    });
+
+    gridWrap.appendChild(grid);
+  }
+
+  function filtered() {
+    return cfg.cards.filter((c) => {
+      if (selected.capability && c.tags.capability !== selected.capability) return false;
+      if (selected.maturity && c.tags.maturity !== selected.maturity) return false;
+      return true;
+    });
+  }
+
+  function renderCard(cards) {
+    if (!cards.length) {
+      cardRoot.innerHTML = "<div class='arc-title'>No matches</div><div>Try fewer filters.</div>";
+      return;
+    }
+    if (index >= cards.length) index = 0;
+    const c = cards[index];
+    const parsed = parseExample(c.example || c.pseudocode || c.math || "");
+    const hasPapers = Array.isArray(c.papers) && c.papers.length > 0;
+    cardRoot.innerHTML = `
+      <div class="arc-title">${c.title}</div>
+      <div class="arc-tagline">${c.tags.capability} · ${c.tags.maturity}</div>
+      <div class="arc-columns">
+        <div>
+          <div class="arc-row"><span class="arc-block-title">What it is:</span> ${c.what_it_is || c.summary || ""}</div>
+          <div class="arc-row"><span class="arc-block-title">How it works:</span> ${c.how_it_works || ""}</div>
+        </div>
+      </div>
+      ${hasPapers ? `<div class="arc-row"><span class="arc-block-title">Papers:</span> ${
+        c.papers
+          .map((p) => `<a class="arc-paper-chip" href="${resolvePaperUrl(p.url)}" title="${escapeHtml(p.title || "")}" target="_blank" rel="noopener noreferrer">${escapeHtml(shortPaperLabel(p))}</a>`)
+          .join("")
+      }</div>` : ""}
+      <div class="arc-row"><span class="arc-block-title">Example:</span></div>
+      <div class="arc-example-wrap">
+        <div class="arc-example-card">
+          <div class="arc-example-head">
+            <div class="arc-example-title">Implementation Sketch</div>
+            ${parsed.code ? `<div class="arc-code-actions">
+              <button type="button" class="arc-code-btn" data-toggle-code>Hide code</button>
+              <button type="button" class="arc-code-btn" data-copy-code>Copy code</button>
+            </div>` : ""}
+          </div>
+          ${parsed.code ? `
+            <div class="arc-code-wrap" data-code-wrap>
+              <pre class="arc-code"><code class="language-${escapeHtml(parsed.language)}">${escapeHtml(parsed.code)}</code></pre>
+            </div>` : ""}
+        </div>
+      </div>
+    `;
+    if (window.hljs) {
+      cardRoot.querySelectorAll("pre code").forEach((el) => window.hljs.highlightElement(el));
+    }
+    const copyBtn = cardRoot.querySelector("[data-copy-code]");
+    if (copyBtn && parsed.code) {
+      copyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(parsed.code);
+          const prev = copyBtn.textContent;
+          copyBtn.textContent = "Copied";
+          setTimeout(() => { copyBtn.textContent = prev; }, 1200);
+        } catch (_) {
+          copyBtn.textContent = "Copy failed";
+          setTimeout(() => { copyBtn.textContent = "Copy"; }, 1200);
+        }
+      });
+    }
+    const toggleBtn = cardRoot.querySelector("[data-toggle-code]");
+    const codeWrap = cardRoot.querySelector("[data-code-wrap]");
+    if (toggleBtn && codeWrap) {
+      toggleBtn.addEventListener("click", () => {
+        codeWrap.classList.toggle("is-collapsed");
+        toggleBtn.textContent = codeWrap.classList.contains("is-collapsed") ? "Show code" : "Hide code";
+      });
+    }
+  }
+
+  function renderMatches(cards) {
+    matchesRoot.innerHTML = "";
+    cards.forEach((c, i) => {
+      const li = document.createElement("li");
+      const isCurrent = i === index ? " <strong>(current)</strong>" : "";
+      li.innerHTML = `${i + 1}. ${c.title}${isCurrent}`;
+      li.style.cursor = "pointer";
+      li.onclick = () => { index = i; rerender(); };
+      matchesRoot.appendChild(li);
+    });
+  }
+
+  function rerender() {
+    const cards = filtered();
+    renderGrid();
+    renderCard(cards);
+    renderMatches(cards);
+    badgeCountRoot.textContent = `${cards.length} card${cards.length === 1 ? "" : "s"}`;
+    metaRoot.textContent = cards.length
+      ? `${cards.length} match(es) · showing ${index + 1}/${cards.length}`
+      : "0 matches";
+    navStatusRoot.textContent = cards.length
+      ? `Card ${index + 1} of ${cards.length}`
+      : "";
+    progressFill.style.width = cards.length ? `${((index + 1) / cards.length) * 100}%` : "0%";
+  }
+
+  prevBtn.onclick = () => {
+    const cards = filtered();
+    if (!cards.length) return;
+    index = (index - 1 + cards.length) % cards.length;
+    rerender();
+  };
+  nextBtn.onclick = () => {
+    const cards = filtered();
+    if (!cards.length) return;
+    index = (index + 1) % cards.length;
+    rerender();
+  };
+  resetBtn.onclick = () => {
+    selected.capability = "";
+    selected.maturity = "";
+    index = 0;
+    rerender();
+  };
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") prevBtn.click();
+    if (e.key === "ArrowRight") nextBtn.click();
+  });
+
+  rerender();
+})();
+</script></div>
+</div>
+		</div>
+	</div> </div>
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-11 col-md-offset-1" id="footer-wrapper">
+				<div class="col-md-3">
+					<div id="social-links">
+						<h4>
+							Contact
+						</h4>
+						<li><a href="mailto:williamabrwolf@gmail.com">Email</a></li>
+							<li><a href="http://twitter.com/willwolf_">Twitter</a></li>
+							<li><a href="http://linkedin.com/in/williamabrwolf">LinkedIn</a></li>
+							<li><a href="http://calendly.com/willwolf">Calendly</a></li>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div id="other-links">
+						<h4>
+							Links
+						</h4>
+						<ul>
+							<li><a href="https://tinyletter.com/willwolf">Newsletter</a></li>
+							<li><a href="http://willtravellife.com">Travel Blog</a></li>
+							<li><a href="http://github.com/cavaunpeu">Github</a></li>
+							<li><a href="https://github.com/cavaunpeu/willwolf.io-source">Source Code</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+				  <div id="categories">
+				    <h4>
+				      Categories
+				    </h4>
+				    <ul>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
+				    </ul>
+				  </div>
+				</div>
+				<div class="col-md-3">
+				  <div id="pages">
+				    <h4>
+				      Pages
+				    </h4>
+				    <ul>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/resume.pdf" title="Résumé">Résumé</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Will Wolf 2020</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div><!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
