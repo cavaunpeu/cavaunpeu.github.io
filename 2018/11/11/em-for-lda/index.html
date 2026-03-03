@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
+		<script src="https://willwolf.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,20 +20,20 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="">
+  <meta name="twitter:domain" content="https://willwolf.io">
     <meta property="twitter:title" content="Deriving Expectation-Maximization"/>
     <meta property="twitter:description" content="Deriving the expectation-maximization algorithm, and the beginnings of its application to LDA. Once finished, its intimate connection to variational inference is apparent."/>
-    <meta property="twitter:image" content="/figures/em-for-lda/initial_decomp.png"/>
+    <meta property="twitter:image" content="https://willwolf.io/figures/em-for-lda/initial_decomp.png"/>
 
 	<!-- CSS -->
-	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
 	<!-- KaTeX for math rendering (modern, fast) - Latest version with proper font loading -->
 	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 	<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -168,17 +168,17 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
             <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-crypto" href="/crypto">crypto</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="/about/" title="About">About</a></li>
-              <li><a href="/consulting/" title="Consulting"></span> Consulting</a></li>
-              <li><a href="/books/" title="Books">Books</a></li>
+              <li><a href="https://willwolf.io/about/" title="About">About</a></li>
+              <li><a href="https://willwolf.io/consulting/" title="Consulting"></span> Consulting</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books">Books</a></li>
           <li>
             <button id="subscribeButton">
-              <a href="/subscribe/" title="Get new posts by email">Subscribe</a>
+              <a href="https://willwolf.io/subscribe/" title="Get new posts by email">Subscribe</a>
             </button>
           </li>
         </ul>
@@ -299,14 +299,14 @@ $$</div>
 <p><strong>The EM algorithm is a repeated alternation between Step 2 (E-step) and Step 3 (M-step).</strong> After each M-Step, <span class="math">\(\log{p(\mathbf{X}\vert\theta)}\)</span> is guaranteed to increase (unless it is already at a maximum)<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
 <p>A graphic<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup> is further illustrative.</p>
 <h3>Initial decomposition</h3>
-<p><img alt="png" class="img-responsive" src="/figures/em-for-lda/initial_decomp.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/em-for-lda/initial_decomp.png"/></p>
 <p>Here, the ELBO is written as <span class="math">\(\mathcal{L}(q, \theta)\)</span>.</p>
 <h3>E-step</h3>
-<p><img alt="png" class="img-responsive" src="/figures/em-for-lda/e_step.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/em-for-lda/e_step.png"/></p>
 <p>In other words, holding the parameters <span class="math">\(\theta\)</span> constant, minimize <span class="math">\(\text{KL}\big(q(\mathbf{Z})\Vert p(\mathbf{Z}\vert\mathbf{X}, \theta)\big)\)</span> with respect to <span class="math">\(q(\mathbf{Z})\)</span>. Remember, as <span class="math">\(q\)</span> is a distribution with a fixed functional form, this amounts to updating its parameters <span class="math">\(\lambda\)</span>.</p>
 <p>The caption implies that we can always compute <span class="math">\(q(\mathbf{Z}) = p(\mathbf{Z}\vert\mathbf{X}, \theta)\)</span>. We will show below that this is not the case for LDA, nor for many interesting models.</p>
 <h3>M-step</h3>
-<p><img alt="png" class="img-responsive" src="/figures/em-for-lda/m_step.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/em-for-lda/m_step.png"/></p>
 <p>In other words, in the M-step, maximize the ELBO with respect to the model parameters <span class="math">\(\theta\)</span>.</p>
 <p>Expanding the ELBO:</p>
 <div class="math">$$
@@ -321,7 +321,7 @@ $$</div>
 <h2>EM for LDA</h2>
 <p>To give an example of the above, we'll examine the classic Latent Dirichlet Allocation<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> paper.</p>
 <h3>Model</h3>
-<p><img alt="png" class="img-responsive" src="/figures/em-for-lda/lda_formulation.png"/></p>
+<p><img alt="png" class="img-responsive" src="https://willwolf.io/figures/em-for-lda/lda_formulation.png"/></p>
 <p>"Given the parameters <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span>, the joint distribution of a topic mixture <span class="math">\(\theta\)</span>, a set of <span class="math">\(N\)</span> topics <span class="math">\(\mathbf{z}\)</span>, and a set of <span class="math">\(N\)</span> words <span class="math">\(\mathbf{w}\)</span> is given by:"<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <div class="math">$$
 p(\theta, \mathbf{z}, \mathbf{w}\vert \alpha, \beta) = p(\theta\vert \alpha)\prod\limits_{n=1}^{N}p(z_n\vert \theta)p(w_n\vert z_n, \beta)
@@ -415,9 +415,9 @@ page 229. Springer-Verlag New York, 2006. <a class="footnote-backref" href="#fn
 				      Categories
 				    </h4>
 				    <ul>
-				      <li><a href="/geopolitics/">geopolitics</li>
-				      <li><a href="/life/">life</li>
-				      <li><a href="/machine-learning/">machine-learning</li>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
 				    </ul>
 				  </div>
 				</div>
@@ -427,8 +427,8 @@ page 229. Springer-Verlag New York, 2006. <a class="footnote-backref" href="#fn
 				      Pages
 				    </h4>
 				    <ul>
-				      <li><a href="/archive/" title="Archive">Archive</a></li>
-				      <li><a href="/resume.pdf" title="Résumé">Résumé</a></li>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/resume.pdf" title="Résumé">Résumé</a></li>
 				    </ul>
 				  </div>
 				</div>
@@ -458,6 +458,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 </body>
 </html>

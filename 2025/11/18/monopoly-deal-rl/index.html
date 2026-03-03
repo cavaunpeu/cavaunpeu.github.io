@@ -11,7 +11,7 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
+		<script src="https://willwolf.io/theme/html5.js"></script>
 		<![endif]-->
 
 	<!-- Atom Feed -->
@@ -20,20 +20,20 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@willwolf_">
   <meta name="twitter:creator" content="@willwolf_">
-  <meta name="twitter:domain" content="">
+  <meta name="twitter:domain" content="https://willwolf.io">
     <meta property="twitter:title" content="Reinforcement Learning for Monopoly Deal"/>
     <meta property="twitter:description" content="Policy-gradient algorithms applied to the card game Monopoly Deal."/>
-    <meta property="twitter:image" content="/images/monopoly-deal-rl/app-screenshot.png"/>
+    <meta property="twitter:image" content="https://willwolf.io/images/monopoly-deal-rl/app-screenshot.png"/>
 
 	<!-- CSS -->
-	<link href="/theme/css/ipython.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/ipython.css?v={12345}" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Berkshire Swash' rel='stylesheet' type='text/css'>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/pygments.css?v={12345}" rel="stylesheet">
-	<link href="/theme/css/main.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/local.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/pygments.css?v={12345}" rel="stylesheet">
+	<link href="https://willwolf.io/theme/css/main.css?v={12345}" rel="stylesheet">
 	<!-- KaTeX for math rendering (modern, fast) - Latest version with proper font loading -->
 	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 	<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -168,17 +168,17 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1><a id="site-title" href="/">will wolf</a></h1>
+        <h1><a id="site-title" href="https://willwolf.io/">will wolf</a></h1>
             <h4 id="site-subtitle-with-links">writings on <a id="sitesubtitle-machine-learning" href="/machine-learning">machine learning</a>, <a id="sitesubtitle-crypto" href="/crypto">crypto</a>, <a id="sitesubtitle-geopolitics" href="/geopolitics">geopolitics</a>, <a id="sitesubtitle-life" href="/life">life</a></h4>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-              <li><a href="/about/" title="About">About</a></li>
-              <li><a href="/consulting/" title="Consulting"></span> Consulting</a></li>
-              <li><a href="/books/" title="Books">Books</a></li>
+              <li><a href="https://willwolf.io/about/" title="About">About</a></li>
+              <li><a href="https://willwolf.io/consulting/" title="Consulting"></span> Consulting</a></li>
+              <li><a href="https://willwolf.io/books/" title="Books">Books</a></li>
           <li>
             <button id="subscribeButton">
-              <a href="/subscribe/" title="Get new posts by email">Subscribe</a>
+              <a href="https://willwolf.io/subscribe/" title="Get new posts by email">Subscribe</a>
             </button>
           </li>
         </ul>
@@ -205,7 +205,7 @@
 <li>Neural Actor-Critic (GAE/PPO)</li>
 </ol>
 <p>All models are trained with JAX and Optax on a single CPU. You can find the training code <a href="https://github.com/cavaunpeu/monopoly-deal-ai/tree/main/models">here</a>, and play against these models at <a href="https://monopolydeal.ai">monopolydeal.ai</a>. Below, we introduce each model, including the policy-gradient formulation, the generalized-advantage estimator, the PPO objective, the state abstractions, and the training modifications. Finally, we conclude with empirical results.</p>
-<p><img alt="Screenshot of the Monopoly Deal AI web application" class="img-responsive" src="/images/monopoly-deal-rl/app-screenshot.png"/></p>
+<p><img alt="Screenshot of the Monopoly Deal AI web application" class="img-responsive" src="https://willwolf.io/images/monopoly-deal-rl/app-screenshot.png"/></p>
 <h1>Policy Gradient</h1>
 <p>We begin with the standard episodic policy-gradient formulation. Define a single game trajectory as:</p>
 <div class="math">$$
@@ -530,7 +530,7 @@ $$</div>
 <p>The models are evaluated every 250 games against the CFR baseline (as well as "random" and "risk-aware" heuristic opponents, not shown). During evaluation, each model uses an argmax policy, i.e. it always selects the action with the highest probability.</p>
 <p>Below, we show the distribution of winrates against the CFR baseline in the final 10,000 games of training for each model.</p>
 <h1>Results</h1>
-<p><img alt="Compare Winrates of Models Against CFR" class="img-responsive" src="/images/monopoly-deal-rl/winrates-cfr-comparison.svg"/></p>
+<p><img alt="Compare Winrates of Models Against CFR" class="img-responsive" src="https://willwolf.io/images/monopoly-deal-rl/winrates-cfr-comparison.svg"/></p>
 <p>The results demonstrate that although the <code>FullStateAbstraction</code> contains more information, and therefore should be more powerful, the <code>IntentStateAbstraction</code> produces more competitive policies across all models. This is likely due to the fact that the <code>IntentStateAbstraction</code> encodes the game's strategic priorities outright, significantly simplifying the learning problem.</p>
 <p>Slicing by abstraction type, we see that for the <code>FullStateAbstraction</code>, performance improves as the model becomes more complex, with the Neural Actor-Critic (GAE/PPO) model achieving the highest performance. Conversely, for the <code>IntentStateAbstraction</code>, the Neural REINFORCE model achieves the highest performance. We hypothesize that the <code>IntentStateAbstraction</code> creates a smoother optimization landscape where PPO's conservative trust-region constraints are unnecessary, allowing the more aggressive REINFORCE updates to converge faster.</p>
 <p>Overall, the results demonstrate that a medium-complexity neural network model that can generalize across unseen states, combined with an intent-based state abstraction that encodes a useful learning manifold <em>a priori</em>, produces the most competitive policy.</p>
@@ -591,9 +591,9 @@ $$</div>
 				      Categories
 				    </h4>
 				    <ul>
-				      <li><a href="/geopolitics/">geopolitics</li>
-				      <li><a href="/life/">life</li>
-				      <li><a href="/machine-learning/">machine-learning</li>
+				      <li><a href="https://willwolf.io/geopolitics/">geopolitics</li>
+				      <li><a href="https://willwolf.io/life/">life</li>
+				      <li><a href="https://willwolf.io/machine-learning/">machine-learning</li>
 				    </ul>
 				  </div>
 				</div>
@@ -603,8 +603,8 @@ $$</div>
 				      Pages
 				    </h4>
 				    <ul>
-				      <li><a href="/archive/" title="Archive">Archive</a></li>
-				      <li><a href="/resume.pdf" title="Résumé">Résumé</a></li>
+				      <li><a href="https://willwolf.io/archive/" title="Archive">Archive</a></li>
+				      <li><a href="https://willwolf.io/resume.pdf" title="Résumé">Résumé</a></li>
 				    </ul>
 				  </div>
 				</div>
@@ -634,6 +634,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97412095-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 </body>
 </html>
